@@ -16,6 +16,4 @@
 // When a command from ./commands is ready to use, import with `import './commands'` syntax
 // import './commands';
 
-import {CampaignStats} from "../../src/app/campaign-stats.model";
-
-
+import { CampaignStats } from '../../src/app/campaign-stats.model';

@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 @use "../../assets/scss/auth-common";
 
 #banner {
@@ -8,7 +8,9 @@ main > div {
   color: white;
   background-color: abstract.$colour-primary;
 
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     color: white;
   }
 }
@@ -27,7 +29,8 @@ table.paymentMethods {
     text-align: right;
   }
 
-  td.cardUpdateButton, td.cardDeleteButton {
+  td.cardUpdateButton,
+  td.cardDeleteButton {
     display: flex;
     @media #{abstract.$breakpoint-xl} {
       display: table-cell;

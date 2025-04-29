@@ -12,7 +12,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -21,9 +21,7 @@ describe('CampaignDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [
-        CampaignDetailsComponent,
-      ],
+      declarations: [CampaignDetailsComponent],
       imports: [
         CommonModule,
         CurrencyPipe,
@@ -35,11 +33,7 @@ describe('CampaignDetailsComponent', () => {
         OptimisedImagePipe,
         RouterModule.forRoot([]),
       ],
-      providers: [
-        TimeLeftPipe,
-        provideHttpClient(withFetch()),
-        provideHttpClientTesting(),
-      ]
+      providers: [TimeLeftPipe, provideHttpClient(withFetch()), provideHttpClientTesting()],
     }).compileComponents();
   }));
 
@@ -102,7 +96,7 @@ describe('CampaignDetailsComponent', () => {
         provider: 'youtube',
         key: 'someFakeKey',
       },
-  };
+    };
     // For now, *don't* detect changes as ngOnInit() will clear out the fixed `campaign` trying to
     // read a value from the state transfer service. TODO it would be better to mock an HTTP response
     // instead so the data is loaded in a more realistic way.

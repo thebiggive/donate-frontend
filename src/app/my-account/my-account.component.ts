@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {PageMetaService} from '../page-meta.service';
-import {DatePipe} from '@angular/common';
-import {IdentityService} from "../identity.service";
-import {Person} from "../person.model";
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {flags} from "../featureFlags";
+import { PageMetaService } from '../page-meta.service';
+import { DatePipe } from '@angular/common';
+import { IdentityService } from '../identity.service';
+import { Person } from '../person.model';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { flags } from '../featureFlags';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
-import {environment} from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Component({
-    selector: 'app-my-account',
-    templateUrl: './my-account.component.html',
-    styleUrl: './my-account.component.scss',
-    providers: [DatePipe],
-    standalone: false
+  selector: 'app-my-account',
+  templateUrl: './my-account.component.html',
+  styleUrl: './my-account.component.scss',
+  providers: [DatePipe],
+  standalone: false,
 })
 export class MyAccountComponent implements OnInit {
   public person!: Person;
@@ -32,42 +32,41 @@ export class MyAccountComponent implements OnInit {
       {
         background: {
           color: 'brand-mhf-turquoise',
-          image: new URL(environment.donateUriPrefix + '/assets/images/turquoise-texture.jpg')
+          image: new URL(environment.donateUriPrefix + '/assets/images/turquoise-texture.jpg'),
         },
         headerText: 'Payment Methods',
         bodyText: 'View and manage your payment methods',
         button: {
           text: '',
-          href: new URL(environment.donateUriPrefix + '/my-account/payment-methods')
-        }
+          href: new URL(environment.donateUriPrefix + '/my-account/payment-methods'),
+        },
       },
       {
         background: {
           color: 'brand-c4c-orange',
-          image: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png')
+          image: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
         },
         headerText: 'Your\nDonations', // line break because other headers in group are longer and take two lines
-        bodyText: 'View all the donations you\'ve made while logged in',
+        bodyText: "View all the donations you've made while logged in",
         button: {
           text: '',
-          href: new URL(environment.donateUriPrefix + '/my-account/donations')
-        }
+          href: new URL(environment.donateUriPrefix + '/my-account/donations'),
+        },
       },
     ];
     if (flags.regularGivingEnabled) {
-      this.actions.push(
-        {
-          background: {
-            color: 'brand-afa-pink',
-            image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg')
-          },
-          headerText: "Your Regular Giving",
-          bodyText: 'View and manage your regular giving mandates',
-          button: {
-            text: '',
-            href: new URL(environment.donateUriPrefix + '/my-account/regular-giving')
-          }
-      })
+      this.actions.push({
+        background: {
+          color: 'brand-afa-pink',
+          image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg'),
+        },
+        headerText: 'Your Regular Giving',
+        bodyText: 'View and manage your regular giving mandates',
+        button: {
+          text: '',
+          href: new URL(environment.donateUriPrefix + '/my-account/regular-giving'),
+        },
+      });
     }
   }
 
@@ -78,8 +77,8 @@ export class MyAccountComponent implements OnInit {
       null, // page is available to account holders only, social sharing doesn't make sense here.
     );
 
-    this.identityService.getLoggedInPerson().subscribe(async (person: Person|null) => {
-      if (! person) {
+    this.identityService.getLoggedInPerson().subscribe(async (person: Person | null) => {
+      if (!person) {
         await this.router.navigate(['']);
       } else {
         this.person = person;

@@ -16,1015 +16,1017 @@
  */
 export const COUNTRIES = [
   {
-    "country": "Afghanistan",
-    "iso2": "AF"
+    country: 'Afghanistan',
+    iso2: 'AF',
   },
   {
-    "country": "Åland Islands",
-    "iso2": "AX"
+    country: 'Åland Islands',
+    iso2: 'AX',
   },
   {
-    "country": "Albania",
-    "iso2": "AL"
+    country: 'Albania',
+    iso2: 'AL',
   },
   {
-    "country": "Algeria",
-    "iso2": "DZ"
+    country: 'Algeria',
+    iso2: 'DZ',
   },
   {
-    "country": "American Samoa",
-    "iso2": "AS"
+    country: 'American Samoa',
+    iso2: 'AS',
   },
   {
-    "country": "Andorra",
-    "iso2": "AD"
+    country: 'Andorra',
+    iso2: 'AD',
   },
   {
-    "country": "Angola",
-    "iso2": "AO"
+    country: 'Angola',
+    iso2: 'AO',
   },
   {
-    "country": "Anguilla",
-    "iso2": "AI"
+    country: 'Anguilla',
+    iso2: 'AI',
   },
   {
-    "country": "Antarctica",
-    "iso2": "AQ"
+    country: 'Antarctica',
+    iso2: 'AQ',
   },
   {
-    "country": "Antigua and Barbuda",
-    "iso2": "AG"
+    country: 'Antigua and Barbuda',
+    iso2: 'AG',
   },
   {
-    "country": "Argentina",
-    "iso2": "AR"
+    country: 'Argentina',
+    iso2: 'AR',
   },
   {
-    "country": "Armenia",
-    "iso2": "AM"
+    country: 'Armenia',
+    iso2: 'AM',
   },
   {
-    "country": "Aruba",
-    "iso2": "AW"
+    country: 'Aruba',
+    iso2: 'AW',
   },
   {
-    "country": "Australia",
-    "iso2": "AU"
+    country: 'Australia',
+    iso2: 'AU',
   },
   {
-    "country": "Austria",
-    "iso2": "AT"
+    country: 'Austria',
+    iso2: 'AT',
   },
   {
-    "country": "Azerbaijan",
-    "iso2": "AZ"
+    country: 'Azerbaijan',
+    iso2: 'AZ',
   },
   {
-    "country": "Bahrain",
-    "iso2": "BH"
+    country: 'Bahrain',
+    iso2: 'BH',
   },
   {
-    "country": "Bangladesh",
-    "iso2": "BD"
+    country: 'Bangladesh',
+    iso2: 'BD',
   },
   {
-    "country": "Barbados",
-    "iso2": "BB"
+    country: 'Barbados',
+    iso2: 'BB',
   },
   {
-    "country": "Belarus",
-    "iso2": "BY"
+    country: 'Belarus',
+    iso2: 'BY',
   },
   {
-    "country": "Belgium",
-    "iso2": "BE"
+    country: 'Belgium',
+    iso2: 'BE',
   },
   {
-    "country": "Belize",
-    "iso2": "BZ"
+    country: 'Belize',
+    iso2: 'BZ',
   },
   {
-    "country": "Benin",
-    "iso2": "BJ"
+    country: 'Benin',
+    iso2: 'BJ',
   },
   {
-    "country": "Bermuda",
-    "iso2": "BM"
+    country: 'Bermuda',
+    iso2: 'BM',
   },
   {
-    "country": "Bhutan",
-    "iso2": "BT"
+    country: 'Bhutan',
+    iso2: 'BT',
   },
   {
-    "country": "Bolivia",
-    "iso2": "BO"
+    country: 'Bolivia',
+    iso2: 'BO',
   },
   {
-    "country": "Bonaire",
-    "iso2": "BQ"
+    country: 'Bonaire',
+    iso2: 'BQ',
   },
   {
-    "country": "Bosnia and Herzegovina",
-    "iso2": "BA"
+    country: 'Bosnia and Herzegovina',
+    iso2: 'BA',
   },
   {
-    "country": "Botswana",
-    "iso2": "BW"
+    country: 'Botswana',
+    iso2: 'BW',
   },
   {
-    "country": "Bouvet Island",
-    "iso2": "BV"
+    country: 'Bouvet Island',
+    iso2: 'BV',
   },
   {
-    "country": "Brazil",
-    "iso2": "BR"
+    country: 'Brazil',
+    iso2: 'BR',
   },
   {
-    "country": "British Indian Ocean Territory",
-    "iso2": "IO"
+    country: 'British Indian Ocean Territory',
+    iso2: 'IO',
   },
   {
-    "country": "British Virgin Islands",
-    "iso2": "VG"
+    country: 'British Virgin Islands',
+    iso2: 'VG',
   },
   {
-    "country": "Brunei",
-    "iso2": "BN"
+    country: 'Brunei',
+    iso2: 'BN',
   },
   {
-    "country": "Bulgaria",
-    "iso2": "BG"
+    country: 'Bulgaria',
+    iso2: 'BG',
   },
   {
-    "country": "Burkina Faso",
-    "iso2": "BF"
+    country: 'Burkina Faso',
+    iso2: 'BF',
   },
   {
-    "country": "Burundi",
-    "iso2": "BI"
+    country: 'Burundi',
+    iso2: 'BI',
   },
   {
-    "country": "Cambodia",
-    "iso2": "KH"
+    country: 'Cambodia',
+    iso2: 'KH',
   },
   {
-    "country": "Cameroon",
-    "iso2": "CM"
+    country: 'Cameroon',
+    iso2: 'CM',
   },
   {
-    "country": "Canada",
-    "iso2": "CA"
+    country: 'Canada',
+    iso2: 'CA',
   },
   {
-    "country": "Cape Verde",
-    "iso2": "CV"
+    country: 'Cape Verde',
+    iso2: 'CV',
   },
   {
-    "country": "Cayman Islands",
-    "iso2": "KY"
+    country: 'Cayman Islands',
+    iso2: 'KY',
   },
   {
-    "country": "Central African Republic",
-    "iso2": "CF"
+    country: 'Central African Republic',
+    iso2: 'CF',
   },
   {
-    "country": "Chad",
-    "iso2": "TD"
+    country: 'Chad',
+    iso2: 'TD',
   },
   {
-    "country": "Chile",
-    "iso2": "CL"
+    country: 'Chile',
+    iso2: 'CL',
   },
   {
-    "country": "China",
-    "iso2": "CN"
+    country: 'China',
+    iso2: 'CN',
   },
   {
-    "country": "Christmas Island",
-    "iso2": "CX"
+    country: 'Christmas Island',
+    iso2: 'CX',
   },
   {
-    "country": "Cocos (Keeling) Islands",
-    "iso2": "CC"
+    country: 'Cocos (Keeling) Islands',
+    iso2: 'CC',
   },
   {
-    "country": "Colombia",
-    "iso2": "CO"
+    country: 'Colombia',
+    iso2: 'CO',
   },
   {
-    "country": "Comoros",
-    "iso2": "KM"
+    country: 'Comoros',
+    iso2: 'KM',
   },
   {
-    "country": "Cook Islands",
-    "iso2": "CK"
+    country: 'Cook Islands',
+    iso2: 'CK',
   },
   {
-    "country": "Costa Rica",
-    "iso2": "CR"
+    country: 'Costa Rica',
+    iso2: 'CR',
   },
   {
-    "country": "Cote d'Ivoire",
-    "iso2": "CI"
+    country: "Cote d'Ivoire",
+    iso2: 'CI',
   },
   {
-    "country": "Croatia",
-    "iso2": "HR"
+    country: 'Croatia',
+    iso2: 'HR',
   },
   {
-    "country": "Cuba",
-    "iso2": "CU"
+    country: 'Cuba',
+    iso2: 'CU',
   },
   {
-    "country": "Curaçao",
-    "iso2": "CW"
+    country: 'Curaçao',
+    iso2: 'CW',
   },
   {
-    "country": "Cyprus",
-    "iso2": "CY"
+    country: 'Cyprus',
+    iso2: 'CY',
   },
   {
-    "country": "Czech Republic",
-    "iso2": "CZ"
+    country: 'Czech Republic',
+    iso2: 'CZ',
   },
   {
-    "country": "Democratic Republic of the Congo",
-    "iso2": "CD"
+    country: 'Democratic Republic of the Congo',
+    iso2: 'CD',
   },
   {
-    "country": "Denmark",
-    "iso2": "DK"
+    country: 'Denmark',
+    iso2: 'DK',
   },
   {
-    "country": "Djibouti",
-    "iso2": "DJ"
+    country: 'Djibouti',
+    iso2: 'DJ',
   },
   {
-    "country": "Dominica",
-    "iso2": "DM"
+    country: 'Dominica',
+    iso2: 'DM',
   },
   {
-    "country": "Dominican Republic",
-    "iso2": "DO"
+    country: 'Dominican Republic',
+    iso2: 'DO',
   },
   {
-    "country": "Ecuador",
-    "iso2": "EC"
+    country: 'Ecuador',
+    iso2: 'EC',
   },
   {
-    "country": "Egypt",
-    "iso2": "EG"
+    country: 'Egypt',
+    iso2: 'EG',
   },
   {
-    "country": "El Salvador",
-    "iso2": "SV"
+    country: 'El Salvador',
+    iso2: 'SV',
   },
   {
-    "country": "Equatorial Guinea",
-    "iso2": "GQ"
+    country: 'Equatorial Guinea',
+    iso2: 'GQ',
   },
   {
-    "country": "Eritrea",
-    "iso2": "ER"
+    country: 'Eritrea',
+    iso2: 'ER',
   },
   {
-    "country": "Estonia",
-    "iso2": "EE"
+    country: 'Estonia',
+    iso2: 'EE',
   },
   {
-    "country": "Eswatini",
-    "iso2": "SZ"
+    country: 'Eswatini',
+    iso2: 'SZ',
   },
   {
-    "country": "Ethiopia",
-    "iso2": "ET"
+    country: 'Ethiopia',
+    iso2: 'ET',
   },
   {
-    "country": "Falkland Islands (Islas Malvinas)",
-    "iso2": "FK"
+    country: 'Falkland Islands (Islas Malvinas)',
+    iso2: 'FK',
   },
   {
-    "country": "Faroe Islands",
-    "iso2": "FO"
+    country: 'Faroe Islands',
+    iso2: 'FO',
   },
   {
-    "country": "Federated States of Micronesia",
-    "iso2": "FM"
+    country: 'Federated States of Micronesia',
+    iso2: 'FM',
   },
   {
-    "country": "Fiji",
-    "iso2": "FJ"
+    country: 'Fiji',
+    iso2: 'FJ',
   },
   {
-    "country": "Finland",
-    "iso2": "FI"
+    country: 'Finland',
+    iso2: 'FI',
   },
   {
-    "country": "France",
-    "iso2": "FR"
+    country: 'France',
+    iso2: 'FR',
   },
   {
-    "country": "French Guiana",
-    "iso2": "GF"
+    country: 'French Guiana',
+    iso2: 'GF',
   },
   {
-    "country": "French Polynesia",
-    "iso2": "PF"
+    country: 'French Polynesia',
+    iso2: 'PF',
   },
   {
-    "country": "French Southern and Antarctic Lands",
-    "iso2": "TF"
+    country: 'French Southern and Antarctic Lands',
+    iso2: 'TF',
   },
   {
-    "country": "Gabon",
-    "iso2": "GA"
+    country: 'Gabon',
+    iso2: 'GA',
   },
   {
-    "country": "Georgia",
-    "iso2": "GE"
+    country: 'Georgia',
+    iso2: 'GE',
   },
   {
-    "country": "Germany",
-    "iso2": "DE"
+    country: 'Germany',
+    iso2: 'DE',
   },
   {
-    "country": "Ghana",
-    "iso2": "GH"
+    country: 'Ghana',
+    iso2: 'GH',
   },
   {
-    "country": "Gibraltar",
-    "iso2": "GI"
+    country: 'Gibraltar',
+    iso2: 'GI',
   },
   {
-    "country": "Greece",
-    "iso2": "GR"
+    country: 'Greece',
+    iso2: 'GR',
   },
   {
-    "country": "Greenland",
-    "iso2": "GL"
+    country: 'Greenland',
+    iso2: 'GL',
   },
   {
-    "country": "Grenada",
-    "iso2": "GD"
+    country: 'Grenada',
+    iso2: 'GD',
   },
   {
-    "country": "Guadeloupe",
-    "iso2": "GP"
+    country: 'Guadeloupe',
+    iso2: 'GP',
   },
   {
-    "country": "Guam",
-    "iso2": "GU"
+    country: 'Guam',
+    iso2: 'GU',
   },
   {
-    "country": "Guatemala",
-    "iso2": "GT"
+    country: 'Guatemala',
+    iso2: 'GT',
   },
   {
-    "country": "Guernsey",
-    "iso2": "GG"
+    country: 'Guernsey',
+    iso2: 'GG',
   },
   {
-    "country": "Guinea",
-    "iso2": "GN"
+    country: 'Guinea',
+    iso2: 'GN',
   },
   {
-    "country": "Guinea-Bissau",
-    "iso2": "GW"
+    country: 'Guinea-Bissau',
+    iso2: 'GW',
   },
   {
-    "country": "Guyana",
-    "iso2": "GY"
+    country: 'Guyana',
+    iso2: 'GY',
   },
   {
-    "country": "Haiti",
-    "iso2": "HT"
+    country: 'Haiti',
+    iso2: 'HT',
   },
   {
-    "country": "Heard Island and McDonald Islands",
-    "iso2": "HM"
+    country: 'Heard Island and McDonald Islands',
+    iso2: 'HM',
   },
   {
-    "country": "Holy See (Vatican City)",
-    "iso2": "VA"
+    country: 'Holy See (Vatican City)',
+    iso2: 'VA',
   },
   {
-    "country": "Honduras",
-    "iso2": "HN"
+    country: 'Honduras',
+    iso2: 'HN',
   },
   {
-    "country": "Hong Kong",
-    "iso2": "HK"
+    country: 'Hong Kong',
+    iso2: 'HK',
   },
   {
-    "country": "Hungary",
-    "iso2": "HU"
+    country: 'Hungary',
+    iso2: 'HU',
   },
   {
-    "country": "Iceland",
-    "iso2": "IS"
+    country: 'Iceland',
+    iso2: 'IS',
   },
   {
-    "country": "India",
-    "iso2": "IN"
+    country: 'India',
+    iso2: 'IN',
   },
   {
-    "country": "Indonesia",
-    "iso2": "ID"
+    country: 'Indonesia',
+    iso2: 'ID',
   },
   {
-    "country": "Iran",
-    "iso2": "IR"
+    country: 'Iran',
+    iso2: 'IR',
   },
   {
-    "country": "Iraq",
-    "iso2": "IQ"
+    country: 'Iraq',
+    iso2: 'IQ',
   },
   {
-    "country": "Ireland",
-    "iso2": "IE"
+    country: 'Ireland',
+    iso2: 'IE',
   },
   {
-    "country": "Isle of Man",
-    "iso2": "IM"
+    country: 'Isle of Man',
+    iso2: 'IM',
   },
   {
-    "country": "Israel",
-    "iso2": "IL"
+    country: 'Israel',
+    iso2: 'IL',
   },
   {
-    "country": "Italy",
-    "iso2": "IT"
+    country: 'Italy',
+    iso2: 'IT',
   },
   {
-    "country": "Jamaica",
-    "iso2": "JM"
+    country: 'Jamaica',
+    iso2: 'JM',
   },
   {
-    "country": "Japan",
-    "iso2": "JP"
+    country: 'Japan',
+    iso2: 'JP',
   },
   {
-    "country": "Jersey",
-    "iso2": "JE"
+    country: 'Jersey',
+    iso2: 'JE',
   },
   {
-    "country": "Jordan",
-    "iso2": "JO"
+    country: 'Jordan',
+    iso2: 'JO',
   },
   {
-    "country": "Kazakhstan",
-    "iso2": "KZ"
+    country: 'Kazakhstan',
+    iso2: 'KZ',
   },
   {
-    "country": "Kenya",
-    "iso2": "KE"
+    country: 'Kenya',
+    iso2: 'KE',
   },
   {
-    "country": "Kiribati",
-    "iso2": "KI"
+    country: 'Kiribati',
+    iso2: 'KI',
   },
   {
-    "country": "Kuwait",
-    "iso2": "KW"
+    country: 'Kuwait',
+    iso2: 'KW',
   },
   {
-    "country": "Kyrgyzstan",
-    "iso2": "KG"
+    country: 'Kyrgyzstan',
+    iso2: 'KG',
   },
   {
-    "country": "Laos",
-    "iso2": "LA"
+    country: 'Laos',
+    iso2: 'LA',
   },
   {
-    "country": "Latvia",
-    "iso2": "LV"
+    country: 'Latvia',
+    iso2: 'LV',
   },
   {
-    "country": "Lebanon",
-    "iso2": "LB"
+    country: 'Lebanon',
+    iso2: 'LB',
   },
   {
-    "country": "Lesotho",
-    "iso2": "LS"
+    country: 'Lesotho',
+    iso2: 'LS',
   },
   {
-    "country": "Liberia",
-    "iso2": "LR"
+    country: 'Liberia',
+    iso2: 'LR',
   },
   {
-    "country": "Libya",
-    "iso2": "LY"
+    country: 'Libya',
+    iso2: 'LY',
   },
   {
-    "country": "Liechtenstein",
-    "iso2": "LI"
+    country: 'Liechtenstein',
+    iso2: 'LI',
   },
   {
-    "country": "Lithuania",
-    "iso2": "LT"
+    country: 'Lithuania',
+    iso2: 'LT',
   },
   {
-    "country": "Luxembourg",
-    "iso2": "LU"
+    country: 'Luxembourg',
+    iso2: 'LU',
   },
   {
-    "country": "Macau",
-    "iso2": "MO"
+    country: 'Macau',
+    iso2: 'MO',
   },
   {
-    "country": "Madagascar",
-    "iso2": "MG"
+    country: 'Madagascar',
+    iso2: 'MG',
   },
   {
-    "country": "Malawi",
-    "iso2": "MW"
+    country: 'Malawi',
+    iso2: 'MW',
   },
   {
-    "country": "Malaysia",
-    "iso2": "MY"
+    country: 'Malaysia',
+    iso2: 'MY',
   },
   {
-    "country": "Maldives",
-    "iso2": "MV"
+    country: 'Maldives',
+    iso2: 'MV',
   },
   {
-    "country": "Mali",
-    "iso2": "ML"
+    country: 'Mali',
+    iso2: 'ML',
   },
   {
-    "country": "Malta",
-    "iso2": "MT"
+    country: 'Malta',
+    iso2: 'MT',
   },
   {
-    "country": "Marshall Islands",
-    "iso2": "MH"
+    country: 'Marshall Islands',
+    iso2: 'MH',
   },
   {
-    "country": "Martinique",
-    "iso2": "MQ"
+    country: 'Martinique',
+    iso2: 'MQ',
   },
   {
-    "country": "Mauritania",
-    "iso2": "MR"
+    country: 'Mauritania',
+    iso2: 'MR',
   },
   {
-    "country": "Mauritius",
-    "iso2": "MU"
+    country: 'Mauritius',
+    iso2: 'MU',
   },
   {
-    "country": "Mayotte",
-    "iso2": "YT"
+    country: 'Mayotte',
+    iso2: 'YT',
   },
   {
-    "country": "Mexico",
-    "iso2": "MX"
+    country: 'Mexico',
+    iso2: 'MX',
   },
   {
-    "country": "Moldova",
-    "iso2": "MD"
+    country: 'Moldova',
+    iso2: 'MD',
   },
   {
-    "country": "Monaco",
-    "iso2": "MC"
+    country: 'Monaco',
+    iso2: 'MC',
   },
   {
-    "country": "Mongolia",
-    "iso2": "MN"
+    country: 'Mongolia',
+    iso2: 'MN',
   },
   {
-    "country": "Montenegro",
-    "iso2": "ME"
+    country: 'Montenegro',
+    iso2: 'ME',
   },
   {
-    "country": "Montserrat",
-    "iso2": "MS"
+    country: 'Montserrat',
+    iso2: 'MS',
   },
   {
-    "country": "Morocco",
-    "iso2": "MA"
+    country: 'Morocco',
+    iso2: 'MA',
   },
   {
-    "country": "Mozambique",
-    "iso2": "MZ"
+    country: 'Mozambique',
+    iso2: 'MZ',
   },
   {
-    "country": "Myanmar (Burma)",
-    "iso2": "MM"
+    country: 'Myanmar (Burma)',
+    iso2: 'MM',
   },
   {
-    "country": "Namibia",
-    "iso2": "NA"
+    country: 'Namibia',
+    iso2: 'NA',
   },
   {
-    "country": "Nauru",
-    "iso2": "NR"
+    country: 'Nauru',
+    iso2: 'NR',
   },
   {
-    "country": "Nepal",
-    "iso2": "NP"
+    country: 'Nepal',
+    iso2: 'NP',
   },
   {
-    "country": "Netherlands",
-    "iso2": "NL"
+    country: 'Netherlands',
+    iso2: 'NL',
   },
   {
-    "country": "Netherlands Antilles",
-    "iso2": "AN"
+    country: 'Netherlands Antilles',
+    iso2: 'AN',
   },
   {
-    "country": "New Caledonia",
-    "iso2": "NC"
+    country: 'New Caledonia',
+    iso2: 'NC',
   },
   {
-    "country": "New Zealand",
-    "iso2": "NZ"
+    country: 'New Zealand',
+    iso2: 'NZ',
   },
   {
-    "country": "Nicaragua",
-    "iso2": "NI"
+    country: 'Nicaragua',
+    iso2: 'NI',
   },
   {
-    "country": "Niger",
-    "iso2": "NE"
+    country: 'Niger',
+    iso2: 'NE',
   },
   {
-    "country": "Nigeria",
-    "iso2": "NG"
+    country: 'Nigeria',
+    iso2: 'NG',
   },
   {
-    "country": "Niue",
-    "iso2": "NU"
+    country: 'Niue',
+    iso2: 'NU',
   },
   {
-    "country": "Norfolk Island",
-    "iso2": "NF"
+    country: 'Norfolk Island',
+    iso2: 'NF',
   },
   {
-    "country": "North Korea",
-    "iso2": "KP"
+    country: 'North Korea',
+    iso2: 'KP',
   },
   {
-    "country": "North Macedonia",
-    "iso2": "MK"
+    country: 'North Macedonia',
+    iso2: 'MK',
   },
   {
-    "country": "Northern Mariana Islands",
-    "iso2": "MP"
+    country: 'Northern Mariana Islands',
+    iso2: 'MP',
   },
   {
-    "country": "Norway",
-    "iso2": "NO"
+    country: 'Norway',
+    iso2: 'NO',
   },
   {
-    "country": "Oman",
-    "iso2": "OM"
+    country: 'Oman',
+    iso2: 'OM',
   },
   {
-    "country": "Pakistan",
-    "iso2": "PK"
+    country: 'Pakistan',
+    iso2: 'PK',
   },
   {
-    "country": "Palau",
-    "iso2": "PW"
+    country: 'Palau',
+    iso2: 'PW',
   },
   {
-    "country": "Palestinian Territory",
-    "iso2": "PS"
+    country: 'Palestinian Territory',
+    iso2: 'PS',
   },
   {
-    "country": "Panama",
-    "iso2": "PA"
+    country: 'Panama',
+    iso2: 'PA',
   },
   {
-    "country": "Papua New Guinea",
-    "iso2": "PG"
+    country: 'Papua New Guinea',
+    iso2: 'PG',
   },
   {
-    "country": "Paraguay",
-    "iso2": "PY"
+    country: 'Paraguay',
+    iso2: 'PY',
   },
   {
-    "country": "Peru",
-    "iso2": "PE"
+    country: 'Peru',
+    iso2: 'PE',
   },
   {
-    "country": "Philippines",
-    "iso2": "PH"
+    country: 'Philippines',
+    iso2: 'PH',
   },
   {
-    "country": "Pitcairn Islands",
-    "iso2": "PN"
+    country: 'Pitcairn Islands',
+    iso2: 'PN',
   },
   {
-    "country": "Poland",
-    "iso2": "PL"
+    country: 'Poland',
+    iso2: 'PL',
   },
   {
-    "country": "Portugal",
-    "iso2": "PT"
+    country: 'Portugal',
+    iso2: 'PT',
   },
   {
-    "country": "Puerto Rico",
-    "iso2": "PR"
+    country: 'Puerto Rico',
+    iso2: 'PR',
   },
   {
-    "country": "Qatar",
-    "iso2": "QA"
+    country: 'Qatar',
+    iso2: 'QA',
   },
   {
-    "country": "Republic of Kosovo",
-    "iso2": "XK"
+    country: 'Republic of Kosovo',
+    iso2: 'XK',
   },
   {
-    "country": "Republic of the Congo",
-    "iso2": "CG"
+    country: 'Republic of the Congo',
+    iso2: 'CG',
   },
   {
-    "country": "Reunion",
-    "iso2": "RE"
+    country: 'Reunion',
+    iso2: 'RE',
   },
   {
-    "country": "Romania",
-    "iso2": "RO"
+    country: 'Romania',
+    iso2: 'RO',
   },
   {
-    "country": "Russia",
-    "iso2": "RU"
+    country: 'Russia',
+    iso2: 'RU',
   },
   {
-    "country": "Rwanda",
-    "iso2": "RW"
+    country: 'Rwanda',
+    iso2: 'RW',
   },
   {
-    "country": "Saint Barthélemy",
-    "iso2": "BL"
+    country: 'Saint Barthélemy',
+    iso2: 'BL',
   },
   {
-    "country": "Saint Helena",
-    "iso2": "SH"
+    country: 'Saint Helena',
+    iso2: 'SH',
   },
   {
-    "country": "Saint Kitts and Nevis",
-    "iso2": "KN"
+    country: 'Saint Kitts and Nevis',
+    iso2: 'KN',
   },
   {
-    "country": "Saint Lucia",
-    "iso2": "LC"
+    country: 'Saint Lucia',
+    iso2: 'LC',
   },
   {
-    "country": "Saint Martin",
-    "iso2": "MF"
+    country: 'Saint Martin',
+    iso2: 'MF',
   },
   {
-    "country": "Saint Pierre and Miquelon",
-    "iso2": "PM"
+    country: 'Saint Pierre and Miquelon',
+    iso2: 'PM',
   },
   {
-    "country": "Saint Vincent and the Grenadines",
-    "iso2": "VC"
+    country: 'Saint Vincent and the Grenadines',
+    iso2: 'VC',
   },
   {
-    "country": "San Marino",
-    "iso2": "SM"
+    country: 'San Marino',
+    iso2: 'SM',
   },
   {
-    "country": "Sao Tome and Principe",
-    "iso2": "ST"
+    country: 'Sao Tome and Principe',
+    iso2: 'ST',
   },
   {
-    "country": "Saudi Arabia",
-    "iso2": "SA"
+    country: 'Saudi Arabia',
+    iso2: 'SA',
   },
   {
-    "country": "Senegal",
-    "iso2": "SN"
+    country: 'Senegal',
+    iso2: 'SN',
   },
   {
-    "country": "Serbia",
-    "iso2": "RS"
+    country: 'Serbia',
+    iso2: 'RS',
   },
   {
-    "country": "Seychelles",
-    "iso2": "SC"
+    country: 'Seychelles',
+    iso2: 'SC',
   },
   {
-    "country": "Sierra Leone",
-    "iso2": "SL"
+    country: 'Sierra Leone',
+    iso2: 'SL',
   },
   {
-    "country": "Singapore",
-    "iso2": "SG"
+    country: 'Singapore',
+    iso2: 'SG',
   },
   {
-    "country": "Sint Maarten",
-    "iso2": "SX"
+    country: 'Sint Maarten',
+    iso2: 'SX',
   },
   {
-    "country": "Slovakia",
-    "iso2": "SK"
+    country: 'Slovakia',
+    iso2: 'SK',
   },
   {
-    "country": "Slovenia",
-    "iso2": "SI"
+    country: 'Slovenia',
+    iso2: 'SI',
   },
   {
-    "country": "Solomon Islands",
-    "iso2": "SB"
+    country: 'Solomon Islands',
+    iso2: 'SB',
   },
   {
-    "country": "Somalia",
-    "iso2": "SO"
+    country: 'Somalia',
+    iso2: 'SO',
   },
   {
-    "country": "South Africa",
-    "iso2": "ZA"
+    country: 'South Africa',
+    iso2: 'ZA',
   },
   {
-    "country": "South Georgia and the South Sandwich Islands",
-    "iso2": "GS"
+    country: 'South Georgia and the South Sandwich Islands',
+    iso2: 'GS',
   },
   {
-    "country": "South Korea",
-    "iso2": "KR"
+    country: 'South Korea',
+    iso2: 'KR',
   },
   {
-    "country": "South Sudan",
-    "iso2": "SS"
+    country: 'South Sudan',
+    iso2: 'SS',
   },
   {
-    "country": "Spain",
-    "iso2": "ES"
+    country: 'Spain',
+    iso2: 'ES',
   },
   {
-    "country": "Sri Lanka",
-    "iso2": "LK"
+    country: 'Sri Lanka',
+    iso2: 'LK',
   },
   {
-    "country": "Sudan",
-    "iso2": "SD"
+    country: 'Sudan',
+    iso2: 'SD',
   },
   {
-    "country": "Suriname",
-    "iso2": "SR"
+    country: 'Suriname',
+    iso2: 'SR',
   },
   {
-    "country": "Svalbard",
-    "iso2": "SJ"
+    country: 'Svalbard',
+    iso2: 'SJ',
   },
   {
-    "country": "Sweden",
-    "iso2": "SE"
+    country: 'Sweden',
+    iso2: 'SE',
   },
   {
-    "country": "Switzerland",
-    "iso2": "CH"
+    country: 'Switzerland',
+    iso2: 'CH',
   },
   {
-    "country": "Syria",
-    "iso2": "SY"
+    country: 'Syria',
+    iso2: 'SY',
   },
   {
-    "country": "Taiwan",
-    "iso2": "TW"
+    country: 'Taiwan',
+    iso2: 'TW',
   },
   {
-    "country": "Tajikistan",
-    "iso2": "TJ"
+    country: 'Tajikistan',
+    iso2: 'TJ',
   },
   {
-    "country": "Tanzania",
-    "iso2": "TZ"
+    country: 'Tanzania',
+    iso2: 'TZ',
   },
   {
-    "country": "Thailand",
-    "iso2": "TH"
+    country: 'Thailand',
+    iso2: 'TH',
   },
   {
-    "country": "The Bahamas",
-    "iso2": "BS"
+    country: 'The Bahamas',
+    iso2: 'BS',
   },
   {
-    "country": "The Gambia",
-    "iso2": "GM"
+    country: 'The Gambia',
+    iso2: 'GM',
   },
   {
-    "country": "Timor-Leste",
-    "iso2": "TL"
+    country: 'Timor-Leste',
+    iso2: 'TL',
   },
   {
-    "country": "Togo",
-    "iso2": "TG"
+    country: 'Togo',
+    iso2: 'TG',
   },
   {
-    "country": "Tokelau",
-    "iso2": "TK"
+    country: 'Tokelau',
+    iso2: 'TK',
   },
   {
-    "country": "Tonga",
-    "iso2": "TO"
+    country: 'Tonga',
+    iso2: 'TO',
   },
   {
-    "country": "Trinidad and Tobago",
-    "iso2": "TT"
+    country: 'Trinidad and Tobago',
+    iso2: 'TT',
   },
   {
-    "country": "Tunisia",
-    "iso2": "TN"
+    country: 'Tunisia',
+    iso2: 'TN',
   },
   {
-    "country": "Turkey",
-    "iso2": "TR"
+    country: 'Turkey',
+    iso2: 'TR',
   },
   {
-    "country": "Turkmenistan",
-    "iso2": "TM"
+    country: 'Turkmenistan',
+    iso2: 'TM',
   },
   {
-    "country": "Turks and Caicos Islands",
-    "iso2": "TC"
+    country: 'Turks and Caicos Islands',
+    iso2: 'TC',
   },
   {
-    "country": "Tuvalu",
-    "iso2": "TV"
+    country: 'Tuvalu',
+    iso2: 'TV',
   },
   {
-    "country": "Uganda",
-    "iso2": "UG"
+    country: 'Uganda',
+    iso2: 'UG',
   },
   {
-    "country": "Ukraine",
-    "iso2": "UA"
+    country: 'Ukraine',
+    iso2: 'UA',
   },
   {
-    "country": "United Arab Emirates",
-    "iso2": "AE"
+    country: 'United Arab Emirates',
+    iso2: 'AE',
   },
   {
-    "country": "United Kingdom",
-    "iso2": "GB"
+    country: 'United Kingdom',
+    iso2: 'GB',
   },
   {
-    "country": "United States",
-    "iso2": "US"
+    country: 'United States',
+    iso2: 'US',
   },
   {
-    "country": "United States Minor Outlying Islands",
-    "iso2": "UM"
+    country: 'United States Minor Outlying Islands',
+    iso2: 'UM',
   },
   {
-    "country": "Uruguay",
-    "iso2": "UY"
+    country: 'Uruguay',
+    iso2: 'UY',
   },
   {
-    "country": "Uzbekistan",
-    "iso2": "UZ"
+    country: 'Uzbekistan',
+    iso2: 'UZ',
   },
   {
-    "country": "Vanuatu",
-    "iso2": "VU"
+    country: 'Vanuatu',
+    iso2: 'VU',
   },
   {
-    "country": "Venezuela",
-    "iso2": "VE"
+    country: 'Venezuela',
+    iso2: 'VE',
   },
   {
-    "country": "Vietnam",
-    "iso2": "VN"
+    country: 'Vietnam',
+    iso2: 'VN',
   },
   {
-    "country": "Virgin Islands",
-    "iso2": "VI"
+    country: 'Virgin Islands',
+    iso2: 'VI',
   },
   {
-    "country": "Wallis and Futuna",
-    "iso2": "WF"
+    country: 'Wallis and Futuna',
+    iso2: 'WF',
   },
   {
-    "country": "Western Sahara",
-    "iso2": "EH"
+    country: 'Western Sahara',
+    iso2: 'EH',
   },
   {
-    "country": "Western Samoa",
-    "iso2": "WS"
+    country: 'Western Samoa',
+    iso2: 'WS',
   },
   {
-    "country": "Yemen",
-    "iso2": "YE"
+    country: 'Yemen',
+    iso2: 'YE',
   },
   {
-    "country": "Zambia",
-    "iso2": "ZM"
+    country: 'Zambia',
+    iso2: 'ZM',
   },
   {
-    "country": "Zimbabwe",
-    "iso2": "ZW"
-  }
-] as const satisfies { country: string, iso2: string }[];
+    country: 'Zimbabwe',
+    iso2: 'ZW',
+  },
+] as const satisfies { country: string; iso2: string }[];
 
 /**
  * Keys are ISO2 codes, values are names.
  */
-export const countryOptions: { label: string; value: string }[] =
-  COUNTRIES.map(country => ({label: country.country, value: country.iso2}));
+export const countryOptions: { label: string; value: string }[] = COUNTRIES.map((country) => ({
+  label: country.country,
+  value: country.iso2,
+}));
 
-export type countryISO2 = (typeof COUNTRIES)[number]["iso2"];
+export type countryISO2 = (typeof COUNTRIES)[number]['iso2'];

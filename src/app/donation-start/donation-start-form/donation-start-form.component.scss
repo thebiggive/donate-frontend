@@ -1,10 +1,11 @@
-@use '@angular/material' as mat;
-@use '../../../abstract';
+@use "@angular/material" as mat;
+@use "../../../abstract";
 @use "../../../assets/scss/donation-common";
 
 @include abstract.binary-options();
 
-.mat-stepper-horizontal, .mat-stepper-vertical {
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
   background: none;
   box-shadow: abstract.$box-shadow-soft;
   @include abstract.b-rt-0;
@@ -23,12 +24,14 @@ div.mdc-form-field label {
   font-size: inherit;
 }
 
-:host ::ng-deep div.mat-step-label, div.mat-step-label-selected, div.mat-step-label.mat-step-label-selected {
+:host ::ng-deep div.mat-step-label,
+div.mat-step-label-selected,
+div.mat-step-label.mat-step-label-selected {
   // important is a bit of a hack to make sure we override the font size set by material design,
   // which is different for the selected and non-selected step. Also overriding that by being more specific
   // in the selector above, including 'div', but don't want to rely just on that.
 
-  font-size: 17px !important; ;
+  font-size: 17px !important;
   line-height: 20px;
   @media #{abstract.$breakpoint-lg} {
     font-size: 20px !important;
@@ -271,11 +274,11 @@ input {
   background-color: abstract.$colour-background;
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
-};
+}
 
 // I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
 // https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
-mat-expansion-panel:has(:focus-visible){
+mat-expansion-panel:has(:focus-visible) {
   box-shadow: 0 8px 8px -7px abstract.$colour-secondary !important;
 }
 
@@ -303,7 +306,8 @@ div#giftAidAddressContainer > div {
   }
 }
 
-button.continue, .c-donate-button {
+button.continue,
+.c-donate-button {
   margin-top: 22px !important;
   margin-bottom: 22px !important;
   padding: 1.5rem;
@@ -312,7 +316,6 @@ button.continue, .c-donate-button {
 
 .c-donate-button {
   @include abstract.make-donate-button;
-
 }
 
 .c-donate-button-amount {
@@ -347,13 +350,14 @@ button.continue, .c-donate-button {
   text-align: center;
 }
 
-.error, .stripeError {
+.error,
+.stripeError {
   color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;
 }
 
 .prefix {
-  font-size: 2rem
+  font-size: 2rem;
 }
 
 .prefix-tbg {
@@ -391,7 +395,6 @@ mat-expansion-panel ul li {
   list-style: none disc outside;
   padding-left: 1em;
 }
-
 
 mat-expansion-panel {
   margin-top: 30px;
@@ -432,7 +435,7 @@ h3 {
   display: inline-block;
 }
 
-.mat-expansion-panel{
+.mat-expansion-panel {
   box-shadow: none !important;
 }
 
@@ -441,8 +444,8 @@ mat-expansion-panel-header h3 {
 }
 
 .span-hr {
-  display:inline-block;
-  width:100%;
+  display: inline-block;
+  width: 100%;
   border-top: 1px solid #888888;
   margin-top: 30px;
   position: absolute;

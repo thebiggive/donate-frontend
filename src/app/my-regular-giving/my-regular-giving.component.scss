@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 @use "../../assets/scss/auth-common";
 
 #banner {
@@ -8,22 +8,26 @@ main > div {
   color: white;
   background-color: abstract.$colour-primary;
 
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     color: white;
   }
 }
 
 div.mandate {
-    position: relative;
-    a:link, a:visited, a:hover {
-      color: inherit !important;
-      text-decoration: none;
-    }
-    ul {
-      padding: 0;
-      list-style-type: none;
-      margin-top: auto;
-    }
+  position: relative;
+  a:link,
+  a:visited,
+  a:hover {
+    color: inherit !important;
+    text-decoration: none;
+  }
+  ul {
+    padding: 0;
+    list-style-type: none;
+    margin-top: auto;
+  }
 
   div.cancelled {
     background-color: abstract.$colour-secondary;

@@ -1,4 +1,4 @@
-import {CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller} from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -11,44 +11,44 @@ import {
   PLATFORM_ID,
   StateKey,
   TransferState,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {BiggiveCampaignCardFilterGrid} from '@biggive/components-angular';
-import {MatomoTracker} from 'ngx-matomo-client';
-import {skip, Subscription} from 'rxjs';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { skip, Subscription } from 'rxjs';
 
-import {currencyPipeDigitsInfo} from '../../environments/common';
-import {CampaignService, SearchQuery} from '../campaign.service';
-import {CampaignGroupsService} from '../campaign-groups.service';
-import {CampaignSummary} from '../campaign-summary.model';
-import {PageMetaService} from '../page-meta.service';
-import {SearchService} from '../search.service';
-import {HighlightCard} from "../highlight-cards/HighlightCard";
-import {Campaign} from "../campaign.model";
-import {Fund} from "../fund.model";
-import {NavigationService} from "../navigation.service";
-import {FundService} from "../fund.service";
-import {TimeLeftPipe} from "../time-left.pipe";
-import {environment} from "../../environments/environment";
-import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
-import {logCampaignCalloutError} from '../logCampaignCalloutError';
+import { currencyPipeDigitsInfo } from '../../environments/common';
+import { CampaignService, SearchQuery } from '../campaign.service';
+import { CampaignGroupsService } from '../campaign-groups.service';
+import { CampaignSummary } from '../campaign-summary.model';
+import { PageMetaService } from '../page-meta.service';
+import { SearchService } from '../search.service';
+import { HighlightCard } from '../highlight-cards/HighlightCard';
+import { Campaign } from '../campaign.model';
+import { Fund } from '../fund.model';
+import { NavigationService } from '../navigation.service';
+import { FundService } from '../fund.service';
+import { TimeLeftPipe } from '../time-left.pipe';
+import { environment } from '../../environments/environment';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { logCampaignCalloutError } from '../logCampaignCalloutError';
 
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-    selector: 'app-explore',
-    templateUrl: './explore.component.html',
-    styleUrl: 'explore.component.scss',
-    providers: [
-        CurrencyPipe,
-        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-        { provide: openPipeToken, useClass: TimeLeftPipe },
-        { provide: endPipeToken, useClass: TimeLeftPipe },
-        DatePipe,
-    ],
-    standalone: false
+  selector: 'app-explore',
+  templateUrl: './explore.component.html',
+  styleUrl: 'explore.component.scss',
+  providers: [
+    CurrencyPipe,
+    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+    { provide: openPipeToken, useClass: TimeLeftPipe },
+    { provide: endPipeToken, useClass: TimeLeftPipe },
+    DatePipe,
+  ],
+  standalone: false,
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
@@ -89,7 +89,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
-  public tickerItems: { label: string, figure: string }[] = [];
+  public tickerItems: { label: string; figure: string }[] = [];
   private tickerUpdateTimer?: number;
   public tickerMainMessage?: string;
   private shouldAutoScroll?: boolean;
@@ -108,14 +108,15 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    *
    * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
    */
-  protected readonly campaignIdsWithRectangleImage: string[] = environment.environmentId !== 'production' ?
-    [
-      'a056900002RXrXtAAL',
-      'a056900002SEVVPAA5', // Christmas Challenge 2024
-    ] :
-    [
-      'a056900002SEVVPAA5', // Christmas Challenge 2024
-    ];
+  protected readonly campaignIdsWithRectangleImage: string[] =
+    environment.environmentId !== 'production'
+      ? [
+          'a056900002RXrXtAAL',
+          'a056900002SEVVPAA5', // Christmas Challenge 2024
+        ]
+      : [
+          'a056900002SEVVPAA5', // Christmas Challenge 2024
+        ];
 
   constructor(
     private campaignService: CampaignService,
@@ -148,17 +149,17 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   protected get title() {
-    if (! this.metaCampaign) {
+    if (!this.metaCampaign) {
       return 'Big Give';
     }
 
-    if (! this.fund) {
+    if (!this.fund) {
       return this.metaCampaign?.title;
     }
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
     // its content + alt text should do the equivalent job.
-    return (!this.fund.logoUri && this.fund.name)
+    return !this.fund.logoUri && this.fund.name
       ? `${this.metaCampaign.title}: ${this.fund.name}`
       : this.metaCampaign.title;
   }
@@ -189,7 +190,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     void this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (!this.fund && this.fundSlug && this.metaCampaign) {
-      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
+      this.fundService.getOneBySlug(this.fundSlug).subscribe((fund) => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
         if (this.fund) {
@@ -203,8 +204,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private setFundSpecificProps(fund: Fund, metaCampaign: Campaign) {
-    this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
-      ' raised' + (metaCampaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+    this.tickerMainMessage =
+      this.currencyPipe.transform(fund.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+      ' raised' +
+      (metaCampaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const tickerItems = [];
     tickerItems.push({
@@ -213,7 +216,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         fund.totalForTicker,
         metaCampaign.currencyCode,
         'symbol',
-        currencyPipeDigitsInfo
+        currencyPipeDigitsInfo,
       ) as string,
     });
     if (CampaignService.isOpenForDonations(metaCampaign)) {
@@ -302,13 +305,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   getRelevantDateAsStr(campaign: CampaignSummary) {
     const date = CampaignService.getRelevantDate(campaign);
     return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
-  };
+  }
 
   /**
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
-    const cardsPerRow = (window.innerWidth < 600 ? 1 : (window.innerWidth < 968 ? 2 : 3));
+    const cardsPerRow = window.innerWidth < 600 ? 1 : window.innerWidth < 968 ? 2 : 3;
     const safeNumberOfRows = 2 + (500 + window.scrollY) / 450; // Allow 500px for top stuff; 450px per card row; 2 spare rows
     const safeNumberToLoad = cardsPerRow * safeNumberOfRows;
     if (this.individualCampaigns.length < safeNumberToLoad) {
@@ -330,7 +333,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     if (!this.blurredSinceLastMajorScroll) {
-      this.cardGrid && await this.cardGrid.unfocusInputs();
+      this.cardGrid && (await this.cardGrid.unfocusInputs());
       this.blurredSinceLastMajorScroll = true;
     }
 
@@ -355,7 +358,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private moreMightExist(): boolean {
-    return (this.individualCampaigns.length === (CampaignService.perPage + this.offset));
+    return this.individualCampaigns.length === CampaignService.perPage + this.offset;
   }
 
   private loadMoreForCurrentSearch() {
@@ -378,7 +381,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
       next: (campaignSummaries) => {
-        this.individualCampaigns = clearExisting ? campaignSummaries : [...this.individualCampaigns, ...campaignSummaries];
+        this.individualCampaigns = clearExisting
+          ? campaignSummaries
+          : [...this.individualCampaigns, ...campaignSummaries];
         this.loading = false;
 
         if (isPlatformBrowser(this.platformId)) {
@@ -403,7 +408,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         );
         this.filterError = true;
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -417,11 +422,18 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searched = this.searchService.nonDefaultsActive;
 
     this.offset = 0;
-    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.metaCampaign?.id, this.campaignSlug, this.fundSlug);
+    const query = this.campaignService.buildQuery(
+      this.searchService.selected,
+      0,
+      this.metaCampaign?.id,
+      this.campaignSlug,
+      this.fundSlug,
+    );
     this.individualCampaigns = [];
     this.loading = true;
 
-    if (!isPlatformBrowser(this.platformId)) { // Server renders don't need the scroll restoration help
+    if (!isPlatformBrowser(this.platformId)) {
+      // Server renders don't need the scroll restoration help
       this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
       return;
     }
@@ -430,7 +442,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
-      recentChildrenData.time > (Date.now() - (60000 * this.recentChildrenMaxMinutes)) &&
+      recentChildrenData.time > Date.now() - 60000 * this.recentChildrenMaxMinutes &&
       recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
     ) {
       this.individualCampaigns = recentChildrenData.children;
@@ -459,7 +471,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Get any query params from the requested URL.
    */
   private loadQueryParamsAndRun() {
-    this.routeParamSubscription = this.route.queryParams.subscribe(params => {
+    this.routeParamSubscription = this.route.queryParams.subscribe((params) => {
       this.searchService.loadQueryParams(params, this.defaultSort);
       this.run();
     });
@@ -485,10 +497,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    void this.router.navigate([], { queryParams: nextQueryParams });  }
+    void this.router.navigate([], { queryParams: nextQueryParams });
+  }
 
   private listenForRouteChanges() {
-    this.routeChangeListener = this.router.events.subscribe(event => {
+    this.routeChangeListener = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         const scrollPositionY = this.scroller.getScrollPosition()[1];
         this.navigationService.saveLastScrollY(scrollPositionY);
@@ -524,8 +537,15 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     if (!this.fund) {
       if (!campaignInFuture) {
         const showGiftAid = metaCampaign.currencyCode === 'GBP' && metaCampaign.amountRaised > 0;
-        this.tickerMainMessage = this.currencyPipe.transform(metaCampaign.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
-          ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
+        this.tickerMainMessage =
+          this.currencyPipe.transform(
+            metaCampaign.amountRaised,
+            metaCampaign.currencyCode,
+            'symbol',
+            currencyPipeDigitsInfo,
+          ) +
+          ' raised' +
+          (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
         this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(metaCampaign.startDate);
       }
@@ -535,16 +555,23 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
     if (!this.fundSlug) {
       if (campaignOpen) {
-        tickerItems.push(...[
-          {
-            label: 'remaining',
-            figure: this.timeLeftToEndPipe.transform(metaCampaign.endDate),
-          },
-          {
-            label: 'match funds remaining',
-            figure: this.currencyPipe.transform(metaCampaign.matchFundsRemaining, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
-          },
-        ]);
+        tickerItems.push(
+          ...[
+            {
+              label: 'remaining',
+              figure: this.timeLeftToEndPipe.transform(metaCampaign.endDate),
+            },
+            {
+              label: 'match funds remaining',
+              figure: this.currencyPipe.transform(
+                metaCampaign.matchFundsRemaining,
+                metaCampaign.currencyCode,
+                'symbol',
+                currencyPipeDigitsInfo,
+              ) as string,
+            },
+          ],
+        );
       } else {
         tickerItems.push({
           label: 'days duration',
@@ -553,26 +580,27 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       }
 
       if (metaCampaign.campaignCount && metaCampaign.campaignCount > 1) {
-        tickerItems.push(
-          {
-            label: 'participating charities',
-            figure: metaCampaign.campaignCount.toLocaleString(),
-          }
-        )
+        tickerItems.push({
+          label: 'participating charities',
+          figure: metaCampaign.campaignCount.toLocaleString(),
+        });
       }
 
       if (metaCampaign.donationCount > 0) {
-        tickerItems.push(
-          {
-            label: 'donations',
-            figure: metaCampaign.donationCount.toLocaleString(),
-          }
-        )
+        tickerItems.push({
+          label: 'donations',
+          figure: metaCampaign.donationCount.toLocaleString(),
+        });
       }
 
       tickerItems.push({
         label: 'total match funds',
-        figure: this.currencyPipe.transform(metaCampaign.matchFundsTotal, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
+        figure: this.currencyPipe.transform(
+          metaCampaign.matchFundsTotal,
+          metaCampaign.currencyCode,
+          'symbol',
+          currencyPipeDigitsInfo,
+        ) as string,
       });
     }
 
@@ -589,7 +617,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     // per second.
     if (isPlatformBrowser(this.platformId) && !this.fundSlug) {
       this.tickerUpdateTimer = window.setTimeout(() => {
-        this.setTickerParams(metaCampaign)
+        this.setTickerParams(metaCampaign);
       }, 1000);
     }
   }

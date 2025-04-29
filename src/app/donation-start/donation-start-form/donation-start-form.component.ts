@@ -1,6 +1,6 @@
-import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {isPlatformBrowser} from '@angular/common';
-import {HttpErrorResponse} from '@angular/common/http';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -15,13 +15,13 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatDialog} from '@angular/material/dialog';
-import {MatStepper} from '@angular/material/stepper';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatomoTracker} from 'ngx-matomo-client';
-import {retry} from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { retry } from 'rxjs/operators';
 import {
   ConfirmationTokenResult,
   PaymentIntent,
@@ -31,42 +31,42 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import {firstValueFrom} from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
-import {Campaign} from '../../campaign.model';
-import {CardIconsService} from '../../card-icons.service';
-import {campaignHiddenMessage} from '../../../environments/common';
-import {countryOptions} from '../../countries';
-import {Donation, maximumDonationAmount, OVERSEAS} from '../../donation.model';
-import {DonationCreatedResponse} from '../../donation-created-response.model';
-import {DonationService} from '../../donation.service';
-import {DonationStartMatchConfirmDialogComponent} from '../donation-start-match-confirm-dialog.component';
-import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-matching-expired-dialog.component';
-import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
-import {environment} from '../../../environments/environment';
-import {ExactCurrencyPipe} from '../../exact-currency.pipe';
-import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
-import {IdentityService} from '../../identity.service';
-import {ConversionTrackingService} from '../../conversionTracking.service';
-import {PageMetaService} from '../../page-meta.service';
-import {Person} from '../../person.model';
-import {AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp} from '../../address.service';
-import {getDelay} from '../../observable-retry';
-import {getStripeFriendlyError, StripeService} from '../../stripe.service';
-import {getCurrencyMaxValidator} from '../../validators/currency-max';
-import {getCurrencyMinValidator} from '../../validators/currency-min';
-import {EMAIL_REGEXP} from '../../validators/patterns';
-import {updateDonationFromForm} from "../updateDonationFromForm";
-import {sanitiseCurrency} from "../sanitiseCurrency";
-import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
-import {requiredNotBlankValidator} from "../../validators/notBlank";
-import {WidgetInstance} from "friendly-challenge";
-import {Toast} from "../../toast.service";
-import {GIFT_AID_FACTOR} from '../../Money';
-import {noLongNumberValidator} from '../../validators/noLongNumberValidator';
+import { Campaign } from '../../campaign.model';
+import { CardIconsService } from '../../card-icons.service';
+import { campaignHiddenMessage } from '../../../environments/common';
+import { countryOptions } from '../../countries';
+import { Donation, maximumDonationAmount, OVERSEAS } from '../../donation.model';
+import { DonationCreatedResponse } from '../../donation-created-response.model';
+import { DonationService } from '../../donation.service';
+import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
+import { DonationStartMatchingExpiredDialogComponent } from '../donation-start-matching-expired-dialog.component';
+import { DonationStartOfferReuseDialogComponent } from '../donation-start-offer-reuse-dialog.component';
+import { environment } from '../../../environments/environment';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
+import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
+import { IdentityService } from '../../identity.service';
+import { ConversionTrackingService } from '../../conversionTracking.service';
+import { PageMetaService } from '../../page-meta.service';
+import { Person } from '../../person.model';
+import { AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp } from '../../address.service';
+import { getDelay } from '../../observable-retry';
+import { getStripeFriendlyError, StripeService } from '../../stripe.service';
+import { getCurrencyMaxValidator } from '../../validators/currency-max';
+import { getCurrencyMinValidator } from '../../validators/currency-min';
+import { EMAIL_REGEXP } from '../../validators/patterns';
+import { updateDonationFromForm } from '../updateDonationFromForm';
+import { sanitiseCurrency } from '../sanitiseCurrency';
+import { PaymentReadinessTracker } from './PaymentReadinessTracker';
+import { requiredNotBlankValidator } from '../../validators/notBlank';
+import { WidgetInstance } from 'friendly-challenge';
+import { Toast } from '../../toast.service';
+import { GIFT_AID_FACTOR } from '../../Money';
+import { noLongNumberValidator } from '../../validators/noLongNumberValidator';
 
 declare let _paq: {
-  push: (args: Array<string|object>) => void,
+  push: (args: Array<string | object>) => void;
 };
 
 @Component({
@@ -74,11 +74,11 @@ declare let _paq: {
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
   standalone: false,
-  providers: [
-    ExactCurrencyPipe,
-  ]
+  providers: [ExactCurrencyPipe],
 })
-export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
+export class DonationStartFormComponent
+  implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
+{
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
    * will not have covered GA on a tip as well. So if this is true and they go back and add a tip we will need to
@@ -133,11 +133,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   minimumTipPercentage = 1 as const;
   readonly suggestedTipPercentages = [
-    {value: '7.5', label: '7.5%'},
-    {value: '10', label: '10%'},
-    {value: '12.5', label: '12.5%'},
-    {value: '15', label: '15%'},
-    {value: 'Other', label: 'Other'}
+    { value: '7.5', label: '7.5%' },
+    { value: '10', label: '10%' },
+    { value: '12.5', label: '12.5%' },
+    { value: '15', label: '15%' },
+    { value: 'Other', label: 'Other' },
   ] as const;
 
   noPsps = false;
@@ -206,12 +206,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then leaves it invalid.
     this.amountsGroup.get('tipAmount')?.markAsUntouched();
     this.showCustomTipInput = true;
-  }
+  };
 
   displayPercentageTipInput = () => {
     const tipValue = Math.max(
-      this.minimumTipPercentage * this.donationAmount / 100,
-      Math.min(this.maximumTipPercentage * this.donationAmount / 100, this.tipValue || 0)
+      (this.minimumTipPercentage * this.donationAmount) / 100,
+      Math.min((this.maximumTipPercentage * this.donationAmount) / 100, this.tipValue || 0),
     );
 
     const tipValueRounded = tipValue.toFixed(2);
@@ -219,19 +219,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
-  }
+  };
 
   private stripeElements: StripeElements | undefined;
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker!: PaymentReadinessTracker;
-  public paymentStepErrors: string = "";
-  private donationRetryTimeout: number|undefined = undefined;
+  public paymentStepErrors: string = '';
+  private donationRetryTimeout: number | undefined = undefined;
 
   @ViewChild('frccaptcha', { static: false })
-  friendlyCaptcha: ElementRef<HTMLElement>|undefined;
+  friendlyCaptcha: ElementRef<HTMLElement> | undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
-  protected zeroTipTextABTestVariant: 'A'|'B' = 'A';
+  protected zeroTipTextABTestVariant: 'A' | 'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
@@ -252,7 +252,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
-    private toast: Toast
+    private toast: Toast,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.selectedCountryCode = this.defaultCountryCode;
@@ -261,11 +261,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = 'dropdown';
 
-
-    if (! environment.production) {
+    if (!environment.production) {
       this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
     }
-
 
     if (this.manuallySelectedABTestVariant == 'B') {
       this.zeroTipTextABTestVariant = 'B';
@@ -274,7 +272,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngOnDestroy() {
     if (this.donation) {
-      this.clearDonation(this.donation, {clearAllRecord: false, jumpToStart: false});
+      this.clearDonation(this.donation, { clearAllRecord: false, jumpToStart: false });
     }
 
     this.destroyStripeElements();
@@ -284,7 +282,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-
       /**
        * For some reason awaiting this promise makes tests fail with
        * "Cannot read properties of undefined (reading 'setValue')". Not sure why, but we can send any error to the
@@ -295,23 +292,25 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
       if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
-        _paq.push(['AbTesting::create', {
-          name: environment.matomoAbTest.name,
-          percentage: 100,
-          includedTargets: [{"attribute":"url","inverted":"0","type":"any","value":""}],
-          excludedTargets: [],
-          startDateTime: environment.matomoAbTest.startDate,
-          endDateTime: environment.matomoAbTest.endDate,
-          variations: [
-            {
+        _paq.push([
+          'AbTesting::create',
+          {
+            name: environment.matomoAbTest.name,
+            percentage: 100,
+            includedTargets: [{ attribute: 'url', inverted: '0', type: 'any', value: '' }],
+            excludedTargets: [],
+            startDateTime: environment.matomoAbTest.startDate,
+            endDateTime: environment.matomoAbTest.endDate,
+            variations: [
+              {
                 name: 'original',
                 activate: (_event: unknown) => {
                   // No change from the original form.
                   console.log('Original test variant active!');
                   this.zeroTipTextABTestVariant = 'A';
-                }
-            },
-            {
+                },
+              },
+              {
                 name: environment.matomoAbTest.variantName,
                 activate: (_event: unknown) => {
                   if (this.manuallySelectedABTestVariant) {
@@ -319,13 +318,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                   }
                   this.zeroTipTextABTestVariant = 'B';
                   console.log('Copy B test variant active!');
-                }
-            },
-          ],
-          trigger: () => {
+                },
+              },
+            ],
+            trigger: () => {
               return true;
+            },
           },
-        }]);
+        ]);
       }
     }
 
@@ -336,24 +336,27 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const marketingBooleansDefaultValue = environment.environmentId === 'regression' ? false : null;
 
     const formGroups: {
-      amounts: FormGroup,   // Matching reservation happens at the end of this group.
-      giftAid: FormGroup,
-      marketing: FormGroup,
-      payment: FormGroup,  // Always present now we're Stripe-only.
+      amounts: FormGroup; // Matching reservation happens at the end of this group.
+      giftAid: FormGroup;
+      marketing: FormGroup;
+      payment: FormGroup; // Always present now we're Stripe-only.
     } = {
       amounts: this.formBuilder.group({
-        donationAmount: [null, [
-          requiredNotBlankValidator,
-          getCurrencyMinValidator(1), // min donation is £1
-          getCurrencyMaxValidator(),
-          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
+        donationAmount: [
+          null,
+          [
+            requiredNotBlankValidator,
+            getCurrencyMinValidator(1), // min donation is £1
+            getCurrencyMaxValidator(),
+            Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+          ],
+        ],
         tipPercentage: [this.tipPercentage], // See setConditionalValidators().
         tipAmount: [null], // See setConditionalValidators()
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null],        // See addUKValidators().
-        homeAddress: [null],  // See setConditionalValidators().
+        giftAid: [null], // See addUKValidators().
+        homeAddress: [null], // See setConditionalValidators().
         homeBuildingNumber: [null],
         homeOutsideUK: [null],
         homePostcode: [null], // See setConditionalValidators().
@@ -364,23 +367,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         optInChampionEmail: [marketingBooleansDefaultValue],
       }),
       payment: this.formBuilder.group({
-        firstName: [null, [
-          Validators.maxLength(40),
-          requiredNotBlankValidator,
-          noLongNumberValidator,
-        ]],
-        lastName: [null, [
-          Validators.maxLength(80),
-          requiredNotBlankValidator,
-          noLongNumberValidator,
-        ]],
-        emailAddress: [null, [
-          requiredNotBlankValidator,
-          // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(EMAIL_REGEXP),
-        ]],
+        firstName: [null, [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]],
+        lastName: [null, [Validators.maxLength(80), requiredNotBlankValidator, noLongNumberValidator]],
+        emailAddress: [
+          null,
+          [
+            requiredNotBlankValidator,
+            // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+            Validators.pattern(EMAIL_REGEXP),
+          ],
+        ],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
-        billingPostcode: [null],  // See setConditionalValidators().
+        billingPostcode: [null], // See setConditionalValidators().
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -423,14 +421,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.giftAidCheckedForZeroTip = false;
         this.triedToLeaveGiftAid = false;
       } else {
-        const gaValue: boolean|null = this.giftAidGroup.get('giftAid')?.value;
+        const gaValue: boolean | null = this.giftAidGroup.get('giftAid')?.value;
         this.giftAidCheckedForZeroTip = this.tipValue === 0 && !!gaValue;
       }
     });
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
 
-    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup);
 
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
@@ -438,19 +436,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async ngAfterViewInit() {
-    if (! isPlatformBrowser(this.platformId)) {
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
     const friendlyCaptcha = this.friendlyCaptcha;
 
-    if (! friendlyCaptcha) {
+    if (!friendlyCaptcha) {
       // should always be loaded from the template, but not present in tests.
       return;
     }
 
     if (environment.environmentId === 'regression') {
-      this.idCaptchaCode = "dummy-captcha-code";
+      this.idCaptchaCode = 'dummy-captcha-code';
       return;
     }
 
@@ -463,7 +461,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
       },
       errorCallback: (error: unknown) => {
-        this.toast.showError("Sorry, there was an error with the anti-spam captcha check.");
+        this.toast.showError('Sorry, there was an error with the anti-spam captcha check.');
         console.error(error);
       },
     });
@@ -471,16 +469,17 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     await this.friendlyCaptchaWidget.start();
   }
 
-  public setSelectedCountry = ((countryCode: string) => {
+  public setSelectedCountry = (countryCode: string) => {
     this.selectedCountryCode = countryCode;
     this.paymentGroup.patchValue({
       billingCountry: countryCode,
     });
-  })
+  };
 
   resumeDonationsIfPossible() {
-    this.donationService.getProbablyResumableDonation(this.campaignId, this.getPaymentMethodType())
-      .subscribe((existingDonation: (Donation|undefined)) => {
+    this.donationService
+      .getProbablyResumableDonation(this.campaignId, this.getPaymentMethodType())
+      .subscribe((existingDonation: Donation | undefined) => {
         this.previousDonation = existingDonation;
 
         // The local check might not have the latest donation status in edge cases, so we need to check the copy
@@ -507,7 +506,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
 
         this.offerExistingDonation(existingDonation);
-    });
+      });
   }
 
   /**
@@ -518,7 +517,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.destroyStripeElements();
     if (this.donation) {
       // We already know the requested amount, so no need to jump back.
-      this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
+      this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: false });
     }
     this.createDonationAndMaybePerson();
     this.prepareStripeElements();
@@ -530,13 +529,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.addressService.suggestAddresses({
-        homeAddressFormControl: this.giftAidGroup.get('homeAddress')!,
-        loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
-        foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
-          this.loadingAddressSuggestions = false;
-          this.addressSuggestions = suggestions;
-        }
-      });
+      homeAddressFormControl: this.giftAidGroup.get('homeAddress')!,
+      loadingAddressSuggestionCallback: () => {
+        this.loadingAddressSuggestions = true;
+      },
+      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+        this.loadingAddressSuggestions = false;
+        this.addressSuggestions = suggestions;
+      },
+    });
   }
 
   ngAfterContentChecked() {
@@ -567,15 +568,25 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
-        if ((clickEvent.target as HTMLElement).innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
+        if (
+          (clickEvent.target as HTMLElement).innerText.includes('Your details') &&
+          this.stepper.selected?.label === 'Gift Aid'
+        ) {
           this.triedToLeaveGiftAid = true;
         }
 
-        if ((clickEvent.target as HTMLElement).innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
+        if (
+          (clickEvent.target as HTMLElement).innerText.includes('Confirm') &&
+          this.stepper.selected?.label === 'Your details'
+        ) {
           this.triedToLeaveMarketing = true;
         }
 
-        if (this.psp === 'stripe' && (clickEvent.target as HTMLElement).innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+        if (
+          this.psp === 'stripe' &&
+          (clickEvent.target as HTMLElement).innerText.includes('Receive updates') &&
+          !this.stripePaymentMethodReady
+        ) {
           this.jumpToStep('Payment details');
         }
 
@@ -599,7 +610,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // no need to reset the ViewChild.
 
     location.reload();
-  }
+  };
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
     this.addressService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
@@ -609,7 +620,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
-        this.toast.showError("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
+        this.toast.showError(
+          "Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards",
+        );
         // Immediate step jumps seem to be disallowed
         setTimeout(() => {
           this.jumpToStep(this.yourDonationStepLabel);
@@ -635,21 +648,24 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // If the original donation amount was updated, cancel that donation and
     // then (sequentially so any match funds are freed up first) create a new
     // one for the updated amount.
-    if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
-      this.donationService.cancel(this.donation)
-        .subscribe(() => {
-          this.matomoTracker.trackEvent(
-            'donate',
-            'cancel_auto',
-            `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
-          );
+    if (
+      this.donation !== undefined &&
+      this.donationAmount > 0 &&
+      this.donationAmount !== this.donation.donationAmount
+    ) {
+      this.donationService.cancel(this.donation).subscribe(() => {
+        this.matomoTracker.trackEvent(
+          'donate',
+          'cancel_auto',
+          `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
+        );
 
-          if (this.donation) {
-            // We know the new amount already, so no need to jump back.
-            this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
-          }
-          this.createDonationAndMaybePerson();
-        });
+        if (this.donation) {
+          // We know the new amount already, so no need to jump back.
+          this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: false });
+        }
+        this.createDonationAndMaybePerson();
+      });
 
       return;
     }
@@ -657,7 +673,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donation && event.selectedIndex > 1) {
       // After create() update all Angular form data on step changes, except billing
       // postcode & country which can be set manually or via PRB callbacks.
-      updateDonationFromForm(this.tipValue, this.donation, this.paymentGroup, this.amountsGroup, this.giftAidGroup, this.donationService, this.marketingGroup);
+      updateDonationFromForm(
+        this.tipValue,
+        this.donation,
+        this.paymentGroup,
+        this.amountsGroup,
+        this.giftAidGroup,
+        this.donationService,
+        this.marketingGroup,
+      );
 
       // And if we're about to submit, patch the donation in MatchBot and prevent submission
       // until the latest is persisted. Previously we did this after submit button press but
@@ -700,11 +724,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       });
     }
 
-    if (
-      event.selectedIndex > this.paymentStepIndex &&
-      this.donor &&
-      this.donation
-    ) {
+    if (event.selectedIndex > this.paymentStepIndex && this.donor && this.donation) {
       this.updateNewPersonInBackend(this.donation);
     }
   }
@@ -717,7 +737,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private updateNewPersonInBackend(donation: Donation) {
     const idAndJWT = this.identityService.getIdAndJWT();
     if (!idAndJWT) {
-      console.error("Missing auth info, can't push person update to backend")
+      console.error("Missing auth info, can't push person update to backend");
       return;
     }
 
@@ -729,17 +749,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const person = this.buildPersonFromDonation(donation);
     person.id = idAndJWT.id;
 
-    this.identityService.update(person)
-      .subscribe({
-        next: person => {
-          this.donor = person;
-        },
-        error: (error: HttpErrorResponse) => {
-          // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
-          // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-          this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
-        },
-      });
+    this.identityService.update(person).subscribe({
+      next: (person) => {
+        this.donor = person;
+      },
+      error: (error: HttpErrorResponse) => {
+        // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+        // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+        this.matomoTracker.trackEvent(
+          'identity_error',
+          'person_core_data_update_failed',
+          `${error.status}: ${error.message}`,
+        );
+      },
+    });
   }
 
   private buildPersonFromDonation(donation: Donation): Person {
@@ -795,7 +818,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.donationService.updateLocalDonation(this.donation);
     }
 
-    this.donationService.update(this.donation)
+    this.donationService
+      .update(this.donation)
       .pipe(retry({ count: 3, delay: getDelay() }))
       .subscribe({
         next: async (donation: Donation) => {
@@ -815,7 +839,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.donationUpdateError = true;
           this.toast.showError("Sorry, we can't submit your donation right now.");
           this.submitting = false;
-        }
+        },
       });
   }
 
@@ -823,7 +847,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
    */
-  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
+  async onStripeCardChange(
+    state: StripeElementChangeEvent & { value: { type: string; payment_method?: PaymentMethod } | undefined },
+  ) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -844,8 +870,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     const isCard = state.value?.type === 'card';
-    const selectedSavedPaymentMethod = state.value?.payment_method
-    this.showCardReuseMessage = isCard && ! selectedSavedPaymentMethod && ! this.donor?.has_password;
+    const selectedSavedPaymentMethod = state.value?.payment_method;
+    this.showCardReuseMessage = isCard && !selectedSavedPaymentMethod && !this.donor?.has_password;
 
     this.isSavedPaymentMethodSelected = !!selectedSavedPaymentMethod;
     if (selectedSavedPaymentMethod) {
@@ -903,7 +929,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.toast.showError(this.stripeError);
       this.stripeResponseErrorCode = undefined;
-      this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
+      this.matomoTracker.trackEvent(
+        'donate_error',
+        'stripe_pay_missing_secret',
+        `Donation ID: ${this.donation?.donationId}`,
+      );
       return;
     }
 
@@ -927,7 +957,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             'stripe_customer_balance_payment_error',
             errorMsg ?? '[No message]',
           );
-          this.stripeError = 'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
+          this.stripeError =
+            'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
           this.toast.showError(this.stripeError);
         },
       });
@@ -936,27 +967,28 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     let result:
-      {
-        paymentIntent?: undefined | { status: PaymentIntent.Status; client_secret: string | null },
-        error?: undefined,
-      } |
-      { error: StripeError } |
-      undefined;
+      | {
+          paymentIntent?: undefined | { status: PaymentIntent.Status; client_secret: string | null };
+          error?: undefined;
+        }
+      | { error: StripeError }
+      | undefined;
 
     if (!this.stripeElements) {
-      throw new Error("Missing stripe elements");
+      throw new Error('Missing stripe elements');
     }
 
-    const confirmationTokenResult: ConfirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-      {countryCode: this.donation.countryCode!, billingPostalAddress: this.donation.billingPostalAddress!},
-      this.stripeElements
-    );
+    const confirmationTokenResult: ConfirmationTokenResult =
+      await this.stripeService.prepareConfirmationTokenFromPaymentElement(
+        { countryCode: this.donation.countryCode!, billingPostalAddress: this.donation.billingPostalAddress! },
+        this.stripeElements,
+      );
 
     const confirmationToken = confirmationTokenResult.confirmationToken;
 
     if (confirmationToken) {
       try {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken}));
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, { confirmationToken }));
       } catch (httpError) {
         this.matomoTracker.trackEvent(
           'donate_error',
@@ -971,15 +1003,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
         if (!result.paymentIntent.client_secret) {
-          throw new Error("payment intent requires action but client secret missing")
+          throw new Error('payment intent requires action but client secret missing');
         }
 
-        const {
-          error,
-        } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
+        const { error } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
         if (error) {
           // Next action (e.g. 3D Secure) was run by Stripe.js, and failed.
-          result = {error: error};
+          result = { error: error };
           this.submitting = false;
 
           // As the donation is now attached to a payment intent that will have status requires_action, its not really
@@ -993,18 +1023,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
-      result = {error: confirmationTokenResult?.error};
+      result = { error: confirmationTokenResult?.error };
     }
 
     if (!result || result.error) {
       // Client-side issue that wasn't a next_action should be a `prepareMethodFromPaymentElement()`
       // problem.
       if (result) {
-        this.matomoTracker.trackEvent(
-          'donate_error',
-          'stripe_token_result_error',
-          result.error.message,
-        );
+        this.matomoTracker.trackEvent('donate_error', 'stripe_token_result_error', result.error.message);
         this.handleStripeError(result.error, 'method_setup');
       }
 
@@ -1051,7 +1077,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * Gift Aid step is only shown (at step index 1) when campaign is in GBP.
    */
   get paymentStepIndex() {
-    return this.campaign.currencyCode  === 'GBP' ? 2 : 1;
+    return this.campaign.currencyCode === 'GBP' ? 2 : 1;
   }
 
   /**
@@ -1076,9 +1102,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   showDonationCreateError() {
     this.toast.showError(
-        "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
-        " us if this message persists."
-    )
+      "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
+        ' us if this message persists.',
+    );
   }
 
   captchaIdentityReturn(captchaResponse: string | null) {
@@ -1118,7 +1144,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   giftAidAmount(): number {
-    return this.giftAidGroup.value.giftAid ? (GIFT_AID_FACTOR * this.donationAmount) : 0;
+    return this.giftAidGroup.value.giftAid ? GIFT_AID_FACTOR * this.donationAmount : 0;
   }
 
   tipAmount(): number {
@@ -1126,7 +1152,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return this.tipValue;
     }
 
-    console.error("We should never be hitting this, the tipValue should now always be set to an number");
+    console.error('We should never be hitting this, the tipValue should now always be set to an number');
     return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
@@ -1166,7 +1192,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // when we know we have only just hidden the error in this call.
     if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
       if (this.donation) {
-        this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: true});
+        this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
         this.matomoTracker.trackEvent(
           'donate',
           'create_retry',
@@ -1207,7 +1233,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private validateAmountsCreateDonorDonationIfPossible(): boolean {
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
-      this.toast.showError(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
+      this.toast.showError(
+        this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount',
+      );
 
       return false;
     }
@@ -1226,62 +1254,66 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const homeAddressErrors = this.giftAidGroup?.controls?.homeAddress?.errors;
     if (homeAddressErrors?.required) {
-      errorMessages.push("Please enter your home address");
+      errorMessages.push('Please enter your home address');
     }
 
     if (homeAddressErrors?.maxlength) {
-      errorMessages.push(`Please enter your address in ${homeAddressErrors.maxlength.requiredLength} characters or less`);
+      errorMessages.push(
+        `Please enter your address in ${homeAddressErrors.maxlength.requiredLength} characters or less`,
+      );
     }
 
     const homePostcodeErrors = this.giftAidGroup?.controls?.homePostcode?.errors;
     if (homePostcodeErrors?.required) {
-      errorMessages.push("Please enter your home postcode");
+      errorMessages.push('Please enter your home postcode');
     }
 
     if (homePostcodeErrors?.pattern) {
-      errorMessages.push("Please enter a UK postcode");
+      errorMessages.push('Please enter a UK postcode');
     }
 
     if (errorMessages.length > 0) {
-      this.toast.showError(errorMessages.join(". "));
+      this.toast.showError(errorMessages.join('. '));
       return;
     }
 
-    this.next()
+    this.next();
   }
 
   progressFromStepReceiveUpdates(): void {
     this.triedToLeaveMarketing = true;
-    const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean)
+    const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean);
     if (errorMessages.length > 0) {
-      this.toast.showError(errorMessages.join(" "));
+      this.toast.showError(errorMessages.join(' '));
       return;
     }
 
-    this.next()
+    this.next();
   }
 
   public errorMessagesForMarketingStep = () => {
     return {
-      optInChampionEmailRequired: this.marketingGroup.get('optInChampionEmail')?.hasError('required') ?
-        `Please choose whether you wish to receive updates from ${this.campaign.championName}.` : null,
+      optInChampionEmailRequired: this.marketingGroup.get('optInChampionEmail')?.hasError('required')
+        ? `Please choose whether you wish to receive updates from ${this.campaign.championName}.`
+        : null,
 
-      optInTbgEmailRequired: this.marketingGroup.get('optInTbgEmail')?.hasError('required') ?
-        'Please choose whether you wish to receive updates from Big Give.' : null,
+      optInTbgEmailRequired: this.marketingGroup.get('optInTbgEmail')?.hasError('required')
+        ? 'Please choose whether you wish to receive updates from Big Give.'
+        : null,
 
-      optInCharityEmailRequired: this.marketingGroup.get('optInCharityEmail')?.hasError('required') ?
-        `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.` : null
+      optInCharityEmailRequired: this.marketingGroup.get('optInCharityEmail')?.hasError('required')
+        ? `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.`
+        : null,
     };
-  }
-
+  };
 
   public giftAidRequiredRadioError = (): string => {
     if (this.giftAidGroup.get('giftAid')?.hasError('required')) {
-      return 'Please choose whether you wish to claim Gift Aid.'
+      return 'Please choose whether you wish to claim Gift Aid.';
     }
 
     return '';
-  }
+  };
 
   /**
    * @todo - refactor to make friendly by combining messages re donation amount and re tip errors -
@@ -1291,7 +1323,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const donationAmountErrors = this.donationAmountField?.errors;
     const tipErrors = this.tipAmountField?.errors;
 
-    if (! donationAmountErrors && ! tipErrors) {
+    if (!donationAmountErrors && !tipErrors) {
       return '';
     }
 
@@ -1300,17 +1332,17 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (donationAmountErrors?.max) {
-      return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
-        + (
-          this.creditPenceToUse === 0 ?
-            ` You can make multiple matched donations of ` +
+      return (
+        `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.` +
+        (this.creditPenceToUse === 0
+          ? ` You can make multiple matched donations of ` +
             `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
-            : ''
-        );
+          : '')
+      );
     }
 
     if (donationAmountErrors?.pattern) {
-      return `Please enter a whole number of ${this.currencySymbol} without commas.`
+      return `Please enter a whole number of ${this.currencySymbol} without commas.`;
     }
 
     if (donationAmountErrors?.required) {
@@ -1319,14 +1351,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // todo - refactor tip messages below to remove duplication.
     if (tipErrors?.pattern) {
-      return "Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000."
+      return 'Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000.';
     }
 
     if (tipErrors?.required) {
-      return "Please enter how much you would like to donate to Big Give."
+      return 'Please enter how much you would like to donate to Big Give.';
     }
 
-    const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+    const message = 'Sorry, something went wrong with the form - please try again or contact Big Give';
     console.error(message);
     return message;
   };
@@ -1357,7 +1389,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripeElements = this.stripeService.stripeElementsForDonation(
         this.donation,
         this.campaign,
-        this.donationService.stripeSessionSecret
+        this.donationService.stripeSessionSecret,
       );
     }
 
@@ -1407,17 +1439,21 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * Updates the balance of donation credits available for use, and connected readiness + validation vars.
    */
   private prepareDonationCredits(person: Person) {
-    if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
+    if (
+      environment.creditDonationsEnabled &&
+      person.cash_balance &&
+      person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0
+    ) {
       this.creditPenceToUse = parseInt(
         person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
-        10
+        10,
       );
       this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
 
-      if (this.donation && this.donation.pspMethodType !== "customer_balance") {
+      if (this.donation && this.donation.pspMethodType !== 'customer_balance') {
         // We can't convert card donation to a customer balance donation, and the donor should choose the amount
         // bearing in mind what they have in the balance, so:
         this.donationService.cancel(this.donation);
@@ -1452,8 +1488,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private handleStripeError(
-    error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
-    context: 'method_setup'| 'card_change'| 'confirm',
+    error: StripeError | { message: string; code: string; decline_code?: string } | undefined,
+    context: 'method_setup' | 'card_change' | 'confirm',
   ) {
     this.submitting = false;
     this.stripeError = getStripeFriendlyError(error, context);
@@ -1469,10 +1505,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private jumpToStep(stepLabel: string) {
-    this.stepper.steps
-      .filter(step => step.label === stepLabel)
-      [0]!
-      .select();
+    this.stepper.steps.filter((step) => step.label === stepLabel)[0]!.select();
 
     this.cd.detectChanges();
   }
@@ -1505,10 +1538,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private getCurrencySymbol(currencyCode: string): string {
-    return Intl.NumberFormat('en-GB', {style:'currency', currency: currencyCode})
-      .formatToParts()
-      .find(part => part.type === 'currency')
-      ?.value || '';
+    return (
+      Intl.NumberFormat('en-GB', { style: 'currency', currency: currencyCode })
+        .formatToParts()
+        .find((part) => part.type === 'currency')?.value || ''
+    );
   }
 
   private setCampaignBasedVars() {
@@ -1552,7 +1586,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private createDonationAndMaybePerson(): void {
     clearTimeout(this.donationRetryTimeout);
-    if (this.creatingDonation) { // Ensure only 1 trigger is doing this at a time.
+    if (this.creatingDonation) {
+      // Ensure only 1 trigger is doing this at a time.
       return;
     }
 
@@ -1617,8 +1652,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.friendlyCaptchaWidget?.reset();
           this.showDonationCreateError();
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
-        }
-      )
+        },
+      );
     }
   }
 
@@ -1638,7 +1673,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.markYourDonationStepIncomplete();
 
-    this.toast.showError("Please wait, running captcha check to prevent spam")
+    this.toast.showError('Please wait, running captcha check to prevent spam');
     return true;
   }
 
@@ -1650,8 +1685,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT())
-    .subscribe({
+    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT()).subscribe({
       next: this.newDonationSuccess.bind(this),
       error: this.newDonationError.bind(this),
     });
@@ -1660,13 +1694,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private newDonationError(response: HttpErrorResponse) {
     const retry_in_seconds = response.error.retry_in;
 
-    if (retry_in_seconds && retry_in_seconds <= 35 && ! this.donationRetryTimeout) {
+    if (retry_in_seconds && retry_in_seconds <= 35 && !this.donationRetryTimeout) {
       // this means we were prevented from creating a donation by a rate limit. Its short enough that we can usefully
       // retry. If the retry fails we show the user an error.
       this.creatingDonation = false;
       this.donation = undefined;
 
-      this.donationRetryTimeout = window.setTimeout(() => this.createDonationAndMaybePerson(), +retry_in_seconds * 1_000)
+      this.donationRetryTimeout = window.setTimeout(
+        () => this.createDonationAndMaybePerson(),
+        +retry_in_seconds * 1_000,
+      );
       return;
     }
 
@@ -1687,11 +1724,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private newDonationSuccess(response: DonationCreatedResponse) {
     this.creatingDonation = false;
 
-    const createResponseMissingData = (
-      !response.donation.charityId ||
-      !response.donation.donationId ||
-      !response.donation.projectId
-    );
+    const createResponseMissingData =
+      !response.donation.charityId || !response.donation.donationId || !response.donation.projectId;
     if (createResponseMissingData) {
       this.matomoTracker.trackEvent(
         'donate_error',
@@ -1707,7 +1741,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.donationService.saveDonation(response);
     this.donation = response.donation; // Simplify update() while we're on this page.
-    this.donationChangeCallBack(this.donation)
+    this.donationChangeCallBack(this.donation);
 
     this.matomoTracker.trackEvent(
       `donate_amount_chosen_${this.campaign.currencyCode}`,
@@ -1735,8 +1769,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (
-      environment.environmentId !== "regression" ||
-      (new URLSearchParams(window.location.search)).has('include-continue-prompt')
+      environment.environmentId !== 'regression' ||
+      new URLSearchParams(window.location.search).has('include-continue-prompt')
     ) {
       // Prompting to continue confuses the regression test automation, so we skip the prompt in the regression
       // test environment at least for the time being. See JIRA REG-33 . When regression tests think they know how to
@@ -1749,7 +1783,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       }
 
       // Amount reserved for matching is > 0 but less than the full donation
-      if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
+      if (
+        response.donation.donationMatched &&
+        response.donation.matchReservedAmount < response.donation.donationAmount
+      ) {
         this.promptToContinueWithPartialMatching(response.donation);
         return;
       }
@@ -1759,7 +1796,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private offerExistingDonation(donation: Donation) {
-    this.matomoTracker.trackEvent('donate', 'existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
+    this.matomoTracker.trackEvent(
+      'donate',
+      'existing_donation_offered',
+      `Found pending donation to campaign ${this.campaignId}`,
+    );
 
     // Ensure we do not claim match funds are reserved when offering an old
     // donation if the reservation time is up. See also the on-page-timeout counterpart
@@ -1767,7 +1808,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
-      (environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime()) < Date.now()
+      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() < Date.now()
     ) {
       donation.matchReservedAmount = 0;
     }
@@ -1798,7 +1839,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
     // than e.g. always using 30 minutes.
-    const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+    const msUntilExpiryTime =
+      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
     // the timeout has already passed. This happens e.g. when the reuse
@@ -1843,8 +1885,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    *                        this should be false. In other cases we need to know the new amount so it
    *                        should usually be true, if the page is not being unloaded.
    */
-  private clearDonation(donation: Donation, {clearAllRecord, jumpToStart}: {clearAllRecord: boolean; jumpToStart: boolean}) {
-    if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
+  private clearDonation(
+    donation: Donation,
+    { clearAllRecord, jumpToStart }: { clearAllRecord: boolean; jumpToStart: boolean },
+  ) {
+    if (clearAllRecord) {
+      // i.e. don't keep donation around for /thanks/... or reuse.
       this.donationService.removeLocalDonation(donation);
     }
 
@@ -1858,7 +1904,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.submitting = false;
 
     delete this.donation;
-    this.donationChangeCallBack(undefined)
+    this.donationChangeCallBack(undefined);
 
     if (jumpToStart) {
       this.jumpToStep(this.yourDonationStepLabel);
@@ -1866,7 +1912,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
-    this.matomoTracker.trackEvent('donate', 'alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
+    this.matomoTracker.trackEvent(
+      'donate',
+      'alerted_no_match_funds',
+      `Asked donor whether to continue for campaign ${this.campaignId}`,
+    );
     this.promptToContinue(
       'Great news - this charity has reached their target',
       'There are no match funds currently available for this charity.',
@@ -1882,11 +1932,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    *                    by the Donations API.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
-    this.matomoTracker.trackEvent('donate', 'alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
-    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
+    this.matomoTracker.trackEvent(
+      'donate',
+      'alerted_partial_match_funds',
+      `Asked donor whether to continue for campaign ${this.campaignId}`,
+    );
+    const formattedReservedAmount = new ExactCurrencyPipe().transform(
+      donation.matchReservedAmount,
+      donation.currencyCode,
+    );
     this.promptToContinue(
       'Not all match funds are available',
-      'There aren\'t enough match funds currently available to fully match your donation. ' +
+      "There aren't enough match funds currently available to fully match your donation. " +
         `<strong>${formattedReservedAmount}</strong> will be matched.`,
       'Remember, every penny helps, and you can continue to make a <strong>partially matched donation</strong> to the charity!',
       'Cancel and release match funds',
@@ -1902,7 +1959,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
     if (tipPercentage === 'Other') {
-      this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected')
+      this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
       this.displayCustomTipInput();
       return;
     }
@@ -1946,8 +2003,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     ]);
     this.amountsGroup.get('donationAmount')?.valueChanges.subscribe((donationAmountInput: string) => {
       const updatedValues: {
-        tipPercentage?: number | string,
-        tipAmount?: string
+        tipPercentage?: number | string;
+        tipAmount?: string;
       } = {};
 
       const donationAmount = sanitiseCurrency(donationAmountInput);
@@ -1977,7 +2034,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // should use `false`.
     this.setGiftAidValidatorsForChoice(this.giftAidGroup.value?.giftAid ?? false);
 
-    this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
+    this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe((homeOutsideUK) => {
       this.setGiftAidValidatorsForChoice(this.giftAidGroup.value.giftAid, homeOutsideUK);
       this.updateAllValidities();
     });
@@ -2068,10 +2125,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.giftAidGroup.controls.homePostcode!.setValidators(
         this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK ?? this.giftAidGroup.value.homeOutsideUK),
       );
-      this.giftAidGroup.controls.homeAddress!.setValidators([
-        requiredNotBlankValidator,
-        Validators.maxLength(255),
-      ]);
+      this.giftAidGroup.controls.homeAddress!.setValidators([requiredNotBlankValidator, Validators.maxLength(255)]);
     } else {
       this.giftAidGroup.controls.homePostcode!.setValidators([]);
       this.giftAidGroup.controls.homeAddress!.setValidators([]);
@@ -2083,10 +2137,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return [];
     }
 
-    return [
-      requiredNotBlankValidator,
-      Validators.pattern(postcodeRegExp),
-    ];
+    return [requiredNotBlankValidator, Validators.pattern(postcodeRegExp)];
   }
 
   private removeStripeCardBillingValidators() {
@@ -2097,9 +2148,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private addStripeCardBillingValidators() {
-    this.paymentGroup.controls.billingCountry!.setValidators([
-      requiredNotBlankValidator,
-    ]);
+    this.paymentGroup.controls.billingCountry!.setValidators([requiredNotBlankValidator]);
     this.paymentGroup.controls.billingPostcode!.setValidators([
       requiredNotBlankValidator,
       Validators.pattern(billingPostcodeRegExp),
@@ -2116,8 +2165,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return '0'; // No tips on donation credit settlements.
     }
 
-    return (percentage / 100 * (donationAmount || 0))
-      .toFixed(2);
+    return ((percentage / 100) * (donationAmount || 0)).toFixed(2);
   }
 
   get readyToProgressFromPaymentStep(): boolean {
@@ -2162,7 +2210,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
-        const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
+        const tipPercentageFixed = ((100 * donation.tipAmount) / donation.donationAmount).toFixed(1);
         let tipPercentage;
 
         if (['7.5', '10.0', '12.5', '15.0'].includes(tipPercentageFixed)) {
@@ -2190,59 +2238,57 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       }
 
       // Else cancel the existing donation and remove our local record.
-      this.donationService.cancel(donation)
-        .subscribe({
-          next: () => {
-            this.matomoTracker.trackEvent('donate', 'cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
-
+      this.donationService.cancel(donation).subscribe({
+        next: () => {
+          this.matomoTracker.trackEvent(
+            'donate',
+            'cancel',
+            `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`,
+          ),
             // Also resets captcha.
-            this.clearDonation(donation, {clearAllRecord: true, jumpToStart: true});
+            this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
 
-            // Go back to 1st step to encourage donor to try again
-            this.stepper.reset();
-            this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
-            this.tipPercentageChanged = false;
-            if (this.paymentGroup) {
-              this.paymentGroup.patchValue({
-                billingCountry: this.defaultCountryCode,
-              });
-            }
-            if (this.donor?.id) {
-              const jwt = this.identityService.getJWT() as string;
-              this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
-                if (! this.donor?.id) {
-                  throw new Error("Person identifier went away");
-                }
-                this.loadPerson(person, jwt)
-              });
-            }
-          },
-          error: response => {
-            this.matomoTracker.trackEvent(
-              'donate_error',
-              'cancel_failed',
-              `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
-            );
-          },
-        });
+          // Go back to 1st step to encourage donor to try again
+          this.stepper.reset();
+          this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
+          this.tipPercentageChanged = false;
+          if (this.paymentGroup) {
+            this.paymentGroup.patchValue({
+              billingCountry: this.defaultCountryCode,
+            });
+          }
+          if (this.donor?.id) {
+            const jwt = this.identityService.getJWT() as string;
+            this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
+              if (!this.donor?.id) {
+                throw new Error('Person identifier went away');
+              }
+              this.loadPerson(person, jwt);
+            });
+          }
+        },
+        error: (response) => {
+          this.matomoTracker.trackEvent(
+            'donate_error',
+            'cancel_failed',
+            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
+          );
+        },
+      });
     };
   }
 
   private setChampionOptInValidity() {
     if (this.showChampionOptIn) {
-      this.marketingGroup.controls.optInChampionEmail!.setValidators([
-        requiredNotBlankValidator,
-      ]);
+      this.marketingGroup.controls.optInChampionEmail!.setValidators([requiredNotBlankValidator]);
     }
   }
 
-  private async exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
-
+  private async exitPostDonationSuccess(donation: Donation, stripe_donation_method: string | undefined) {
     const stripeMethod = stripe_donation_method || 'undefined';
 
     // if not card then we assume it must be a Payment Request Button i.e. Google Pay or Apple Pay.
-    const action = stripe_donation_method === 'card' ?
-        'stripe_card_payment_success' : 'stripe_prb_payment_success';
+    const action = stripe_donation_method === 'card' ? 'stripe_card_payment_success' : 'stripe_prb_payment_success';
 
     this.matomoTracker.trackEvent(
       'donate',
@@ -2296,21 +2342,21 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   continueFromPaymentStep() {
-    if (! this.readyToProgressFromPaymentStep) {
-      this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(" ");
+    if (!this.readyToProgressFromPaymentStep) {
+      this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
       this.toast.showError(this.paymentStepErrors);
       return;
     } else {
       // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
       // show up again in case the next attempt has the same problem.
-      this.paymentStepErrors = "";
+      this.paymentStepErrors = '';
       this.stripeError = undefined;
-      this.next()
+      this.next();
     }
   }
 
   private getPaymentMethodType() {
-    return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
+    return this.creditPenceToUse > 0 ? 'customer_balance' : 'card';
   }
 
   protected showCardReuseMessage = false;

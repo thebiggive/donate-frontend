@@ -11,77 +11,77 @@
         ></biggive-heading>
       </div>
     </biggive-page-section>
-     <biggive-page-section>
-        @if (mandates.length > 0) {
-          <biggive-grid columnCount="2">
-            @for (mandate of mandates; track mandate.id) {
-              <biggive-container-card
-                card-colour="white"
-                background-colour="primary"
-              >
-                <div class="mandate" class="{{mandate.status}}">
-                  @switch (mandate.status) {
-                    @case ('cancelled') {
-                      <div class="cancelled">
-                        <strong>Mandate Cancelled</strong>
-                      </div>
-                    }
-                    @case ('campaign-ended') {
-                      <div class="cancelled">
-                        <strong>Collections stopped for campaign</strong>
-                      </div>
-                    }
-                    @case ('pending') {
-                      <!-- this should never appear but including in this list for completeness -->
-                      <div class="cancelled">
-                        <strong>Mandate not activated</strong>
-                      </div>
-                    }
-                    @case ('active') {
-                      <!-- nothing to show-->
-                    }
-                    @default {
-                      <div class="cancelled">
-                        <strong>Error: Unexpected mandate status {{mandate.status}}, please contact Big Give</strong>
-                      </div>
-                    }
+    <biggive-page-section>
+      @if (mandates.length > 0) {
+        <biggive-grid columnCount="2">
+          @for (mandate of mandates; track mandate.id) {
+            <biggive-container-card card-colour="white" background-colour="primary">
+              <div class="mandate" class="{{ mandate.status }}">
+                @switch (mandate.status) {
+                  @case ("cancelled") {
+                    <div class="cancelled">
+                      <strong>Mandate Cancelled</strong>
+                    </div>
                   }
-                  <h3><a href="{{'/campaign/' + mandate.campaignId}}">{{ mandate.charityName }}</a></h3>
+                  @case ("campaign-ended") {
+                    <div class="cancelled">
+                      <strong>Collections stopped for campaign</strong>
+                    </div>
+                  }
+                  @case ("pending") {
+                    <!-- this should never appear but including in this list for completeness -->
+                    <div class="cancelled">
+                      <strong>Mandate not activated</strong>
+                    </div>
+                  }
+                  @case ("active") {
+                    <!-- nothing to show-->
+                  }
+                  @default {
+                    <div class="cancelled">
+                      <strong>Error: Unexpected mandate status {{ mandate.status }}, please contact Big Give</strong>
+                    </div>
+                  }
+                }
+                <h3>
+                  <a href="{{ '/campaign/' + mandate.campaignId }}">{{ mandate.charityName }}</a>
+                </h3>
                 <ul>
-                  <li>Amount: {{mandate.donationAmount | money }}</li>
+                  <li>Amount: {{ mandate.donationAmount | money }}</li>
                   <!-- @todo-regular-giving consider whether to also show total with match
                               funds when the next donation will be matched. -->
-                    <li>Gift Aid Value: {{mandate.giftAidAmount | money }}</li>
+                  <li>Gift Aid Value: {{ mandate.giftAidAmount | money }}</li>
                   @if (mandate.giftAid) {
-                    <li>Total with gift aid {{mandate.totalIncGiftAid | money}}</li>
+                    <li>Total with gift aid {{ mandate.totalIncGiftAid | money }}</li>
                   }
-                  <li>Payment collection day: {{mandate.schedule.dayOfMonth}} </li>
+                  <li>Payment collection day: {{ mandate.schedule.dayOfMonth }}</li>
                   @if (mandate.schedule.expectedNextPaymentDate) {
-                  <li>Next expected payment date:
-                    {{ mandate.schedule.expectedNextPaymentDate | date: 'mediumDate'}}
-                  </li>
+                    <li>
+                      Next expected payment date:
+                      {{ mandate.schedule.expectedNextPaymentDate | date: "mediumDate" }}
+                    </li>
                   }
-                  <li>Active from: {{ mandate.schedule.activeFrom | date: 'mediumDate'}}</li>
+                  <li>Active from: {{ mandate.schedule.activeFrom | date: "mediumDate" }}</li>
                   @if (mandate.cancellationDate) {
-                    <li>Cancelled: {{ mandate.cancellationDate | date: 'mediumDate'}}</li>
+                    <li>Cancelled: {{ mandate.cancellationDate | date: "mediumDate" }}</li>
                   }
-                    </ul>
-                </div>
+                </ul>
+              </div>
 
-                <biggive-button
-                  space-above="5"
-                  colour-scheme="primary"
-                  label="View Mandate"
-                  full-width="true"
-                  size="medium"
-                  url="/my-account/regular-giving/{{mandate.id}}"
-                />
-              </biggive-container-card>
-            }
-          </biggive-grid>
-        } @else {
-          <p>No regular giving mandates active</p>
-        }
-          </biggive-page-section>
+              <biggive-button
+                space-above="5"
+                colour-scheme="primary"
+                label="View Mandate"
+                full-width="true"
+                size="medium"
+                url="/my-account/regular-giving/{{ mandate.id }}"
+              />
+            </biggive-container-card>
+          }
+        </biggive-grid>
+      } @else {
+        <p>No regular giving mandates active</p>
+      }
+    </biggive-page-section>
   </div>
 </main>

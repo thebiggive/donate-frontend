@@ -1,24 +1,24 @@
-import {isPlatformBrowser} from "@angular/common";
-import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {RESPONSE} from '../../express.tokens';
-import { Response } from "express";
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, Optional, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RESPONSE } from '../../express.tokens';
+import { Response } from 'express';
 
-import {PageMetaService} from '../page-meta.service';
-import {HighlightCard} from "../highlight-cards/HighlightCard";
-import {environment} from "../../environments/environment";
-import {NavigationService} from "../navigation.service";
+import { PageMetaService } from '../page-meta.service';
+import { HighlightCard } from '../highlight-cards/HighlightCard';
+import { environment } from '../../environments/environment';
+import { NavigationService } from '../navigation.service';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrl: 'home.component.scss',
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: 'home.component.scss',
+  standalone: false,
 })
 export class HomeComponent implements OnInit {
   stats!: {
-    totalRaisedFormatted: string,
-    totalCountFormatted: string
+    totalRaisedFormatted: string;
+    totalCountFormatted: string;
   };
 
   /**
@@ -36,16 +36,10 @@ export class HomeComponent implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private response: Response,
-  ) {
-  }
-
+  ) {}
 
   ngOnInit() {
-    this.pageMeta.setCommon(
-      'Big Give',
-      'Big Give – discover campaigns and donate',
-      '/assets/images/social-banner.png',
-    );
+    this.pageMeta.setCommon('Big Give', 'Big Give – discover campaigns and donate', '/assets/images/social-banner.png');
     this.stats = this.route.snapshot.data['stats'];
     this.highlightCards = this.route.snapshot.data['highlights'];
     const queryParams = this.route.snapshot.queryParams;
@@ -56,16 +50,13 @@ export class HomeComponent implements OnInit {
       !queryParams.hasOwnProperty('noredirect') &&
       redirectPath !== null
     ) {
-        if (isPlatformBrowser(this.platformId)) {
-          void this.router.navigate(
-            [redirectPath],
-            {
-              replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
-            }
-          );
-        } else {
-          this.response.redirect(302, redirectPath);
-        }
+      if (isPlatformBrowser(this.platformId)) {
+        void this.router.navigate([redirectPath], {
+          replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
+        });
+      } else {
+        this.response.redirect(302, redirectPath);
+      }
     } else {
       this.mayBeAboutToRedirect = false;
     }

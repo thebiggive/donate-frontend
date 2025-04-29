@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 @use "../../assets/scss/auth-common";
 
 #banner {
@@ -11,7 +11,9 @@ main > div {
 
 p:not(biggive-container-card *) {
   // biggive-container-cards have white backgrounds so white links in there would be invisible.
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     color: white;
   }
 }
@@ -34,7 +36,7 @@ p:not(biggive-container-card *) {
   width: fit-content;
   margin: auto;
   padding-top: 20px; // 15px of this is to match the padding of a parent element from the container-card component,
-                     // without it the badge would be half invisible above the top of the card
+  // without it the badge would be half invisible above the top of the card
   padding-right: 15px;
   padding-left: 15px;
   padding-bottom: 5px;

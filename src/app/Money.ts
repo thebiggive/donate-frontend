@@ -1,6 +1,6 @@
 export type Money = {
-  "amountInPence": number,
-  "currency": "GBP" | "USD"
+  amountInPence: number;
+  currency: 'GBP' | 'USD';
 };
 
 /**

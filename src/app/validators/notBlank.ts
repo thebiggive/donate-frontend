@@ -1,4 +1,4 @@
-import {AbstractControl, ValidatorFn} from "@angular/forms";
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 /**
  * Checks that the control is filled in, and that the content is not soley whitespace.
@@ -9,12 +9,12 @@ import {AbstractControl, ValidatorFn} from "@angular/forms";
  */
 export const requiredNotBlankValidator: ValidatorFn = (control: AbstractControl) => {
   if (control.value === null) {
-    return {required: true}
+    return { required: true };
   }
 
-  if (typeof (control.value) === 'string' && control.value.trim() === '') {
-    return {required: true}
+  if (typeof control.value === 'string' && control.value.trim() === '') {
+    return { required: true };
   }
 
   return null;
-}
+};

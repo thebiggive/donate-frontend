@@ -1,6 +1,6 @@
-import {Pipe, PipeTransform} from "@angular/core";
-import {ExactCurrencyPipe} from "./exact-currency.pipe";
-import {Money} from './Money';
+import { Pipe, PipeTransform } from '@angular/core';
+import { ExactCurrencyPipe } from './exact-currency.pipe';
+import { Money } from './Money';
 
 /**
  * Formats a money object as a string. Currently, the money object is only used in regular giving mandates, (hence
@@ -22,8 +22,8 @@ export class MoneyPipe implements PipeTransform {
     // old pipe, maybe first swapping the delegation relationship around.
     const formatted = exactCurrencyPipe.transform(money.amountInPence / 100, money.currency);
 
-    if (typeof formatted !== "string") {
-      throw new Error("Could not format money value: " + money.toString());
+    if (typeof formatted !== 'string') {
+      throw new Error('Could not format money value: ' + money.toString());
     }
 
     return formatted;

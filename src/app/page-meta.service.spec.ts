@@ -6,9 +6,7 @@ import { PageMetaService } from './page-meta.service';
 describe('PageMetaService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterModule.forRoot([]),
-      ],
+      imports: [RouterModule.forRoot([])],
     });
   });
 

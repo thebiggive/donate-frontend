@@ -1,7 +1,7 @@
-import { RegularGivingComponent } from './regular-giving.component'
+import { RegularGivingComponent } from './regular-giving.component';
 
 describe('RegularGivingComponent', () => {
   it('should mount', () => {
-    cy.mount(RegularGivingComponent)
-  })
-})
+    cy.mount(RegularGivingComponent);
+  });
+});

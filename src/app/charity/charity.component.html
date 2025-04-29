@@ -8,36 +8,38 @@
   <div>
     @if (campaigns.length === 0) {
       <div>
-        <p class="error" aria-live="polite">
-          None yet! <a tabindex="0" routerLink="/">Find campaigns here</a>.
-        </p>
+        <p class="error" aria-live="polite">None yet! <a tabindex="0" routerLink="/">Find campaigns here</a>.</p>
       </div>
     }
 
     @if (campaigns) {
-      <biggive-grid
-        slot="campaign-grid"
-        columnCount="3"
-        >
+      <biggive-grid slot="campaign-grid" columnCount="3">
         @for (campaign of campaigns; track $index) {
           <div>
             <biggive-campaign-card
-              id="campaign-{{campaign.id}}"
-              [banner]="campaign.imageUri | optimisedImage:830 | async"
+              id="campaign-{{ campaign.id }}"
+              [banner]="campaign.imageUri | optimisedImage: 830 | async"
               [campaignType]="campaign.isMatched ? 'Match Funded' : null"
               [campaignTitle]="campaign.title"
-              [donateButtonUrl]="campaign.isRegularGiving ? '/regular-giving/' + campaign.id :  '/donate/' + campaign.id"
+              [donateButtonUrl]="campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id"
               [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
               [moreInfoButtonUrl]="'/campaign/' + campaign.id"
               [organisationName]="campaign.charity.name"
               [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
-              [primaryFigureAmount]="campaign.isRegularGiving ? null : campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+              [primaryFigureAmount]="
+                campaign.isRegularGiving
+                  ? null
+                  : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
+              "
               [progressBarCounter]="getPercentageRaised(campaign)"
               secondary-figure-label="Total Funds Raised"
-              [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+              [secondaryFigureAmount]="
+                campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo
+              "
               [isFutureCampaign]="isInFuture(campaign)"
               [isPastCampaign]="isInPast(campaign)"
-              [datetime]="getRelevantDateAsStr(campaign)">
+              [datetime]="getRelevantDateAsStr(campaign)"
+            >
             </biggive-campaign-card>
           </div>
         }

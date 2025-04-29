@@ -1,15 +1,13 @@
-import { provideHttpClientTesting } from "@angular/common/http/testing";
-import { TestBed } from "@angular/core/testing";
-import { RouterModule } from "@angular/router";
-import { InMemoryStorageService } from "ngx-webstorage-service";
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 
-import { TBG_DONATE_STORAGE } from "./donation.service";
-import { StripeService } from "./stripe.service";
-import {
-  provideHttpClient, withFetch,
-} from '@angular/common/http';
+import { TBG_DONATE_STORAGE } from './donation.service';
+import { StripeService } from './stripe.service';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
-describe("StripeService", () => {
+describe('StripeService', () => {
   let service: StripeService;
 
   beforeEach(() => {
@@ -26,7 +24,7 @@ describe("StripeService", () => {
     service = TestBed.inject(StripeService);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 });

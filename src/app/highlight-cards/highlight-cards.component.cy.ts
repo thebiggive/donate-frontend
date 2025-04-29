@@ -1,7 +1,7 @@
-import { HighlightCardsComponent } from './highlight-cards.component'
+import { HighlightCardsComponent } from './highlight-cards.component';
 
 describe('HighlightCardsComponent', () => {
   it('should mount', () => {
-    cy.mount(HighlightCardsComponent)
-  })
-})
+    cy.mount(HighlightCardsComponent);
+  });
+});

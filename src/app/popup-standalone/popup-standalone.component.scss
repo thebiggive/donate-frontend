@@ -1,49 +1,49 @@
-@use '../../abstract';
+@use "../../abstract";
 
 :host {
   display: contents;
 }
 
 .popup {
-    position: fixed;
-    display: none;
-    z-index: 100;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 15px;
-    background-color: rgba(0,0,0,0.75);
-    transition: all 0.5s ease-in-out;
-    .sleeve {
-      position: relative;
-      max-width: 600px;
-      padding: 30px;
-      box-sizing: border-box;
-      margin-left: auto;
-      margin-right: auto;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: white;
-      text-align: left;
-    }
-    .header {
-      .close {
-        width: 25px;
-        height: 25px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: abstract.$colour-primary;
-        background-image: url(/assets/images/cross.svg?1);
-        background-size: 50% 50%;
-        background-position: center center;
-        background-repeat: no-repeat;
-        border-radius: 50%;
-        cursor: pointer;
-      }
+  position: fixed;
+  display: none;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.75);
+  transition: all 0.5s ease-in-out;
+  .sleeve {
+    position: relative;
+    max-width: 600px;
+    padding: 30px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    text-align: left;
   }
-  &[data-visible=true] {
+  .header {
+    .close {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: abstract.$colour-primary;
+      background-image: url(/assets/images/cross.svg?1);
+      background-size: 50% 50%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+  &[data-visible="true"] {
     display: block;
   }
 }

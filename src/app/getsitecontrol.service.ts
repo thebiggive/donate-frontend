@@ -4,7 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { environment } from '../environments/environment';
 
 declare let _gscq: {
-  push: (...args: string[][]) => void,
+  push: (...args: string[][]) => void;
 };
 
 /**
@@ -14,7 +14,6 @@ declare let _gscq: {
   providedIn: 'root',
 })
 export class GetSiteControlService {
-
   constructor(private router: Router) {}
 
   /**
@@ -38,7 +37,7 @@ export class GetSiteControlService {
   }
 
   private listenForRouteChanges() {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (!globalThis.hasOwnProperty('_gscq')) {
           return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.

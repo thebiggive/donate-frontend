@@ -1,86 +1,86 @@
 <app-popup-standalone>
   @if (forgotPassword) {
+  <div>
+    <h2 mat-dialog-title>Reset Password</h2>
+    @if (!userAskedForResetLink) {
     <div>
-      <h2 mat-dialog-title>Reset Password</h2>
-      @if (!userAskedForResetLink) {
-        <div>
-          <mat-dialog-content class="mat-typography">
-            <form [formGroup]="resetPasswordForm">
-              <mat-form-field class="b-w-100" color="primary">
-                <mat-label for="loginEmailAddress">Email address</mat-label>
-                <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
-              </mat-form-field>
-              <p class="b-rt-0">Please enter your email address.</p>
-            </form>
-          </mat-dialog-content>
-          <mat-dialog-actions align="end">
-            <button
-              id="reset-password-modal-submit"
-              mat-raised-button
-              [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
-              (click)="resetPasswordClicked()"
-              color="primary"
-            >Reset Password</button>
-            <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
-          </mat-dialog-actions>
-        </div>
-      }
-      @if (userAskedForResetLink) {
-        <div>
-          @if (resetPasswordSuccess === undefined) {
-            <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
-          }
-          @if (resetPasswordSuccess) {
-            <p>Please check your email and click on the password reset link received.</p>
-          }
-          @if (resetPasswordSuccess === false) {
-            <p class="error">Sorry, we encountered a problem. Please <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.</p>
-          }
-          @if (resetPasswordSuccess !== undefined) {
-            <mat-dialog-actions align="end">
-              <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
-            </mat-dialog-actions>
-          }
-        </div>
+      <mat-dialog-content class="mat-typography">
+        <form [formGroup]="resetPasswordForm">
+          <mat-form-field class="b-w-100" color="primary">
+            <mat-label for="loginEmailAddress">Email address</mat-label>
+            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off" />
+          </mat-form-field>
+          <p class="b-rt-0">Please enter your email address.</p>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button
+          id="reset-password-modal-submit"
+          mat-raised-button
+          [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
+          (click)="resetPasswordClicked()"
+          color="primary"
+        >
+          Reset Password
+        </button>
+        <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
+      </mat-dialog-actions>
+    </div>
+    } @if (userAskedForResetLink) {
+    <div>
+      @if (resetPasswordSuccess === undefined) {
+      <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
+      } @if (resetPasswordSuccess) {
+      <p>Please check your email and click on the password reset link received.</p>
+      } @if (resetPasswordSuccess === false) {
+      <p class="error">
+        Sorry, we encountered a problem. Please <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for
+        help.
+      </p>
+      } @if (resetPasswordSuccess !== undefined) {
+      <mat-dialog-actions align="end">
+        <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
+      </mat-dialog-actions>
       }
     </div>
+    }
+  </div>
   } @else {
-    <h2 mat-dialog-title>Log in</h2>
-    <mat-dialog-content class="mat-typography">
-      <form [formGroup]="loginForm">
-        <mat-form-field class="b-w-100" color="primary">
-          <mat-label for="loginEmailAddress">Email address</mat-label>
-          <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
-        </mat-form-field>
-        <mat-form-field class="b-w-100" color="primary">
-          <mat-label for="loginPassword">Password</mat-label>
-          <input matInput type="password" id="loginPassword" formControlName="password">
-        </mat-form-field>
-        @if (loginError) {
-          <p class="error" aria-live="assertive">
-            Login error: {{ loginError }}
-          </p>
-        }
-      </form>
-
-    </mat-dialog-content>
-    <mat-dialog-actions style="justify-content: space-between;">
-      <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-      <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-      <a (click)="forgotPasswordClicked()">Forgot Password?</a>
-      <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
-      <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
-      <div>
-        <button
-          id="login-modal-submit"
-          mat-raised-button
-          [disabled]="!loginForm.valid || loggingIn"
-          (click)="login()"
-          color="primary"
-        >Log in</button>
-        <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
-      </div>
-    </mat-dialog-actions>
+  <h2 mat-dialog-title>Log in</h2>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="loginForm">
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="loginEmailAddress">Email address</mat-label>
+        <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off" />
+      </mat-form-field>
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="loginPassword">Password</mat-label>
+        <input matInput type="password" id="loginPassword" formControlName="password" />
+      </mat-form-field>
+      @if (loginError) {
+      <p class="error" aria-live="assertive">Login error: {{ loginError }}</p>
+      }
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions style="justify-content: space-between">
+    <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+    <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+    <a (click)="forgotPasswordClicked()">Forgot Password?</a>
+    <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+    <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
+    <div>
+      <button
+        id="login-modal-submit"
+        mat-raised-button
+        [disabled]="!loginForm.valid || loggingIn"
+        (click)="login()"
+        color="primary"
+      >
+        Log in
+      </button>
+      <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
+    </div>
+  </mat-dialog-actions>
   }
   <div
     class="frc-captcha"

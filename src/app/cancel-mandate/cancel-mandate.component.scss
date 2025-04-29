@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 @use "../../assets/scss/auth-common";
 
 #banner {
@@ -13,6 +13,6 @@ div.actions {
   gap: 17px;
 
   div {
-      flex: 0 0 auto;
+    flex: 0 0 auto;
   }
 }

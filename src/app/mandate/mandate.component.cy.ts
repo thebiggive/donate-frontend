@@ -1,7 +1,7 @@
-import { MandateComponent } from './mandate.component'
+import { MandateComponent } from './mandate.component';
 
 describe('MandateComponent', () => {
   it('should mount', () => {
-    cy.mount(MandateComponent)
-  })
-})
+    cy.mount(MandateComponent);
+  });
+});

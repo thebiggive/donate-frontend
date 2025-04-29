@@ -4,7 +4,7 @@ import { setAssetPath } from '@biggive/components/dist/components';
 import { register as registerSwiper } from 'swiper/element/bundle';
 
 import { environment } from './environments/environment';
-import {AppModule} from './app/app.module';
+import { AppModule } from './app/app.module';
 
 if (environment.productionLike) {
   enableProdMode();
@@ -13,8 +13,9 @@ if (environment.productionLike) {
 setAssetPath(`${environment.donateUriPrefix}/assets`);
 
 globalThis.document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic().bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch((err) => console.error(err));
 });
 
 registerSwiper();

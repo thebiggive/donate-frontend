@@ -1,21 +1,21 @@
-import {isPlatformServer} from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
-import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
-import {firstValueFrom, Observable, of} from 'rxjs';
-import {ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent} from '@stripe/stripe-js';
+import { Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState } from '@angular/core';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { firstValueFrom, Observable, of } from 'rxjs';
+import { ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent } from '@stripe/stripe-js';
 
-import {COUNTRY_CODE} from './country-code.token';
-import {CompleteDonation, Donation} from './donation.model';
-import {DonationCreatedResponse} from './donation-created-response.model';
-import {environment} from '../environments/environment';
-import {Person} from "./person.model";
-import {MatomoTracker} from 'ngx-matomo-client';
-import {map, switchMap} from "rxjs/operators";
-import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
-import {completeStatuses, DonationStatus, resumableStatuses} from "./donation-status.type";
-import {CookieService} from "ngx-cookie-service";
-import {Campaign} from "./campaign.model";
+import { COUNTRY_CODE } from './country-code.token';
+import { CompleteDonation, Donation } from './donation.model';
+import { DonationCreatedResponse } from './donation-created-response.model';
+import { environment } from '../environments/environment';
+import { Person } from './person.model';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { map, switchMap } from 'rxjs/operators';
+import { IdentityService, getPersonAuthHttpOptions } from './identity.service';
+import { completeStatuses, DonationStatus, resumableStatuses } from './donation-status.type';
+import { CookieService } from 'ngx-cookie-service';
+import { Campaign } from './campaign.model';
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -95,10 +95,10 @@ export class DonationService {
   ): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
 
-    const existingDonations = this.getDonationCouplets().filter(donationItem => {
+    const existingDonations = this.getDonationCouplets().filter((donationItem) => {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
-        this.getCreatedTime(donationItem.donation) > (Date.now() - 1_500_000) && // ...from the past 25 minutes...
+        this.getCreatedTime(donationItem.donation) > Date.now() - 1_500_000 && // ...from the past 25 minutes...
         this.isResumable(donationItem.donation, paymentMethodType) // ...with a reusable last-known status & method.
       );
     });
@@ -129,7 +129,7 @@ export class DonationService {
 
     const jwt = couplet.jwt;
     this.removeLocalDonation(donation);
-    this.saveDonation({donation, jwt});
+    this.saveDonation({ donation, jwt });
   }
 
   /**
@@ -137,7 +137,7 @@ export class DonationService {
    * can be refunded and exit the Collected status.
    */
   isComplete(donation: Donation): donation is CompleteDonation {
-    return (donation.status !== undefined && (completeStatuses as readonly DonationStatus[]).includes(donation.status));
+    return donation.status !== undefined && (completeStatuses as readonly DonationStatus[]).includes(donation.status);
   }
 
   /**
@@ -164,7 +164,7 @@ export class DonationService {
     if (donation.homeAddress?.hasOwnProperty('address')) {
       // should never happen given fix made now to AddressService.loadAddress but just in case:
 
-      console.error("Donation.homeAddress is object, should be string");
+      console.error('Donation.homeAddress is object, should be string');
       // @ts-expect-error:
       donation.homeAddress = donation.homeAddress.address;
     }
@@ -177,20 +177,22 @@ export class DonationService {
   }
 
   async getPaymentMethods(
-    {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
-  ): Promise<{adHocMethods: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod}> {
-    const {jwt, person} = await this.getLoggedInUser();
+    { cacheBust }: { cacheBust?: boolean } = { cacheBust: false },
+  ): Promise<{ adHocMethods: PaymentMethod[]; regularGivingPaymentMethod?: PaymentMethod }> {
+    const { jwt, person } = await this.getLoggedInUser();
 
-    const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
+    const cacheBuster = cacheBust ? '?t=' + new Date().getTime() : '';
 
-    const response = await firstValueFrom(this.http.get(
-      `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
-      getPersonAuthHttpOptions(jwt),
-    )) as { data: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod };
+    const response = (await firstValueFrom(
+      this.http.get(
+        `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
+        getPersonAuthHttpOptions(jwt),
+      ),
+    )) as { data: PaymentMethod[]; regularGivingPaymentMethod?: PaymentMethod };
 
     return {
       adHocMethods: response.data,
-      regularGivingPaymentMethod: response.regularGivingPaymentMethod
+      regularGivingPaymentMethod: response.regularGivingPaymentMethod,
     };
   }
 
@@ -199,10 +201,10 @@ export class DonationService {
     const person = await firstValueFrom(this.identityService.getLoggedInPerson());
 
     if (!person) {
-      throw new Error("logged in person required");
+      throw new Error('logged in person required');
     }
 
-    return {jwt, person};
+    return { jwt, person };
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
@@ -210,11 +212,7 @@ export class DonationService {
       ? `${environment.donationsApiPrefix}/people/${personId}${this.apiPath}`
       : `${environment.donationsApiPrefix}${this.apiPath}`;
 
-    return this.http.post<DonationCreatedResponse>(
-      endpoint,
-      donation,
-      getPersonAuthHttpOptions(jwt),
-    );
+    return this.http.post<DonationCreatedResponse>(endpoint, donation, getPersonAuthHttpOptions(jwt));
   }
 
   get(donation: Donation): Observable<Donation> {
@@ -229,7 +227,7 @@ export class DonationService {
     );
   }
 
-  public get stripeSessionSecret(): string|undefined {
+  public get stripeSessionSecret(): string | undefined {
     const secret = this.cookieService.get(STRIPE_SESSION_SECRET_COOKIE_NAME);
     if (secret == '') {
       return undefined;
@@ -238,13 +236,13 @@ export class DonationService {
     return secret;
   }
 
-  saveDonation({donation, jwt, stripeSessionSecret}: DonationCreatedResponse) {
+  saveDonation({ donation, jwt, stripeSessionSecret }: DonationCreatedResponse) {
     // Salesforce doesn't add this until after the async persist so we need to set it
     // locally in order to later determine which donations are new and eligible for reuse.
     // Note that updates call this too so this must check for existing values and not
     // replace them with now.
     if (!donation.createdTime) {
-      donation.createdTime = (new Date()).toISOString();
+      donation.createdTime = new Date().toISOString();
     }
 
     if (stripeSessionSecret) {
@@ -265,7 +263,7 @@ export class DonationService {
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.splice(
-      donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
+      donationCouplets.findIndex((donationItem) => donationItem.donation.donationId === donation.donationId),
       1,
     );
 
@@ -285,14 +283,16 @@ export class DonationService {
    */
   private getCreatedTime(donation: Donation): number {
     if (donation.createdTime) {
-      return (new Date(donation.createdTime)).getTime();
+      return new Date(donation.createdTime).getTime();
     }
 
     return 0;
   }
 
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
-    const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
+    const donationDataItems = this.getDonationCouplets().filter(
+      (donationItem) => donationItem.donation.donationId === donation.donationId,
+    );
 
     if (donationDataItems.length !== 1) {
       this.matomoTracker.trackEvent(
@@ -311,9 +311,9 @@ export class DonationService {
     };
   }
 
-  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } | undefined {
-    const donations = this.getDonationCouplets().filter(donationItem => {
-      return (donationItem.donation.donationId === donationId);
+  private getLocalDonationCouplet(donationId: string): { donation: Donation; jwt: string } | undefined {
+    const donations = this.getDonationCouplets().filter((donationItem) => {
+      return donationItem.donation.donationId === donationId;
     });
 
     if (donations.length === 0) {
@@ -328,7 +328,7 @@ export class DonationService {
    * unique JWT. This token grants the donor who originally created a donation permission to get its current
    * status & additional data, and to cancel it if it's Pending or Reserved.
    */
-  private getDonationCouplets(): Array<{ donation: Donation, jwt: string }> {
+  private getDonationCouplets(): Array<{ donation: Donation; jwt: string }> {
     return this.sessionStorage.get(this.storageKey) ?? this.storage.get(this.storageKey) ?? [];
   }
 
@@ -336,7 +336,7 @@ export class DonationService {
     const paymentMethodId: string = method.id;
     const personId = person.id;
 
-    if (! personId) {
+    if (!personId) {
       throw new Error('Undefined person ID');
     }
 
@@ -353,9 +353,9 @@ export class DonationService {
     updatedMethodDetails: {
       countryCode: string;
       postalCode: string;
-      expiry: {month: number; year: number}
-    }) {
-
+      expiry: { month: number; year: number };
+    },
+  ) {
     const url = `${environment.donationsApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
 
     return this.http.put<{ data: PaymentMethod[] }>(
@@ -368,21 +368,23 @@ export class DonationService {
         billing_details: {
           address: {
             country: updatedMethodDetails.countryCode,
-            postal_code: updatedMethodDetails.postalCode
+            postal_code: updatedMethodDetails.postalCode,
           },
           email: person.email_address,
           name: `${person.first_name} ${person.last_name}`,
-        }
+        },
       },
-      {headers: getPersonAuthHttpOptions(jwt).headers}
+      { headers: getPersonAuthHttpOptions(jwt).headers },
     );
   }
 
-  confirmCardPayment(donation: Donation, {confirmationToken}: {confirmationToken?: ConfirmationToken}):
-    Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>
-  {
-    return this.http.post<{paymentIntent: {status: PaymentIntent.Status, client_secret: string}}>(
-      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
+  confirmCardPayment(
+    donation: Donation,
+    { confirmationToken }: { confirmationToken?: ConfirmationToken },
+  ): Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }> {
+    return this.http.post<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>(
+      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`,
+      {
         stripeConfirmationTokenId: confirmationToken?.id,
       },
       this.getAuthHttpOptions(donation),
@@ -393,57 +395,71 @@ export class DonationService {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
 
-    return person$.pipe(switchMap((person) => {
-      if (! person) {
-        throw new Error("logged in person required");
-      }
+    return person$.pipe(
+      switchMap((person) => {
+        if (!person) {
+          throw new Error('logged in person required');
+        }
 
-      return this.http.get<{ donations: CompleteDonation[] }>(
-        `${environment.donationsApiPrefix}/people/${person.id}/donations`,
-        getPersonAuthHttpOptions(jwt),
-      ).pipe(map((response) => response.donations));
-    }));
+        return this.http
+          .get<{
+            donations: CompleteDonation[];
+          }>(`${environment.donationsApiPrefix}/people/${person.id}/donations`, getPersonAuthHttpOptions(jwt))
+          .pipe(map((response) => response.donations));
+      }),
+    );
   }
 
   cancelDonationFundsToCampaign(campaignId: string): Observable<Donation[]> {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
 
-    return person$.pipe(switchMap((person) => {
-      if (!person) {
-        throw new Error("logged in person required");
-      }
+    return person$.pipe(
+      switchMap((person) => {
+        if (!person) {
+          throw new Error('logged in person required');
+        }
 
-      return this.http.request<{ donations: Donation[] }>(
-        'DELETE',
-        `${environment.donationsApiPrefix}/people/${person.id}/donations?campaignId=${campaignId}&paymentMethodType=customer_balance`,
-        getPersonAuthHttpOptions(jwt),
-      ).pipe(map((response) => response.donations));
-    }));
+        return this.http
+          .request<{
+            donations: Donation[];
+          }>(
+            'DELETE',
+            `${environment.donationsApiPrefix}/people/${person.id}/donations?campaignId=${campaignId}&paymentMethodType=customer_balance`,
+            getPersonAuthHttpOptions(jwt),
+          )
+          .pipe(map((response) => response.donations));
+      }),
+    );
   }
-
 
   /**
    * @param campaign: Campaign that the donor is considering donating to. Optional, will instruct matchbot to fetch
    * fetch this campaign from SF in preparation for a donation or mandate.
    */
-  async createCustomerSessionForRegularGiving({campaign}: {campaign?: Campaign}): Promise<StripeCustomerSession> {
-    const {jwt, person} = await this.getLoggedInUser();
+  async createCustomerSessionForRegularGiving({ campaign }: { campaign?: Campaign }): Promise<StripeCustomerSession> {
+    const { jwt, person } = await this.getLoggedInUser();
 
-    return firstValueFrom(this.http.post(
-      `${environment.donationsApiPrefix}/people/${person.id}/create-customer-session`,
-      {campaignId: campaign?.id},
-      getPersonAuthHttpOptions(jwt),
-    ) as Observable<StripeCustomerSession>);
+    return firstValueFrom(
+      this.http.post(
+        `${environment.donationsApiPrefix}/people/${person.id}/create-customer-session`,
+        { campaignId: campaign?.id },
+        getPersonAuthHttpOptions(jwt),
+      ) as Observable<StripeCustomerSession>,
+    );
   }
 
   async createSetupIntent(): Promise<SetupIntent> {
-    const {jwt, person} = await this.getLoggedInUser();
+    const { jwt, person } = await this.getLoggedInUser();
 
-    return (await firstValueFrom(this.http.post(
-      `${environment.donationsApiPrefix}/people/${person.id}/create-setup-intent`,
-      {},
-      getPersonAuthHttpOptions(jwt),
-    ) as Observable<{setupIntent: SetupIntent}>)).setupIntent;
+    return (
+      await firstValueFrom(
+        this.http.post(
+          `${environment.donationsApiPrefix}/people/${person.id}/create-setup-intent`,
+          {},
+          getPersonAuthHttpOptions(jwt),
+        ) as Observable<{ setupIntent: SetupIntent }>,
+      )
+    ).setupIntent;
   }
 }

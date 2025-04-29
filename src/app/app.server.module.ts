@@ -6,11 +6,7 @@ import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  imports: [
-    AppModule,
-    NoopAnimationsModule,
-    ServerModule,
-  ],
+  imports: [AppModule, NoopAnimationsModule, ServerModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })

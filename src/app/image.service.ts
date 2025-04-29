@@ -14,7 +14,7 @@ export class ImageService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
-  getImageUri(originalImageUri: string | null, width: number): Observable<string|null> {
+  getImageUri(originalImageUri: string | null, width: number): Observable<string | null> {
     if (!originalImageUri) {
       return of(null);
     }
@@ -31,7 +31,7 @@ export class ImageService {
     // If client-side and we don't know about support yet, resolve an Observable when Modernizr gets back to us.
     if (isPlatformBrowser(this.platformId)) {
       const uriSubject = new Subject<string>();
-      Modernizr.on('webp', browserSupportsWebp => {
+      Modernizr.on('webp', (browserSupportsWebp) => {
         this.webp = browserSupportsWebp;
         uriSubject.next(this.webp ? `${imageUri}&format=webp` : imageUri);
       });

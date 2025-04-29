@@ -1,10 +1,15 @@
 <main>
   @if (loggedInWithPassword) {
     <div class="id-info">
-      <p>Logged in as <strong>{{ email}}</strong></p>
+      <p>
+        Logged in as <strong>{{ email }}</strong>
+      </p>
       <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
       @if (creditPenceToUse > 0) {
-        <p>Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
+        <p>
+          Your credit balance will be used and the donation value capped at
+          {{ creditPenceToUse / 100 | exactCurrency: campaign.currencyCode }}
+        </p>
       }
       <p>
         <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>

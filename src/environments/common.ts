@@ -1,6 +1,7 @@
 // This file contains variables common across ALL environments
 
-export const campaignHiddenMessage = 'This campaign is temporarily unable to accept donations – please try again later.';
+export const campaignHiddenMessage =
+  'This campaign is temporarily unable to accept donations – please try again later.';
 /**
  * Suitable digits info for summaries that don't need to be exact, e.g.
  * stats to the nearest whole £.

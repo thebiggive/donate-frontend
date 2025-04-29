@@ -9,8 +9,8 @@ export interface IdentityJWT {
   iat?: number;
   iss?: string;
   sub: {
-    complete: boolean,
-    person_id: string,
-    psp_id: string,
-  }
+    complete: boolean;
+    person_id: string;
+    psp_id: string;
+  };
 }

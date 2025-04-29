@@ -13,8 +13,8 @@ import { map, startWith } from 'rxjs/operators';
   pure: false,
 })
 export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
-    // static for access from object context and in interval callbacks
-    public static unitDefinitions = [
+  // static for access from object context and in interval callbacks
+  public static unitDefinitions = [
     {
       label: 'day',
       value: 86400000,
@@ -47,7 +47,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     for (const unit of TimeLeftPipe.unitDefinitions) {
       const wholeUnits = TimeLeftPipe.buildForUnit(date, unit.value);
       if (wholeUnits >= 1) {
-        return (new DecimalPipe('en-GB')).transform(wholeUnits, '1.0-0') + ` ${unit.label}` + (wholeUnits > 1 ? 's' : '');
+        return new DecimalPipe('en-GB').transform(wholeUnits, '1.0-0') + ` ${unit.label}` + (wholeUnits > 1 ? 's' : '');
       }
     }
 
@@ -60,7 +60,8 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override transform(date: any, _args?: any[]): any {
-    if (!(date instanceof Date)) { // Support ISO 8601 strings as returned by the Salesforce API
+    if (!(date instanceof Date)) {
+      // Support ISO 8601 strings as returned by the Salesforce API
       date = new Date(date);
     }
 
@@ -80,7 +81,10 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     // On the browser / client-side JS, we set a 1 second interval so times can 'tick' live.
     const theDate = this.value || new Date();
     if (isPlatformBrowser(this.platformId) && this.value) {
-      return interval(1000).pipe(startWith(0), map(() => TimeLeftPipe.format(theDate)));
+      return interval(1000).pipe(
+        startWith(0),
+        map(() => TimeLeftPipe.format(theDate)),
+      );
     }
 
     // On the server, get the value once; if we set an interval here, SSR spins forever and breaks the app!

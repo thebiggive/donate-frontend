@@ -1,19 +1,17 @@
-import {isPlatformBrowser} from '@angular/common';
-import {Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
-import {MatomoTracker} from 'ngx-matomo-client';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from './campaign.model';
-import {CampaignService, SearchQuery} from './campaign.service';
-import {SearchService} from "./search.service";
-import {logCampaignCalloutError} from './logCampaignCalloutError';
+import { CampaignService, SearchQuery } from './campaign.service';
+import { SearchService } from './search.service';
+import { logCampaignCalloutError } from './logCampaignCalloutError';
 
-@Injectable(
-  {providedIn: 'root'}
-)
-export class CampaignResolver implements Resolve<Campaign>  {
+@Injectable({ providedIn: 'root' })
+export class CampaignResolver implements Resolve<Campaign> {
   constructor(
     public campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
@@ -44,14 +42,17 @@ export class CampaignResolver implements Resolve<Campaign>  {
         return EMPTY;
       }
 
-      return this.loadWithStateCache(
-        campaignId,
-        (identifier: string) => this.campaignService.getOneById(identifier),
-      );
+      return this.loadWithStateCache(campaignId, (identifier: string) => this.campaignService.getOneById(identifier));
     }
 
-    if (campaignSlug && fundSlug && campaignSlug !== "campaign") {
-      const query = this.campaignService.buildQuery(this.searchService.selected, 0, campaignId ?? undefined, campaignSlug, fundSlug);
+    if (campaignSlug && fundSlug && campaignSlug !== 'campaign') {
+      const query = this.campaignService.buildQuery(
+        this.searchService.selected,
+        0,
+        campaignId ?? undefined,
+        campaignSlug,
+        fundSlug,
+      );
       this.campaignService.search(query as SearchQuery).subscribe({
         next: () => {},
         error: () => {
@@ -66,9 +67,8 @@ export class CampaignResolver implements Resolve<Campaign>  {
       });
     }
 
-    return this.loadWithStateCache(
-      campaignSlug || '',
-      (identifier: string) => this.campaignService.getOneBySlug(identifier),
+    return this.loadWithStateCache(campaignSlug || '', (identifier: string) =>
+      this.campaignService.getOneBySlug(identifier),
     );
   }
 
@@ -76,7 +76,8 @@ export class CampaignResolver implements Resolve<Campaign>  {
     identifier: string,
     method: (identifier: string) => Observable<Campaign>,
   ): Observable<Campaign> {
-    if (!this.plausibleIdentifier(identifier)) { // Make sure we don't do `/null` API requests, on /explore for e.g.
+    if (!this.plausibleIdentifier(identifier)) {
+      // Make sure we don't do `/null` API requests, on /explore for e.g.
       return EMPTY;
     }
 
@@ -87,16 +88,22 @@ export class CampaignResolver implements Resolve<Campaign>  {
       return of(campaign);
     }
 
-    const observable = method(identifier)
-      .pipe(catchError(error => {
-        logCampaignCalloutError(isPlatformBrowser(this.platformId), `CampaignResolver main load: ${error.message}`, identifier, this.matomoTracker);
+    const observable = method(identifier).pipe(
+      catchError((error) => {
+        logCampaignCalloutError(
+          isPlatformBrowser(this.platformId),
+          `CampaignResolver main load: ${error.message}`,
+          identifier,
+          this.matomoTracker,
+        );
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Home content on the requested path.
         void this.router.navigateByUrl('/');
         return EMPTY;
-      }));
+      }),
+    );
 
-    observable.subscribe(loadedCampaign => {
+    observable.subscribe((loadedCampaign) => {
       // Save in state for future routes, e.g. when moving between `CampaignDetailComponent`
       // and `DonationStartComponent`.
       this.state.set(campaignKey, loadedCampaign);

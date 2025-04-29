@@ -2,70 +2,74 @@
 <main>
   <div>
     <biggive-page-section>
-      @if(mandate$ | async; as mandate) {
-      <div class="heading-wrapper">
-        <biggive-heading
-          colour="tertiary"
-          size="1"
-          align="center"
-          [text]="'Cancel regular giving to ' + mandate.charityName"
-        ></biggive-heading>
-      </div>
-      <p>
-        You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
-        <strong>{{ mandate.charityName }}</strong>,
-        on the {{ mandate.schedule.dayOfMonth | ordinal }} of each month.
-        Click below to stop future donations.
-      </p>
-
-      <p>This will not affect any donations that have already been collected or are currently being processed.</p>
-
-      <form>
-        <biggive-text-input spaceBelow="4">
-          <label slot="label" for="reason">Please tell us why you wish to stop giving
-            to {{ mandate.charityName }}</label>
-          <input
-            slot="input"
-            matInput type="email" id="reason" [formControl]="reasonFormControl" autocapitalize="off"
-            [maxlength]="reasonMaxLength">
-        </biggive-text-input>
-
-        <div class="actions">
-          <div>
-            <a routerLink="/my-account/regular-giving/{{mandate.id}}">Back to mandate details</a>
-          </div>
-          <div>
-            @if (processing) {
-              <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
-            } @else {
-              <biggive-button
-                space-above="5"
-                spaceBelow="0"
-                colour-scheme="primary"
-                label="Stop donations"
-                full-width="true"
-                size="medium"
-                rounded="false"
-                (click)="cancel(mandate)"
-              />
-            }
-          </div>
-
-        </div>
-      </form>
-      } @else {
-        <div style="min-height: 10em">
-        @defer (on timer(1000ms)) {
+      @if (mandate$ | async; as mandate) {
         <div class="heading-wrapper">
           <biggive-heading
             colour="tertiary"
             size="1"
             align="center"
-            text="Cancel regular giving..."
+            [text]="'Cancel regular giving to ' + mandate.charityName"
           ></biggive-heading>
         </div>
-          <mat-spinner color="primary" diameter="30" aria-label="Loading mandate"></mat-spinner>
-        }
+        <p>
+          You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
+          <strong>{{ mandate.charityName }}</strong
+          >, on the {{ mandate.schedule.dayOfMonth | ordinal }} of each month. Click below to stop future donations.
+        </p>
+
+        <p>This will not affect any donations that have already been collected or are currently being processed.</p>
+
+        <form>
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="reason"
+              >Please tell us why you wish to stop giving to {{ mandate.charityName }}</label
+            >
+            <input
+              slot="input"
+              matInput
+              type="email"
+              id="reason"
+              [formControl]="reasonFormControl"
+              autocapitalize="off"
+              [maxlength]="reasonMaxLength"
+            />
+          </biggive-text-input>
+
+          <div class="actions">
+            <div>
+              <a routerLink="/my-account/regular-giving/{{ mandate.id }}">Back to mandate details</a>
+            </div>
+            <div>
+              @if (processing) {
+                <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+              } @else {
+                <biggive-button
+                  space-above="5"
+                  spaceBelow="0"
+                  colour-scheme="primary"
+                  label="Stop donations"
+                  full-width="true"
+                  size="medium"
+                  rounded="false"
+                  (click)="cancel(mandate)"
+                />
+              }
+            </div>
+          </div>
+        </form>
+      } @else {
+        <div style="min-height: 10em">
+          @defer (on timer(1000ms)) {
+            <div class="heading-wrapper">
+              <biggive-heading
+                colour="tertiary"
+                size="1"
+                align="center"
+                text="Cancel regular giving..."
+              ></biggive-heading>
+            </div>
+            <mat-spinner color="primary" diameter="30" aria-label="Loading mandate"></mat-spinner>
+          }
         </div>
       }
     </biggive-page-section>
