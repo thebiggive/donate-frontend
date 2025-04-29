@@ -20,6 +20,8 @@
         </a>
       }
       @if (campaign.parentRef && !fromFund) {
+        <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+        <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
         <a
           class=""
           mat-icon-button
@@ -28,6 +30,8 @@
           <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
           All participating campaigns
         </a>
+        <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+        <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
       }
       @if (!campaign.parentRef) {
         <a mat-icon-button routerLink="/explore">
@@ -206,12 +210,15 @@
 
             @if (campaign.additionalImageUris.length > 0) {
               <div class="c-additional">
+                <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
+                <!-- eslint-disable @angular-eslint/template/alt-text -->
                 @for (image of campaign.additionalImageUris; track $index) {
                   <img
                     [src]="image.uri | optimisedImage:850 | async"
                     class="c-additional__images"
                   >
                 }
+                <!-- eslint-enable @angular-eslint/template/alt-text -->
               </div>
             }
 

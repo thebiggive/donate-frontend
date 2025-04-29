@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
 
-declare var _gscq: {
+declare let _gscq: {
   push: (...args: string[][]) => void,
 };
 

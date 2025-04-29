@@ -39,7 +39,11 @@
                 </div>
                 <div class="actions">
                   <div>
+                    <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+                    <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
                     <a (click)="this.forgotPassword = false">Return to Login page</a>
+                    <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+                    <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
                   </div>
                   <div id="reset-password-button">
                     @if (! userAskedForResetLink) {
@@ -109,7 +113,11 @@
           </form>
           <div class="actions">
             <div>
+              <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+              <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
               <a (click)="this.forgotPassword = true">Forgot Password?</a>
+              <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+              <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
             </div>
             <div id="login-button">
               <div aria-live="polite">

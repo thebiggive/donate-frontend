@@ -33,8 +33,8 @@ export class AddressService {
     // Get up to top 20 suggestions – the maximum allowed.
     const uri = `${environment.postcodeLookupUri}/autocomplete/${encodeURIComponent(partialAddress)}?top=20&api-key=${environment.postcodeLookupKey}`;
 
-    return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
-      map((response: any) => response.suggestions),
+    return this.http.get<{suggestions: GiftAidAddressSuggestion[]}>(uri).pipe(
+      map((response) => response.suggestions),
       catchError((error) => {
         console.log('AddressService.getSuggestions() error', error);
         return EMPTY;

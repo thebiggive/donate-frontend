@@ -66,7 +66,7 @@ export class NavigationService {
   }
 
   static isAllowableRedirectPath(redirectParam: string) {
-    return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
+    return ! redirectParam.match(/[^a-zA-Z0-9\-_/]/);
   }
 
   /**

@@ -32,7 +32,7 @@ import {FundService} from "../fund.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {environment} from "../../environments/environment";
 import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
-import {logCalloutError} from '../logCalloutError';
+import {logCampaignCalloutError} from '../logCampaignCalloutError';
 
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
@@ -129,7 +129,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     private pageMeta: PageMetaService,
     private scroller: ViewportScroller,
     public searchService: SearchService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private state: TransferState,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
@@ -395,7 +395,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         }
       },
       error: (error) => {
-        logCalloutError(
+        logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
           `ExploreComponent.doCampaignSearch: ${error.message}`,
           undefined,

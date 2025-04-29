@@ -1,5 +1,5 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
@@ -98,7 +98,7 @@ export class IdentityService {
   }
 
   get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
-    var cacheBuster: string;
+    let cacheBuster: string;
     if (refresh) {
       cacheBuster = "?cacheBust=" + (new Date()).getTime();
     } else {
@@ -172,12 +172,11 @@ export class IdentityService {
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
     const cookieValue = this.cookieService.get(this.cookieName);
-    var idAndJwt: {jwt: string, id: string};
     if (!cookieValue) {
       return undefined;
     }
 
-    idAndJwt = JSON.parse(cookieValue);
+    const idAndJwt: {jwt: string, id: string} = JSON.parse(cookieValue);
 
     if (idAndJwt === undefined) {
       return undefined;
@@ -263,10 +262,11 @@ export class IdentityService {
   }): Promise<EmailVerificationToken> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/${secretNumber}/${personUUID}`;
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
 
-  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<Object> {
+  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<object> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
 
     return firstValueFrom(this.http.post(
@@ -287,7 +287,7 @@ export class IdentityService {
    * allows setting a password using the secret number that we emailed to them in their donation confirmation
    * message.
    */
-  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<object> {
     // @todo add an Identity route with UUID included & then switch Donate's used route over
     const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
 
@@ -314,7 +314,7 @@ export class IdentityService {
       ) as Observable<{token: EmailVerificationToken}>);
 
       return token.valid;
-    } catch (error) {
+    } catch (_e) {
       return false;
     }
   }

@@ -3,6 +3,7 @@
 // Definitions by: Boris Yankov <https://github.com/borisyankov/>, Theodore Brown <https://github.com/theodorejb/>, Leon Yu <https://github.com/leonyu/>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+
 declare namespace __Modernizr {
     interface AudioBoolean {
         ogg: boolean;
@@ -343,7 +344,7 @@ declare namespace __Modernizr {
     }
 
     interface ModernizrAPI {
-        on(feature: string, cb: (result: boolean) => any): void;
+      on(feature: string, cb: (result: boolean) => any): void;
 
         addTest(feature: string, test: () => boolean): void;
         addTest(feature: string, test: boolean): void;

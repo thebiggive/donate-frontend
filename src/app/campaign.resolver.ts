@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { Campaign } from './campaign.model';
 import {CampaignService, SearchQuery} from './campaign.service';
 import {SearchService} from "./search.service";
-import {logCalloutError} from './logCalloutError';
+import {logCampaignCalloutError} from './logCampaignCalloutError';
 
 @Injectable(
   {providedIn: 'root'}
@@ -17,7 +17,7 @@ export class CampaignResolver implements Resolve<Campaign>  {
   constructor(
     public campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     public searchService: SearchService,
     private router: Router,
     private state: TransferState,
@@ -55,7 +55,7 @@ export class CampaignResolver implements Resolve<Campaign>  {
       this.campaignService.search(query as SearchQuery).subscribe({
         next: () => {},
         error: () => {
-          logCalloutError(
+          logCampaignCalloutError(
             isPlatformBrowser(this.platformId),
             'CampaignResolver search to check fundSlug validity',
             `/${campaignSlug}/${fundSlug}`,
@@ -89,7 +89,7 @@ export class CampaignResolver implements Resolve<Campaign>  {
 
     const observable = method(identifier)
       .pipe(catchError(error => {
-        logCalloutError(isPlatformBrowser(this.platformId), `CampaignResolver main load: ${error.message}`, identifier, this.matomoTracker);
+        logCampaignCalloutError(isPlatformBrowser(this.platformId), `CampaignResolver main load: ${error.message}`, identifier, this.matomoTracker);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Home content on the requested path.
         void this.router.navigateByUrl('/');

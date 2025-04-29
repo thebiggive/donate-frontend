@@ -187,6 +187,7 @@
         </div>
       </form>
       <div class="actions">
+        @if (! verificationCodeSupplied) {
         <!-- Sitekey below is shared between environments and necessarily exposed in FE, so should be fine to hard-code -->
         <div
           class="frc-captcha"
@@ -194,6 +195,8 @@
           data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
           #frccaptcha
         ></div>
+        } <!-- else we don't need them to do a captcha as they alrady did it on the previous screen and we verified their
+        code.-->
         <div class="register-button-container">
           <div aria-live="polite">
             @if (processing) {
@@ -208,7 +211,7 @@
               space-above="5"
               spaceBelow="0"
               colour-scheme="primary"
-              [label]="(flags.requireEmailVerification && !verificationCodeSupplied) ? 'Continue' : 'Register'"
+              [label]="verificationCodeSupplied ? 'Register' : 'Continue'"
               full-width="true"
               disabled="!registrationForm.valid"
               size="medium"

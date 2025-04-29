@@ -12,7 +12,7 @@ export class ImageService {
   /** Track whether we should request images converted to webp to be as small as possible on modern browsers. */
   private webp?: boolean;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   getImageUri(originalImageUri: string | null, width: number): Observable<string|null> {
     if (!originalImageUri) {

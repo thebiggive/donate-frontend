@@ -1,3 +1,13 @@
+import {LONG_NUMBER, MIN_LENGTH_BANNED} from '../../validators/noLongNumberValidator';
+
+export type PaymentGroupControls = {
+  [key: string]: {
+    errors: {
+      [key: string]: unknown;
+    } | null
+  }
+};
+
 /**
  * This object tracks whether a donor is ready to progress past the payment stage of the donation start form. At time of
  * writing it just returns a boolean from readyToProgressFromPaymentStep, but my plan is to add a function to return
@@ -26,12 +36,7 @@ export class PaymentReadinessTracker {
      * to proceed.
      */
     private paymentGroup: {
-      controls: {
-        [key: string]: {
-          errors: {
-            [key: string]: unknown;
-          } | null
-        }},
+      controls: PaymentGroupControls,
 
         valid: boolean
     }
@@ -79,6 +84,8 @@ export class PaymentReadinessTracker {
           return `Please enter your ${fieldName}.`;
         case 'pattern':
           return `Sorry, your ${fieldName} is not recognised - please enter a valid ${fieldName}.`;
+        case LONG_NUMBER:
+          return `We do not accept ${MIN_LENGTH_BANNED} consecutive numbers in the ${fieldName} field.`
         default:
           console.error(error);
           return `Sorry, there is an error with the ${fieldName} field.`;

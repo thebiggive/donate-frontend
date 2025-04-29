@@ -65,7 +65,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
 
-  let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
+  const href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
 
   const color = iconColor(sfApiHighlightCard, campaignFamilyColours);
   return {
@@ -118,18 +118,11 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  const cards = apiHighlightCards.map(
-    card => SFAPIHighlightCardToHighlightCard(
-      environment.experienceUriPrefix,
-      environment.blogUriPrefix,
-      environment.donateUriPrefix,
-      card
-    ));
-
-  // temp code, remove after GMF 2025
-  cards.sort((cardA, cardB) =>
-    (Number)(cardB.campaignFamily === 'greenMatchFund') - (Number)(cardA.campaignFamily === 'greenMatchFund')
-  );
-
-  return cards
+  return apiHighlightCards.map(
+  card => SFAPIHighlightCardToHighlightCard(
+    environment.experienceUriPrefix,
+    environment.blogUriPrefix,
+    environment.donateUriPrefix,
+    card
+  ))
 }

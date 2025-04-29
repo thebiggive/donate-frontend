@@ -5,7 +5,6 @@ import {getPersonAuthHttpOptions, IdentityService} from "./identity.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {map, switchMap} from "rxjs/operators";
-import {PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
 import { Campaign } from './campaign.model';
 
 /**

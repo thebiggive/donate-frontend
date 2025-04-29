@@ -40,33 +40,6 @@
           <div class="header-box">
             <h2>Thank you!</h2>
             <p class="thank-you-text">Your generous donation has been made.</p>
-            @if (showRegistrationPrompt) {
-              <div>
-                <p>For a smoother giving experience, create a Big Give account. Your information will be saved
-                  securely, making future donations quicker and easier.
-                </p>
-                @if (showRegistrationPrompt) {
-                  <div class="cta">
-                    <div class="button-wrapper">
-                      <biggive-button
-                        space-below="0"
-                        colour-scheme="white"
-                        is-past-campaign="false"
-                        is-future-campaign="false"
-                        label="{{'Create my account'}}"
-                        open-in-new-tab="false"
-                        full-width="true"
-                        size="medium"
-                        rounded="false"
-                        centered="false"
-                        button-id="save-details-button"
-                        (click)="openSetPasswordDialog()">
-                      </biggive-button>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
             <div aria-live="polite">
               @if (registrationComplete) {
                 <div>

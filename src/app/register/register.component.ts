@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -76,7 +75,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly router: Router,
     private sanitizer: DomSanitizer,
     private readonly activatedRoute: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
   }
@@ -166,7 +165,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     const firstName = this.registrationForm.value.firstName;
     const lastName = this.registrationForm.value.lastName;
 
-    if (flags.requireEmailVerification && ! this.verificationCodeSupplied) {
+    if (! this.verificationCodeSupplied) {
       await this.requestVerificationCode(captchaResponse, emailAddress);
       return;
     }
@@ -222,6 +221,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       await this.identityService.requestEmailAuthToken(emailAddress, {captcha_code: captchaResponse});
       this.verificationLinkSentToEmail = emailAddress;
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
     } finally {
@@ -273,7 +273,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get readyToTakeAccountDetails(): boolean {
-    return !!this.verificationCodeSupplied || this.emailVerificationToken?.valid || ! flags.requireEmailVerification
+    return !!this.verificationCodeSupplied || !!this.emailVerificationToken?.valid
   }
 
   async registerPostDonation() {
@@ -290,6 +290,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     try {
       await this.identityService.setFirstPasswordWithToken(password!, this.emailVerificationToken!)
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
       this.processing = false;

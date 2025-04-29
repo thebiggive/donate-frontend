@@ -114,6 +114,7 @@ export class ChangeRegularGivingComponent implements OnInit {
           return_url: window.location.href
         }
       );
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.errorMessage = error?.message || 'Unexpected error';
       this.toaster.showError(this.errorMessage!);

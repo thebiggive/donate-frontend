@@ -90,7 +90,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
         this.loggedInEmailAddress = person.email_address;
         // `await` to ensure that credit balance is set before checking for resumable donations.
-        await this.donationStartForm.loadPerson(person, id, jwt);
+        await this.donationStartForm.loadPerson(person, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
 
         if (this.identityService.isTokenForFinalisedUser(jwt)) {
