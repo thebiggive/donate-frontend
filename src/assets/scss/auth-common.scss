@@ -1,6 +1,6 @@
 // common CSS rules used in authentication related pages - my account, register and login.
-@use '@angular/material' as mat;
-@use '../../abstract';
+@use "@angular/material" as mat;
+@use "../../abstract";
 
 main {
   margin: 0 0;
@@ -101,7 +101,8 @@ div.actions {
     flex-basis: 20%;
   }
 
-  #register-button-container, #reset-password-button-container {
+  #register-button-container,
+  #reset-password-button-container {
     margin-bottom: 1em;
     width: 100%;
     flex-basis: 60%;
@@ -111,7 +112,10 @@ div.actions {
   }
 }
 
-#register-button-container, #reset-password-button, #login-button, #reset-password-button  {
+#register-button-container,
+#reset-password-button,
+#login-button,
+#reset-password-button {
   width: 80%;
   text-align: center;
   margin: auto;

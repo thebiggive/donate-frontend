@@ -12,10 +12,10 @@ you don't need to work with FontAwesome and don't have a Pro key.
 
 To run the app locally:
 
-* clone it from GitHub
-* `export FONTAWESOME_NPM_AUTH_TOKEN=<token id>`
-* `npm install`
-* `npm run start`
+- clone it from GitHub
+- `export FONTAWESOME_NPM_AUTH_TOKEN=<token id>`
+- `npm install`
+- `npm run start`
 
 The app should be running at [localhost:4200](http://localhost:4200).
 
@@ -27,7 +27,7 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 To develop this app and the components together, ensure they are in sibling directories `donate-frontend` and `components` on your dev machine, then
 from this directory run:
-  `npm run link-components`
+`npm run link-components`
 
 This will set up symlinks so that you can use your local copy of the components instead of the default behaviour which is to use the copy published to
 NPM. You may need to re-run after making changes in the component code.
@@ -36,14 +36,15 @@ Note: make sure that you are checked out on the branch with your latest componen
 in Angular post-linking.
 
 If you wish to see changes made in components reflected in front end in near-real time, then run
+
 ```shell
 (cd ../components && npm run build.watch) &
-````
+```
 
 ## CI, e2e tests and Puppeteer
 
-* `main` branch deploys to Production.
-* `develop` branch deploys to Staging and Regression (for end-to-end regression tests).
+- `main` branch deploys to Production.
+- `develop` branch deploys to Staging and Regression (for end-to-end regression tests).
 
 To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
 
@@ -70,14 +71,14 @@ version for a locally downloaded `chromium` on macOS:
 
 Environment Variables configured in the CircleCI interface for this app are:
 
-* `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_ECR_ACCOUNT_URL`, `AWS_ECR_REPO_NAME` and `AWS_ECS_SERVICE_SUFFIX`, for ECS deploys.
+- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_ECR_ACCOUNT_URL`, `AWS_ECR_REPO_NAME` and `AWS_ECS_SERVICE_SUFFIX`, for ECS deploys.
   Key must belong to a user with ECS deploy rights and permission to deploy to the S3 static asset buckets.
-* `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
-* `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
+- `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
+- `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
 
 ### Feature Flag(s)
 
-We have currently one, but in future possible more or less feature flags used to separate code deployment from feature release. 
+We have currently one, but in future possible more or less feature flags used to separate code deployment from feature release.
 See [featureFlags.ts](./src/app/featureFlags.ts).
 
 ## Salesforce API requirements
@@ -96,7 +97,7 @@ fund allocation. For data in Salesforce to be eventually consistent, it must als
 We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
 donors' security.
 
-Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support 
+Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support
 release cycles. Where we want to communicate specific brands that should work we are likely best off mirroring [Stripe's appendix](https://stripe.com/docs/js/appendix/supported_browsers)
 for Stripe.js, as we must depend on that library for donations.
 
@@ -124,7 +125,7 @@ To test re-building the image (use FontAwesome token marked "Pro Package Token" 
 
     docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
-If you want to test *running* the staging image but locally, then for CORS to work you must (before building)
+If you want to test _running_ the staging image but locally, then for CORS to work you must (before building)
 update `environment.staging.ts` to set `donateUriPrefix` to 'http://localhost:4000'.
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
@@ -144,8 +145,8 @@ of the ECS cluster.
 
 Deploys must therefore:
 
-* deploy to S3 by copying built files to S3 at `/d` and `/assets`; *then*
-* deploy to ECS, which will use a mix of `<base href="/d/">` and providing `APP_BASE_HREF` *without* the `/d/`
+- deploy to S3 by copying built files to S3 at `/d` and `/assets`; _then_
+- deploy to ECS, which will use a mix of `<base href="/d/">` and providing `APP_BASE_HREF` _without_ the `/d/`
   suffix to get everything working, referencing any updated file hashes in S3's `/d/` directory but with dynamic
   routes having no such suffix.
 
@@ -166,9 +167,10 @@ See [Angular docs](https://angular.io/guide/ssr#working-around-the-browser-apis)
 general guidance on this.
 
 In the few cases where we need to work with these browser APIs, we should check carefully that either:
-* the use case can be invoked only by in-browser explicit visitor interaction, e.g. some
+
+- the use case can be invoked only by in-browser explicit visitor interaction, e.g. some
   infinite scroll `more()` calls make this assumption; or
-* the entrypoint to code is explicitly limited with `isPlatformBrowser(this.platformId)`. See `AppComponent`
+- the entrypoint to code is explicitly limited with `isPlatformBrowser(this.platformId)`. See `AppComponent`
   or search for this snippet to see how the token injection and DI is done.
 
 Finally, you can confirm your code runs OK on the server by checking CloudWatch logs for

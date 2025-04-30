@@ -1,11 +1,11 @@
-@use '@angular/material' as mat;
-@use './abstract';
+@use "@angular/material" as mat;
+@use "./abstract";
 
 // Utility classes
-@use './assets/scss/utilities';
+@use "./assets/scss/utilities";
 
 // Style Material Componenets here due to ViewEncapsulation
-@use './assets/scss/overwrite-mat';
+@use "./assets/scss/overwrite-mat";
 
 html {
   font-family: mat.m2-font-family(abstract.$app-typography);
@@ -21,7 +21,8 @@ body {
   // Asking the menu component to adjust the document body padding was flaky in some edge
   // cases, so declaratively do it here. These numbers need to stay in sync with the biggive-main-menu desktop & mobile heights.
   padding-top: 130px;
-  @media (max-width: 968px) { // must match components $screen-large
+  @media (max-width: 968px) {
+    // must match components $screen-large
     padding-top: 60px;
   }
 }

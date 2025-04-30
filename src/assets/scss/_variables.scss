@@ -1,13 +1,13 @@
-$colour-background: #F6F6F6; // Global / main app background
-$colour-grey-light: #E1E2E5;
+$colour-background: #f6f6f6; // Global / main app background
+$colour-grey-light: #e1e2e5;
 $colour-grey: #333;
 $colour-black: #000;
 $colour-black-contrast: #fff; // Suitable for legible text on `$colour-black` backgrounds
-$colour-highlight: #2AF135;
+$colour-highlight: #2af135;
 $colour-card-background: #fff;
 
-$colour-primary: #2C089B;
-$colour-secondary: #FF7272;
+$colour-primary: #2c089b;
+$colour-secondary: #ff7272;
 $colour-primary-contrast: #fff;
 
 $full-copy-max-width: 600px;
@@ -16,7 +16,13 @@ $breakpoint-smallish: "(min-width: 450px)";
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 968px)";
 $breakpoint-xl: "(min-width: 1280px)";
-$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow-soft:
+  0px 11px 15px rgba(0, 0, 0, 0.05),
+  0px 9px 46px rgba(0, 0, 0, 0.05),
+  0px 24px 38px rgba(0, 0, 0, 0.05);
 $box-shadow: $box-shadow-soft;
-$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+$box-shadow-hard:
+  0px 1px 3px rgba(0, 0, 0, 0.2),
+  0px 2px 2px rgba(0, 0, 0, 0.12),
+  0px 0px 2px rgba(0, 0, 0, 0.14);
 $box-shadow-super-soft: 0px 0px 5px 0px rgb(0 0 0 / 10%);

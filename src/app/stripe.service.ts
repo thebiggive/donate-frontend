@@ -1,20 +1,21 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  ConfirmationTokenResult, CustomFontSource,
+  ConfirmationTokenResult,
+  CustomFontSource,
   loadStripe,
   SetupIntentResult,
   Stripe,
   StripeElements,
   StripeElementsOptionsMode,
   StripeError,
-  StripePaymentElement
+  StripePaymentElement,
 } from '@stripe/stripe-js';
 
-import {environment} from '../environments/environment';
-import {environment as stagingEnvironment} from '../environments/environment.staging';
-import {Donation} from './donation.model';
-import {Campaign} from "./campaign.model";
-import {countryISO2} from './countries';
+import { environment } from '../environments/environment';
+import { environment as stagingEnvironment } from '../environments/environment.staging';
+import { Donation } from './donation.model';
+import { Campaign } from './campaign.model';
+import { countryISO2 } from './countries';
 
 @Injectable({
   providedIn: 'root',
@@ -41,26 +42,26 @@ export class StripeService {
       '.Block': {
         backgroundColor: 'var(--colorBackground)',
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
-        padding: '12px'
+        padding: '12px',
       },
       '.Input': {
         padding: '12px',
         border: 'solid 1px #8A8A8A', // matches our $colour-grey-medium
       },
       '.Input:disabled, .Input--invalid:disabled': {
-        color: 'lightgray'
+        color: 'lightgray',
       },
       '.Tab': {
         padding: '10px 12px 8px 12px',
         backgroundColor: '#fff',
-        transition: "background .15s ease, outline .15s ease, box-shadow .15s ease",
+        transition: 'background .15s ease, outline .15s ease, box-shadow .15s ease',
       },
       '.Tab:hover': {
         backgroundColor: '#fff',
       },
       '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
         backgroundColor: '#fff',
-        outline: "2px solid #FF7272",
+        outline: '2px solid #FF7272',
       },
       '.TabIcon--selected': {
         fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
@@ -68,20 +69,20 @@ export class StripeService {
       },
       '.CheckboxInput, .CheckboxInput--checked': {
         backgroundColor: 'inherit',
-        outline: "solid 1px black",
+        outline: 'solid 1px black',
       },
       '.Label, .CheckboxLabel': {
         fontWeight: '500',
         color: '#2C089B', // matches our $colour-primary
       },
       '.PickerItem': {
-        outline: "1px solid #8A8A8A",
+        outline: '1px solid #8A8A8A',
       },
       '.PickerItem--highlight': {
-        outline: "1px solid #FF7272",
+        outline: '1px solid #FF7272',
       },
       '.PickerItem--selected': {
-        outline: "none",
+        outline: 'none',
       },
       '.PickerItem--highlight, .PickerItem--highlight:hover': {
         boxShadow: 'none',
@@ -89,7 +90,7 @@ export class StripeService {
       '.PickerItem:hover, .PickerItem--highlight:hover': {
         boxShadow: '0 0 1px rgba(0,0,0,.15), 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 8px rgba(0, 0, 0, 0.03)',
       },
-    }
+    },
   } as const;
 
   public constructor() {
@@ -125,14 +126,18 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  public stripeElementsForDonation(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+  public stripeElementsForDonation(
+    donation: Donation,
+    campaign: Campaign,
+    customerSessionClientSecret: string | undefined,
+  ) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
 
     const money = {
       currency: donation.currencyCode,
-      amount: this.amountIncTipInMinorUnit(donation)
+      amount: this.amountIncTipInMinorUnit(donation),
     };
 
     return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
@@ -148,11 +153,11 @@ export class StripeService {
   public stripeElements(
     money: {
       currency: string;
-      amount: number
+      amount: number;
     },
-    futureUsage: "off_session" | "on_session",
+    futureUsage: 'off_session' | 'on_session',
     campaign: Campaign,
-    customerSessionClientSecret: string | undefined
+    customerSessionClientSecret: string | undefined,
   ) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
@@ -174,75 +179,71 @@ export class StripeService {
   }
 
   updateAmount(elements: StripeElements, donation: Donation) {
-    elements.update({amount: this.amountIncTipInMinorUnit(donation)});
+    elements.update({ amount: this.amountIncTipInMinorUnit(donation) });
   }
 
   async prepareConfirmationTokenFromPaymentElement(
-    {countryCode, billingPostalAddress}: {countryCode: string, billingPostalAddress: string},
-    elements: StripeElements
+    { countryCode, billingPostalAddress }: { countryCode: string; billingPostalAddress: string },
+    elements: StripeElements,
   ): Promise<ConfirmationTokenResult> {
-    if (! this.stripe) {
-      throw new Error("Stripe not ready");
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
     }
 
-    const {error: submitError} = await elements.submit();
+    const { error: submitError } = await elements.submit();
     if (submitError) {
-      return {error: submitError, confirmationToken: undefined}
+      return { error: submitError, confirmationToken: undefined };
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
     // as `params.billing_details` here.
     const paymentMethodData = {
-      billing_details:
-        {
-          address: {
-            country: countryCode,
-            postal_code: billingPostalAddress
-          },
-        }
+      billing_details: {
+        address: {
+          country: countryCode,
+          postal_code: billingPostalAddress,
+        },
+      },
     };
 
-    return await this.stripe.createConfirmationToken(
-      {elements: elements, params: {payment_method_data: paymentMethodData}}
-    );
+    return await this.stripe.createConfirmationToken({
+      elements: elements,
+      params: { payment_method_data: paymentMethodData },
+    });
   }
 
   public static createStripeElement(stripeElements: StripeElements) {
-    return stripeElements.create(
-      "payment",
-      {
-        wallets: {
-          applePay: 'auto',
-          googlePay: 'auto'
-        },
-        terms: {
-          // We have our own terms copy for the future payment in donation-start-form.component.html
-          card: "never",
-          applePay: "never",
-          googlePay: "never",
-        },
-        fields: {
-          billingDetails: {
-            address: {
-              // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
-              country: "never",
-              postalCode: "never",
-            }
+    return stripeElements.create('payment', {
+      wallets: {
+        applePay: 'auto',
+        googlePay: 'auto',
+      },
+      terms: {
+        // We have our own terms copy for the future payment in donation-start-form.component.html
+        card: 'never',
+        applePay: 'never',
+        googlePay: 'never',
+      },
+      fields: {
+        billingDetails: {
+          address: {
+            // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
+            country: 'never',
+            postalCode: 'never',
           },
         },
-        business: {name: "Big Give"},
-      }
-    );
+      },
+      business: { name: 'Big Give' },
+    });
   }
 
-
   async handleNextAction(clientSecret: string) {
-    if (! this.stripe) {
-      throw new Error("Stripe not ready");
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
     }
 
     return await this.stripe.handleNextAction({
-      clientSecret: clientSecret
+      clientSecret: clientSecret,
     });
   }
 
@@ -251,29 +252,29 @@ export class StripeService {
     return Math.round((donation.tipAmount + donation.donationAmount) * 100);
   }
 
-  public stripeElementsForRegularGivingPaymentMethod(client_secret: string): [StripeElements, StripePaymentElement]  {
+  public stripeElementsForRegularGivingPaymentMethod(client_secret: string): [StripeElements, StripePaymentElement] {
     const elements = this.stripe!.elements({
-    clientSecret: client_secret,
-    appearance: this.appearance,
-    fonts: this.fonts
-  });
+      clientSecret: client_secret,
+      appearance: this.appearance,
+      fonts: this.fonts,
+    });
 
-  return [elements, StripeService.createStripeElement(elements)];
+    return [elements, StripeService.createStripeElement(elements)];
   }
 
   public async confirmSetup({
-                              stripeElements,
-                              return_url,
-                              billingCountryCode,
-                              billingPostalCode,
-  }:{
-    billingCountryCode: countryISO2,
-    billingPostalCode: string,
-    stripeElements: StripeElements,
-    return_url: string
+    stripeElements,
+    return_url,
+    billingCountryCode,
+    billingPostalCode,
+  }: {
+    billingCountryCode: countryISO2;
+    billingPostalCode: string;
+    stripeElements: StripeElements;
+    return_url: string;
   }): Promise<SetupIntentResult> {
-    if (! this.stripe) {
-      throw new Error("Stripe not ready");
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
     }
 
     return await this.stripe.confirmSetup({
@@ -284,23 +285,20 @@ export class StripeService {
             address: {
               country: billingCountryCode.toLowerCase(),
               postal_code: billingPostalCode,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       elements: stripeElements,
       redirect: 'if_required',
-    })
+    });
   }
 }
 
-
 export function getStripeFriendlyError(
-  error: StripeError | {message: string, code: string, decline_code?: string, description?: string} | undefined,
-  context: 'method_setup'| 'card_change'| 'confirm',
+  error: StripeError | { message: string; code: string; decline_code?: string; description?: string } | undefined,
+  context: 'method_setup' | 'card_change' | 'confirm',
 ): string {
-
-
   let prefix = '';
   switch (context) {
     case 'method_setup':
@@ -313,7 +311,7 @@ export function getStripeFriendlyError(
       prefix = 'Payment processing failed: ';
   }
 
-  if (! error || (! error.message && ! error.code)) {
+  if (!error || (!error.message && !error.code)) {
     if (error && error.hasOwnProperty('description')) {
       // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
       // with hasOwnProperty.
@@ -333,7 +331,8 @@ export function getStripeFriendlyError(
 
   if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
     // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
-    friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
+    friendlyError =
+      'The payment was declined. You might need to contact your bank before making a donation of this amount.';
     customMessage = true;
   }
 

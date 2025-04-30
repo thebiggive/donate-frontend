@@ -20,7 +20,7 @@ export class PageMetaService {
     private title: Title,
   ) {}
 
-  setCommon(title: string, description: string, imageUri: string|null) {
+  setCommon(title: string, description: string, imageUri: string | null) {
     const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
     const links = this.dom.getElementsByTagName('link');
@@ -36,19 +36,19 @@ export class PageMetaService {
     }
 
     this.title.setTitle(title);
-    this.meta.updateTag( { property: 'og:title', content: title } );
-    this.meta.updateTag( { property: 'twitter:title', content: title } );
+    this.meta.updateTag({ property: 'og:title', content: title });
+    this.meta.updateTag({ property: 'twitter:title', content: title });
 
-    this.meta.updateTag({ name: 'description', content: description});
-    this.meta.updateTag( { property: 'og:description', content: description } );
-    this.meta.updateTag( { property: 'twitter:description', content: description } );
+    this.meta.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'twitter:description', content: description });
 
     if (imageUri) {
-      this.meta.updateTag( { property: 'og:image', content: imageUri } );
-      this.meta.updateTag( { property: 'twitter:image', content: imageUri } );
-      this.meta.updateTag( { property: 'twitter:card', content: 'summary_large_image' } );
+      this.meta.updateTag({ property: 'og:image', content: imageUri });
+      this.meta.updateTag({ property: 'twitter:image', content: imageUri });
+      this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
     } else {
-      this.meta.updateTag( { property: 'twitter:card', content: 'summary' } );
+      this.meta.updateTag({ property: 'twitter:card', content: 'summary' });
     }
   }
 }

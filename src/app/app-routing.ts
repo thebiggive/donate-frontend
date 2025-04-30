@@ -1,34 +1,34 @@
-import {ActivatedRouteSnapshot, CanActivateFn, Router, Routes} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, Routes } from '@angular/router';
 
-import {CampaignListResolver} from './campaign-list.resolver';
-import {CampaignResolver} from './campaign.resolver';
-import {CharityCampaignsResolver} from './charity-campaigns.resolver';
-import {CampaignStatsResolver} from "./campaign-stats-resolver";
-import {HighlightCardsResolver} from "./highlight-cards-resolver";
-import {LoginComponent} from "./login/login.component";
-import {RegisterComponent} from "./register/register.component";
-import {flags} from "./featureFlags";
-import {MyDonationsComponent} from "./my-donations/my-donations.component";
-import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
-import {MandateComponent} from "./mandate/mandate.component";
-import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
-import {NotFoundComponent} from "./not-found/not-found.component";
-import {MandateResolver} from './mandate.resolver';
-import {PaymentMethodsResolver} from './payment-methods.resolver';
-import {PastDonationsResolver} from './past-donations.resolver';
+import { CampaignListResolver } from './campaign-list.resolver';
+import { CampaignResolver } from './campaign.resolver';
+import { CharityCampaignsResolver } from './charity-campaigns.resolver';
+import { CampaignStatsResolver } from './campaign-stats-resolver';
+import { HighlightCardsResolver } from './highlight-cards-resolver';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { flags } from './featureFlags';
+import { MyDonationsComponent } from './my-donations/my-donations.component';
+import { RegularGivingComponent } from './regular-giving/regular-giving.component';
+import { MandateComponent } from './mandate/mandate.component';
+import { MyPaymentMethodsComponent } from './my-payment-methods/my-payment-methods.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { MandateResolver } from './mandate.resolver';
+import { PaymentMethodsResolver } from './payment-methods.resolver';
+import { PastDonationsResolver } from './past-donations.resolver';
 import { isPlatformServer } from '@angular/common';
-import {inject, PLATFORM_ID} from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
 
-import {IdentityService} from './identity.service';
+import { IdentityService } from './identity.service';
 import { LoggedInPersonResolver } from './logged-in-person.resolver';
 import { DonorAccountResolver } from './donor-account.resolver';
-import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.component';
-import {NavigationService} from './navigation.service';
-import {myMandatesResolver} from './my-mandates.resolver';
-import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
-import {ChangeRegularGivingComponent} from './change-regular-giving/change-regular-giving.component';
-import {setupIntentResolver} from './setupIntent.resolver';
-import {EmailVerificationTokenResolver} from './email-verification-token.resolver';
+import { MyRegularGivingComponent } from './my-regular-giving/my-regular-giving.component';
+import { NavigationService } from './navigation.service';
+import { myMandatesResolver } from './my-mandates.resolver';
+import { CancelMandateComponent } from './cancel-mandate/cancel-mandate.component';
+import { ChangeRegularGivingComponent } from './change-regular-giving/change-regular-giving.component';
+import { setupIntentResolver } from './setupIntent.resolver';
+import { EmailVerificationTokenResolver } from './email-verification-token.resolver';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -46,11 +46,13 @@ const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapsh
   const requestedRedirect = snapshot.queryParams.r;
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
-  if (! isLoggedIn) {
+  if (!isLoggedIn) {
     return true;
   } else {
-    const redirectPath = (requestedRedirect && NavigationService.isAllowableRedirectPath(requestedRedirect)) ?
-      `/${requestedRedirect}` : '/' + myAccountPath
+    const redirectPath =
+      requestedRedirect && NavigationService.isAllowableRedirectPath(requestedRedirect)
+        ? `/${requestedRedirect}`
+        : '/' + myAccountPath;
     return router.parseUrl(redirectPath);
   }
 };
@@ -64,7 +66,7 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
   const router = inject(Router);
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
-  if ( isLoggedIn ) {
+  if (isLoggedIn) {
     return true;
   }
 
@@ -72,9 +74,9 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
   // If we need to redirect to any other pages in future, we can take an ActivatedRouteSnapshot param here
   // and pass it to the login page as an 'r' query param.
 
-  const redirectPath = routerStateSnapshot.url
+  const redirectPath = routerStateSnapshot.url;
   if (redirectPath) {
-    const query = new URLSearchParams({r: redirectPath})
+    const query = new URLSearchParams({ r: redirectPath });
     const url = '/login?' + query.toString();
     return router.parseUrl(url);
   }
@@ -97,24 +99,20 @@ export const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       stats: CampaignStatsResolver,
-      highlights: HighlightCardsResolver
+      highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./home/home.module')
-      .then(c => c.HomeModule),
+    loadChildren: () => import('./home/home.module').then((c) => c.HomeModule),
   },
   {
     path: transferFundsPath,
     pathMatch: 'full',
-    canActivate: [
-      requireLogin,
-    ],
-    loadChildren: () => import('./transfer-funds/transfer-funds.module')
-      .then(c => c.TransferFundsModule),
+    canActivate: [requireLogin],
+    loadChildren: () => import('./transfer-funds/transfer-funds.module').then((c) => c.TransferFundsModule),
   },
   {
     path: 'buy-credits',
     pathMatch: 'full',
-    redirectTo: "/transfer-funds"
+    redirectTo: '/transfer-funds',
   },
   {
     path: 'campaign/:campaignId',
@@ -122,8 +120,7 @@ export const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./campaign-details/campaign-details.module')
-      .then(c => c.CampaignDetailsModule),
+    loadChildren: () => import('./campaign-details/campaign-details.module').then((c) => c.CampaignDetailsModule),
   },
   {
     path: 'charity/:charityId',
@@ -131,8 +128,7 @@ export const routes: Routes = [
     resolve: {
       campaigns: CharityCampaignsResolver,
     },
-    loadChildren: () => import('./charity/charity.module')
-      .then(c => c.CharityModule),
+    loadChildren: () => import('./charity/charity.module').then((c) => c.CharityModule),
   },
   {
     path: 'donate/:campaignId',
@@ -140,8 +136,10 @@ export const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
-      .then(c => c.DonationStartContainerModule),
+    loadChildren: () =>
+      import('./donation-start/donation-start-container/donation-start-container.module').then(
+        (c) => c.DonationStartContainerModule,
+      ),
   },
   {
     path: 'donate-new-stepper/:campaignId',
@@ -153,33 +151,27 @@ export const routes: Routes = [
     pathMatch: 'full',
     component: MandateComponent,
     data: {
-      isThanks: true
+      isThanks: true,
     },
-    canActivate: [
-      requireLogin,
-    ],
+    canActivate: [requireLogin],
     resolve: {
-      mandate:  MandateResolver,
+      mandate: MandateResolver,
     },
   },
   {
     path: `${myRegularGivingPath}/:mandateId`,
     pathMatch: 'full',
     component: MandateComponent,
-    canActivate: [
-      requireLogin,
-    ],
+    canActivate: [requireLogin],
     resolve: {
-      mandate:  MandateResolver,
+      mandate: MandateResolver,
     },
   },
   {
     path: `${myRegularGivingPath}/:mandateId/cancel`,
     pathMatch: 'full',
     component: CancelMandateComponent,
-    canActivate: [
-      requireLogin,
-    ],
+    canActivate: [requireLogin],
   },
   {
     path: 'metacampaign/:campaignId',
@@ -188,8 +180,7 @@ export const routes: Routes = [
       campaign: CampaignResolver,
       highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
+    loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
@@ -198,20 +189,17 @@ export const routes: Routes = [
       campaign: CampaignResolver,
       highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
+    loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
   },
   {
     path: 'reset-password',
     pathMatch: 'full',
-    loadChildren: () => import('./reset-password/reset-password.module')
-      .then(c => c.ResetPasswordModule),
+    loadChildren: () => import('./reset-password/reset-password.module').then((c) => c.ResetPasswordModule),
   },
   {
     path: 'thanks/:donationId',
     pathMatch: 'full',
-    loadChildren: () => import('./donation-thanks/donation-thanks.module')
-      .then(c => c.DonationThanksModule),
+    loadChildren: () => import('./donation-thanks/donation-thanks.module').then((c) => c.DonationThanksModule),
   },
   {
     path: 'my-account/donations',
@@ -220,9 +208,7 @@ export const routes: Routes = [
     },
     pathMatch: 'full',
     component: MyDonationsComponent,
-    canActivate: [
-      requireLogin,
-    ],
+    canActivate: [requireLogin],
   },
   {
     path: 'my-account/payment-methods',
@@ -232,9 +218,7 @@ export const routes: Routes = [
       paymentMethods: PaymentMethodsResolver,
     },
     component: MyPaymentMethodsComponent,
-    canActivate: [
-      requireLogin,
-    ],
+    canActivate: [requireLogin],
   },
   {
     path: ':campaignSlug/:fundSlug',
@@ -243,35 +227,28 @@ export const routes: Routes = [
       campaign: CampaignResolver,
       highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
+    loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
   },
   {
     path: 'explore',
     pathMatch: 'full',
     resolve: {
       campaigns: CampaignListResolver,
-      highlights: HighlightCardsResolver
+      highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
+    loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
   },
   {
     path: myAccountPath,
     pathMatch: 'full',
-    canActivate: [
-      requireLogin,
-    ],
-    loadChildren: () => import('./my-account/my-account.module')
-      .then(c => c.MyAccountModule),
+    canActivate: [requireLogin],
+    loadChildren: () => import('./my-account/my-account.module').then((c) => c.MyAccountModule),
   },
   {
     path: registerPath,
     pathMatch: 'full',
     component: RegisterComponent,
-    canActivate: [
-      redirectIfAlreadyLoggedIn,
-    ],
+    canActivate: [redirectIfAlreadyLoggedIn],
     resolve: {
       emailVerificationToken: EmailVerificationTokenResolver,
     },
@@ -279,20 +256,16 @@ export const routes: Routes = [
   /** For use when donor clicks logout in the menu on the wordpress site **/
   {
     component: LoginComponent, // Angular requires we set a component but it will never be used client-side as
-                                    // `canActivate` always redirects there.
+    // `canActivate` always redirects there.
     path: 'logout',
     pathMatch: 'full',
-    canActivate: [
-      handleLogout,
-    ],
+    canActivate: [handleLogout],
   },
   {
     path: 'login',
     pathMatch: 'full',
     component: LoginComponent,
-    canActivate: [
-      redirectIfAlreadyLoggedIn,
-    ],
+    canActivate: [redirectIfAlreadyLoggedIn],
   },
   {
     // The cookie preference center is a modal popup, not a full page. We need something behind it
@@ -302,13 +275,12 @@ export const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       stats: CampaignStatsResolver,
-      highlights: HighlightCardsResolver
+      highlights: HighlightCardsResolver,
     },
     data: {
       showCookiePreferences: true,
     },
-    loadChildren: () => import('./home/home.module')
-      .then(c => c.HomeModule),
+    loadChildren: () => import('./home/home.module').then((c) => c.HomeModule),
   },
   // This is effectively our no-or-one-forward-slashes 404 handler because we support any string as meta-campaign
   // slug (and optionally another as fund slug). So check `CampaignResolver` for adjusting what happens if the slug doesn't
@@ -320,62 +292,47 @@ export const routes: Routes = [
       campaign: CampaignResolver,
       highlights: HighlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
+    loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
   },
   // And this is our final 404 handler which actually says 'not found'; used for e.g. legacy /project/X/Y format paths.
   {
     path: '**',
     component: NotFoundComponent,
-  }
+  },
 ];
 
 if (flags.regularGivingEnabled) {
-  routes.unshift(
-    {
-      path: myRegularGivingPath,
-      resolve: {
-        mandates: myMandatesResolver,
-      },
-      pathMatch: 'full',
-      component: MyRegularGivingComponent,
-      canActivate: [
-        requireLogin,
-      ],
+  routes.unshift({
+    path: myRegularGivingPath,
+    resolve: {
+      mandates: myMandatesResolver,
     },
-  );
+    pathMatch: 'full',
+    component: MyRegularGivingComponent,
+    canActivate: [requireLogin],
+  });
 
-  routes.unshift(
-    {
-      path: 'my-account/payment-methods/change-regular-giving',
-      resolve: {
-        person: LoggedInPersonResolver,
-        paymentMethods: PaymentMethodsResolver,
-        setupIntent: setupIntentResolver,
-      },
-      pathMatch: 'full',
-      component: ChangeRegularGivingComponent,
-      canActivate: [
-        requireLogin,
-      ],
+  routes.unshift({
+    path: 'my-account/payment-methods/change-regular-giving',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+      setupIntent: setupIntentResolver,
     },
-  );
+    pathMatch: 'full',
+    component: ChangeRegularGivingComponent,
+    canActivate: [requireLogin],
+  });
 
-
-  routes.unshift(
-    {
-      path: 'regular-giving/:campaignId',
-      pathMatch: 'full',
-      component: RegularGivingComponent,
-      canActivate: [
-        requireLogin,
-      ],
-      resolve: {
-        campaign: CampaignResolver,
-        donor: LoggedInPersonResolver,
-        donorAccount: DonorAccountResolver,
-      },
+  routes.unshift({
+    path: 'regular-giving/:campaignId',
+    pathMatch: 'full',
+    component: RegularGivingComponent,
+    canActivate: [requireLogin],
+    resolve: {
+      campaign: CampaignResolver,
+      donor: LoggedInPersonResolver,
+      donorAccount: DonorAccountResolver,
     },
-  )
+  });
 }
-

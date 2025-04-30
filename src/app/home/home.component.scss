@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 
 .auto-margin {
   margin: auto; //centres the button
@@ -62,6 +62,6 @@ swiper-slide {
   z-index: 1;
   gap: 7px;
   .button {
-    cursor:pointer;
+    cursor: pointer;
   }
 }

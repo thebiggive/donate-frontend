@@ -1,4 +1,4 @@
-@use './variables' as var;
+@use "./variables" as var;
 @use "sass:color";
 
 @mixin size-md {
@@ -22,7 +22,7 @@
   line-height: 14px;
   @media #{var.$breakpoint-lg} {
     font-size: 14px;
-    line-height: 20px
+    line-height: 20px;
   }
 }
 
@@ -143,7 +143,6 @@
   }
 }
 
-
 @mixin make-back-button {
   display: inline-block;
   text-align: left;
@@ -193,7 +192,7 @@
   left: -5px;
   width: 5px;
   height: 5px;
-  background: url(/assets/images/ribbon-back.png)
+  background: url(/assets/images/ribbon-back.png);
 }
 
 @mixin format-icon-container {
@@ -230,20 +229,20 @@
 }
 
 @mixin format-icon-title {
-    font-size: 0.9rem;
-    margin: auto;
-    width: 90%;
-    line-height: 20px;
-    display: block;
-    word-wrap: break-word;
-    padding-left: 20px;
+  font-size: 0.9rem;
+  margin: auto;
+  width: 90%;
+  line-height: 20px;
+  display: block;
+  word-wrap: break-word;
+  padding-left: 20px;
 
-    @media#{var.$breakpoint-lg} {
-      padding-left: 5px;
-    }
-    @media#{var.$breakpoint-xl} {
-      padding-left: 10px;
-    }
+  @media#{var.$breakpoint-lg} {
+    padding-left: 5px;
+  }
+  @media#{var.$breakpoint-xl} {
+    padding-left: 10px;
+  }
 }
 
 /**
@@ -282,7 +281,6 @@
 }
 
 @mixin binary-options {
-
   .binary-options {
     display: flex;
     justify-content: space-between;

@@ -5,9 +5,9 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ExploreComponent } from './explore.component';
-import {ExploreRoutingModule} from './explore-routing.module';
-import {OptimisedImagePipe} from '../optimised-image.pipe';
-import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.component";
+import { ExploreRoutingModule } from './explore-routing.module';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 
 @NgModule({
   imports: [
@@ -19,11 +19,7 @@ import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.compon
     OptimisedImagePipe,
     HighlightCardsComponent,
   ],
-  declarations: [
-    ExploreComponent,
-  ],
-  providers: [
-    DatePipe,
-  ],
+  declarations: [ExploreComponent],
+  providers: [DatePipe],
 })
 export class ExploreModule {}

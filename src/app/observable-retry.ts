@@ -4,8 +4,7 @@ import { throwError, timer } from 'rxjs';
 const excludedStatusCodes = [500];
 export const getDelay = () => {
   let scalingDuration = 1_000; // ms, initial
-  return (
-  (error: HttpErrorResponse, retryCount: number) => {
+  return (error: HttpErrorResponse, retryCount: number) => {
     // if response is a status code we don't wish to retry, throw error
     if (excludedStatusCodes.includes(error.status)) {
       return throwError(() => error);
@@ -16,5 +15,5 @@ export const getDelay = () => {
     }
 
     return timer(retryCount * scalingDuration);
-  });
-}
+  };
+};

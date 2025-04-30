@@ -1,38 +1,38 @@
-import {DatePipe} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatSelectModule} from '@angular/material/select';
-import {MatStepperModule} from '@angular/material/stepper';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {MatomoTracker as MatomoClientTracker, MatomoModule} from 'ngx-matomo-client';
-import {InMemoryStorageService} from 'ngx-webstorage-service';
-import {of} from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatomoTracker as MatomoClientTracker, MatomoModule } from 'ngx-matomo-client';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
+import { of } from 'rxjs';
 
-import {Campaign} from '../../campaign.model';
-import {DonationService, TBG_DONATE_STORAGE} from '../../donation.service';
-import {IdentityService} from '../../identity.service';
-import {TimeLeftPipe} from "../../time-left.pipe";
-import {DonationStartFormComponent} from "./donation-start-form.component";
-import {CardIconsService} from "../../card-icons.service";
-import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from "@angular/core";
-import {ConversionTrackingService} from "../../conversionTracking.service";
-import {PageMetaService} from "../../page-meta.service";
-import {AddressService} from "../../address.service";
-import {StripeService} from "../../stripe.service";
-import {Donation} from "../../donation.model";
-import {provideHttpClient, withFetch} from '@angular/common/http';
-import {Toast} from "../../toast.service";
+import { Campaign } from '../../campaign.model';
+import { DonationService, TBG_DONATE_STORAGE } from '../../donation.service';
+import { IdentityService } from '../../identity.service';
+import { TimeLeftPipe } from '../../time-left.pipe';
+import { DonationStartFormComponent } from './donation-start-form.component';
+import { CardIconsService } from '../../card-icons.service';
+import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core';
+import { ConversionTrackingService } from '../../conversionTracking.service';
+import { PageMetaService } from '../../page-meta.service';
+import { AddressService } from '../../address.service';
+import { StripeService } from '../../stripe.service';
+import { Donation } from '../../donation.model';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { Toast } from '../../toast.service';
 
-function makeDonationStartFormComponent(donationService: DonationService,) {
+function makeDonationStartFormComponent(donationService: DonationService) {
   const mockIdentityService = TestBed.inject(IdentityService);
   spyOn(mockIdentityService, 'isTokenForFinalisedUser').and.returnValue(true);
 
@@ -40,8 +40,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as CardIconsService,
     undefined as unknown as ChangeDetectorRef,
     {
-      convert: () => {
-      }
+      convert: () => {},
     } as unknown as ConversionTrackingService,
     undefined as unknown as MatDialog,
     donationService,
@@ -49,16 +48,14 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     new FormBuilder(),
     mockIdentityService,
     {
-      trackEvent: () => {
-      }
+      trackEvent: () => {},
     } as unknown as MatomoClientTracker,
     undefined as unknown as PageMetaService,
     undefined as unknown as AddressService,
     {},
-    {snapshot: {}} as unknown as ActivatedRoute,
+    { snapshot: {} } as unknown as ActivatedRoute,
     {
-      navigate: () => {
-      }
+      navigate: () => {},
     } as unknown as Router,
     undefined as unknown as StripeService,
     {
@@ -66,7 +63,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     } as unknown as Toast,
   );
 
-  donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
+  donationStartFormComponent.campaign = { currencyCode: 'GBP' } as Campaign;
 
   donationStartFormComponent.donation = {} as Donation;
   return donationStartFormComponent;
@@ -76,19 +73,19 @@ describe('DonationStartForm', () => {
   let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;
 
-  const getDummyCampaign = (campaignId: string) : Campaign => {
+  const getDummyCampaign = (campaignId: string): Campaign => {
     return {
       id: campaignId,
       aims: ['Aim 1'],
-      amountRaised: 200.00,
+      amountRaised: 200.0,
       additionalImageUris: [
         {
           uri: 'https://example.com/some-additional-image.png',
           order: 100,
         },
-    ],
-    bannerUri: 'https://example.com/some-banner.png',
-    beneficiaries: ['Other'],
+      ],
+      bannerUri: 'https://example.com/some-banner.png',
+      beneficiaries: ['Other'],
       budgetDetails: [
         {
           description: 'budget line 1',
@@ -114,8 +111,8 @@ describe('DonationStartForm', () => {
       impactReporting: 'Impact reporting plan',
       impactSummary: 'Impact overview',
       isMatched: true,
-      matchFundsRemaining: 987.00,
-      matchFundsTotal: 988.00,
+      matchFundsRemaining: 987.0,
+      matchFundsTotal: 988.0,
       parentUsesSharedFunds: false,
       problem: 'The situation',
       quotes: [
@@ -149,21 +146,22 @@ describe('DonationStartForm', () => {
         provider: 'youtube',
         key: '1G_Abc2delF',
       },
-  };
+    };
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [FormsModule,
+      imports: [
+        FormsModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,
         MatDialogModule,
         MatIconModule,
         MatInputModule,
         MatomoModule.forRoot({
-            siteId: '',
-            trackerUrl: '',
+          siteId: '',
+          trackerUrl: '',
         }),
         MatRadioModule,
         MatProgressSpinnerModule,
@@ -172,20 +170,21 @@ describe('DonationStartForm', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
-            {
-                path: 'donate/:campaignId',
-                component: DonationStartFormComponent,
-            },
-        ])],
-    providers: [
+          {
+            path: 'donate/:campaignId',
+            component: DonationStartFormComponent,
+          },
+        ]),
+      ],
+      providers: [
         {
-            provide: ActivatedRoute,
-            useValue: {
-                queryParams: of({}),
-                snapshot: {
-                    data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
-                },
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of({}),
+            snapshot: {
+              data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
             },
+          },
         },
         DatePipe,
         TimeLeftPipe,
@@ -193,8 +192,8 @@ describe('DonationStartForm', () => {
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
-    ]
-});
+      ],
+    });
   });
 
   beforeEach(() => {
@@ -421,11 +420,11 @@ describe('DonationStartForm', () => {
 
     const fakeDonationService = {
       getDefaultCounty: () => 'GB',
-      finaliseCashBalancePurchase: (donation: Donation)=> {
+      finaliseCashBalancePurchase: (donation: Donation) => {
         finaliseCashBalancePurchaseCalled = true;
         return of(donation);
       },
-      getPaymentMethods: () => of({data: []}),
+      getPaymentMethods: () => of({ data: [] }),
     } as unknown as DonationService;
 
     const sut = makeDonationStartFormComponent(fakeDonationService);
@@ -433,15 +432,13 @@ describe('DonationStartForm', () => {
     // Ensure form groups are ready, otherwise we get lots of errors from validation updates
     // etc. on undefined elements.
     await waitForAsync(() => {
-      sut.loadPerson({cash_balance: {gbp: 0}}, 'jwt');
+      sut.loadPerson({ cash_balance: { gbp: 0 } }, 'jwt');
     });
 
     await sut.payWithStripe();
 
-    expect(finaliseCashBalancePurchaseCalled).toBe(false)
+    expect(finaliseCashBalancePurchaseCalled).toBe(false);
   });
-
-
 
   it('should have maximum amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.

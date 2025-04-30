@@ -1,58 +1,57 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {Campaign} from "../campaign.model";
-import {ComponentsModule} from "@biggive/components-angular";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatStep, MatStepper} from "@angular/material/stepper";
-import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {MatHint, MatInput} from "@angular/material/input";
-import {MatButton, MatIconAnchor} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {Person} from "../person.model";
-import {MandateCreateResponse, RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Mandate} from '../mandate.model';
-import {myRegularGivingPath} from "../app-routing";
-import {requiredNotBlankValidator} from "../validators/notBlank";
-import {getCurrencyMinValidator} from "../validators/currency-min";
-import {getCurrencyMaxValidator} from "../validators/currency-max";
-import {Toast} from "../toast.service";
-import {DonorAccount} from "../donorAccount.model";
-import {countryOptions} from "../countries";
-import {PageMetaService} from "../page-meta.service";
-import {getStripeFriendlyError, StripeService} from "../stripe.service";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Campaign } from '../campaign.model';
+import { ComponentsModule } from '@biggive/components-angular';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatStep, MatStepper } from '@angular/material/stepper';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { MatHint, MatInput } from '@angular/material/input';
+import { MatButton, MatIconAnchor } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { Person } from '../person.model';
+import { MandateCreateResponse, RegularGivingService, StartMandateParams } from '../regularGiving.service';
+import { Mandate } from '../mandate.model';
+import { myRegularGivingPath } from '../app-routing';
+import { requiredNotBlankValidator } from '../validators/notBlank';
+import { getCurrencyMinValidator } from '../validators/currency-min';
+import { getCurrencyMaxValidator } from '../validators/currency-max';
+import { Toast } from '../toast.service';
+import { DonorAccount } from '../donorAccount.model';
+import { countryOptions } from '../countries';
+import { PageMetaService } from '../page-meta.service';
+import { getStripeFriendlyError, StripeService } from '../stripe.service';
 import {
   ConfirmationToken,
   PaymentMethod,
   StripeElementChangeEvent,
   StripeElements,
-  StripePaymentElement
-} from "@stripe/stripe-js";
-import {DonationService, StripeCustomerSession} from "../donation.service";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp} from "../address.service";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {environment} from "../../environments/environment";
+  StripePaymentElement,
+} from '@stripe/stripe-js';
+import { DonationService, StripeCustomerSession } from '../donation.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address.service';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { environment } from '../../environments/environment';
 import {
   MatAutocomplete,
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
-  MatOption
-} from "@angular/material/autocomplete";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
-import {MoneyPipe} from "../money.pipe";
-import {BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError} from "../backendError";
-import {CampaignService} from '../campaign.service';
-import {Observable, of} from 'rxjs';
-import {AsyncPipe} from '@angular/common';
-import {GIFT_AID_FACTOR, Money} from '../Money';
+  MatOption,
+} from '@angular/material/autocomplete';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { MoneyPipe } from '../money.pipe';
+import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
+import { CampaignService } from '../campaign.service';
+import { Observable, of } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { GIFT_AID_FACTOR, Money } from '../Money';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
 const paymentStepIndex = 2;
-
 
 // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
 // and prefilling them with 'no' values in that case.
@@ -63,8 +62,8 @@ const booleansDefaultValue = environment.environmentId === 'regression' ? false 
 const over18DefaultValue = environment.environmentId === 'regression';
 
 @Component({
-    selector: 'app-regular-giving',
-    imports: [
+  selector: 'app-regular-giving',
+  imports: [
     ComponentsModule,
     FormsModule,
     MatStep,
@@ -86,8 +85,8 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MoneyPipe,
     AsyncPipe,
   ],
-    templateUrl: './regular-giving.component.html',
-    styleUrl: './regular-giving.component.scss'
+  templateUrl: './regular-giving.component.html',
+  styleUrl: './regular-giving.component.scss',
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy {
   protected mandateForm = new FormGroup({
@@ -97,18 +96,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       getCurrencyMaxValidator(maxAmount),
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]),
-    billingPostcode: new FormControl('',
-      [
-        requiredNotBlankValidator,
-        Validators.pattern(billingPostcodeRegExp),
-      ]
-    ),
+    billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     giftAid: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
-    homeOutsideUK: new FormControl<string|null>(null),
-    homeAddress: new FormControl<string|null>(null),
-    homePostcode: new FormControl<string|null>(null),
+    homeOutsideUK: new FormControl<string | null>(null),
+    homeAddress: new FormControl<string | null>(null),
+    homePostcode: new FormControl<string | null>(null),
     unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
     aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
   });
@@ -124,7 +118,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
 
-  public readonly labelYourPaymentInformation = "Your Payment Information";
+  public readonly labelYourPaymentInformation = 'Your Payment Information';
 
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;
   private stripeCustomerSession: StripeCustomerSession | undefined;
@@ -155,12 +149,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    */
   protected insufficientMatchFundsAvailable = false;
 
-
   /**
    * Amount of match funds remaining based on campaign information loaded with the page. Does not always account for
    * any very recent or concurrent usage of match funds by another donor.
    */
-    // @ts-expect-error - initialised in ngOnInit rather than constructor.
+  // @ts-expect-error - initialised in ngOnInit rather than constructor.
   protected maximumMatchableDonation: Money;
 
   /** Used to distinguish between the case where there are zero match funds available on the campaign as seen at page
@@ -170,7 +163,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected matchFundsZeroOnLoad = false;
   protected campaignOpenOnLoad = false;
 
-  protected preExistingActiveMandate$: Observable<Mandate[]|undefined> = of(undefined);
+  protected preExistingActiveMandate$: Observable<Mandate[] | undefined> = of(undefined);
   protected ageErrorMessage: string | undefined;
 
   /**
@@ -189,25 +182,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     private stripeService: StripeService,
     private donationService: DonationService,
     private addressService: AddressService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     const donor: Person | null = this.route.snapshot.data['donor'];
-    if (! donor) {
-      throw new Error("Must be logged in to see regular giving page");
+    if (!donor) {
+      throw new Error('Must be logged in to see regular giving page');
     }
     this.donor = donor;
-    this.donorAccount = this.route.snapshot.data['donorAccount']
+    this.donorAccount = this.route.snapshot.data['donorAccount'];
 
     this.campaign = this.route.snapshot.data['campaign'];
 
-    if ( !this.campaign.isRegularGiving ) {
-      console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
+    if (!this.campaign.isRegularGiving) {
+      console.error('Campaign ' + this.campaign.id + ' is not a regular giving campaign');
     }
 
     this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
-    if (! this.campaignOpenOnLoad) {
+    if (!this.campaignOpenOnLoad) {
       void this.router.navigateByUrl(`/campaign/${this.campaign.id}`);
     }
 
@@ -219,14 +211,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    this.mandateForm.patchValue({billingPostcode: this.donorAccount.billingPostCode})
+    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
 
     this.stripeService.init().catch(console.error);
 
-    this.donationService.createCustomerSessionForRegularGiving({campaign: this.campaign})
+    this.donationService
+      .createCustomerSessionForRegularGiving({ campaign: this.campaign })
       .then((session) => {
         this.stripeCustomerSession = session;
-        if (! this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
           this.prepareStripeElements();
         }
       })
@@ -234,21 +227,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.addressService.suggestAddresses({
       homeAddressFormControl: this.mandateForm.get('homeAddress')!,
-      loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+      loadingAddressSuggestionCallback: () => {
+        this.loadingAddressSuggestions = true;
+      },
       foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
         this.loadingAddressSuggestions = false;
         this.addressSuggestions = suggestions;
-      }
+      },
     });
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
 
     if (this.maximumMatchableDonation.amountInPence === 0) {
       this.matchFundsZeroOnLoad = true;
-      this.mandateForm.patchValue({unmatched: true});
+      this.mandateForm.patchValue({ unmatched: true });
     }
 
-    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign)
+    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign);
   }
 
   ngOnDestroy() {
@@ -265,14 +260,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
         this.stepper.steps.forEach((step, stepIndex) => {
           step.select = () => {
             this.selectStep(stepIndex);
           };
         });
       },
-      500 // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
+      500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
     );
   }
 
@@ -296,9 +292,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (invalid) {
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
-        errorMessage += "Monthly donation amount is required";
+        errorMessage += 'Monthly donation amount is required';
       } else {
-        errorMessage = "Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance."
+        errorMessage =
+          'Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance.';
       }
       this.toast.showError(errorMessage);
       return;
@@ -315,15 +312,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        {billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry},
-        this.stripeElements
+        { billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry },
+        this.stripeElements,
       );
 
       confirmationToken = confirmationTokenResult.confirmationToken;
     }
     if (!this.donorAccount.regularGivingPaymentMethod && !confirmationToken) {
       this.submitting = false;
-      throw new Error("Stripe Confirmation token is missing");
+      throw new Error('Stripe Confirmation token is missing');
     }
 
     /**
@@ -333,13 +330,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.submitErrorMessage = undefined;
 
-    let home: StartMandateParams["home"];
+    let home: StartMandateParams['home'];
     if (this.giftAid && this.homeAddressFormValue) {
       home = {
         addressLine1: this.homeAddressFormValue,
         // postcode and isOutsideUK must be set within this if block.
         postcode: this.homePostcode!,
-        isOutsideUK: this.homeOutsideUK!
+        isOutsideUK: this.homeOutsideUK!,
       };
     } else {
       home = undefined;
@@ -351,60 +348,62 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       throw new Error(`unsupported currency ${currency}`);
     }
 
-    this.regularGivingService.startMandate({
-      amountInPence: this.getDonationAmountPence(),
-      dayOfMonth,
-      campaignId: this.campaign.id,
-      currency: currency,
-      giftAid: !!this.giftAid,
-      billingPostcode: this.billingPostCode,
-      billingCountry,
-      stripeConfirmationTokenId: confirmationToken?.id,
-      charityComms: !!this.optInCharityEmail,
-      tbgComms: !!this.optInTbgEmail,
-      homeAddress: this.homeAddressFormValue,
-      homePostcode: this.homePostcode,
-      home: home,
-      unmatched: this.unmatched,
-    }).subscribe({
-      next: async (response: MandateCreateResponse) => {
-        if (response.paymentIntent) {
-          const nextActionResult = await this.stripeService.handleNextAction(response.paymentIntent.client_secret);
+    this.regularGivingService
+      .startMandate({
+        amountInPence: this.getDonationAmountPence(),
+        dayOfMonth,
+        campaignId: this.campaign.id,
+        currency: currency,
+        giftAid: !!this.giftAid,
+        billingPostcode: this.billingPostCode,
+        billingCountry,
+        stripeConfirmationTokenId: confirmationToken?.id,
+        charityComms: !!this.optInCharityEmail,
+        tbgComms: !!this.optInTbgEmail,
+        homeAddress: this.homeAddressFormValue,
+        homePostcode: this.homePostcode,
+        home: home,
+        unmatched: this.unmatched,
+      })
+      .subscribe({
+        next: async (response: MandateCreateResponse) => {
+          if (response.paymentIntent) {
+            const nextActionResult = await this.stripeService.handleNextAction(response.paymentIntent.client_secret);
 
-          if (nextActionResult.error) {
-            this.submitErrorMessage = nextActionResult.error.message;
-            this.submitting = false;
+            if (nextActionResult.error) {
+              this.submitErrorMessage = nextActionResult.error.message;
+              this.submitting = false;
 
-            // @todo-regular-giving DON-1119 - cancel new mandate here to release match funds and/or, or consider providing
-            // a way for donor to retry the 3DS or other next action on the existing mandate, without calling matchbot
-            // to create a new one.
-            return;
+              // @todo-regular-giving DON-1119 - cancel new mandate here to release match funds and/or, or consider providing
+              // a way for donor to retry the 3DS or other next action on the existing mandate, without calling matchbot
+              // to create a new one.
+              return;
+            }
           }
-        }
 
-        await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}/thanks`);
-      },
-      error: (error: BackendError) => {
-        const message = errorDescription(error);
+          await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}/thanks`);
+        },
+        error: (error: BackendError) => {
+          const message = errorDescription(error);
 
-        if (isInsufficientMatchFundsError(error)) {
-          this.insufficientMatchFundsAvailable = true;
-          this.maximumMatchableDonation = errorDetails(error).maxMatchable;
-          this.selectStep(0);
-        } else {
-          this.submitErrorMessage = message;
-        }
-        this.toast.showError(message);
-        this.submitting = false;
-      }
-    })
+          if (isInsufficientMatchFundsError(error)) {
+            this.insufficientMatchFundsAvailable = true;
+            this.maximumMatchableDonation = errorDetails(error).maxMatchable;
+            this.selectStep(0);
+          } else {
+            this.submitErrorMessage = message;
+          }
+          this.toast.showError(message);
+          this.submitting = false;
+        },
+      });
   }
 
   protected get unmatched(): boolean {
     return !!this.mandateForm.value.unmatched;
   }
 
-  private get billingPostCode(): string | null{
+  private get billingPostCode(): string | null {
     return this.mandateForm.value.billingPostcode ?? null;
   }
 
@@ -415,26 +414,25 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected get donationAmount(): Money {
     return {
       amountInPence: this.getDonationAmountPence(),
-      currency: this.campaign.currencyCode
-    }
+      currency: this.campaign.currencyCode,
+    };
   }
 
-  protected setSelectedCountry = ((countryCode: string) => {
+  protected setSelectedCountry = (countryCode: string) => {
     this.selectedBillingCountryCode = countryCode;
-  })
+  };
 
-  protected get giftAid(): boolean | undefined | null
-  {
+  protected get giftAid(): boolean | undefined | null {
     return this.mandateForm.value.giftAid;
   }
 
   giftAidAmount(): Money {
-    const {amountInPence} = this.donationAmount;
+    const { amountInPence } = this.donationAmount;
     const gaAmountInPence = amountInPence * GIFT_AID_FACTOR;
 
-    return this.giftAid ?
-      {amountInPence: gaAmountInPence, currency: this.campaign.currencyCode} :
-      {amountInPence: 0, currency: this.campaign.currencyCode};
+    return this.giftAid
+      ? { amountInPence: gaAmountInPence, currency: this.campaign.currencyCode }
+      : { amountInPence: 0, currency: this.campaign.currencyCode };
   }
 
   protected addressSuggestions: GiftAidAddressSuggestion[] = [];
@@ -443,7 +441,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected giftAidErrorMessage: string | undefined = undefined;
 
   protected get homeOutsideUK(): boolean {
-     return !!this.mandateForm.value.homeOutsideUK;
+    return !!this.mandateForm.value.homeOutsideUK;
   }
 
   protected get homePostcode(): string | null {
@@ -455,7 +453,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private prepareStripeElements() {
-    if (! this.selectedBillingCountryCode) {
+    if (!this.selectedBillingCountryCode) {
       return;
     }
 
@@ -464,16 +462,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (this.stripeElements) {
-      this.stripeElements.update({amount: this.getDonationAmountPence()})
+      this.stripeElements.update({ amount: this.getDonationAmountPence() });
     } else {
       this.stripeElements = this.stripeService.stripeElements(
         {
           amount: this.getDonationAmountPence(),
-          currency: this.campaign.currencyCode
+          currency: this.campaign.currencyCode,
         },
         'off_session',
         this.campaign,
-        this.stripeCustomerSession.stripeSessionSecret
+        this.stripeCustomerSession.stripeSessionSecret,
       );
     }
 
@@ -495,7 +493,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * Adapted from similar function in DonationStartFormComponent. There may be parts to DRY up but the pages are
    * different.
    */
-  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
+  async onStripeCardChange(
+    state: StripeElementChangeEvent & { value: { type: string; payment_method?: PaymentMethod } | undefined },
+  ) {
     this.stripePaymentMethodReady = state.complete;
 
     if (state.error) {
@@ -521,7 +521,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected continue(): void {
     const nextStepIndex = this.stepper.selectedIndex + 1;
     if (nextStepIndex > this.stepper.steps.length - 1) {
-      throw new Error("Cannot continue past last step");
+      throw new Error('Cannot continue past last step');
     }
 
     this.selectStep(nextStepIndex);
@@ -544,7 +544,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode?.trim()) {
+    if (this.giftAid && this.homePostcode?.trim() && !this.billingPostCode?.trim()) {
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
@@ -553,18 +553,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.stepper.selected = this.stepper.steps.get(stepIndex);
   }
 
-  protected get optInCharityEmail(): boolean | undefined
-  {
+  protected get optInCharityEmail(): boolean | undefined {
     return this.mandateForm.value.optInCharityEmail ?? undefined;
   }
 
-  protected get optInTbgEmail(): boolean | undefined
-  {
+  protected get optInTbgEmail(): boolean | undefined {
     return this.mandateForm.value.optInTbgEmail ?? undefined;
   }
 
-  protected get homeAddressFormValue(): string
-  {
+  protected get homeAddressFormValue(): string {
     return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress ?? undefined);
   }
 
@@ -579,7 +576,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       for (const [key] of Object.entries(donationAmountErrors)) {
         switch (key) {
           case 'required':
-            this.amountErrorMessage = "Please enter your monthly donation amount";
+            this.amountErrorMessage = 'Please enter your monthly donation amount';
             break;
           case 'pattern':
             this.amountErrorMessage = `Please enter a whole number of £ without commas`;
@@ -590,7 +587,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
             break;
           default:
             this.amountErrorMessage = 'Unexpected donation amount error';
-            console.error({donationAmountErrors});
+            console.error({ donationAmountErrors });
             break;
         }
       }
@@ -601,8 +598,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.amountErrorMessage = undefined;
 
       this.insufficientMatchFundsAvailable =
-        ! this.unmatched &&
-        this.getDonationAmountPence() > this.maximumMatchableDonation.amountInPence;
+        !this.unmatched && this.getDonationAmountPence() > this.maximumMatchableDonation.amountInPence;
 
       if (this.insufficientMatchFundsAvailable) {
         this.insufficientMatchFundsAvailable = true;
@@ -612,12 +608,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
       if (this.mandateForm.controls.aged18OrOver.errors?.required) {
         errorFound = true;
-        this.ageErrorMessage = "Please tick the box to confirm if you are at least 18 years old to proceed.";
+        this.ageErrorMessage = 'Please tick the box to confirm if you are at least 18 years old to proceed.';
         this.toast.showError(this.ageErrorMessage);
       } else {
         this.ageErrorMessage = undefined;
       }
-
     }
     return errorFound;
   }
@@ -645,17 +640,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return errorFound;
   }
 
-
-    /**
+  /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
   private validatePaymentInformationStep(): boolean {
     this.paymentInfoErrorMessage = undefined;
 
-    if (!this.stripePaymentMethodReady && ! this.donorAccount.regularGivingPaymentMethod) {
-      this.paymentInfoErrorMessage = "Please complete your payment method details";
+    if (!this.stripePaymentMethodReady && !this.donorAccount.regularGivingPaymentMethod) {
+      this.paymentInfoErrorMessage = 'Please complete your payment method details';
     } else if (this.stripeError) {
-     this.paymentInfoErrorMessage = this.stripeError;
+      this.paymentInfoErrorMessage = this.stripeError;
     }
 
     const postcodeErrors = this.mandateForm.controls['billingPostcode']!.errors;
@@ -663,14 +657,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       for (const [key] of Object.entries(postcodeErrors)) {
         switch (key) {
           case 'required':
-           this.paymentInfoErrorMessage = "Please enter a billing postcode";
+            this.paymentInfoErrorMessage = 'Please enter a billing postcode';
             break;
           case 'pattern':
-           this.paymentInfoErrorMessage = "Sorry, your billing postcode is not recognised - please enter a valid billing postcode";
+            this.paymentInfoErrorMessage =
+              'Sorry, your billing postcode is not recognised - please enter a valid billing postcode';
             break;
           default:
-           this.paymentInfoErrorMessage = "Unexpected billing postcode error";
-            console.error({postcodeErrors});
+            this.paymentInfoErrorMessage = 'Unexpected billing postcode error';
+            console.error({ postcodeErrors });
             break;
         }
       }
@@ -681,7 +676,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return !!this.paymentInfoErrorMessage;
   }
 
-  private validateGiftAidStep(): boolean  {
+  private validateGiftAidStep(): boolean {
     const errors: string[] = [];
     if (typeof this.giftAid !== 'boolean') {
       errors.push('Please choose whether you wish to claim Gift Aid.');
@@ -691,12 +686,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       errors.push('Please enter or select your home address if you wish to claim gift aid.');
     }
 
-    if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
+    if (this.giftAid && !this.homeOutsideUK && !this.homePostcode) {
       errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
     }
 
-    if (this.giftAid && ! this.homeOutsideUK && ! this.homePostcode?.match(postcodeRegExp)) {
-      errors.push("Please enter a UK postcode");
+    if (this.giftAid && !this.homeOutsideUK && !this.homePostcode?.match(postcodeRegExp)) {
+      errors.push('Please enter a UK postcode');
     }
 
     this.giftAidErrorMessage = errors.join(' ');
@@ -708,7 +703,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
     this.addressService.loadAddress(event, (address) => {
-      this.mandateForm.patchValue({homePostcode: address.homePostcode});
+      this.mandateForm.patchValue({ homePostcode: address.homePostcode });
       this.homeAddress = address;
     });
   }
@@ -716,11 +711,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   maximumMatchableDonationGivenCampaign(campaign: Campaign): Money {
     // this is not static just because it shares standardNumberOfDonationsMatched with the template, and templates can't
     // read static values directly.
-    const fundsRemaining = campaign.parentUsesSharedFunds ? campaign.parentMatchFundsRemaining : campaign.matchFundsRemaining;
+    const fundsRemaining = campaign.parentUsesSharedFunds
+      ? campaign.parentMatchFundsRemaining
+      : campaign.matchFundsRemaining;
 
     return {
       currency: campaign.currencyCode,
-      amountInPence: Math.max(Math.floor(fundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100
+      amountInPence: Math.max(Math.floor(fundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100,
     };
   }
 }

@@ -4,37 +4,35 @@
     <biggive-page-section>
       <div class="heading-wrapper">
         <biggive-heading
-          space-above=0
-          space-below=6
+          space-above="0"
+          space-below="6"
           html-element="h1"
           size="1"
           align="center"
           text="Donor Registration"
         ></biggive-heading>
       </div>
-      @if (redirectPath.startsWith('/regular-giving')) {
+      @if (redirectPath.startsWith("/regular-giving")) {
         <p>Please register for a a Big Give donation account to set up your regular giving agreement.</p>
         <p>You will be able to log-in any time to see your donations or cancel the agreement.</p>
-      } @else if (! this.emailVerificationToken){
-      <p>
-        Registering for a Donor Account is quick and easy.
-      </p>
+      } @else if (!this.emailVerificationToken) {
+        <p>Registering for a Donor Account is quick and easy.</p>
       }
 
       @if (redirectPath === transferFundsPath) {
-      <p>
-        When you have registered, you will be shown the Transfer Funds page. Here, you can:
-      </p>
+        <p>When you have registered, you will be shown the Transfer Funds page. Here, you can:</p>
 
-      <ul>
-        <li>Set the amount you want to donate to the charities you want to support</li>
+        <ul>
+          <li>Set the amount you want to donate to the charities you want to support</li>
 
-        <li>Choose whether you would like to contribute towards Big Give’s platform fees and the Anchor Match Fund</li>
+          <li>
+            Choose whether you would like to contribute towards Big Give’s platform fees and the Anchor Match Fund
+          </li>
 
-        <li>Choose whether Gift Aid can be claimed on your donation to Big Give</li>
+          <li>Choose whether Gift Aid can be claimed on your donation to Big Give</li>
 
-        <li>Choose whether you would like to join Big Give’s mailing list</li>
-      </ul>
+          <li>Choose whether you would like to join Big Give’s mailing list</li>
+        </ul>
       }
 
       @if (verificationLinkSentToEmail && !verificationCodeSupplied) {
@@ -43,9 +41,7 @@
           [error]="error"
           (codeEnteredEvent)="verificationCodeEntered($event)"
         >
-
         </app-verify-email>
-
       } @else if (this.emailVerificationToken?.valid) {
         <p>
           For a smoother giving experience create a Big Give account. Your information will be saved securely, making
@@ -53,44 +49,34 @@
         </p>
 
         <p>
-          <strong>Your payment card</strong> will be saved for reuse, if you selected
-          "Save payment details for future purchases" when making your donation.
-          It is held securely only with Stripe.
+          <strong>Your payment card</strong> will be saved for reuse, if you selected "Save payment details for future
+          purchases" when making your donation. It is held securely only with Stripe.
           <a href="https://stripe.com/docs/security/stripe" target="_blank">
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-            Learn more about Stripe
-          </a>.
+            Learn more about Stripe </a
+          >.
         </p>
 
-        <form
-          [formGroup]="registerPostDonationForm"
-          (keydown.enter)="registerPostDonation()"
-        >
+        <form [formGroup]="registerPostDonationForm" (keydown.enter)="registerPostDonation()">
           <div class="savedDetails">
-          <div class="label">
-            Email Address</div>
-            <div class="value"> <strong>{{this.emailVerificationToken?.email_address}}</strong>
+            <div class="label">Email Address</div>
+            <div class="value">
+              <strong>{{ this.emailVerificationToken?.email_address }}</strong>
             </div>
-          <div class="label">
-            Name
-          </div>
-            <div class="value"> {{this.emailVerificationToken?.first_name}} {{this.emailVerificationToken?.last_name}}
+            <div class="label">Name</div>
+            <div class="value">
+              {{ this.emailVerificationToken?.first_name }} {{ this.emailVerificationToken?.last_name }}
             </div>
-
           </div>
 
           <biggive-text-input spaceBelow="4">
             <label slot="label" for="password">Password *</label>
-            <input
-              slot="input"
-              matInput type="password" id="password-post-donation" formControlName="password">
+            <input slot="input" matInput type="password" id="password-post-donation" formControlName="password" />
           </biggive-text-input>
 
           <div aria-live="polite">
             @if (errorHtml) {
-              <p class="error" aria-live="assertive">
-                Registration error: <span [innerHtml]="errorHtml"></span>
-              </p>
+              <p class="error" aria-live="assertive">Registration error: <span [innerHtml]="errorHtml"></span></p>
             }
             @if (error) {
               <p class="error" aria-live="assertive">
@@ -121,9 +107,8 @@
               />
             }
           </div>
-
         </form>
-      } @else if (this.emailVerificationToken && ! this.emailVerificationToken.valid) {
+      } @else if (this.emailVerificationToken && !this.emailVerificationToken.valid) {
         <p>Sorry, we couldn't find your details. Your account registration link may have expired.</p>
         <p>
           <!-- href not routerlink because this component was built with a bit too much of an imperative style
@@ -132,99 +117,91 @@
           <a href="/register">Register a new Big Give account</a>
         </p>
       } @else {
-      <form
-        [formGroup]="registrationForm"
-        (keydown.enter)="register()"
-      >
-
-        @if (readyToTakeAccountDetails) {
-        <biggive-text-input spaceBelow="4">
-          <label slot="label" for="firstName">First Name *</label>
-          <input
-            slot="input"
-            matInput type="text" id="firstName" formControlName="firstName">
-        </biggive-text-input>
-        <biggive-text-input spaceBelow="4">
-          <label slot="label" for="lastName">Last Name *</label>
-          <input
-            slot="input"
-            matInput type="text" id="lastName" formControlName="lastName">
-        </biggive-text-input>
-        }
-        @if (! verificationLinkSentToEmail) {
-        <biggive-text-input spaceBelow="4">
-          <label slot="label" for="emailAddress">Email address *</label>
-          <input
-            slot="input"
-            matInput type="email" id="emailAddress" formControlName="emailAddress" autocapitalize="off">
-        </biggive-text-input>
-        } @else {
-          <div>
-          Email Address: {{verificationLinkSentToEmail}}
-          </div>
-        }
-
-        @if (readyToTakeAccountDetails) {
-        <biggive-text-input spaceBelow="4">
-          <label slot="label" for="password">Password *</label>
-          <input
-            slot="input"
-            matInput type="password" id="password" formControlName="password">
-        </biggive-text-input>
-        }
-
-        <div aria-live="polite">
-          @if (errorHtml) {
-            <p class="error" aria-live="assertive">
-              Registration error: <span [innerHtml]="errorHtml"></span>
-            </p>
+        <form [formGroup]="registrationForm" (keydown.enter)="register()">
+          @if (readyToTakeAccountDetails) {
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="firstName">First Name *</label>
+              <input slot="input" matInput type="text" id="firstName" formControlName="firstName" />
+            </biggive-text-input>
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="lastName">Last Name *</label>
+              <input slot="input" matInput type="text" id="lastName" formControlName="lastName" />
+            </biggive-text-input>
           }
-          @if (error) {
-            <p class="error" aria-live="assertive">
-              {{ error }}
-            </p>
+          @if (!verificationLinkSentToEmail) {
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="emailAddress">Email address *</label>
+              <input
+                slot="input"
+                matInput
+                type="email"
+                id="emailAddress"
+                formControlName="emailAddress"
+                autocapitalize="off"
+              />
+            </biggive-text-input>
+          } @else {
+            <div>Email Address: {{ verificationLinkSentToEmail }}</div>
           }
-        </div>
-      </form>
-      <div class="actions">
-        @if (! verificationCodeSupplied) {
-        <!-- Sitekey below is shared between environments and necessarily exposed in FE, so should be fine to hard-code -->
-        <div
-          class="frc-captcha"
-          [attr.data-sitekey]="friendlyCaptchaSiteKey"
-          data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
-          #frccaptcha
-        ></div>
-        } <!-- else we don't need them to do a captcha as they alrady did it on the previous screen and we verified their
-        code.-->
-        <div class="register-button-container">
+
+          @if (readyToTakeAccountDetails) {
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="password">Password *</label>
+              <input slot="input" matInput type="password" id="password" formControlName="password" />
+            </biggive-text-input>
+          }
+
           <div aria-live="polite">
-            @if (processing) {
-              <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+            @if (errorHtml) {
+              <p class="error" aria-live="assertive">Registration error: <span [innerHtml]="errorHtml"></span></p>
+            }
+            @if (error) {
+              <p class="error" aria-live="assertive">
+                {{ error }}
+              </p>
             }
           </div>
-
-          @if (!processing) {
-            <!-- button id below required by regression tests -->
-            <biggive-button
-              id="register-button"
-              space-above="5"
-              spaceBelow="0"
-              colour-scheme="primary"
-              [label]="verificationCodeSupplied ? 'Register' : 'Continue'"
-              full-width="true"
-              disabled="!registrationForm.valid"
-              size="medium"
-              rounded="false"
-              (click)="register()"
-            />
+        </form>
+        <div class="actions">
+          @if (!verificationCodeSupplied) {
+            <!-- Sitekey below is shared between environments and necessarily exposed in FE, so should be fine to hard-code -->
+            <div
+              class="frc-captcha"
+              [attr.data-sitekey]="friendlyCaptchaSiteKey"
+              data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+              #frccaptcha
+            ></div>
           }
+          <!-- else we don't need them to do a captcha as they alrady did it on the previous screen and we verified their
+        code.-->
+          <div class="register-button-container">
+            <div aria-live="polite">
+              @if (processing) {
+                <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+              }
+            </div>
+
+            @if (!processing) {
+              <!-- button id below required by regression tests -->
+              <biggive-button
+                id="register-button"
+                space-above="5"
+                spaceBelow="0"
+                colour-scheme="primary"
+                [label]="verificationCodeSupplied ? 'Register' : 'Continue'"
+                full-width="true"
+                disabled="!registrationForm.valid"
+                size="medium"
+                rounded="false"
+                (click)="register()"
+              />
+            }
+          </div>
         </div>
-      </div>
       }
       @if (!emailVerificationToken) {
-      <hr style="margin: 20px auto;">
-      Already have an account? <a href="{{loginLink}}">Login here</a>
+        <hr style="margin: 20px auto" />
+        Already have an account? <a href="{{ loginLink }}">Login here</a>
       }
     </biggive-page-section>
   </div>

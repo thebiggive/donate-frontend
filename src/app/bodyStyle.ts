@@ -1,4 +1,4 @@
-import {isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 /**
  * A few components need to manipulate a body class. Using technique from

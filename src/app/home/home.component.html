@@ -1,4 +1,4 @@
-@if (! mayBeAboutToRedirect) {
+@if (!mayBeAboutToRedirect) {
   <main>
     <biggive-hero-image
       colour-scheme="primary"
@@ -9,14 +9,10 @@
       main-image-align-vertical="center"
     ></biggive-hero-image>
     <div class="b-container">
-      <app-highlight-cards
-        [highlightCards]="highlightCards">
-      </app-highlight-cards>
+      <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
     </div>
-    <biggive-page-section
-      colour-scheme="primary"
-      section-style-bottom="crop-right">
-      <div style="padding: 50px 0 40px 0;">
+    <biggive-page-section colour-scheme="primary" section-style-bottom="crop-right">
+      <div style="padding: 50px 0 40px 0">
         @if (stats) {
           <biggive-call-to-action
             default-text-colour="secondary"
@@ -25,19 +21,20 @@
             subtitle-colour="white"
             secondary-button-label="Read about our impact"
             secondary-button-url="https://biggive.org/impact"
-            secondary-button-colour-scheme="clear-white">
+            secondary-button-colour-scheme="clear-white"
+          >
           </biggive-call-to-action>
         }
       </div>
     </biggive-page-section>
     <biggive-page-section>
-      <div style="text-align: center;">
+      <div style="text-align: center">
         <biggive-heading
           heading-colour="primary"
           html-element="h2"
           size="3"
           text="We're proud to support thousands of incredible charities"
-          >
+        >
         </biggive-heading>
       </div>
     </biggive-page-section>
@@ -54,20 +51,47 @@
         centered-slides="false"
         navigation-next-el="#carousel-button-next"
         navigation-prev-el="#carousel-button-prev"
-        >
-        <swiper-slide><img src="/assets/images/logo-the-passage-2023.png" alt="The Passage - Everyone deserves a place to call home" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-dec.png" alt="Disasters Emergency Committee" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-net.png" alt="National Emergencies Trust" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-friends-of-the-earth.png" alt="Friends Of The Earth" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-borne.png" alt="Borne - Research to prevent premature birth" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-magic-breakfast-fuel-for-learning.png" alt="Magic Breakfast: Fuel for learning" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-princes-trust.png" alt="Prince's Trust" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-prisoners-of-conscience-supporting-people-who-defend-human-rights.png" alt="Prisoners Of Conscience: Supporting people who defend human rights" width="300"></swiper-slide>
-        <swiper-slide><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="300"></swiper-slide>
+      >
+        <swiper-slide
+          ><img
+            src="/assets/images/logo-the-passage-2023.png"
+            alt="The Passage - Everyone deserves a place to call home"
+            width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-dec.png" alt="Disasters Emergency Committee" width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-net.png" alt="National Emergencies Trust" width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-friends-of-the-earth.png" alt="Friends Of The Earth" width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-borne.png" alt="Borne - Research to prevent premature birth" width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img
+            src="/assets/images/logo-magic-breakfast-fuel-for-learning.png"
+            alt="Magic Breakfast: Fuel for learning"
+            width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-princes-trust.png" alt="Prince's Trust" width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img
+            src="/assets/images/logo-prisoners-of-conscience-supporting-people-who-defend-human-rights.png"
+            alt="Prisoners Of Conscience: Supporting people who defend human rights"
+            width="300"
+        /></swiper-slide>
+        <swiper-slide
+          ><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="300"
+        /></swiper-slide>
       </swiper-container>
       <div class="charity-carousel-navigation">
-        <div role="button" id="carousel-button-prev" class="button next" >
-          <img width="35px" src="/assets/images/arrow-prev-with-circle.svg" alt="Previous"/>
+        <div role="button" id="carousel-button-prev" class="button next">
+          <img width="35px" src="/assets/images/arrow-prev-with-circle.svg" alt="Previous" />
         </div>
         <div role="button" id="carousel-button-next" class="button prev" title="Next">
           <img width="35px" src="/assets/images/arrow-next-with-circle.svg" title="Next" alt="Next" />
@@ -79,15 +103,14 @@
             colour-scheme="primary"
             label="Join us today"
             url="https://biggive.org/charities"
-            full-width="false">
+            full-width="false"
+          >
           </biggive-button>
         </div>
       </div>
     </biggive-page-section>
-    <biggive-page-section
-      colour-scheme="primary"
-      section-style-top="crop-left">
-      <div style="padding: 50px 0 40px 0;">
+    <biggive-page-section colour-scheme="primary" section-style-top="crop-left">
+      <div style="padding: 50px 0 40px 0">
         <biggive-video-feature
           default-text-colour="white"
           video-url="https://player.vimeo.com/video/860172535"
@@ -98,7 +121,7 @@
           button-url="https://biggive.org/our-story"
           button-label="Learn more about us"
           button-colour-scheme="white"
-          >
+        >
         </biggive-video-feature>
       </div>
     </biggive-page-section>
@@ -226,22 +249,26 @@
       </biggive-grid>
     </div>
   </biggive-page-section> -->
-  <biggive-page-section>
-    <div class='container text-colour-primary space-above-6 space-below-6'>
-      <div class="sleeve">
-        <div class="get-started-cta">
-          <h2 class='title heading-2'>Ready to get started? Explore our match funded campaigns.</h2>
-          <div class='slug heading-4'></div>
-          <div class='teaser'></div>
-          <div class="button-wrap">
-            <biggive-button colour-scheme="primary" url="/explore" label="Donate today"></biggive-button>
-          </div>
-          <div class="button-wrap">
-            <biggive-button colour-scheme="clear-primary" url="https://biggive.org/our-story" label="Learn more about us"></biggive-button>
+    <biggive-page-section>
+      <div class="container text-colour-primary space-above-6 space-below-6">
+        <div class="sleeve">
+          <div class="get-started-cta">
+            <h2 class="title heading-2">Ready to get started? Explore our match funded campaigns.</h2>
+            <div class="slug heading-4"></div>
+            <div class="teaser"></div>
+            <div class="button-wrap">
+              <biggive-button colour-scheme="primary" url="/explore" label="Donate today"></biggive-button>
+            </div>
+            <div class="button-wrap">
+              <biggive-button
+                colour-scheme="clear-primary"
+                url="https://biggive.org/our-story"
+                label="Learn more about us"
+              ></biggive-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </biggive-page-section>
-</main>
+    </biggive-page-section>
+  </main>
 }

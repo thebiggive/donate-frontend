@@ -6,7 +6,7 @@
         main-title="This campaign has now closed"
         [subtitle]="'But ' + campaign.charity.name + ' may have others'"
         primary-button-label="View all their campaigns"
-        [primaryButtonUrl]="'/charity/' + campaign.charity.id "
+        [primaryButtonUrl]="'/charity/' + campaign.charity.id"
       ></biggive-call-to-action>
     </biggive-page-section>
   }
@@ -16,17 +16,13 @@
       @if (campaign.parentRef && fromFund) {
         <a mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
           <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-          All {{ campaign.championName }} campaigns<br>
+          All {{ campaign.championName }} campaigns<br />
         </a>
       }
       @if (campaign.parentRef && !fromFund) {
         <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
         <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-        <a
-          class=""
-          mat-icon-button
-          (click)="goBackToMetacampaign()"
-        >
+        <a class="" mat-icon-button (click)="goBackToMetacampaign()">
           <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
           All participating campaigns
         </a>
@@ -46,17 +42,17 @@
     <div class="b-primary-column">
       <biggive-branded-image
         space-below="4"
-        [imageUrl]="campaign.bannerUri | optimisedImage:2000 | async"
-        [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage:240 | async) : null"
+        [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
+        [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
         [slug]="campaign.isMatched ? 'Match Funded' : null"
         [charityName]="campaign.charity.name"
-        [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : (campaign.countries[0] || null)"
+        [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
       >
       </biggive-branded-image>
 
       <biggive-heading
-        space-above=0
-        space-below=0
+        space-above="0"
+        space-below="0"
         colour="primary"
         html-element="h1"
         size="3"
@@ -65,8 +61,7 @@
       >
       </biggive-heading>
 
-      <biggive-formatted-text
-        default-text-colour="black">
+      <biggive-formatted-text default-text-colour="black">
         <p>{{ campaign.summary }}</p>
       </biggive-formatted-text>
 
@@ -163,81 +158,74 @@
             allow="encrypted-media"
             webkitallowfullscreen="true"
             mozallowfullscreen="true"
-            allowfullscreen="true"></iframe>
+            allowfullscreen="true"
+          ></iframe>
         </div>
       }
-
 
       <div class="c-tabs">
         <mat-tab-group class="c-tab-group" animationDuration="0ms" [color]="'primary'">
           @if (campaign.problem?.trim() || campaign.solution?.trim()) {
-          <mat-tab label="Campaign overview">
-            <div class="c-details">
+            <mat-tab label="Campaign overview">
+              <div class="c-details">
+                <biggive-heading
+                  space-above="6"
+                  space-below="0"
+                  colour="primary"
+                  html-element="h3"
+                  size="3"
+                  align="left"
+                  text="Situation"
+                >
+                </biggive-heading>
 
-              <biggive-heading
-                space-above=6
-                space-below=0
-                colour="primary"
-                html-element="h3"
-                size="3"
-                align="left"
-                text="Situation"
-              >
-              </biggive-heading>
+                <biggive-formatted-text default-text-colour="black">
+                  <p>{{ campaign.problem }}</p>
+                </biggive-formatted-text>
 
-              <biggive-formatted-text
-                default-text-colour="black">
-                <p>{{ campaign.problem }}</p>
-              </biggive-formatted-text>
+                <biggive-heading
+                  space-above="6"
+                  space-below="0"
+                  colour="primary"
+                  html-element="h3"
+                  size="3"
+                  align="left"
+                  text="Solution"
+                >
+                </biggive-heading>
 
-              <biggive-heading
-                space-above=6
-                space-below=0
-                colour="primary"
-                html-element="h3"
-                size="3"
-                align="left"
-                text="Solution"
-              >
-              </biggive-heading>
-
-              <biggive-formatted-text
-                default-text-colour="black">
-                <p>{{ campaign.solution }}</p>
-              </biggive-formatted-text>
-
-            </div>
-
-            @if (campaign.additionalImageUris.length > 0) {
-              <div class="c-additional">
-                <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
-                <!-- eslint-disable @angular-eslint/template/alt-text -->
-                @for (image of campaign.additionalImageUris; track $index) {
-                  <img
-                    [src]="image.uri | optimisedImage:850 | async"
-                    class="c-additional__images"
-                  >
-                }
-                <!-- eslint-enable @angular-eslint/template/alt-text -->
+                <biggive-formatted-text default-text-colour="black">
+                  <p>{{ campaign.solution }}</p>
+                </biggive-formatted-text>
               </div>
-            }
 
-            @if (campaign.quotes.length > 0) {
-              <ul class="c-quotes">
-                @for (quote of campaign.quotes; track $index) {
-                  <li>
-                    <biggive-quote
-                      space-below="4"
-                      default-text-colour="black"
-                      [quote]="quote.quote"
-                      [attribution]="quote.person"
-                    >
-                    </biggive-quote>
-                  </li>
-                }
-              </ul>
-            }
-          </mat-tab>
+              @if (campaign.additionalImageUris.length > 0) {
+                <div class="c-additional">
+                  <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
+                  <!-- eslint-disable @angular-eslint/template/alt-text -->
+                  @for (image of campaign.additionalImageUris; track $index) {
+                    <img [src]="image.uri | optimisedImage: 850 | async" class="c-additional__images" />
+                  }
+                  <!-- eslint-enable @angular-eslint/template/alt-text -->
+                </div>
+              }
+
+              @if (campaign.quotes.length > 0) {
+                <ul class="c-quotes">
+                  @for (quote of campaign.quotes; track $index) {
+                    <li>
+                      <biggive-quote
+                        space-below="4"
+                        default-text-colour="black"
+                        [quote]="quote.quote"
+                        [attribution]="quote.person"
+                      >
+                      </biggive-quote>
+                    </li>
+                  }
+                </ul>
+              }
+            </mat-tab>
           }
 
           @if (campaign.updates.length > 0) {
@@ -246,7 +234,7 @@
                 <ul class="c-updates">
                   <li>
                     <biggive-formatted-text>
-                      <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
+                      <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date: "longDate" }}</h4>
                       <p class="c-updates__description">{{ update.content }}</p>
                     </biggive-formatted-text>
                   </li>
@@ -258,8 +246,8 @@
           @if (campaign.aims.length > 0) {
             <mat-tab label="Aims">
               <biggive-heading
-                space-above=6
-                space-below=0
+                space-above="6"
+                space-below="0"
                 colour="primary"
                 html-element="h3"
                 size="3"
@@ -278,8 +266,8 @@
           @if (campaign.budgetDetails.length > 0 || campaign.alternativeFundUse) {
             <mat-tab label="Where's the money going?">
               <biggive-heading
-                space-above=6
-                space-below=0
+                space-above="6"
+                space-below="0"
                 colour="primary"
                 html-element="h3"
                 size="3"
@@ -290,8 +278,9 @@
               @for (detail of campaign.budgetDetails; track $index) {
                 <ul class="c-budget">
                   <li class="c-budget__item">
-                    <span
-                      class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo }}</span>
+                    <span class="c-budget__value b-semi-bold">{{
+                      detail.amount | currency: campaign.currencyCode : "symbol" : currencyPipeDigitsInfo
+                    }}</span>
                     &ndash; {{ detail.description }}
                   </li>
                 </ul>
@@ -299,8 +288,8 @@
               @if (campaign.alternativeFundUse) {
                 <div class="c-alternative-funds">
                   <biggive-heading
-                    space-above=6
-                    space-below=0
+                    space-above="6"
+                    space-below="0"
                     colour="primary"
                     html-element="h4"
                     size="4"
@@ -315,33 +304,33 @@
           }
 
           @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim()) {
-          <mat-tab label="Impact &amp; reporting">
-            <div class="c-impact">
-              <biggive-heading
-                space-above=6
-                space-below=0
-                colour="primary"
-                html-element="h3"
-                size="3"
-                align="left"
-                text="Impact"
-              >
-              </biggive-heading>
-              <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+            <mat-tab label="Impact &amp; reporting">
+              <div class="c-impact">
+                <biggive-heading
+                  space-above="6"
+                  space-below="0"
+                  colour="primary"
+                  html-element="h3"
+                  size="3"
+                  align="left"
+                  text="Impact"
+                >
+                </biggive-heading>
+                <p class="c-impact__description">{{ campaign.impactSummary }}</p>
 
-              <biggive-heading
-                space-above=6
-                space-below=0
-                colour="primary"
-                html-element="h3"
-                size="3"
-                align="left"
-                text="Reporting"
-              >
-              </biggive-heading>
-              <p class="c-impact__description">{{ campaign.impactReporting }}</p>
-            </div>
-          </mat-tab>
+                <biggive-heading
+                  space-above="6"
+                  space-below="0"
+                  colour="primary"
+                  html-element="h3"
+                  size="3"
+                  align="left"
+                  text="Reporting"
+                >
+                </biggive-heading>
+                <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+              </div>
+            </mat-tab>
           }
         </mat-tab-group>
       </div>
@@ -369,7 +358,7 @@
               [url]="'/donate/' + campaign.id"
             ></biggive-button>
           }
-          @if (donateEnabled && campaign.isRegularGiving && ! campaignInPast) {
+          @if (donateEnabled && campaign.isRegularGiving && !campaignInPast) {
             <biggive-button
               space-above="5"
               colour-scheme="primary"

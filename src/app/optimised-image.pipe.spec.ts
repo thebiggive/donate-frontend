@@ -7,9 +7,7 @@ describe('OptimisedImagePipe', () => {
   let pipe: OptimisedImagePipe;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        ImageService,
-      ],
+      providers: [ImageService],
     });
   });
 
@@ -26,7 +24,8 @@ describe('OptimisedImagePipe', () => {
   });
 
   it('processes a non-null URI', async () => {
-    expect(await pipe.transform('https://example.com/image.png', 777))
-      .toEqual('https://example.com/image.png?width=777&format=webp'); // Modern test browsers support webp.
+    expect(await pipe.transform('https://example.com/image.png', 777)).toEqual(
+      'https://example.com/image.png?width=777&format=webp',
+    ); // Modern test browsers support webp.
   });
 });

@@ -4,10 +4,10 @@
 // the app.
 
 // Material themes – must come first as some later bits depend on vars defined here.
-@forward './assets/scss/mat-theme';
+@forward "./assets/scss/mat-theme";
 
 // Variables
-@forward './assets/scss/variables';
+@forward "./assets/scss/variables";
 
 // Mixins
-@forward './assets/scss/mixins';
+@forward "./assets/scss/mixins";

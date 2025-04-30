@@ -1,4 +1,4 @@
-import {MatomoTracker} from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client';
 
 export const logCampaignCalloutError = (
   isBrowser: boolean,
@@ -13,10 +13,6 @@ export const logCampaignCalloutError = (
 
   console.error('Client-side error in: ' + context + '. Callout identifier: ' + calloutIdentifier);
   if (matomoTracker) {
-    matomoTracker.trackEvent(
-      'campaign_error',
-      'callout_error',
-      context + ' – ' + calloutIdentifier,
-    );
+    matomoTracker.trackEvent('campaign_error', 'callout_error', context + ' – ' + calloutIdentifier);
   }
 };

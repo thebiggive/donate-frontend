@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { CharityComponent } from './charity.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CharityComponent', () => {
   let component: CharityComponent;
@@ -13,11 +13,8 @@ describe('CharityComponent', () => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [],
-      providers: [
-        { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
-        DatePipe,
-      ],
-    })
+      providers: [{ provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] } } } }, DatePipe],
+    });
   });
 
   beforeEach(() => {

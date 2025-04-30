@@ -9,21 +9,21 @@
   </div>
   @if (!campaign.isRegularGiving) {
     <div>
-      <p class="error">
-        Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
-      <p>To make a one-off donation to {{ campaign.charity.name }} please visit the <a
-        href="/campaign/{{campaign.id}}">campaign page</a>.
+      <p class="error">Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
+      <p>
+        To make a one-off donation to {{ campaign.charity.name }} please visit the
+        <a href="/campaign/{{ campaign.id }}">campaign page</a>.
       </p>
     </div>
   } @else if (preExistingActiveMandate && preExistingActiveMandate.length > 0) {
-
     <p>
-      You already have a regular giving agreement for <strong>{{campaign.title}}</strong>, giving
-      {{preExistingActiveMandate[0].donationAmount | money}} each month.
+      You already have a regular giving agreement for <strong>{{ campaign.title }}</strong
+      >, giving {{ preExistingActiveMandate[0].donationAmount | money }} each month.
     </p>
 
-    <p>If you wish to change your regular donation you can cancel the existing agreement
-      and then return to this page to create a new one.
+    <p>
+      If you wish to change your regular donation you can cancel the existing agreement and then return to this page to
+      create a new one.
     </p>
 
     <biggive-button
@@ -32,9 +32,8 @@
       label="View Mandate"
       full-width="false"
       size="medium"
-      url="/my-account/regular-giving/{{preExistingActiveMandate[0].id}}"
+      url="/my-account/regular-giving/{{ preExistingActiveMandate[0].id }}"
     />
-
   } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
     <div class="c-form-container">
       <biggive-page-section>
@@ -43,21 +42,10 @@
           (keydown.enter)="interceptSubmitAndProceedInstead($event)"
           [formGroup]="mandateForm"
         >
-          <mat-vertical-stepper
-            id="stepper"
-            linear
-            #stepper
-            (selectionChange)="stepChanged($event)"
-            [@.disabled]
-          >
-            <mat-step
-              label="Your regular donation"
-              class="c-your-donation">
-
+          <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
+            <mat-step label="Your regular donation" class="c-your-donation">
               @if (maximumMatchableDonation.amountInPence > 0) {
-                <p class="donation_highlight">
-                  Match funds are currently available!
-                </p>
+                <p class="donation_highlight">Match funds are currently available!</p>
               }
 
               <div class="youAreSupporting">
@@ -66,20 +54,11 @@
               </div>
 
               <div class="donation-input donation-input-main">
-
-                <biggive-text-input currency="{{campaign.currencyCode}}">
-                  <label
-                    class="label-with-limited-space"
-                    slot="label"
-                    for="donationAmount"
-                  >
+                <biggive-text-input currency="{{ campaign.currencyCode }}">
+                  <label class="label-with-limited-space" slot="label" for="donationAmount">
                     Monthly donation to {{ campaign.charity.name }}
                   </label>
-                  <input
-                    maxlength="10"
-                    formControlName="donationAmount" id="donationAmount" matInput
-                    slot="input"
-                  />
+                  <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
               </div>
               <p>This amount will be taken from your account today and once every month in future</p>
@@ -88,7 +67,7 @@
                 @if (this.matchFundsZeroOnLoad) {
                   <!-- no need to show any message here, the donor will read below that there are no match funds-->
                 } @else if (!this.unmatched) {
-                  <p>Your first three donations will be matched. </p>
+                  <p>Your first three donations will be matched.</p>
                 } @else {
                   <p>Your donations will not be matched.</p>
                 }
@@ -99,8 +78,8 @@
                 }
                 @if (maximumMatchableDonation.amountInPence === 0) {
                   <p>
-                    There are no match funds currently available for this campaign. Remember, every penny helps.
-                    Please continue to make an <strong>unmatched donation</strong> to the charity!
+                    There are no match funds currently available for this campaign. Remember, every penny helps. Please
+                    continue to make an <strong>unmatched donation</strong> to the charity!
                     @if (!matchFundsZeroOnLoad) {
                       <mat-checkbox formControlName="unmatched" id="unmatched">
                         Make an unmatched donation
@@ -108,8 +87,10 @@
                     }
                   </p>
                 } @else if (insufficientMatchFundsAvailable) {
-                  <p><span class="error">There are limited match funds available</span>, but every penny helps, so you
-                    have two options:</p>
+                  <p>
+                    <span class="error">There are limited match funds available</span>, but every penny helps, so you
+                    have two options:
+                  </p>
                   <ol>
                     <li>Reduce your donation amount to a maximum of {{ maximumMatchableDonation | money }}, or</li>
                     <li>
@@ -121,9 +102,7 @@
                 }
               </div>
 
-              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver">
-                I am aged 18 or older.
-              </mat-checkbox>
+              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver"> I am aged 18 or older. </mat-checkbox>
               @if (ageErrorMessage) {
                 <div class="error">
                   {{ this.ageErrorMessage }}
@@ -131,130 +110,139 @@
               }
 
               <div style="text-align: center">
-                <button style="width: 40%;"
-                        type="button"
-                        class="continue b-w-100 b-rt-0"
-                        mat-raised-button
-                        color="primary"
-                        (click)="this.continue()"
-                >Continue
+                <button
+                  style="width: 40%"
+                  type="button"
+                  class="continue b-w-100 b-rt-0"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
+                  Continue
                 </button>
               </div>
-
             </mat-step>
-            <mat-step
-              label="Gift Aid"
-            >
-                <p class="b-mt-40 b-bold b-rt-0">Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every <span class="colour-primary">£1</span> you donate.</p>
-                <p class="b-grey b-rt-sm">
-                  I confirm that am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid
-                  claimed on all my donations in that tax year it is my responsibility to pay any difference.
-                <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.</p>
-                <p><a [href]="termsUrl" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Find out more about Gift Aid</a></p>
-                <mat-radio-group formControlName="giftAid">
-                  <div class="binary-options">
-                    <div class="binary-option">
-                      <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
-                        <strong>Yes</strong>, I want to Gift Aid my donations to {{ campaign.charity.name }}.
-                      </mat-radio-button>
-                    </div>
-                    <div class="binary-option">
-                      <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
-                        <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
-                      </mat-radio-button>
-                    </div>
-                  </div>
-                  <div aria-live="polite">
-                    <div
-                      class="error"
-                    >
-                      @if (giftAidErrorMessage) {
-                        {{ giftAidErrorMessage }}
-                      }
-                    </div>
-                  </div>
+            <mat-step label="Gift Aid">
+              <p class="b-mt-40 b-bold b-rt-0">
+                Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every
+                <span class="colour-primary">£1</span> you donate.
+              </p>
+              <p class="b-grey b-rt-sm">
+                I confirm that am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax
+                than the amount of Gift Aid claimed on all my donations in that tax year it is my responsibility to pay
+                any difference.
+              </p>
 
-                </mat-radio-group>
-                @if (giftAid) {
-                  <div id="giftAidAddressContainer">
+              <p class="b-grey b-rt-sm">
+                Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at
+                no cost or hassle to you.
+              </p>
+              <p>
+                <a [href]="termsUrl" target="_blank"
+                  ><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon
+                  >Find out more about Gift Aid</a
+                >
+              </p>
+              <mat-radio-group formControlName="giftAid">
+                <div class="binary-options">
+                  <div class="binary-option">
+                    <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
+                      <strong>Yes</strong>, I want to Gift Aid my donations to {{ campaign.charity.name }}.
+                    </mat-radio-button>
+                  </div>
+                  <div class="binary-option">
+                    <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
+                      <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift
+                      Aid claimed
+                    </mat-radio-button>
+                  </div>
+                </div>
+                <div aria-live="polite">
+                  <div class="error">
+                    @if (giftAidErrorMessage) {
+                      {{ giftAidErrorMessage }}
+                    }
+                  </div>
+                </div>
+              </mat-radio-group>
+              @if (giftAid) {
+                <div id="giftAidAddressContainer">
+                  <div>
+                    <biggive-text-input>
+                      <label slot="label" for="homeAddress">Enter your home address</label>
+                      <input
+                        formControlName="homeAddress"
+                        id="homeAddress"
+                        matInput
+                        slot="input"
+                        autocomplete="off"
+                        [matAutocomplete]="autoAddress"
+                      />
+                    </biggive-text-input>
+                    <mat-autocomplete
+                      #autoAddress="matAutocomplete"
+                      [displayWith]="summariseAddressSuggestion"
+                      (optionSelected)="addressChosen($event)"
+                    >
+                      @for (suggestion of addressSuggestions; track suggestion.address) {
+                        <mat-option [value]="suggestion">
+                          {{ suggestion.address }}
+                        </mat-option>
+                      }
+                    </mat-autocomplete>
+
+                    <mat-hint>
+                      This is for your Gift Aid declaration to HMRC
+                      @if (loadingAddressSuggestions) {
+                        <mat-spinner
+                          aria-label="Loading possible addresses"
+                          color="primary"
+                          diameter="15"
+                          class="address-loading-spinner"
+                        ></mat-spinner>
+                      }
+                    </mat-hint>
+                  </div>
+                  @if (!homeOutsideUK) {
                     <div>
                       <biggive-text-input>
-                        <label slot="label" for="homeAddress">Enter your home address</label>
+                        <label slot="label" for="homePostcode">Enter your home postcode</label>
                         <input
-                          formControlName="homeAddress"
-                          id="homeAddress"
+                          autocomplete="postal-code"
+                          formControlName="homePostcode"
+                          id="homePostcode"
+                          autocapitalize="characters"
                           matInput
                           slot="input"
-                          autocomplete="off"
-                          [matAutocomplete]="autoAddress"
                         />
                       </biggive-text-input>
-                      <mat-autocomplete
-                        #autoAddress="matAutocomplete"
-                        [displayWith]="summariseAddressSuggestion"
-                        (optionSelected)="addressChosen($event)"
-                      >
-                        @for (suggestion of addressSuggestions; track suggestion.address) {
-                          <mat-option [value]="suggestion">
-                            {{ suggestion.address }}
-                          </mat-option>
-                        }
-                      </mat-autocomplete>
-
-                      <mat-hint>
-                        This is for your Gift Aid declaration to HMRC
-                        @if (loadingAddressSuggestions) {
-                          <mat-spinner
-                            aria-label="Loading possible addresses"
-                            color="primary"
-                            diameter="15"
-                            class="address-loading-spinner"
-                          ></mat-spinner>
-                        }
-                      </mat-hint>
                     </div>
-                    @if (!homeOutsideUK) {
-                      <div>
-                        <biggive-text-input>
-                          <label slot="label" for="homePostcode">Enter your home postcode</label>
-                          <input
-                            autocomplete="postal-code"
-                            formControlName="homePostcode"
-                            id="homePostcode"
-                            autocapitalize="characters"
-                            matInput
-                            slot="input"
-                          />
-                        </biggive-text-input>
-                      </div>
-                    }
-                    <div class="homeOutsideUK-wrapper">
-                      <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
-                        I live outside the UK
-                      </mat-checkbox>
-                    </div>
+                  }
+                  <div class="homeOutsideUK-wrapper">
+                    <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                      I live outside the UK
+                    </mat-checkbox>
                   </div>
-                }
+                </div>
+              }
 
               <p></p>
 
-                <div style="text-align: center">
-                  <button
-                    type="button"
-                    class="continue b-w-100 b-rt-0"
-                    mat-raised-button
-                    color="primary"
-                    (click)="this.continue()"
-                  >Continue</button>
-                </div>
-
-
+              <div style="text-align: center">
+                <button
+                  type="button"
+                  class="continue b-w-100 b-rt-0"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
+                  Continue
+                </button>
+              </div>
             </mat-step>
-            <mat-step
-              [label]=this.labelYourPaymentInformation
-              class="c-make-your-donation"
-            >
-              <p> <!-- hack to take up space until I find a better way -->
+            <mat-step [label]="this.labelYourPaymentInformation" class="c-make-your-donation">
+              <p>
+                <!-- hack to take up space until I find a better way -->
 
                 <!-- @todo-regular-giving-DON-1021 - make each or all payment detail fields read-only if already set on
                      donor account - if donors want to edit them direct them to do so on the My Account page,
@@ -266,10 +254,7 @@
                     instead of just link to account. Might require either saving card brand and last4 to our matchbot
                     DB to make it easy to show here, or loading it the same way we do on the linked page.
                    -->
-                  <p>
-                    Your existing regular giving payment method
-                    will be used for these donations.
-                  </p>
+                  <p>Your existing regular giving payment method will be used for these donations.</p>
                   <p>
                     You can change your regular giving payment method at
                     <a href="/my-account/payment-methods">Your Payment Methods</a>.
@@ -282,7 +267,6 @@
                   </biggive-text-input>
 
                   <p>
-
                     <biggive-form-field-select
                       [prompt]="'Billing country'"
                       [options]="countryOptionsObject"
@@ -296,16 +280,22 @@
 
                     <biggive-text-input>
                       <label slot="label" for="billingPostcode">Billing postcode</label>
-                      <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput
-                             (change)="onBillingPostCodeChanged($event)" autocapitalize="characters"
-                             autocomplete="postal-code">
+                      <input
+                        slot="input"
+                        formControlName="billingPostcode"
+                        id="billingPostcode"
+                        matInput
+                        (change)="onBillingPostCodeChanged($event)"
+                        autocapitalize="characters"
+                        autocomplete="postal-code"
+                      />
                     </biggive-text-input>
-                    }
+                  </p>
+                }
+              </p>
 
               <div aria-live="polite">
-                <div
-                  class="error"
-                >
+                <div class="error">
                   @if (paymentInfoErrorMessage) {
                     {{ paymentInfoErrorMessage }}
                   }
@@ -313,22 +303,24 @@
               </div>
 
               <div style="text-align: center">
-                <button style="width: 40%;"
-                        type="button"
-                        class="continue b-w-100 b-rt-0"
-                        mat-raised-button
-                        color="primary"
-                        (click)="this.continue()"
-                >Continue
+                <button
+                  style="width: 40%"
+                  type="button"
+                  class="continue b-w-100 b-rt-0"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
+                  Continue
                 </button>
               </div>
-
             </mat-step>
-            <mat-step
-              label="Receive Updates"
-            >
-
-              <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
+            <mat-step label="Receive Updates">
+              <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">
+                Would you be happy to receive email updates from
+                <span class="colour-primary">{{ campaign.charity.name }}</span
+                >?
+              </p>
               <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
                 <div class="binary-options">
                   <div class="binary-option">
@@ -342,31 +334,34 @@
                     </mat-radio-button>
                   </div>
                 </div>
-                  <div aria-live="polite">
-                    @if (optInCharityEmailError) {
-                      <p class="error">{{optInCharityEmailError}}</p>
-                    }
-                  </div>
+                <div aria-live="polite">
+                  @if (optInCharityEmailError) {
+                    <p class="error">{{ optInCharityEmailError }}</p>
+                  }
+                </div>
               </mat-radio-group>
               <mat-hint>
                 @if (campaign.charity.optInStatement) {
                   <p class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
                 }
                 <div aria-live="polite">
-                @if (optInCharityEmail === false) {
-                  <p
-                    class="no-margin-top b-rt-sm b-grey"
-                  >
-                    Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
-                  </p>
-                }
-                @if (optInCharityEmail) {
-                  <p class="no-margin-top b-rt-sm b-grey">
-                    As you are providing personal information to {{ campaign.charity.name }}, please make sure you read and agree to their privacy statement.</p>
-                }
+                  @if (optInCharityEmail === false) {
+                    <p class="no-margin-top b-rt-sm b-grey">
+                      Please note that you might continue to receive communications from the charity if you have already
+                      shared your details with them via other methods.
+                    </p>
+                  }
+                  @if (optInCharityEmail) {
+                    <p class="no-margin-top b-rt-sm b-grey">
+                      As you are providing personal information to {{ campaign.charity.name }}, please make sure you
+                      read and agree to their privacy statement.
+                    </p>
+                  }
                 </div>
               </mat-hint>
-              <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?</p>
+              <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">
+                Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?
+              </p>
               <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
                 <div class="binary-options">
                   <div class="binary-option">
@@ -381,18 +376,19 @@
                   </div>
                 </div>
                 <div aria-live="polite">
-                @if (optInTBGEmailError) {
-                  <p class="error">
-                    {{optInTBGEmailError}}
-                  </p>
-                }
+                  @if (optInTBGEmailError) {
+                    <p class="error">
+                      {{ optInTBGEmailError }}
+                    </p>
+                  }
                 </div>
               </mat-radio-group>
               <div aria-live="polite">
                 @if (optInTbgEmail === false) {
                   <mat-hint>
                     <p class="no-margin-top b-rt-sm b-grey">
-                      By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+                      By selecting 'no', we will no longer be able to email you about opportunities to double your
+                      donation.
                     </p>
                   </mat-hint>
                 }
@@ -401,24 +397,20 @@
               <p></p>
 
               <div style="text-align: center">
-                <button style="width: 40%;"
-                        type="button"
-                        class="continue b-w-100 b-rt-0"
-                        mat-raised-button
-                        color="primary"
-                        (click)="this.continue()"
-                >Continue
+                <button
+                  style="width: 40%"
+                  type="button"
+                  class="continue b-w-100 b-rt-0"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
+                  Continue
                 </button>
               </div>
-
             </mat-step>
-            <mat-step
-              label="Confirm"
-              class="c-make-your-donation"
-            >
-              <p>
-                Your details
-              </p>
+            <mat-step label="Confirm" class="c-make-your-donation">
+              <p>Your details</p>
               @if (donor) {
                 <table id="personal-details">
                   <tr>
@@ -432,16 +424,17 @@
                 </table>
               }
 
-              <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span>
-                button, you agree to
-                Big Give's Terms and Conditions and Privacy Statement. <br/>
+              <p class="b-rt-0 b-m-0 b-mt-40">
+                By clicking on the <span class="b-bold">Start regular giving now</span> button, you agree to Big Give's
+                Terms and Conditions and Privacy Statement. <br />
                 <a [href]="termsUrl" target="_blank">
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   Read our Terms and Conditions,
                 </a>
                 <a [href]="privacyUrl" target="_blank">
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-                  read our Privacy Statement.</a>
+                  read our Privacy Statement.</a
+                >
               </p>
               <p>(todo-regular-giving-OPS-766: add link to regular giving terms & conditions)</p>
 
@@ -450,7 +443,7 @@
                   <td>Your monthly donation to {{ campaign.charity.name }}</td>
                   <td>{{ donationAmount | money }}</td>
                 </tr>
-                @if (! unmatched) {
+                @if (!unmatched) {
                   <tr>
                     <td>Matched Amount for first {{ standardNumberOfDonationsMatched }} donations</td>
                     <td>{{ donationAmount | money }}</td>
@@ -463,43 +456,46 @@
                   </tr>
                 }
                 <tr>
-                  <td colspan="2"><hr></td>
+                  <td colspan="2"><hr /></td>
                 </tr>
                 <tr class="total">
-                  <td><div><strong>Total amount you will be charged each month</strong></div></td>
+                  <td>
+                    <div><strong>Total amount you will be charged each month</strong></div>
+                  </td>
                   <td>{{ donationAmount | money }}</td>
                 </tr>
               </table>
 
               <div aria-live="polite">
-                  @if (submitErrorMessage) {
-                    <div
-                      class="error"
-                    >
-                      {{ submitErrorMessage }}
-                    </div>
-                  }
+                @if (submitErrorMessage) {
+                  <div class="error">
+                    {{ submitErrorMessage }}
+                  </div>
+                }
               </div>
 
               <div aria-live="polite">
-              @if (!submitting) {
-                <button
-                  (click)="submit()"
-                  (keyup.enter)="submit()"
-                  class="c-donate-button b-donate-button b-w-100 b-rt-1"
-                  mat-raised-button
-                  color="primary"
-                >
-                  Start regular giving now
-                </button>
-              } @else {
-                <div>
-                  @if (submitting) {
-                    <mat-spinner color="primary" diameter="30"
-                                 aria-label="Processing your regular giving mandate"></mat-spinner>
-                  }
-                </div>
-              }
+                @if (!submitting) {
+                  <button
+                    (click)="submit()"
+                    (keyup.enter)="submit()"
+                    class="c-donate-button b-donate-button b-w-100 b-rt-1"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Start regular giving now
+                  </button>
+                } @else {
+                  <div>
+                    @if (submitting) {
+                      <mat-spinner
+                        color="primary"
+                        diameter="30"
+                        aria-label="Processing your regular giving mandate"
+                      ></mat-spinner>
+                    }
+                  </div>
+                }
               </div>
             </mat-step>
           </mat-vertical-stepper>

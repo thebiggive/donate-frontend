@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 @use "../../assets/scss/auth-common";
 
 #banner {
@@ -8,7 +8,9 @@ main > div {
   color: white;
   background-color: abstract.$colour-primary;
 
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     color: white;
   }
 }
@@ -22,7 +24,9 @@ main > div {
   // other colours then have to be changed to provide contrast.
   color: black;
 
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     color: abstract.$colour-primary;
   }
 }

@@ -1,13 +1,11 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { Observable } from 'rxjs';
 
-import {Mandate} from './mandate.model';
-import {RegularGivingService} from './regularGiving.service';
+import { Mandate } from './mandate.model';
+import { RegularGivingService } from './regularGiving.service';
 
-@Injectable(
-  {providedIn: 'root'}
-)
+@Injectable({ providedIn: 'root' })
 export class MandateResolver implements Resolve<Observable<Mandate>> {
   constructor(private regularGivingService: RegularGivingService) {}
 

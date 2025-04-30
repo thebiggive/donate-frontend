@@ -1,4 +1,4 @@
-import {maximumDonationAmount} from "./donation.model";
+import { maximumDonationAmount } from './donation.model';
 describe('Maximum donation value function', () => {
   it('Is 25k when the user has no funds stored', () => {
     const creditPenceToUse = 0;
@@ -23,4 +23,4 @@ describe('Maximum donation value function', () => {
 
     expect(max).toBe(20_000);
   });
-})
+});

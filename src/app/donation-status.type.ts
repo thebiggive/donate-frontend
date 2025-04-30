@@ -21,4 +21,3 @@ export type DonationStatus = keyof typeof DonationStatusEnum;
 
 export const completeStatuses = ['Collected', 'Paid'] as const;
 export const resumableStatuses = ['Pending', 'Reserved'] as const;
-

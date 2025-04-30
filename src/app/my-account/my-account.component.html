@@ -4,8 +4,8 @@
     <biggive-page-section>
       <div class="heading-wrapper">
         <biggive-heading
-          space-above=0
-          space-below=1
+          space-above="0"
+          space-below="1"
           colour="tertiary"
           html-element="h1"
           size="1"
@@ -18,18 +18,19 @@
         <table id="personal-details">
           <tr>
             <td>Name</td>
-            <td>{{person.first_name}} {{person.last_name}}</td>
+            <td>{{ person.first_name }} {{ person.last_name }}</td>
           </tr>
           <tr>
             <td>Email</td>
-            <td>{{person.email_address}}</td>
+            <td>{{ person.email_address }}</td>
           </tr>
           @if (person.home_address_line_1) {
             <tr>
               <td>Address</td>
-              <td>{{person.home_address_line_1}}
-                <br/>
-                {{person.home_postcode}}
+              <td>
+                {{ person.home_address_line_1 }}
+                <br />
+                {{ person.home_postcode }}
               </td>
             </tr>
           }
@@ -38,15 +39,9 @@
     </biggive-page-section>
 
     <biggive-page-section>
-
-  <app-highlight-cards
-    [highlightCards]="actions"
-    space-above="5">
-  </app-highlight-cards>
-
+      <app-highlight-cards [highlightCards]="actions" space-above="5"> </app-highlight-cards>
     </biggive-page-section>
 
-    @if (person) {
-    }
+    @if (person) {}
   </div>
 </main>

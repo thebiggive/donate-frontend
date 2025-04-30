@@ -1,31 +1,40 @@
 <div>
   <biggive-campaign-highlights
-    space-below=0
+    space-below="0"
     [primaryFigureLabel]="this.campaign.parentUsesSharedFunds ? 'Overall total raised' : 'Amount raised'"
     [primaryFigureAmount]="campaignRaised"
     [secondaryFigureLabel]="this.campaign.parentUsesSharedFunds ? 'Overall target' : 'Campaign target'"
     [secondaryFigureAmount]="campaignTarget"
     [progressBarCounter]="getPercentageRaised(campaign)?.toFixed(0)"
     primary-stat-icon="AlarmClock"
-    [primaryStatText]="campaignFinished ? 'Closed ' + datePipe.transform(campaign.endDate, 'd LLL yyyy') : ( campaignOpen ? (timeLeftToEndPipe.transform(campaign.endDate) + ' left') : 'Opens in ' + timeLeftToOpenPipe.transform(campaign.startDate))"
+    [primaryStatText]="
+      campaignFinished
+        ? 'Closed ' + datePipe.transform(campaign.endDate, 'd LLL yyyy')
+        : campaignOpen
+          ? timeLeftToEndPipe.transform(campaign.endDate) + ' left'
+          : 'Opens in ' + timeLeftToOpenPipe.transform(campaign.startDate)
+    "
     secondary-stat-icon="Heart"
-    [secondaryStatText]="donationCount === 1 ? '1 donation' : integerPipe.transform(donationCount, '1.0-0') + ' donations'"
+    [secondaryStatText]="
+      donationCount === 1 ? '1 donation' : integerPipe.transform(donationCount, '1.0-0') + ' donations'
+    "
     [championName]="campaign.championName"
-    [championUrl]="'/' + campaign.parentRef + '/' + campaign.championRef">
+    [championUrl]="'/' + campaign.parentRef + '/' + campaign.championRef"
+  >
   </biggive-campaign-highlights>
 
   <div class="icon-container">
     @if (campaign.categories.length > 0) {
       <h5>Categories</h5>
-      <hr>
+      <hr />
       <div class="icons">
         @for (category of campaign.categories; track $index) {
           <li class="icon-wrapper">
             <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
             <span class="c-icon-title">
-                <!-- add zero width space to allow line break -->
-              {{ category.split('/').join('/\u200B') }}
-              </span>
+              <!-- add zero width space to allow line break -->
+              {{ category.split("/").join("/\u200B") }}
+            </span>
           </li>
         }
       </div>
@@ -33,15 +42,15 @@
 
     @if (campaign.beneficiaries.length > 0) {
       <h5>Beneficiaries</h5>
-      <hr>
+      <hr />
       <ul class="icons">
         @for (beneficiary of campaign.beneficiaries; track $index) {
           <li class="icon-wrapper">
             <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
             <span class="c-icon-title">
-                <!-- add zero width space to allow line break -->
-              {{ beneficiary.split('/').join('/\u200B') }}
-              </span>
+              <!-- add zero width space to allow line break -->
+              {{ beneficiary.split("/").join("/\u200B") }}
+            </span>
           </li>
         }
       </ul>

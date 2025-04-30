@@ -1,30 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {ComponentsModule} from "@biggive/components-angular";
-import {DatePipe} from "@angular/common";
-import {Mandate} from "../mandate.model";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {MoneyPipe} from "../money.pipe";
-import {myRegularGivingPath} from '../app-routing';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {RegularGivingService} from '../regularGiving.service';
+import { Component, OnInit } from '@angular/core';
+import { ComponentsModule } from '@biggive/components-angular';
+import { DatePipe } from '@angular/common';
+import { Mandate } from '../mandate.model';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MoneyPipe } from '../money.pipe';
+import { myRegularGivingPath } from '../app-routing';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { RegularGivingService } from '../regularGiving.service';
 
 @Component({
-    selector: 'app-mandate',
-  imports: [
-    ComponentsModule,
-    DatePipe,
-    MoneyPipe,
-    MatProgressSpinner,
-    RouterLink
-  ],
-    templateUrl: './mandate.component.html',
-    styleUrl: './mandate.component.scss'
+  selector: 'app-mandate',
+  imports: [ComponentsModule, DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
+  templateUrl: './mandate.component.html',
+  styleUrl: './mandate.component.scss',
 })
-
 export class MandateComponent implements OnInit {
   protected mandate!: Mandate;
   protected readonly cancelPath;
-  private mandateRefreshTimer: number|undefined;
+  private mandateRefreshTimer: number | undefined;
   private timePageLoaded = new Date();
 
   /**
@@ -42,7 +35,7 @@ export class MandateComponent implements OnInit {
   ) {
     this.mandate = this.route.snapshot.data.mandate;
     this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
-    this.isThanksPage = !! this.route.snapshot.data['isThanks'];
+    this.isThanksPage = !!this.route.snapshot.data['isThanks'];
   }
 
   async ngOnInit(): Promise<void> {
@@ -68,32 +61,27 @@ export class MandateComponent implements OnInit {
   }
 
   private pollForMandateUpdate() {
-    this.mandateRefreshTimer = window.setInterval(
-      async () => {
-        const updatedMandate = await this.regularGivingService.getActiveMandate(this.mandate.id).toPromise();
+    this.mandateRefreshTimer = window.setInterval(async () => {
+      const updatedMandate = await this.regularGivingService.getActiveMandate(this.mandate.id).toPromise();
 
-        if (updatedMandate && updatedMandate.status !== 'pending') {
-          this.mandate = updatedMandate;
-          window.clearInterval(this.mandateRefreshTimer);
-        }
+      if (updatedMandate && updatedMandate.status !== 'pending') {
+        this.mandate = updatedMandate;
+        window.clearInterval(this.mandateRefreshTimer);
+      }
 
-        if (this.timedOut) {
-          window.clearInterval(this.mandateRefreshTimer);
-        }
-      },
-      2_000
-    )
+      if (this.timedOut) {
+        window.clearInterval(this.mandateRefreshTimer);
+      }
+    }, 2_000);
   }
 
-  get timedOut(): boolean
-  {
+  get timedOut(): boolean {
     const maxPollingTime = 15_000; // 15 seconds
 
-    return this.mandate.status === 'pending' && ((new Date().getTime() - this.timePageLoaded.getTime()) > maxPollingTime);
+    return this.mandate.status === 'pending' && new Date().getTime() - this.timePageLoaded.getTime() > maxPollingTime;
   }
 
-  get showCancelLink(): boolean
-  {
+  get showCancelLink(): boolean {
     if (this.isThanksPage) {
       // We don't want to encourage people to use regular giving as if it was ad-hoc, so we don't present the
       // cancel link directly on the thanks page. If the donor wants to cancel they need to navigate to the
@@ -103,22 +91,29 @@ export class MandateComponent implements OnInit {
 
     // ts checks for exhaustiveness:
     switch (this.mandate.status) {
-      case 'active': return true;
+      case 'active':
+        return true;
 
-      case 'cancelled': return false;
-      case 'pending': return false;
-      case 'campaign-ended': return false;
+      case 'cancelled':
+        return false;
+      case 'pending':
+        return false;
+      case 'campaign-ended':
+        return false;
     }
   }
 
-  get statusMessage(): string|false
-  {
+  get statusMessage(): string | false {
     switch (this.mandate.status) {
-      case 'active': return false;
+      case 'active':
+        return false;
 
-      case 'cancelled': return 'Regular Donations Cancelled';
-      case 'pending': return 'Regular Giving agreement pending'; // should never actually be seen
-      case 'campaign-ended': return `Collections period ended for ${this.mandate.charityName} campaign`;
+      case 'cancelled':
+        return 'Regular Donations Cancelled';
+      case 'pending':
+        return 'Regular Giving agreement pending'; // should never actually be seen
+      case 'campaign-ended':
+        return `Collections period ended for ${this.mandate.charityName} campaign`;
     }
   }
 }
