@@ -133,19 +133,21 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  const cards = apiHighlightCards.map(
-    card => SFAPIHighlightCardToHighlightCard(
+  const cards = apiHighlightCards.map((card) =>
+    SFAPIHighlightCardToHighlightCard(
       environment.experienceUriPrefix,
       environment.blogUriPrefix,
       environment.donateUriPrefix,
-      card
-    ));
+      card,
+    ),
+  );
 
-  if (new Date() < new Date("2025-06-31")) {
-    cards.sort((cardA, cardB) =>
-      (Number)(cardB.campaignFamily === 'greenMatchFund') - (Number)(cardA.campaignFamily === 'greenMatchFund')
+  if (new Date() < new Date('2025-06-31')) {
+    cards.sort(
+      (cardA, cardB) =>
+        Number(cardB.campaignFamily === 'greenMatchFund') - Number(cardA.campaignFamily === 'greenMatchFund'),
     );
   }
 
-  return cards
+  return cards;
 }
