@@ -133,7 +133,7 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  return apiHighlightCards.map((card) =>
+  const cards = apiHighlightCards.map((card) =>
     SFAPIHighlightCardToHighlightCard(
       environment.experienceUriPrefix,
       environment.blogUriPrefix,
@@ -141,4 +141,13 @@ export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighl
       card,
     ),
   );
+
+  if (new Date() < new Date('2025-06-31')) {
+    cards.sort(
+      (cardA, cardB) =>
+        Number(cardB.campaignFamily === 'greenMatchFund') - Number(cardA.campaignFamily === 'greenMatchFund'),
+    );
+  }
+
+  return cards;
 }
