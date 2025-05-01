@@ -3,12 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Campaign } from '../../campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
 
-
 @Component({
-    selector: 'app-donation-start-login',
-    templateUrl: './donation-start-login.component.html',
-    styleUrl: './donation-start-login.component.scss',
-    standalone: false
+  selector: 'app-donation-start-login',
+  templateUrl: './donation-start-login.component.html',
+  styleUrl: './donation-start-login.component.scss',
+  standalone: false,
 })
 export class DonationStartLoginComponent {
   @Input({ required: true }) loadAuthedPersonInfo!: (dataId: string, dataJwt: string) => void;
@@ -20,17 +19,15 @@ export class DonationStartLoginComponent {
 
   @Input({ required: true }) public loginChangeEmitter!: EventEmitter<boolean>;
 
-  constructor(
-    public dialog: MatDialog,
-  ) {}
+  constructor(public dialog: MatDialog) {}
 
   login = () => {
     const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+    loginDialog.afterClosed().subscribe((data?: { id: string; jwt: string }) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
         this.loginChangeEmitter.emit(true);
       }
     });
-  }
+  };
 }

@@ -1,14 +1,14 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import {Campaign} from './campaign.model';
-import {CampaignStats, formatCampaignStats} from './campaign-stats.model';
-import {CampaignSummary} from './campaign-summary.model';
-import {environment} from '../environments/environment';
-import {SelectedType} from './search.service';
-import {HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards} from "./highlight-cards/HighlightCard";
-import {map} from "rxjs/operators";
+import { Campaign } from './campaign.model';
+import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
+import { CampaignSummary } from './campaign-summary.model';
+import { environment } from '../environments/environment';
+import { SelectedType } from './search.service';
+import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +18,7 @@ export class CampaignService {
 
   private apiPath = '/campaigns/services/apexrest/v1.0' as const;
 
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /**
    * See also the less forgiving variant `campaignIsOpenLessForgiving`.
@@ -40,7 +38,7 @@ export class CampaignService {
       return false;
     }
 
-    return (new Date(campaign.endDate) >= now);
+    return new Date(campaign.endDate) >= now;
   }
 
   /**
@@ -51,33 +49,27 @@ export class CampaignService {
    * matchbot.
    */
   static campaignIsOpenLessForgiving(campaign: Campaign) {
-    return (
-      campaign
-        ? (new Date(campaign.startDate) <= new Date() && new Date(campaign.endDate) > new Date())
-        : false
-    );
+    return campaign ? new Date(campaign.startDate) <= new Date() && new Date(campaign.endDate) > new Date() : false;
   }
 
-  static isInFuture(campaign: Campaign|CampaignSummary): boolean {
+  static isInFuture(campaign: Campaign | CampaignSummary): boolean {
     if (campaign.status === 'Active' || campaign.status === 'Expired') {
       return false;
     }
 
-    return (new Date(campaign.startDate) > new Date());
+    return new Date(campaign.startDate) > new Date();
   }
 
-  static isInPast(campaign: Campaign|CampaignSummary): boolean {
-    return ( campaign.status === 'Expired' || new Date(campaign.endDate) < new Date());
+  static isInPast(campaign: Campaign | CampaignSummary): boolean {
+    return campaign.status === 'Expired' || new Date(campaign.endDate) < new Date();
   }
 
-  static getRelevantDate(campaign: Campaign|CampaignSummary): Date|undefined {
-    let dateToUse: Date|undefined;
+  static getRelevantDate(campaign: Campaign | CampaignSummary): Date | undefined {
+    let dateToUse: Date | undefined;
 
     if (this.isInFuture(campaign)) {
       dateToUse = new Date(campaign.startDate);
-    }
-
-    else if (this.isInPast(campaign)) {
+    } else if (this.isInPast(campaign)) {
       dateToUse = new Date(campaign.endDate);
     }
 
@@ -88,7 +80,7 @@ export class CampaignService {
     return Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
   }
 
-  static percentRaisedOfIndividualCampaign(campaign: (Campaign | CampaignSummary)) {
+  static percentRaisedOfIndividualCampaign(campaign: Campaign | CampaignSummary) {
     if (!campaign.target) {
       return undefined;
     }
@@ -110,7 +102,15 @@ export class CampaignService {
     return CampaignService.percentRaisedOfIndividualCampaign(campaign);
   }
 
-  buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {
+  buildQuery(
+    selected: SelectedType,
+    offset: number,
+    campaignId?: string,
+    campaignSlug?: string,
+    fundSlug?: string,
+    // any predates having this linting rule on.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): { [key: string]: any } {
     const perPage = 6;
     const query: SearchQuery = {
       limit: perPage,
@@ -139,7 +139,8 @@ export class CampaignService {
     } else if (selected.sortField === 'closeToTarget') {
       query.sortDirection = 'asc';
       query.sortField = 'matchFundsRemaining';
-    } else { // match funds left and amount raised both make most sense in 'desc' order
+    } else {
+      // match funds left and amount raised both make most sense in 'desc' order
       query.sortDirection = 'desc';
     }
 
@@ -147,7 +148,9 @@ export class CampaignService {
   }
 
   getForCharity(charityId: string): Observable<CampaignSummary[]> {
-    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`);
+    return this.http.get<CampaignSummary[]>(
+      `${environment.apiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
+    );
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
@@ -216,19 +219,20 @@ export class CampaignService {
   }
 
   getCampaignImpactStats() {
-    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`).pipe(
-      map(formatCampaignStats)
-    )
+    return this.http
+      .get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
+      .pipe(map(formatCampaignStats));
   }
 
   getHomePageHighlightCards(): Observable<HighlightCard[]> {
-    return this.http.get<SfApiHighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`).pipe(
-      map(SFHighlightCardsToFEHighlightCards)
-    );
+    return this.http
+      .get<SfApiHighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`)
+      .pipe(map(SFHighlightCardsToFEHighlightCards));
   }
 }
 
 interface SearchQueryInterface {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   [key: string]: any;
 }
 
@@ -238,11 +242,10 @@ export class SearchQuery implements SearchQueryInterface {
   public country?: string;
   public fundSlug?: string;
   public limit = 6;
-  public offset?: number|undefined = 0;
+  public offset?: number | undefined = 0;
   public parentId?: string;
   public parentSlug?: string;
   public sortDirection?: string;
   public sortField?: string;
   public term?: string;
 }
-

@@ -1,6 +1,6 @@
-@use '../../abstract';
+@use "../../abstract";
 // Write all class styling inside elements where possible
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 .mat-ripple {
   display: none;

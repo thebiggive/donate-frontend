@@ -1,8 +1,7 @@
-import {CookiePreferenceService} from "./cookiePreference.service";
-import {CookieService} from "ngx-cookie-service";
+import { CookiePreferenceService } from './cookiePreference.service';
+import { CookieService } from 'ngx-cookie-service';
 
 describe('CookiePreferenceService', () => {
-
   const mockCookieService: CookieService = {
     get: undefined,
     set: undefined,
@@ -12,17 +11,17 @@ describe('CookiePreferenceService', () => {
     mockCookieService.get = (name) => {
       expect(name).toBe('cookie-preferences');
       return '';
-    }
+    };
 
     const service = new CookiePreferenceService(mockCookieService);
 
     service.userHasExpressedCookiePreference().subscribe({
-      next: value => {
+      next: (value) => {
         expect(value).toBe(false);
         done();
-      }
-    })
-  })
+      },
+    });
+  });
 
   it('should show user expressed cookie preference if all cookies accepted cookie is set', (done) => {
     mockCookieService.get = (name) => {
@@ -33,12 +32,12 @@ describe('CookiePreferenceService', () => {
     const service = new CookiePreferenceService(mockCookieService);
 
     service.userHasExpressedCookiePreference().subscribe({
-      next: value => {
+      next: (value) => {
         expect(value).toBe(true);
         done();
-      }
-    })
-  })
+      },
+    });
+  });
 
   it('should show user expressed cookie preference if marketing cookies are accepted', (done) => {
     mockCookieService.get = (name) => {
@@ -49,13 +48,12 @@ describe('CookiePreferenceService', () => {
     const service = new CookiePreferenceService(mockCookieService);
 
     service.userHasExpressedCookiePreference().subscribe({
-      next: value => {
+      next: (value) => {
         expect(value).toBe(true);
         done();
-      }
-    })
-  })
-
+      },
+    });
+  });
 
   it('should show user expressed cookie preference if marketing cookies are rejected', (done) => {
     mockCookieService.get = (name) => {
@@ -66,14 +64,14 @@ describe('CookiePreferenceService', () => {
     const service = new CookiePreferenceService(mockCookieService);
 
     service.userHasExpressedCookiePreference().subscribe({
-      next: value => {
+      next: (value) => {
         expect(value).toBe(true);
         done();
-      }
-    })
-  })
+      },
+    });
+  });
 
-  it('Should set a cookie to show the user accepts all cookies', done => {
+  it('Should set a cookie to show the user accepts all cookies', (done) => {
     // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
@@ -93,11 +91,14 @@ describe('CookiePreferenceService', () => {
     service.agreeToAll();
   });
 
-  it('Should set a cookie to show the user accepts specified', done => {
+  it('Should set a cookie to show the user accepts specified', (done) => {
     // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
-      expect(JSON.parse(value)).toEqual({agreedToAll: false, agreedToCookieTypes: {analyticsAndTesting: true, thirdParty: false}});
+      expect(JSON.parse(value)).toEqual({
+        agreedToAll: false,
+        agreedToCookieTypes: { analyticsAndTesting: true, thirdParty: false },
+      });
       expect(duration).toBe(365);
       expect(path).toBe('/');
       expect(domain).toBe('localhost');
@@ -107,6 +108,9 @@ describe('CookiePreferenceService', () => {
 
     const service = new CookiePreferenceService(mockCookieService);
 
-    service.storePreferences({agreedToAll: false, agreedToCookieTypes: {analyticsAndTesting: true, thirdParty: false}})
+    service.storePreferences({
+      agreedToAll: false,
+      agreedToCookieTypes: { analyticsAndTesting: true, thirdParty: false },
+    });
   });
 });

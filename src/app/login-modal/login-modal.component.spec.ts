@@ -8,9 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
-import {MatomoModule} from "ngx-matomo-client";
+import { MatomoModule } from 'ngx-matomo-client';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('LoginModalComponent', () => {
   let component: LoginModalComponent;
@@ -19,25 +19,26 @@ describe('LoginModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [],
-    imports: [FormsModule,
+      declarations: [],
+      imports: [
+        FormsModule,
         MatButtonModule,
         MatDialogModule,
         MatomoModule.forRoot({
-            siteId: '',
-            trackerUrl: '',
+          siteId: '',
+          trackerUrl: '',
         }),
         NoopAnimationsModule,
-        ReactiveFormsModule],
-    providers: [
+        ReactiveFormsModule,
+      ],
+      providers: [
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
-    ]
-})
-    .compileComponents();
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LoginModalComponent);
     component = fixture.componentInstance;

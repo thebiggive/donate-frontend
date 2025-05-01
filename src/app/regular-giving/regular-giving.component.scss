@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@use '../../abstract';
+@use "@angular/material" as mat;
+@use "../../abstract";
 @use "../../assets/scss/donation-common";
 
 @include abstract.binary-options();
@@ -19,8 +19,8 @@
 }
 
 .match-funded-badge-wrapper {
-  width     : 100%;
-  height    : 100%;
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
@@ -30,7 +30,7 @@
   text-align: center;
   background: abstract.$colour-highlight;
   color: abstract.$colour-black;
-  width  : 140px;
+  width: 140px;
   padding: 0.3rem 0.5rem;
   margin-bottom: 1rem !important;
   font-size: 1rem;
@@ -38,7 +38,8 @@
   top: 30px;
 }
 
-.mat-stepper-horizontal, .mat-stepper-vertical {
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
   background: none;
   box-shadow: abstract.$box-shadow-soft;
   @include abstract.b-rt-0;
@@ -75,7 +76,7 @@ input {
   background-color: abstract.$colour-background;
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
-};
+}
 
 :host ::ng-deep .mat-step-header {
   // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
@@ -123,7 +124,8 @@ div.youAreSupporting {
   margin-bottom: 40px;
 }
 
-table#personal-details, table#paymentMethods {
+table#personal-details,
+table#paymentMethods {
   width: 100%;
   vertical-align: bottom;
   td {
@@ -138,7 +140,8 @@ table#personal-details, table#paymentMethods {
   color: abstract.$colour-primary;
 }
 
-.error, .stripeError {
+.error,
+.stripeError {
   color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;
 }

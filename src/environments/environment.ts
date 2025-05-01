@@ -7,8 +7,8 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
-  friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
-  environmentId: "development",
+  friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ',
+  environmentId: 'development',
   production: false,
   productionLike: false,
   creditTipsCampaign: 'a056900002LDXWgAAP',
@@ -31,10 +31,11 @@ export const environment: Environment = {
   psps: {
     stripe: {
       enabled: true,
-      publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
+      publishableKey:
+        'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  reservationMinutes: 3,
+  reservationMinutes: 30,
   showDebugInfo: true,
 };
 

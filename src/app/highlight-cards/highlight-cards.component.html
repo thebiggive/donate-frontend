@@ -4,12 +4,12 @@ card as a special case rather than changing the grid implemnation or replacing i
 @if (highlightCards.length === 1) {
   <div class="single-highlight-card">
     <biggive-basic-card
-      [spaceBelow]='4'
+      [spaceBelow]="4"
       [headingLevel]="2"
       [buttonColourScheme]="'clear-primary'"
       [class]="'basic-card-padding'"
       [iconColour]="highlightCards[0]!.icon?.color"
-      [icon]="!! highlightCards[0]!.icon"
+      [icon]="!!highlightCards[0]!.icon"
       [backgroundColour]="highlightCards[0]!.icon?.color"
       [backgroundImageUrl]="highlightCards[0]!.background.image.toString()"
       [mainTitle]="highlightCards[0]!.headerText"
@@ -22,12 +22,12 @@ card as a special case rather than changing the grid implemnation or replacing i
   <biggive-grid [columnCount]="highlightCards.length" column-gap="3">
     @for (card of highlightCards; track $index) {
       <biggive-basic-card
-        [spaceBelow]='4'
+        [spaceBelow]="4"
         [headingLevel]="2"
         [buttonColourScheme]="'clear-primary'"
         [class]="'basic-card-padding'"
         [iconColour]="card.icon?.color"
-        [icon]="!! card.icon"
+        [icon]="!!card.icon"
         [backgroundColour]="card.background.color"
         [backgroundImageUrl]="card.background.image.toString()"
         [mainTitle]="card.headerText"

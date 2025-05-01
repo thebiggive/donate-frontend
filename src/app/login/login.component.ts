@@ -1,51 +1,60 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import {isPlatformBrowser} from '@angular/common';
-import {ComponentsModule} from "@biggive/components-angular";
-import {MatButtonModule} from "@angular/material/button";
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {IdentityService} from "../identity.service";
-import {PageMetaService} from '../page-meta.service';
-import {environment} from "../../environments/environment";
-import {EMAIL_REGEXP} from "../validators/patterns";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {registerPath} from "../app-routing";
-import {WidgetInstance} from "friendly-challenge";
-import {NavigationService} from "../navigation.service";
-import {errorDescription, BackendError} from "../backendError";
-import {addBodyClass, removeBodyClass} from '../bodyStyle';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ComponentsModule } from '@biggive/components-angular';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IdentityService } from '../identity.service';
+import { PageMetaService } from '../page-meta.service';
+import { environment } from '../../environments/environment';
+import { EMAIL_REGEXP } from '../validators/patterns';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { registerPath } from '../app-routing';
+import { WidgetInstance } from 'friendly-challenge';
+import { NavigationService } from '../navigation.service';
+import { errorDescription, BackendError } from '../backendError';
+import { addBodyClass, removeBodyClass } from '../bodyStyle';
 
 export type LoginNavigationState = {
   /**
    * True if we came here as a redirect from the registration form.
    */
-  newAccountRegistration?: boolean
-}
+  newAccountRegistration?: boolean;
+};
 
 @Component({
-    selector: 'app-login',
-    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
-    templateUrl: './login.component.html',
-    styleUrl: 'login.component.scss'
+  selector: 'app-login',
+  imports: [
+    ComponentsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+  ],
+  templateUrl: './login.component.html',
+  styleUrl: 'login.component.scss',
 })
-export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frccaptcha', { static: false })
-  friendlyCaptcha: ElementRef<HTMLElement>|undefined;
+  friendlyCaptcha: ElementRef<HTMLElement> | undefined;
 
   protected forgotPassword = false;
   protected loggingIn = false;
   protected loginError?: string;
   loginForm!: FormGroup;
   protected resetPasswordForm!: FormGroup;
-  protected resetPasswordSuccess: boolean|undefined = undefined;
+  protected resetPasswordSuccess: boolean | undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   protected redirectPath: string = '/my-account';
-  protected passwordResetError: undefined|string = undefined;
+  protected passwordResetError: undefined | string = undefined;
   protected readonly registerPath = registerPath;
 
   protected userAskedForResetLink: boolean = false;
@@ -62,7 +71,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     private readonly pageMeta: PageMetaService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
     this.isNewRegistration = !!state?.newAccountRegistration;
@@ -78,23 +87,15 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     addBodyClass(this.platformId, 'primary-colour');
 
     this.loginForm = this.formBuilder.group({
-      emailAddress: [null, [
-        Validators.required,
-        Validators.pattern(EMAIL_REGEXP),
-      ]],
-      password: [null, [
-        Validators.required,
-      ]],
+      emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
+      password: [null, [Validators.required]],
     });
 
     this.resetPasswordForm = this.formBuilder.group({
-      emailAddress: [null, [
-        Validators.required,
-        Validators.pattern(EMAIL_REGEXP),
-      ]],
+      emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
     });
 
-    const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
+    const redirectParam = this.activatedRoute.snapshot.queryParams.r as string | undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
     if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
@@ -109,8 +110,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   private friendlyCaptchaWidget!: WidgetInstance;
 
   async ngAfterViewInit() {
-    if (! isPlatformBrowser(this.platformId)) {
-      return
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
 
     if (environment.environmentId === 'regression') {
@@ -118,7 +119,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-    if (! this.friendlyCaptcha) {
+    if (!this.friendlyCaptcha) {
       return;
     }
 
@@ -127,18 +128,16 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
         this.captchaCode = solution;
       },
       errorCallback: (error: unknown) => {
-        this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+        this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
         console.error(error);
       },
     });
 
-    await this.friendlyCaptchaWidget.start()
+    await this.friendlyCaptchaWidget.start();
   }
 
-
   login(): void {
-    if (! this.loginForm.valid) {
-
+    if (!this.loginForm.valid) {
       const emailErrors = this.loginForm.controls?.emailAddress?.errors;
       const passwordErrors = this.loginForm.controls?.password?.errors;
 
@@ -161,30 +160,31 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-
-   if (!this.captchaCode) {
-      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+    if (!this.captchaCode) {
+      this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
       this.loggingIn = false;
       return;
     }
 
-    this.identityService.login({
-      captcha_code: this.captchaCode,
-      email_address: this.loginForm.value.emailAddress,
-      raw_password: this.loginForm.value.password,
-    }).subscribe({
-      next: async (_response: { id: string, jwt: string }) => {
-        await this.router.navigateByUrl(this.redirectPath);
-      },
-      error: async (error: BackendError) => {
-        this.loginError = errorDescription(error)
-        this.loggingIn = false;
+    this.identityService
+      .login({
+        captcha_code: this.captchaCode,
+        email_address: this.loginForm.value.emailAddress,
+        raw_password: this.loginForm.value.password,
+      })
+      .subscribe({
+        next: async (_response: { id: string; jwt: string }) => {
+          await this.router.navigateByUrl(this.redirectPath);
+        },
+        error: async (error: BackendError) => {
+          this.loginError = errorDescription(error);
+          this.loggingIn = false;
 
-        this.captchaCode = undefined;
-        this.friendlyCaptchaWidget.reset();
-        await this.friendlyCaptchaWidget.start();
-      }
-    });
+          this.captchaCode = undefined;
+          this.friendlyCaptchaWidget.reset();
+          await this.friendlyCaptchaWidget.start();
+        },
+      });
     this.loggingIn = true;
   }
 
@@ -206,15 +206,15 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-    if (! this.captchaCode) {
-      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+    if (!this.captchaCode) {
+      this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
       return;
     }
 
     this.userAskedForResetLink = true;
     this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, this.captchaCode).subscribe({
-      next: _ => this.resetPasswordSuccess = true,
-      error: _ => this.resetPasswordSuccess = false,
+      next: (_) => (this.resetPasswordSuccess = true),
+      error: (_) => (this.resetPasswordSuccess = false),
     });
   }
 }

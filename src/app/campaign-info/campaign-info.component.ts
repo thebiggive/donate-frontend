@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -15,23 +15,20 @@ const openPipeToken = 'timeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-    selector: 'app-campaign-info',
-    templateUrl: './campaign-info.component.html',
-    styleUrl: './campaign-info.component.scss',
-    imports: [
-        ...allChildComponentImports,
-        FontAwesomeModule,
-    ],
-    providers: [
-        CurrencyPipe,
-        { provide: integerPipeToken, useClass: DecimalPipe },
-        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-        { provide: openPipeToken, useClass: TimeLeftPipe },
-        { provide: endPipeToken, useClass: TimeLeftPipe },
-    ]
+  selector: 'app-campaign-info',
+  templateUrl: './campaign-info.component.html',
+  styleUrl: './campaign-info.component.scss',
+  imports: [...allChildComponentImports, FontAwesomeModule],
+  providers: [
+    CurrencyPipe,
+    { provide: integerPipeToken, useClass: DecimalPipe },
+    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+    { provide: openPipeToken, useClass: TimeLeftPipe },
+    { provide: endPipeToken, useClass: TimeLeftPipe },
+  ],
 })
 export class CampaignInfoComponent implements OnInit {
-  additionalImageUris: Array<string|null> = [];
+  additionalImageUris: Array<string | null> = [];
   @Input({ required: true }) campaign!: Campaign;
   campaignOpen!: boolean;
   campaignFinished!: boolean;
@@ -50,8 +47,7 @@ export class CampaignInfoComponent implements OnInit {
     @Inject(integerPipeToken) public integerPipe: DecimalPipe,
     @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -70,7 +66,7 @@ export class CampaignInfoComponent implements OnInit {
       currencyPipeDigitsInfo,
     ) as string;
     this.donationCount = this.campaign.parentUsesSharedFunds
-      ? (this.campaign.parentDonationCount || 0)
+      ? this.campaign.parentDonationCount || 0
       : this.campaign.donationCount;
   }
 

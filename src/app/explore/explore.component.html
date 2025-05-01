@@ -10,9 +10,7 @@
     >
       <div slot="ticker-items">
         @for (tickerItem of tickerItems; track tickerItem.label) {
-          <biggive-totalizer-ticker-item
-            [figure]="tickerItem.figure"
-            [label]="tickerItem.label">
+          <biggive-totalizer-ticker-item [figure]="tickerItem.figure" [label]="tickerItem.label">
           </biggive-totalizer-ticker-item>
         }
       </div>
@@ -24,7 +22,7 @@
       [logo]="fund?.logoUri"
       [logoAltText]="fund?.name"
       [mainTitle]="title"
-      [mainImage]="metaCampaign.bannerUri | optimisedImage:2000 | async"
+      [mainImage]="metaCampaign.bannerUri | optimisedImage: 2000 | async"
       [mainImageShape]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'rectangle' : 'triangle'"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
@@ -42,11 +40,7 @@
     ></biggive-hero-image>
   }
   <biggive-page-section>
-
-    <div
-      style="position: absolute; margin-top: -6em;"
-      id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"
-    ></div>
+    <div style="position: absolute; margin-top: -6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <biggive-campaign-card-filter-grid
       [categoryOptions]="categoryOptions"
@@ -56,8 +50,8 @@
       [searchText]="searchService.selected.term"
       [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
       [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
-      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null">
-
+      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+    >
       @if (individualCampaigns) {
         <biggive-grid
           slot="campaign-grid"
@@ -66,10 +60,10 @@
           [infiniteScrollThrottle]="500"
           (scrolled)="onScroll()"
           [scrollWindow]="true"
-          >
-            @for (campaign of individualCampaigns; track campaign.id) {
-              <div>
-                  <!-- note the primary figure amount below in case of regular giving has to be a non-empty string to
+        >
+          @for (campaign of individualCampaigns; track campaign.id) {
+            <div>
+              <!-- note the primary figure amount below in case of regular giving has to be a non-empty string to
                   make the component
                        reserve space for it to keep the layout consistent. Once we're happy with this layout
                        consider editing component code to allow this to happen in a more intuitive way
@@ -84,26 +78,40 @@
                        as it doesn't make sense to display any primary figure or secondary figure, but the only way to know in FE at present that it's an emergency campaign
                        is by the fact that it uses match funds and *isn't* regular giving. If it is regular giving we pass a space to take up space in the layout without being visible.
                        -->
-                  <biggive-campaign-card
-                    id="campaign-{{campaign.id}}"
-                    [banner]="campaign.imageUri | optimisedImage:830 | async"
-                    [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-                    [campaignTitle]="campaign.title"
-                    [donateButtonUrl]="campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id"
-                    [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
-                    [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-                    [organisationName]="campaign.charity.name"
-                    [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
-                    [primaryFigureAmount]="(this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving) ? (campaign.isRegularGiving ? ' ' : null) : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                    [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
-                    secondary-figure-label="Total Funds Raised"
-                    [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                    [isFutureCampaign]="isInFuture(campaign)"
-                    [isPastCampaign]="isInPast(campaign)"
-                    [datetime]="getRelevantDateAsStr(campaign)">
-                  </biggive-campaign-card>
-              </div>
-            }
+              <biggive-campaign-card
+                id="campaign-{{ campaign.id }}"
+                [banner]="campaign.imageUri | optimisedImage: 830 | async"
+                [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                [campaignTitle]="campaign.title"
+                [donateButtonUrl]="
+                  campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id
+                "
+                [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
+                [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+                [organisationName]="campaign.charity.name"
+                [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
+                [primaryFigureAmount]="
+                  this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving
+                    ? campaign.isRegularGiving
+                      ? ' '
+                      : null
+                    : (campaign.matchFundsRemaining
+                      | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
+                "
+                [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
+                secondary-figure-label="Total Funds Raised"
+                [secondaryFigureAmount]="
+                  this.metaCampaign?.usesSharedFunds
+                    ? null
+                    : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
+                "
+                [isFutureCampaign]="isInFuture(campaign)"
+                [isPastCampaign]="isInPast(campaign)"
+                [datetime]="getRelevantDateAsStr(campaign)"
+              >
+              </biggive-campaign-card>
+            </div>
+          }
         </biggive-grid>
       }
     </biggive-campaign-card-filter-grid>
@@ -116,16 +124,18 @@
       <div>
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots more to choose from.
+          <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+          <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
           <a tabindex="0" (click)="clear()">View all campaigns here</a>.
+          <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+          <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
         </p>
       </div>
     }
 
-    @if (individualCampaigns.length <=6 && ! this.searched && !loading && highlightCards && highlightCards.length > 0) {
+    @if (individualCampaigns.length <= 6 && !this.searched && !loading && highlightCards && highlightCards.length > 0) {
       <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
-        <app-highlight-cards
-          [highlightCards]="highlightCards">
-        </app-highlight-cards>
+      <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
     }
 
     @if (filterError) {
@@ -138,7 +148,5 @@
         </p>
       </div>
     }
-
   </biggive-page-section>
-
 </main>

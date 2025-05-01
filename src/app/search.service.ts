@@ -1,12 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import {Params} from "@angular/router";
+import { Params } from '@angular/router';
 
 export type SelectedType = {
-  beneficiary?: string,
-  category?: string,
-  country?: string,
-  sortField?: string,
-  term?: string,
+  beneficiary?: string;
+  category?: string;
+  country?: string;
+  sortField?: string;
+  term?: string;
 };
 
 const sortOptions = {
@@ -18,13 +18,13 @@ const sortOptions = {
 } as const;
 
 type camelCaseSortOption = keyof typeof sortOptions;
-type sortLabel = typeof sortOptions[camelCaseSortOption];
+type sortLabel = (typeof sortOptions)[camelCaseSortOption];
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
-  selected: {[key: string]: string|boolean} & {term?: string}; // SelectedType but allowing string key lookups.
+  selected: { [key: string]: string | boolean } & { term?: string }; // SelectedType but allowing string key lookups.
 
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
@@ -47,22 +47,23 @@ export class SearchService {
     };
   }
 
-  doSearchAndFilterAndSort(customSearchEvent: {
-    searchText: string;
-    sortBy: string;
-    filterCategory: string;
-    filterBeneficiary: string;
-    filterLocation: string;
-    filterFunding: string;
-  }, defaultSort: camelCaseSortOption) {
+  doSearchAndFilterAndSort(
+    customSearchEvent: {
+      searchText: string;
+      sortBy: string;
+      filterCategory: string;
+      filterBeneficiary: string;
+      filterLocation: string;
+      filterFunding: string;
+    },
+    defaultSort: camelCaseSortOption,
+  ) {
     this.nonDefaultsActive = true;
     this.selected['beneficiary'] = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
     this.selected['category'] = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
     this.selected['country'] = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
 
-    const blankSearchText = (
-      !customSearchEvent.searchText || customSearchEvent.searchText.trim() === ''
-    );
+    const blankSearchText = !customSearchEvent.searchText || customSearchEvent.searchText.trim() === '';
 
     const previousSearchText = this.selected.term;
     // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
@@ -91,24 +92,25 @@ export class SearchService {
     (Object.keys(sortOptions) as camelCaseSortOption[]).forEach((key: camelCaseSortOption) => {
       if (sortBy === key || sortBy === sortOptions[key]) {
         selected = key;
-    }});
+      }
+    });
 
     return selected ?? defaultSort;
   }
 
   private updateSelectedSortLabel() {
-    switch(this.selected['sortField']) {
+    switch (this.selected['sortField']) {
       case 'matchFundsRemaining':
-        this.selectedSortLabel  = sortOptions.matchFundsRemaining;
+        this.selectedSortLabel = sortOptions.matchFundsRemaining;
         break;
       case 'amountRaised':
-        this.selectedSortLabel =  sortOptions.amountRaised;
+        this.selectedSortLabel = sortOptions.amountRaised;
         break;
       case 'closeToTarget':
-        this.selectedSortLabel =  sortOptions.closeToTarget;
+        this.selectedSortLabel = sortOptions.closeToTarget;
         break;
       case 'leastRaised':
-        this.selectedSortLabel =  sortOptions.leastRaised;
+        this.selectedSortLabel = sortOptions.leastRaised;
         break;
       case 'relevance':
       case 'Relevance': // historically we set this with a capital R.
@@ -119,7 +121,7 @@ export class SearchService {
     }
   }
 
-  filter(filterName: string, value: string|boolean) {
+  filter(filterName: string, value: string | boolean) {
     this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);
@@ -129,9 +131,9 @@ export class SearchService {
    * Get just the params which should be in the query string as they diverge
    * from the defaults.
    */
-  getQueryParams(defaultSort = ''): {[key: string]: string} {
-    const defaults: {[key: string]: any} = SearchService.selectedDefaults(defaultSort);
-    const queryParams: {[key: string]: any} = {};
+  getQueryParams(defaultSort = ''): { [key: string]: string } {
+    const defaults: { [key: string]: string } = SearchService.selectedDefaults(defaultSort);
+    const queryParams: { [key: string]: string } = {};
     const length = this.selected.term?.length || 0;
 
     for (const key in this.selected) {
@@ -189,10 +191,7 @@ export class SearchService {
 
   showClearFilters(): boolean {
     return Boolean(
-      this.selected['beneficiary'] ||
-      this.selected['category'] ||
-      this.selected['country'] ||
-      this.selected.term,
+      this.selected['beneficiary'] || this.selected['category'] || this.selected['country'] || this.selected.term,
     );
   }
 

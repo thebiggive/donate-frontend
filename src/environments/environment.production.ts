@@ -1,8 +1,8 @@
 import { Environment } from './environment.interface';
 // // see also src/app/featureFlags.ts
 export const environment: Environment = {
-  friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
-  environmentId: "production",
+  friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ',
+  environmentId: 'production',
   production: true,
   productionLike: true,
   creditTipsCampaign: 'a056900002LDXWgAAP',
@@ -11,7 +11,7 @@ export const environment: Environment = {
   donateUriPrefix: 'https://donate.biggive.org',
   experienceUriPrefix: 'https://community.biggive.org',
   blogUriPrefix: 'https://biggive.org',
-  sharedCookieDomain: ".biggive.org",
+  sharedCookieDomain: '.biggive.org',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
@@ -30,7 +30,8 @@ export const environment: Environment = {
   psps: {
     stripe: {
       enabled: true,
-      publishableKey: 'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
+      publishableKey:
+        'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },
   reservationMinutes: 30,

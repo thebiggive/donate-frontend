@@ -1,3 +1,13 @@
+import { LONG_NUMBER, MIN_LENGTH_BANNED } from '../../validators/noLongNumberValidator';
+
+export type PaymentGroupControls = {
+  [key: string]: {
+    errors: {
+      [key: string]: unknown;
+    } | null;
+  };
+};
+
 /**
  * This object tracks whether a donor is ready to progress past the payment stage of the donation start form. At time of
  * writing it just returns a boolean from readyToProgressFromPaymentStep, but my plan is to add a function to return
@@ -26,17 +36,11 @@ export class PaymentReadinessTracker {
      * to proceed.
      */
     private paymentGroup: {
-      controls: {
-        [key: string]: {
-          errors: {
-            [key: string]: unknown;
-          } | null
-        }},
+      controls: PaymentGroupControls;
 
-        valid: boolean
-    }
-) {
-  }
+      valid: boolean;
+    },
+  ) {}
 
   get readyToProgressFromPaymentStep(): boolean {
     return this.getErrorsBlockingProgress().length === 0;
@@ -52,9 +56,9 @@ export class PaymentReadinessTracker {
     let paymentErrors: string[] = [];
     if (!atLeastOneWayOfPayingIsReady) {
       paymentErrors = [
-        this.hasASavedCard ?
-          "Please complete your new payment method, or select a saved payment method." :
-          "Please complete your payment method."
+        this.hasASavedCard
+          ? 'Please complete your new payment method, or select a saved payment method.'
+          : 'Please complete your payment method.',
       ];
     }
 
@@ -67,7 +71,7 @@ export class PaymentReadinessTracker {
       lastName: 'last name',
       emailAddress: 'email address',
       billingPostcode: 'billing postcode',
-    }
+    };
 
     const errors = this.getFormValidationErrors().map((error) => {
       const key = error.key as keyof typeof fieldNames;
@@ -79,15 +83,17 @@ export class PaymentReadinessTracker {
           return `Please enter your ${fieldName}.`;
         case 'pattern':
           return `Sorry, your ${fieldName} is not recognised - please enter a valid ${fieldName}.`;
+        case LONG_NUMBER:
+          return `We do not accept ${MIN_LENGTH_BANNED} consecutive numbers in the ${fieldName} field.`;
         default:
           console.error(error);
           return `Sorry, there is an error with the ${fieldName} field.`;
       }
     });
 
-    if (errors.length === 0 && ! this.paymentGroup.valid ) {
+    if (errors.length === 0 && !this.paymentGroup.valid) {
       // hopefully will never happen in prod.
-      console.error("Unexpected payment group error");
+      console.error('Unexpected payment group error');
       return ['Please check all fields in the payment section and correct any errors.'];
     }
 
@@ -95,12 +101,12 @@ export class PaymentReadinessTracker {
   }
 
   getFormValidationErrors(): { key: string; error: string }[] {
-    const errors: {key: string, error: string}[] = [];
+    const errors: { key: string; error: string }[] = [];
 
     Object.entries(this.paymentGroup.controls).forEach(([key, control]) => {
       const errorsFromThisControl = Object.entries(control.errors ?? []).filter(Boolean);
 
-      errorsFromThisControl.forEach(([errorType]) => errors.push({key: key, error: errorType}))
+      errorsFromThisControl.forEach(([errorType]) => errors.push({ key: key, error: errorType }));
     });
 
     return errors;

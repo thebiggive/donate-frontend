@@ -35,7 +35,7 @@ import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons
   providedIn: 'root',
 })
 export class CampaignGroupsService {
-  static getBeneficiaries(): Array<{name: string, icon: IconDefinition}> {
+  static getBeneficiaries(): Array<{ name: string; icon: IconDefinition }> {
     return [
       {
         name: 'Children (3-18)',
@@ -85,18 +85,18 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryNames(): string[] {
-    let names: string[] = [];
-    const beneficiaries: {name: string, icon: IconDefinition}[] = this.getBeneficiaries();
+    const names: string[] = [];
+    const beneficiaries: { name: string; icon: IconDefinition }[] = this.getBeneficiaries();
 
     for (let i = 0; i < beneficiaries.length; i++) {
-      const beneficiaryObj: {name: string, icon: IconDefinition} = beneficiaries[i]!;
+      const beneficiaryObj: { name: string; icon: IconDefinition } = beneficiaries[i]!;
       names.push(beneficiaryObj.name);
     }
 
     return names;
   }
 
-  static getCategories(): Array<{name: string, icon: IconDefinition}> {
+  static getCategories(): Array<{ name: string; icon: IconDefinition }> {
     return [
       {
         name: 'Animals',
@@ -178,11 +178,11 @@ export class CampaignGroupsService {
   }
 
   static getCategoryNames(): string[] {
-    let names: string[] = [];
-    const categories: {name: string, icon: IconDefinition}[] = this.getCategories();
+    const names: string[] = [];
+    const categories: { name: string; icon: IconDefinition }[] = this.getCategories();
 
     for (let i = 0; i < categories.length; i++) {
-      const categoryObj: {name: string, icon: IconDefinition} = categories[i]!;
+      const categoryObj: { name: string; icon: IconDefinition } = categories[i]!;
       names.push(categoryObj.name);
     }
 
@@ -248,7 +248,7 @@ export class CampaignGroupsService {
       'Congo, the Democratic Republic of the',
       'Cook Islands',
       'Costa Rica',
-      'Cote d\'Ivoire',
+      "Cote d'Ivoire",
       'Croatia',
       'Cuba',
       'Curaçao',
@@ -310,12 +310,12 @@ export class CampaignGroupsService {
       'Kazakhstan',
       'Kenya',
       'Kiribati',
-      'Korea, Democratic People\'s Republic of',
+      "Korea, Democratic People's Republic of",
       'Korea, Republic of',
       'Kosovo',
       'Kuwait',
       'Kyrgyzstan',
-      'Lao People\'s Democratic Republic',
+      "Lao People's Democratic Republic",
       'Latvia',
       'Lebanon',
       'Lesotho',
@@ -438,18 +438,14 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryIcon(beneficiary: string): IconDefinition {
-    const matchingItems = CampaignGroupsService.getBeneficiaries().filter(
-      ii => ii.name === beneficiary,
-    );
+    const matchingItems = CampaignGroupsService.getBeneficiaries().filter((ii) => ii.name === beneficiary);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
-    return matchingItems[0] && matchingItems[0].icon || faPlus;
+    return (matchingItems[0] && matchingItems[0].icon) || faPlus;
   }
 
   static getCategoryIcon(category: string): IconDefinition {
-    const matchingItems = CampaignGroupsService.getCategories().filter(
-      ii => ii.name === category,
-    );
+    const matchingItems = CampaignGroupsService.getCategories().filter((ii) => ii.name === category);
 
     // For an unknown/invalid category, show 'other' symbol.
     return matchingItems[0]?.icon || faPlus;

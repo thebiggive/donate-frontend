@@ -9,13 +9,14 @@
     <p>Donations received once the charity has hit its target may be used for the charity's general funds.</p>
 
     @if (data.surplusDonationInfo) {
-      <p>{{ data.surplusDonationInfo }}</p>
+    <p>{{ data.surplusDonationInfo }}</p>
     }
-
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button mat-raised-button [mat-dialog-close]="false" color="primary">{{ data.cancelCopy }}</button>
-    <button id="proceed-with-donation" mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="accent">Continue donation</button>
+    <button id="proceed-with-donation" mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="accent">
+      Continue donation
+    </button>
   </mat-dialog-actions>
 </app-popup-standalone>

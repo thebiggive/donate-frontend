@@ -22,14 +22,17 @@
         [personId]="this.donor?.id"
         [email]="this.loggedInEmailAddress || ''"
         [loadAuthedPersonInfo]="loadAuthedPersonInfo"
-        [creditPenceToUse]="this.donationStartForm && this.donationStartForm.creditPenceToUse || 0"
+        [creditPenceToUse]="(this.donationStartForm && this.donationStartForm.creditPenceToUse) || 0"
         [campaign]="campaign"
         [loggedInWithPassword]="this.loggedInWithPassword"
         [loginChangeEmitter]="identityService.loginStatusChanged"
       ></app-donation-start-login>
 
       @if (!campaignOpenOnLoad) {
-        <p>Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+        <p>
+          Donations open {{ campaign.startDate | date: "h:mm a, d LLLL yyyy" }} to
+          {{ campaign.endDate | date: "h:mm a, d LLLL yyyy" }}
+        </p>
       }
 
       <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
@@ -41,32 +44,22 @@
           [donor]="donor"
           [donationChangeCallBack]="setDonation"
           [campaignOpenOnLoad]="campaignOpenOnLoad"
-          />
+        />
       }
-
     </div>
     <div class="b-secondary-column">
       <!-- On this page, we agreed that this info is best to hide entirely on mobile. So
       this has no `mobile` counterpart but we still use the mixin that hides this on mobile. -->
       @if (campaign) {
-        <div
-          id="campaign-highlights-beneficiaries-and-categories-desktop"
-          >
+        <div id="campaign-highlights-beneficiaries-and-categories-desktop">
           <div class="match-funded-badge-wrapper">
             @if (campaign.matchFundsRemaining > 0) {
-              <div class="match-funded-badge">
-                Match Funded
-              </div>
+              <div class="match-funded-badge">Match Funded</div>
             }
           </div>
           <div class="c-banner">
             @if (bannerUri) {
-              <img
-                class="c-banner__image b-w-100"
-                [src]="bannerUri"
-                alt=""
-                role="presentation"
-                >
+              <img class="c-banner__image b-w-100" [src]="bannerUri" alt="" role="presentation" />
             }
           </div>
           <app-campaign-info [campaign]="campaign"></app-campaign-info>

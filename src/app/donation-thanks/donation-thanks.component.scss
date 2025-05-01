@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 
 mat-spinner.complete-spinner {
   margin: 3rem auto;
@@ -139,22 +139,22 @@ hr {
 }
 
 .thank-you-large-donation-text {
-    a {
-      color: white;
-    }
-    line-height: 1.2em;
-    padding: 0 0;
-    @media #{abstract.$breakpoint-sm} {
-      font-size: 1rem;
-    }
-    @media #{abstract.$breakpoint-md} {
-      font-size: 1.2rem;
-    }
-    @media #{abstract.$breakpoint-lg} {
-      font-size: 1.5rem;
-    }
-    @media #{abstract.$breakpoint-xl} {
-      font-size: 2rem;
+  a {
+    color: white;
+  }
+  line-height: 1.2em;
+  padding: 0 0;
+  @media #{abstract.$breakpoint-sm} {
+    font-size: 1rem;
+  }
+  @media #{abstract.$breakpoint-md} {
+    font-size: 1.2rem;
+  }
+  @media #{abstract.$breakpoint-lg} {
+    font-size: 1.5rem;
+  }
+  @media #{abstract.$breakpoint-xl} {
+    font-size: 2rem;
   }
 }
 
@@ -257,7 +257,7 @@ div.clearfix {
     margin-bottom: 40px;
 
     span.separator {
-      width: 30px
+      width: 30px;
     }
   }
 
@@ -265,7 +265,8 @@ div.clearfix {
     margin: auto;
   }
 
-  a, p {
+  a,
+  p {
     @media #{abstract.$breakpoint-sm} {
       font-size: 1rem;
     }
@@ -284,7 +285,7 @@ div.clearfix {
 #thank-you-large-donation-wrapper {
   text-align: center;
   width: 80%;
-  margin: auto
+  margin: auto;
 }
 
 .screenreader-only {

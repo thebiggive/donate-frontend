@@ -1,18 +1,18 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
 import jwtDecode from 'jwt-decode';
-import {CookieService} from 'ngx-cookie-service';
-import {MatomoTracker} from 'ngx-matomo-client';
-import {firstValueFrom, Observable, of} from 'rxjs';
-import {delay, map, retry, tap} from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { firstValueFrom, Observable, of } from 'rxjs';
+import { delay, map, retry, tap } from 'rxjs/operators';
 
-import {Credentials} from './credentials.model';
-import {environment} from '../environments/environment';
-import {IdentityJWT} from './identity-jwt.model';
-import {Person} from './person.model';
-import {FundingInstruction} from './fundingInstruction.model';
-import {STRIPE_SESSION_SECRET_COOKIE_NAME} from "./donation.service";
-import {EmailVerificationToken} from './email-verification-token.resolver';
+import { Credentials } from './credentials.model';
+import { environment } from '../environments/environment';
+import { IdentityJWT } from './identity-jwt.model';
+import { Person } from './person.model';
+import { FundingInstruction } from './fundingInstruction.model';
+import { STRIPE_SESSION_SECRET_COOKIE_NAME } from './donation.service';
+import { EmailVerificationToken } from './email-verification-token.resolver';
 
 @Injectable({
   providedIn: 'root',
@@ -39,81 +39,79 @@ export class IdentityService {
     private cookieService: CookieService,
   ) {}
 
-  login(credentials: Credentials): Observable<{ id: string, jwt: string}> {
-    return this.http.post<{ id: string, jwt: string }>(
-      `${environment.identityApiPrefix}${this.loginPath}`,
-      // @todo:1072: Remove captcha_type when identity defaults to friendy_captcha
-      {...credentials, captcha_type: 'friendly_captcha'},
-    ).pipe(tap({
-      next: (response)  => {
-        this.saveJWT(response.id, response.jwt);
-        this.loginStatusChanged.emit(true);
-      }
-    }));
+  login(credentials: Credentials): Observable<{ id: string; jwt: string }> {
+    return this.http
+      .post<{ id: string; jwt: string }>(
+        `${environment.identityApiPrefix}${this.loginPath}`,
+        // @todo:1072: Remove captcha_type when identity defaults to friendy_captcha
+        { ...credentials, captcha_type: 'friendly_captcha' },
+      )
+      .pipe(
+        tap({
+          next: (response) => {
+            this.saveJWT(response.id, response.jwt);
+            this.loginStatusChanged.emit(true);
+          },
+        }),
+      );
   }
 
   getResetPasswordToken(email: string, captchaCode: string): Observable<[]> {
     return this.http.post<[]>(
       `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
-      {email_address: email},
+      { email_address: email },
       {
         headers: {
-          "x-captcha-code": captchaCode
-        }
-      }
+          'x-captcha-code': captchaCode,
+        },
+      },
     );
   }
 
   checkTokenValid(token: string): Observable<object> {
-    return this.http.get(
-      `${environment.identityApiPrefix}${this.resetPasswordTokenPath}/${token}`,
-    );
+    return this.http.get(`${environment.identityApiPrefix}${this.resetPasswordTokenPath}/${token}`);
   }
 
   resetPassword(password: string, token: string) {
-    return this.http.post<{ jwt: string}>(
-      `${environment.identityApiPrefix}${this.resetPasswordPath}`,
-      {
-        new_password: password,
-        secret: token
-      },
-    );
+    return this.http.post<{ jwt: string }>(`${environment.identityApiPrefix}${this.resetPasswordPath}`, {
+      new_password: password,
+      secret: token,
+    });
   }
 
   /**
    * secret number (from email verification) will be required soon if setting a password.
    */
-  create(person: Person & ({secretNumber: string | undefined} | {raw_password: undefined})): Observable<Person> {
-    return this.http.post<Person>(
-      `${environment.identityApiPrefix}${this.peoplePath}`,
-      person).pipe(
-        tap((_person) => {
-          // I would like to run:
-          //      this.saveJWT(person.id as string, person.completion_jwt as string);
-          // here and then make saveJWT private - and it seems to work with manual tests
-          // but it's generating errors "InvalidTokenError: Invalid token specified" in unit tests. Not sure why.
-          this.loginStatusChanged.emit(true);
-        })
-    )
+  create(person: Person & ({ secretNumber: string | undefined } | { raw_password: undefined })): Observable<Person> {
+    return this.http.post<Person>(`${environment.identityApiPrefix}${this.peoplePath}`, person).pipe(
+      tap((_person) => {
+        // I would like to run:
+        //      this.saveJWT(person.id as string, person.completion_jwt as string);
+        // here and then make saveJWT private - and it seems to work with manual tests
+        // but it's generating errors "InvalidTokenError: Invalid token specified" in unit tests. Not sure why.
+        this.loginStatusChanged.emit(true);
+      }),
+    );
   }
 
-  get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
-    var cacheBuster: string;
+  get(
+    id: string,
+    jwt: string,
+    { withTipBalances = false, refresh = false }: { withTipBalances?: boolean; refresh?: boolean } = {},
+  ): Observable<Person> {
+    let cacheBuster: string;
     if (refresh) {
-      cacheBuster = "?cacheBust=" + (new Date()).getTime();
+      cacheBuster = '?cacheBust=' + new Date().getTime();
     } else {
       cacheBuster = '';
     }
 
-    return this.http.get<Person>(
-      `${environment.identityApiPrefix}${this.peoplePath}/${id}${cacheBuster}`,
-      {
-        headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
-        params: {
-          withTipBalances: withTipBalances ? 'true' : 'false',
-        },
+    return this.http.get<Person>(`${environment.identityApiPrefix}${this.peoplePath}/${id}${cacheBuster}`, {
+      headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
+      params: {
+        withTipBalances: withTipBalances ? 'true' : 'false',
       },
-    );
+    });
   }
 
   /**
@@ -130,7 +128,7 @@ export class IdentityService {
    * them the opportunity to set a password. This call doesn't get their pending
    * bank-funded tips balance, which is only used on the Transfer Funds page.
    */
-  getLoggedInPerson(): Observable<null|Person> {
+  getLoggedInPerson(): Observable<null | Person> {
     const idAndJWT = this.getIdAndJWT();
 
     if (!idAndJWT || !this.isTokenForFinalisedUser(idAndJWT.jwt)) {
@@ -140,22 +138,24 @@ export class IdentityService {
     return this.get(idAndJWT.id, idAndJWT.jwt);
   }
 
-  getPerson({ refresh = false }: {refresh?: boolean}): Observable<null|Person> {
+  getPerson({ refresh = false }: { refresh?: boolean }): Observable<null | Person> {
     const idAndJWT = this.getIdAndJWT();
 
     if (!idAndJWT) {
       return of(null);
     }
 
-    return this.get(idAndJWT.id, idAndJWT.jwt, {refresh: refresh});
+    return this.get(idAndJWT.id, idAndJWT.jwt, { refresh: refresh });
   }
 
   update(person: Person): Observable<Person> {
-    return this.http.put<Person>(
-      `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
-      person,
-      this.getAuthHttpOptions(person),
-    ).pipe(retry(2), delay(2_000));
+    return this.http
+      .put<Person>(
+        `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
+        person,
+        this.getAuthHttpOptions(person),
+      )
+      .pipe(retry(2), delay(2_000));
   }
 
   logout() {
@@ -164,20 +164,19 @@ export class IdentityService {
     this.cookieService.delete(STRIPE_SESSION_SECRET_COOKIE_NAME);
 
     // delete didn't seem to work reliably, so also directly setting an empty cookie that expires in the past here:
-    this.cookieService.set(this.cookieName, '', new Date('1970-01-01'), '/')
+    this.cookieService.set(this.cookieName, '', new Date('1970-01-01'), '/');
     this.cookieService.set(this.isLoggedInCookieName, '', new Date('1970-01-01'), '/');
-    this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, '', new Date('1970-01-01'), '/')
+    this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, '', new Date('1970-01-01'), '/');
     this.loginStatusChanged.emit(false);
   }
 
-  getIdAndJWT(): { id: string, jwt: string } | undefined {
+  getIdAndJWT(): { id: string; jwt: string } | undefined {
     const cookieValue = this.cookieService.get(this.cookieName);
-    var idAndJwt: {jwt: string, id: string};
     if (!cookieValue) {
       return undefined;
     }
 
-    idAndJwt = JSON.parse(cookieValue);
+    const idAndJwt: { jwt: string; id: string } = JSON.parse(cookieValue);
 
     if (idAndJwt === undefined) {
       return undefined;
@@ -208,7 +207,7 @@ export class IdentityService {
 
   saveJWT(id: string, jwt: string) {
     const daysTilExpiry = 1;
-    this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
+    this.cookieService.set(this.cookieName, JSON.stringify({ id, jwt }), daysTilExpiry, '/');
     if (this.probablyHaveLoggedInPerson()) {
       this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
     }
@@ -257,29 +256,35 @@ export class IdentityService {
     };
   }
 
-  async getEmailVerificationTokenDetails({secretNumber, personUUID}: {
+  async getEmailVerificationTokenDetails({
+    secretNumber,
+    personUUID,
+  }: {
     secretNumber: string | undefined;
-    personUUID: string | undefined
+    personUUID: string | undefined;
   }): Promise<EmailVerificationToken> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/${secretNumber}/${personUUID}`;
 
-    return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    return firstValueFrom(this.http.get(uri).pipe(map((response: any) => response.token)));
   }
 
-  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<Object> {
+  async requestEmailAuthToken(emailAddress: string, { captcha_code }: { captcha_code: string }): Promise<object> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
 
-    return firstValueFrom(this.http.post(
-      uri,
-      {
-        emailAddress,
-      },
-      {
-       headers: {
-         "x-captcha-code": captcha_code
-       }
-      }
-      ));
+    return firstValueFrom(
+      this.http.post(
+        uri,
+        {
+          emailAddress,
+        },
+        {
+          headers: {
+            'x-captcha-code': captcha_code,
+          },
+        },
+      ),
+    );
   }
 
   /**
@@ -287,34 +292,39 @@ export class IdentityService {
    * allows setting a password using the secret number that we emailed to them in their donation confirmation
    * message.
    */
-  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+  async setFirstPasswordWithToken(
+    password: string,
+    { person_uuid, secretNumber }: EmailVerificationToken,
+  ): Promise<object> {
     // @todo add an Identity route with UUID included & then switch Donate's used route over
     const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
 
-    return firstValueFrom(this.http.post(
-      uri,
-      {
+    return firstValueFrom(
+      this.http.post(uri, {
         personUuid: person_uuid,
         secret: secretNumber,
         password: password,
-      }));
+      }),
+    );
   }
 
-  async checkNewAccountEmailVerificationTokenValid({emailAddress, secret}: {
+  async checkNewAccountEmailVerificationTokenValid({
+    emailAddress,
+    secret,
+  }: {
     secret: string;
-    emailAddress: string | undefined
+    emailAddress: string | undefined;
   }): Promise<boolean> {
     try {
-      const {token} = await firstValueFrom(this.http.post(
-        `${environment.identityApiPrefix}/emailVerificationToken/check-is-valid-no-person-id`,
-        {
+      const { token } = await firstValueFrom(
+        this.http.post(`${environment.identityApiPrefix}/emailVerificationToken/check-is-valid-no-person-id`, {
           emailAddress,
           secret,
-        },
-      ) as Observable<{token: EmailVerificationToken}>);
+        }) as Observable<{ token: EmailVerificationToken }>,
+      );
 
       return token.valid;
-    } catch (error) {
+    } catch (_e) {
       return false;
     }
   }

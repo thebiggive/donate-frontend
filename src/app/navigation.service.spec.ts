@@ -20,9 +20,9 @@ describe('NavigationService', () => {
       {
         campaignFamily: 'emergencyMatch',
         cardStyle: 'DONATE_NOW',
-        headerText:  "header",
-        bodyText: "Emergency card body",
-        button: {text: "Donate Now", href: 'https://biggive.org/some-path'}
+        headerText: 'header',
+        bodyText: 'Emergency card body',
+        button: { text: 'Donate Now', href: 'https://biggive.org/some-path' },
       },
     ];
 
@@ -36,9 +36,9 @@ describe('NavigationService', () => {
       {
         campaignFamily: 'christmasChallenge',
         cardStyle: 'SEE_RESULTS',
-        headerText:  "header",
-        bodyText: "Christmas card body",
-        button: {text: 'See results', href: 'https://biggive.org/some-path'}
+        headerText: 'header',
+        bodyText: 'Christmas card body',
+        button: { text: 'See results', href: 'https://biggive.org/some-path' },
       },
     ];
 
@@ -53,16 +53,16 @@ describe('NavigationService', () => {
       {
         campaignFamily: 'emergencyMatch',
         cardStyle: 'DONATE_NOW',
-        headerText:  "header",
-        bodyText: "Emergency card body",
-        button: {text: "Donate Now", href: 'https://biggive.org/some-path'}
+        headerText: 'header',
+        bodyText: 'Emergency card body',
+        button: { text: 'Donate Now', href: 'https://biggive.org/some-path' },
       },
       {
         campaignFamily: 'christmasChallenge',
         cardStyle: 'DONATE_NOW',
-        headerText:  "header",
-        bodyText: "Christmas card body",
-        button: {text: 'Donate Now', href: 'https://biggive.org/cc-path'}
+        headerText: 'header',
+        bodyText: 'Christmas card body',
+        button: { text: 'Donate Now', href: 'https://biggive.org/cc-path' },
       },
     ];
 

@@ -3,14 +3,9 @@
   <div>
     <biggive-page-section>
       <div class="heading-wrapper">
-        <biggive-heading
-          colour="tertiary"
-          size="1"
-          align="center"
-          text="Your Payment Methods"
-        ></biggive-heading>
+        <biggive-heading colour="tertiary" size="1" align="center" text="Your Payment Methods"></biggive-heading>
       </div>
-        <h2>Your Payment Methods</h2>
+      <h2>Your Payment Methods</h2>
       @if (registerErrorDescription) {
         <p class="error" aria-live="assertive">
           <fa-icon [icon]="faExclamationTriangle"></fa-icon>
@@ -22,107 +17,111 @@
           {{ registerSuccessMessage }}
         </p>
       }
-          <h3>Donation Funds</h3>
-          <div>
-            @if (hasDonationFunds) {
-            <p>Available balance: <strong>{{ ((person.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
-            } @else {
-              <p>No donation funds</p>
-            }
-            <biggive-button
-              space-above="5"
-              colour-scheme="white"
-              label="Transfer funds"
-              full-width="false"
-              size="medium"
-              url="/transfer-funds"
-            />
-          </div>
-        <h3>
-          Saved Cards
-        </h3>
+      <h3>Donation Funds</h3>
+      <div>
+        @if (hasDonationFunds) {
+          <p>
+            Available balance: <strong>{{ (person.cash_balance?.gbp || 0) / 100 | exactCurrency: "GBP" }}</strong>
+          </p>
+        } @else {
+          <p>No donation funds</p>
+        }
+        <biggive-button
+          space-above="5"
+          colour-scheme="white"
+          label="Transfer funds"
+          full-width="false"
+          size="medium"
+          url="/transfer-funds"
+        />
+      </div>
+      <h3>Saved Cards</h3>
       @if (paymentMethods === undefined) {
         <div>
           <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
         </div>
       }
       @if (hasSavedPaymentMethods) {
-          <table id="paymentMethods" class="paymentMethods">
-            @for (method of paymentMethods!.adHocMethods; track method.id) {
-              <tr>
-                <td class="cardBrand">
-                  <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
-                  @if (method.card !== undefined) {
-                    <div>
-                      Card Ending: {{method.card.last4}}
-                    </div>
-                  }
-                  @if (method.card !== undefined) {
-                    <div class="cardExpiry">
-                      Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
-                    </div>
-                  }
-                </td>
-                <td class="cardExpiry">
-                  @if (method.card !== undefined) {
-                    <div>
-                      Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
-                    </div>
-                  }
-                </td>
+        <table id="paymentMethods" class="paymentMethods">
+          @for (method of paymentMethods!.adHocMethods; track method.id) {
+            <tr>
+              <td class="cardBrand">
+                <div class="cardBrand">{{ (method.card?.brand || method.type).toUpperCase() }}</div>
                 @if (method.card !== undefined) {
-                  <td class="cardUpdateButton"
-                  >
-                    <!--            href must be set to make link interactable with keyboard-->
-                    <a href="javascript:void(0);" (click)="updateCard(method.id, method.card, method.billing_details)">
-                      Edit
-                    </a>
-                  </td>
+                  <div>Card Ending: {{ method.card.last4 }}</div>
                 }
-                <td class="cardDeleteButton">
-                  <a href="javascript:void(0);" (click)="deleteMethod(method)">Delete</a>
+                @if (method.card !== undefined) {
+                  <div class="cardExpiry">
+                    Expiry Date: {{ method.card.exp_month.toString().padStart(2, "0") }}/{{ method.card.exp_year }}
+                  </div>
+                }
+              </td>
+              <td class="cardExpiry">
+                @if (method.card !== undefined) {
+                  <div>
+                    Expiry Date: {{ method.card.exp_month.toString().padStart(2, "0") }}/{{ method.card.exp_year }}
+                  </div>
+                }
+              </td>
+              @if (method.card !== undefined) {
+                <td class="cardUpdateButton">
+                  <!--            href must be set to make link interactable with keyboard-->
+                  <a href="javascript:void(0);" (click)="updateCard(method.id, method.card, method.billing_details)">
+                    Edit
+                  </a>
                 </td>
-              </tr>
-            }
-          </table>
-        }
-        @if (paymentMethods !== undefined && paymentMethods.adHocMethods.length === 0) {
-          <div>
-            No saved cards
-          </div>
-        }
+              }
+              <td class="cardDeleteButton">
+                <a href="javascript:void(0);" (click)="deleteMethod(method)">Delete</a>
+              </td>
+            </tr>
+          }
+        </table>
+      }
+      @if (paymentMethods !== undefined && paymentMethods.adHocMethods.length === 0) {
+        <div>No saved cards</div>
+      }
       @if (paymentMethods?.regularGivingPaymentMethod) {
-        <h3>
-          Regular Giving payment method
-        </h3>
+        <h3>Regular Giving payment method</h3>
         <p>
           This payment method will be used to automatically collect donations in relation to your
           <a href="/my-account/regular-giving">regular giving mandates</a>.
         </p>
 
         <table id="regularGivingPaymentMethod" class="paymentMethods">
-        <tr>
-          <td class="cardBrand">
-            <div class="cardBrand">{{(paymentMethods?.regularGivingPaymentMethod?.card?.brand || paymentMethods?.regularGivingPaymentMethod?.type)?.toUpperCase()}}</div>
-            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
-              <div>
-                Card Ending: {{paymentMethods?.regularGivingPaymentMethod?.card?.last4}}
+          <tr>
+            <td class="cardBrand">
+              <div class="cardBrand">
+                {{
+                  (
+                    paymentMethods?.regularGivingPaymentMethod?.card?.brand ||
+                    paymentMethods?.regularGivingPaymentMethod?.type
+                  )?.toUpperCase()
+                }}
               </div>
-            }
-            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
-              <div class="cardExpiry">
-                Expiry Date: {{paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0")}}/{{paymentMethods?.regularGivingPaymentMethod?.card?.exp_year}}
-              </div>
-            }
-          </td>
-          <td class="cardExpiry">
-            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
-              <div>
-                Expiry Date: {{paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0")}}/{{paymentMethods?.regularGivingPaymentMethod?.card?.exp_year}}
-              </div>
-            }
-          </td>
-        </tr>
+              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+                <div>Card Ending: {{ paymentMethods?.regularGivingPaymentMethod?.card?.last4 }}</div>
+              }
+              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+                <div class="cardExpiry">
+                  Expiry Date:
+                  {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{
+                    paymentMethods?.regularGivingPaymentMethod?.card?.exp_year
+                  }}
+                </div>
+              }
+            </td>
+            <td class="cardExpiry">
+              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+                <div>
+                  Expiry Date:
+                  {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{
+                    paymentMethods?.regularGivingPaymentMethod?.card?.exp_year
+                  }}
+                </div>
+              }
+            </td>
+          </tr>
         </table>
 
         <biggive-button

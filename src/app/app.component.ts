@@ -1,36 +1,37 @@
-import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  HostListener, Inject,
+  HostListener,
+  Inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   signal,
   ViewChild,
-  WritableSignal
+  WritableSignal,
 } from '@angular/core';
-import {Event as RouterEvent, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {BiggiveMainMenu} from '@biggive/components-angular';
-import {MatomoTracker} from "ngx-matomo-client";
-import {filter, map} from 'rxjs/operators';
+import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { BiggiveMainMenu } from '@biggive/components-angular';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { filter, map } from 'rxjs/operators';
 
-import {DonationService} from './donation.service';
-import {GetSiteControlService} from './getsitecontrol.service';
-import {NavigationService} from './navigation.service';
-import {IdentityService} from "./identity.service";
-import {environment} from "../environments/environment";
-import {flags} from "./featureFlags";
+import { DonationService } from './donation.service';
+import { GetSiteControlService } from './getsitecontrol.service';
+import { NavigationService } from './navigation.service';
+import { IdentityService } from './identity.service';
+import { environment } from '../environments/environment';
+import { flags } from './featureFlags';
 import {
   AgreedToCookieTypes,
   agreesToAnalyticsAndTracking,
   agreesToThirdParty,
   CookiePreferences,
-  CookiePreferenceService
-} from "./cookiePreference.service";
-import {Observable, Subscription} from "rxjs";
-import {supportedBrowsers} from "../supportedBrowsers";
-import {detect} from "detect-browser";
+  CookiePreferenceService,
+} from './cookiePreference.service';
+import { Observable, Subscription } from 'rxjs';
+import { supportedBrowsers } from '../supportedBrowsers';
+import { detect } from 'detect-browser';
 
 @Component({
   selector: 'app-root',
@@ -45,7 +46,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   public isLoggedIn: boolean = false;
 
   public readonly donateUriPrefix = environment.donateUriPrefix;
-  public readonly blogUriPrefix = environment.blogUriPrefix
+  public readonly blogUriPrefix = environment.blogUriPrefix;
 
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
 
@@ -59,9 +60,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
     switch (true) {
       case cookiePrefs === undefined:
-        return {analyticsAndTesting: false, thirdParty: false}
+        return { analyticsAndTesting: false, thirdParty: false };
       case cookiePrefs.agreedToAll:
-        return {analyticsAndTesting: true, thirdParty: true}
+        return { analyticsAndTesting: true, thirdParty: true };
       default:
         return cookiePrefs.agreedToCookieTypes;
     }
@@ -81,13 +82,14 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
-    this.existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+    this.existingCookiePreferences = this.cookiePreferenceService
+      .userOptInToSomeCookies()
       .pipe(map(this.convertCookiePreferencesForDisplay));
 
     navigationService.setPossibleRedirectSignal(this.someCampaignHasHomePageRedirect);
@@ -98,7 +100,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         if (isPlatformBrowser(this.platformId)) {
           this.navigationService.saveNewUrl(event.urlAfterRedirects);
 
-          this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
+          this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences';
         }
       }
     });
@@ -107,9 +109,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       map((_event) => {
         const url = new URL(environment.donateUriPrefix + router.url);
-        url.hash = "";
+        url.hash = '';
         return url;
-      })
+      }),
     );
   }
 
@@ -176,7 +178,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
      * Server copy never has the menu open and doesn't have a DOM for Stencil to adjust.
      */
     if (isPlatformBrowser(this.platformId)) {
-      this.setUpMenuCloseOnNavigation(this.router, this.header);
+      this.setUpMenuCloseOnNavigation();
     }
   }
 
@@ -194,13 +196,13 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @HostListener('preferenceModalClosed', ['$event'])
   async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
     if (this.showingDedicatedCookiePreferencesPage) {
-      await this.router.navigateByUrl('/')
+      await this.router.navigateByUrl('/');
     }
   }
 
   @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
   onCookieBannerSavePreferencesSelected(event: CustomEvent) {
-    this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
+    this.cookiePreferenceService.storePreferences({ agreedToAll: false, agreedToCookieTypes: event.detail });
   }
 
   private updatePersonInfo() {
@@ -208,14 +210,11 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.isDataLoaded = true;
   }
 
-  private setUpMenuCloseOnNavigation(router: Router, header: BiggiveMainMenu | undefined) {
+  private setUpMenuCloseOnNavigation() {
     const headerEl = this.header;
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(
+    this.router.events.pipe(filter((event: RouterEvent) => event instanceof NavigationStart)).subscribe(
       // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-      () => headerEl && headerEl.closeMobileMenuFromOutside()
+      () => headerEl && headerEl.closeMobileMenuFromOutside(),
     );
   }
 }
-

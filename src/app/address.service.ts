@@ -1,13 +1,13 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 
-import {environment} from '../environments/environment';
-import {GiftAidAddress} from './gift-aid-address.model';
-import {GiftAidAddressSuggestion} from './gift-aid-address-suggestion.model';
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {AbstractControl} from "@angular/forms";
+import { environment } from '../environments/environment';
+import { GiftAidAddress } from './gift-aid-address.model';
+import { GiftAidAddressSuggestion } from './gift-aid-address-suggestion.model';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { AbstractControl } from '@angular/forms';
 
 /**
  * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
@@ -21,7 +21,7 @@ export const postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{
 // Intentionally looser to support most countries' formats.
 export const billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 
-export type HomeAddress = { homeAddress: string, homeBuildingNumber: string, homePostcode: string };
+export type HomeAddress = { homeAddress: string; homeBuildingNumber: string; homePostcode: string };
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +33,8 @@ export class AddressService {
     // Get up to top 20 suggestions – the maximum allowed.
     const uri = `${environment.postcodeLookupUri}/autocomplete/${encodeURIComponent(partialAddress)}?top=20&api-key=${environment.postcodeLookupKey}`;
 
-    return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
-      map((response: any) => response.suggestions),
+    return this.http.get<{ suggestions: GiftAidAddressSuggestion[] }>(uri).pipe(
+      map((response) => response.suggestions),
       catchError((error) => {
         console.log('AddressService.getSuggestions() error', error);
         return EMPTY;
@@ -43,9 +43,10 @@ export class AddressService {
   }
 
   get(addressUrl: string): Observable<GiftAidAddress> {
-    return this.http.get<GiftAidAddress>(`${environment.postcodeLookupUri}${addressUrl}?api-key=${environment.postcodeLookupKey}`);
+    return this.http.get<GiftAidAddress>(
+      `${environment.postcodeLookupUri}${addressUrl}?api-key=${environment.postcodeLookupKey}`,
+    );
   }
-
 
   /**
    * Loads selected address from the postcode look up service and returns it to the callback
@@ -56,58 +57,62 @@ export class AddressService {
   public loadAddress(event: MatAutocompleteSelectedEvent, callback: (address: HomeAddress) => void) {
     const autoCompleteSuggestionValue: GiftAidAddressSuggestion = event.option.value;
     this.get(autoCompleteSuggestionValue.url).subscribe({
-    next: (address: GiftAidAddress) => {
-      const addressParts = [address.line_1];
-      if (address.line_2) {
-        addressParts.push(address.line_2);
-      }
-      addressParts.push(address.town_or_city);
+      next: (address: GiftAidAddress) => {
+        const addressParts = [address.line_1];
+        if (address.line_2) {
+          addressParts.push(address.line_2);
+        }
+        addressParts.push(address.town_or_city);
 
-      const anAddress: HomeAddress = {
-        homeAddress: addressParts.join(', '),
-        homeBuildingNumber: address.building_number,
-        homePostcode: address.postcode,
-      } as const;
+        const anAddress: HomeAddress = {
+          homeAddress: addressParts.join(', '),
+          homeBuildingNumber: address.building_number,
+          homePostcode: address.postcode,
+        } as const;
 
-      callback(anAddress);
-    },
-    error: (error: unknown) => {
-      // We failed to fetch an address from the lookup service so use the address from the suggestion as a fallback.
-      // The donor will have to manually fill in their postcode. Home building number is not currently used.
-      callback({
-        homeAddress: autoCompleteSuggestionValue.address,
-        homePostcode: '',
-        homeBuildingNumber: '',
-      });
-      console.log('Postcode resolve error', error);
-    }});
+        callback(anAddress);
+      },
+      error: (error: unknown) => {
+        // We failed to fetch an address from the lookup service so use the address from the suggestion as a fallback.
+        // The donor will have to manually fill in their postcode. Home building number is not currently used.
+        callback({
+          homeAddress: autoCompleteSuggestionValue.address,
+          homePostcode: '',
+          homeBuildingNumber: '',
+        });
+        console.log('Postcode resolve error', error);
+      },
+    });
   }
 
-  public suggestAddresses (
-    {homeAddressFormControl, loadingAddressSuggestionCallback, foundAddressSuggestionCallback}: {
-      homeAddressFormControl: AbstractControl,
-      loadingAddressSuggestionCallback: () => void,
-      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => void
-    }
-  ) {
-    const observable = homeAddressFormControl.valueChanges.pipe(
-      startWith(''),
-      // https://stackoverflow.com/a/51470735/2803757
-      debounceTime(400),
-      distinctUntilChanged(),
-      // switchMap *seems* like the best operator to swap out the Observable on the value change
-      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
-      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
-      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-      switchMap((initialAddress: string | false) => {
-        if (!initialAddress) {
-          return EMPTY;
-        }
+  public suggestAddresses({
+    homeAddressFormControl,
+    loadingAddressSuggestionCallback,
+    foundAddressSuggestionCallback,
+  }: {
+    homeAddressFormControl: AbstractControl;
+    loadingAddressSuggestionCallback: () => void;
+    foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => void;
+  }) {
+    const observable =
+      homeAddressFormControl.valueChanges.pipe(
+        startWith(''),
+        // https://stackoverflow.com/a/51470735/2803757
+        debounceTime(400),
+        distinctUntilChanged(),
+        // switchMap *seems* like the best operator to swap out the Observable on the value change
+        // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
+        // hope this may also cancel previous outstanding lookup resolutions that are in flight?
+        // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
+        switchMap((initialAddress: string | false) => {
+          if (!initialAddress) {
+            return EMPTY;
+          }
 
-        loadingAddressSuggestionCallback();
-        return this.getSuggestions(initialAddress);
-      }),
-    ) || EMPTY;
+          loadingAddressSuggestionCallback();
+          return this.getSuggestions(initialAddress);
+        }),
+      ) || EMPTY;
 
     observable.subscribe(foundAddressSuggestionCallback);
   }
@@ -123,5 +128,4 @@ export class AddressService {
 
     return suggestion?.address || '';
   }
-
 }

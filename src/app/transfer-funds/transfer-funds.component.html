@@ -4,9 +4,17 @@
 
     @if (hasDonationFunds) {
       <div class="existing-balance-info">
-        <p>Existing available balance: <strong>{{ ((donor?.cash_balance?.['gbp'] || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
-        <p>Ready to donate to charities? <a routerLink="/explore">Explore campaigns</a> &ndash; your Funds will be used for logged in donations automatically.</p>
-        <p>Want to add more to your balance first? Continue with the form below to get bank details for another transfer.</p>
+        <p>
+          Existing available balance:
+          <strong>{{ (donor?.cash_balance?.["gbp"] || 0) / 100 | exactCurrency: "GBP" }}</strong>
+        </p>
+        <p>
+          Ready to donate to charities? <a routerLink="/explore">Explore campaigns</a> &ndash; your Funds will be used
+          for logged in donations automatically.
+        </p>
+        <p>
+          Want to add more to your balance first? Continue with the form below to get bank details for another transfer.
+        </p>
       </div>
     }
 
@@ -18,39 +26,66 @@
             formGroupName="amounts"
             [stepControl]="amountsGroup"
             label="Your Donation Funds"
-            >
+          >
             <mat-form-field class="form-field b-center size-lg" hideRequiredMarker>
               <mat-label>Amount ({{ currency }})</mat-label>
-              <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
+              <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required />
             </mat-form-field>
-            @if (creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)) {
+            @if (
+              creditAmountField?.errors &&
+              creditAmountField?.invalid &&
+              (creditAmountField?.dirty || creditAmountField?.touched)
+            ) {
               <p class="error">
-                Please enter a whole number of pounds between {{ minimumCreditAmount | exactCurrency:currency }} and
-                {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
+                Please enter a whole number of pounds between {{ minimumCreditAmount | exactCurrency: currency }} and
+                {{ maximumCreditAmount | exactCurrency: currency }} inclusive.
               </p>
             }
             @if (donorHasPendingTipBalance) {
               <div>
-                <p>Thank you for choosing to tip Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }}.</p>
+                <p>Thank you for choosing to tip Big Give {{ pendingTipBalance / 100 | exactCurrency: "GBP" }}.</p>
 
-                <p>We will collect this tip when you make your bank transfer. Need to change this? You can
+                <!--
+                Following eslint rules disabled as they were not in place at the time this code was written, and also
+                to check that it's possible to disable rules in-place in Angular html files.
+
+                I'm also not sure why an `a` tag wouldn't support focus by default. Possibly because its doesn't have an
+                href. -->
+                <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+                <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+                <p>
+                  We will collect this tip when you make your bank transfer. Need to change this? You can
                   <a (click)="cancelPendingTips()">cancel the tip</a>
                   and then optionally make a new one.
+
+                  <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+                  <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
+                </p>
               </div>
             }
             @if (donorHasRecentlyTipped) {
               <div>
-                <p>Thank you for tipping Big Give {{ (recentlyConfirmedTipsTotal / 100) | exactCurrency:"GBP" }}. This was confirmed from your balance when you transferred funds.</p>
+                <p>
+                  Thank you for tipping Big Give {{ recentlyConfirmedTipsTotal / 100 | exactCurrency: "GBP" }}. This was
+                  confirmed from your balance when you transferred funds.
+                </p>
               </div>
             }
             <!-- All tip bits are shown iff the pending bank-funded tip balance in GBP is £0 or undefined -->
             @if (!donorHasPendingTipBalance && !donorHasRecentlyTipped) {
               <div>
                 <p><strong>Tip Big Give</strong></p>
-                <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
-                <mat-form-field >
+                <p class="tip-text">
+                  Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to
+                  donors who leave an optional tip amount here:
+                </p>
+                <mat-form-field>
                   <mat-label>Tip amount (approx. %)</mat-label>
-                  <mat-select formControlName="tipPercentage" required="true" (selectionChange)="onTipSelectorChanged($event)">
+                  <mat-select
+                    formControlName="tipPercentage"
+                    required="true"
+                    (selectionChange)="onTipSelectorChanged($event)"
+                  >
                     <mat-option [value]="2.5">2.5%</mat-option>
                     <mat-option [value]="5">5%</mat-option>
                     <mat-option [value]="7.5">7.5%</mat-option>
@@ -62,13 +97,19 @@
                 </mat-form-field>
                 @if (customTip()) {
                   <div>
-                    <mat-form-field  class="form-field b-center size-lg">
+                    <mat-form-field class="form-field b-center size-lg">
                       <mat-label>Custom Tip amount ({{ currency }})</mat-label>
-                      <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount">
+                      <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount" />
                     </mat-form-field>
-                    @if (customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)) {
+                    @if (
+                      customTipAmountField?.errors &&
+                      customTipAmountField?.invalid &&
+                      (customTipAmountField?.dirty || customTipAmountField?.touched)
+                    ) {
                       <p class="error">
-                        Donation Funds tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive and must be a whole number of pounds.
+                        Donation Funds tips can range from {{ 0 | exactCurrency: currency }} and
+                        {{ maximumDonationAmount | exactCurrency: currency }} inclusive and must be a whole number of
+                        pounds.
                       </p>
                     }
                   </div>
@@ -84,25 +125,35 @@
                   !(customTip() && !customTipAmountField?.value) &&
                   !customTipAmountField?.errors &&
                   !customTipAmountField?.invalid
-                  ) {
-                  <p><strong>{{ calculatedTipAmount() | exactCurrency:currency }}</strong> donation (tip) to support Big Give
-                  @if (calculatedTipAmount() > 0) {
-                    <span>💗</span>
-                    } <!-- display heart emoji if tip > £0 -->
+                ) {
+                  <p>
+                    <strong>{{ calculatedTipAmount() | exactCurrency: currency }}</strong> donation (tip) to support Big
+                    Give
+                    @if (calculatedTipAmount() > 0) {
+                      <span>💗</span>
+                    }
+                    <!-- display heart emoji if tip > £0 -->
                   </p>
                 }
                 <p><strong>How does Big Give use tips?</strong></p>
-                <p>Big Give is a registered charity, no 1136547. We don't charge charities for using our platform;
-                  we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match-funding campaigns.
-                  <br>
-                    Your tips will be going to:
-                  </p>
-                  <ul>
-                    <li>Supporting our website and team, allowing charities to double their donations to good causes.</li>
-                    <li>Providing match funds in our <a href="https://biggive.org/anchor-match-fund/">Anchor Match Fund</a>.
-                  Through tips, charities will receive funding to launch their own match-funded campaign on Big Give.</li>
+                <p>
+                  Big Give is a registered charity, no 1136547. We don't charge charities for using our platform; we
+                  rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our
+                  match-funding campaigns.
+                  <br />
+                  Your tips will be going to:
+                </p>
+                <ul>
+                  <li>Supporting our website and team, allowing charities to double their donations to good causes.</li>
+                  <li>
+                    Providing match funds in our <a href="https://biggive.org/anchor-match-fund/">Anchor Match Fund</a>.
+                    Through tips, charities will receive funding to launch their own match-funded campaign on Big Give.
+                  </li>
                 </ul>
-                <p>Thank you for your generosity! Your tip ensures that we can continue to support charities and causes that are important to you.</p>
+                <p>
+                  Thank you for your generosity! Your tip ensures that we can continue to support charities and causes
+                  that are important to you.
+                </p>
               </div>
             }
             <div>
@@ -110,141 +161,155 @@
             </div>
           </mat-step>
           @if (shouldShowGiftAidStep()) {
-            <mat-step
-              formGroupName="giftAid"
-              [stepControl]="giftAidGroup"
-              >
+            <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup">
               <ng-template matStepLabel>Gift Aid (for tips to Big Give only)</ng-template>
               <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
-              <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
-              Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
-              <p><strong>Note:</strong>This Gift Aid section is only for claiming Gift Aid on the tip to Big Give. If you wish to claim Gift Aid on the credit amount used for making donations, you may do so when donating
-            to a charity's campaign.</p>
-            <p><a href="https://biggive.org/terms-and-conditions" target="_blank">Find out more about Gift Aid </a></p>
-            <mat-radio-group required aria-label="Select a Gift Aid option" formControlName="giftAid">
-              <mat-radio-button [value]="true">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:currency }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
-              <mat-radio-button [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
-            </mat-radio-group>
-            @if (isOptedIntoGiftAid) {
-              <div id="addressWrapper">
-                <mat-form-field>
-                  <mat-label for="homeAddress">Home address</mat-label>
-                  <input
-                    formControlName="homeAddress"
-                    id="homeAddress"
-                    matInput
-                    autocomplete="off"
-                    [matAutocomplete]="autoAddress"
-                    >
-                  <mat-autocomplete
-                    #autoAddress="matAutocomplete"
-                    [displayWith]="summariseAddressSuggestion"
-                    (optionSelected)="addressChosen($event)"
-                    >
-                    @for (suggestion of addressSuggestions; track suggestion.address) {
-                      <mat-option [value]="suggestion">
-                        {{ suggestion.address }}
-                      </mat-option>
-                    }
-                  </mat-autocomplete>
-                  <mat-hint>
-                    For your Gift Aid declaration to HMRC.
-                    @if (loadingAddressSuggestions) {
-                      <mat-spinner
-                        aria-label="Loading possible addresses"
-                        color="primary"
-                        diameter="15"
-                        class="address-loading-spinner"
-                      ></mat-spinner>
-                    }
-                  </mat-hint>
-                </mat-form-field>
-                @if (giftAidGroup.get('homeAddress')?.errors?.['maxlength']) {
-                  <div class="error">
-                    Maximum 255 characters exceeded
-                  </div>
-                }
-                @if (!giftAidGroup.value.homeOutsideUK) {
+              <p>
+                I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains
+                tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my
+                responsibility to pay the difference.
+              </p>
+              <p>
+                <strong>Note:</strong>This Gift Aid section is only for claiming Gift Aid on the tip to Big Give. If you
+                wish to claim Gift Aid on the credit amount used for making donations, you may do so when donating to a
+                charity's campaign.
+              </p>
+              <p>
+                <a href="https://biggive.org/terms-and-conditions" target="_blank">Find out more about Gift Aid </a>
+              </p>
+              <mat-radio-group required aria-label="Select a Gift Aid option" formControlName="giftAid">
+                <mat-radio-button [value]="true"
+                  >Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency: currency }}</strong> Gift Aid on my
+                  tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the
+                  future.</mat-radio-button
+                >
+                <mat-radio-button [value]="false"
+                  >No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid
+                  claimed.</mat-radio-button
+                >
+              </mat-radio-group>
+              @if (isOptedIntoGiftAid) {
+                <div id="addressWrapper">
                   <mat-form-field>
-                    <mat-label for="homePostcode">
-                      Home postcode
-                    </mat-label>
-                    <input formControlName="homePostcode" id="homePostcode" matInput>
+                    <mat-label for="homeAddress">Home address</mat-label>
+                    <input
+                      formControlName="homeAddress"
+                      id="homeAddress"
+                      matInput
+                      autocomplete="off"
+                      [matAutocomplete]="autoAddress"
+                    />
+                    <mat-autocomplete
+                      #autoAddress="matAutocomplete"
+                      [displayWith]="summariseAddressSuggestion"
+                      (optionSelected)="addressChosen($event)"
+                    >
+                      @for (suggestion of addressSuggestions; track suggestion.address) {
+                        <mat-option [value]="suggestion">
+                          {{ suggestion.address }}
+                        </mat-option>
+                      }
+                    </mat-autocomplete>
+                    <mat-hint>
+                      For your Gift Aid declaration to HMRC.
+                      @if (loadingAddressSuggestions) {
+                        <mat-spinner
+                          aria-label="Loading possible addresses"
+                          color="primary"
+                          diameter="15"
+                          class="address-loading-spinner"
+                        ></mat-spinner>
+                      }
+                    </mat-hint>
                   </mat-form-field>
-                }
-                <div class="homeOutsideUK-wrapper">
-                  <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
-                    I live outside the UK
-                  </mat-checkbox>
+                  @if (giftAidGroup.get("homeAddress")?.errors?.["maxlength"]) {
+                    <div class="error">Maximum 255 characters exceeded</div>
+                  }
+                  @if (!giftAidGroup.value.homeOutsideUK) {
+                    <mat-form-field>
+                      <mat-label for="homePostcode"> Home postcode </mat-label>
+                      <input formControlName="homePostcode" id="homePostcode" matInput />
+                    </mat-form-field>
+                  }
+                  <div class="homeOutsideUK-wrapper">
+                    <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                      I live outside the UK
+                    </mat-checkbox>
+                  </div>
                 </div>
+              }
+              <div>
+                <button mat-button matStepperNext>Next</button>
               </div>
-            }
+            </mat-step>
+          }
+          @if (!donor.pending_tip_balance?.["gbp"]) {
+            <mat-step formGroupName="marketing" [stepControl]="marketingGroup">
+              <ng-template matStepLabel>Receive Updates</ng-template>
+              <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">
+                Would you be happy to receive emails from Big Give?
+              </p>
+              <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+                <div class="binary-options">
+                  <div class="binary-option">
+                    <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
+                      Yes, I'm happy to receive emails from Big Give
+                    </mat-radio-button>
+                  </div>
+                  <div class="binary-option">
+                    <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
+                      No, I would not like to receive emails from Big Give
+                    </mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+              @if (marketingGroup.value.optInTbgEmail === false) {
+                <mat-hint aria-live="polite">
+                  <p class="no-margin-top b-rt-sm b-grey">
+                    By selecting 'no', we will no longer be able to email you about opportunities to double your
+                    donation.
+                  </p>
+                </mat-hint>
+              }
+              <div>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </mat-step>
+          }
+          <mat-step>
+            <ng-template matStepLabel>Submission</ng-template>
+            <p>
+              By clicking on the 'Submit Donation Funds transfer form' button below, you agree to transfer the funds via
+              bank transfer to the bank account and sort code displayed on the next screen. See our
+              <a href="https://biggive.org/terms-and-conditions" target="_blank">Terms and Conditions</a> for more
+              information.
+            </p>
+            <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
             <div>
-              <button mat-button matStepperNext>Next</button>
+              <button mat-button (click)="createAccount()">Submit Donation Funds transfer form</button>
             </div>
           </mat-step>
-        }
-        @if (!donor.pending_tip_balance?.['gbp']) {
-          <mat-step
-            formGroupName="marketing"
-            [stepControl]="marketingGroup"
-            >
-            <ng-template matStepLabel>Receive Updates</ng-template>
-            <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from Big Give?</p>
-            <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
-              <div class="binary-options">
-                <div class="binary-option">
-                  <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
-                    Yes, I'm happy to receive emails from Big Give
-                  </mat-radio-button>
-                </div>
-                <div class="binary-option">
-                  <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
-                    No, I would not like to receive emails from Big Give
-                  </mat-radio-button>
-                </div>
-              </div>
-            </mat-radio-group>
-            @if (marketingGroup.value.optInTbgEmail === false) {
-              <mat-hint aria-live="polite">
-                <p class="no-margin-top b-rt-sm b-grey">
-                  By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
-                </p>
-              </mat-hint>
-            }
-            <div>
-              <button mat-button matStepperNext>Next</button>
-            </div>
-          </mat-step>
-        }
-        <mat-step>
-          <ng-template matStepLabel>Submission</ng-template>
-          <p>By clicking on the 'Submit Donation Funds transfer form' button below, you agree to transfer the funds via bank transfer to the bank account and sort code
-            displayed on the next screen. See our <a href="https://biggive.org/terms-and-conditions" target="_blank">Terms and Conditions</a> for more information.
-          </p>
-          <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
-          <div>
-            <button mat-button (click)="createAccount()">Submit Donation Funds transfer form</button>
-          </div>
-        </mat-step>
-      </mat-stepper>
-    </form>
-  }
+        </mat-stepper>
+      </form>
+    }
 
-  @if (isLoading) {
-    <div>
-      <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
-    </div>
-  }
+    @if (isLoading) {
+      <div>
+        <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
+      </div>
+    }
 
-  @if (donor && isPurchaseComplete) {
-    <div>
-      <h2>Transfer Instructions</h2>
-      <p>Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account using the following details</p>
-      <p><strong>Recipient</strong> {{ accountHolderName }}</p>
-      <p><strong>Sort Code:</strong> {{ sortCode }}</p>
-      <p><strong>Account Number:</strong> {{ accountNumber }}</p>
-    </div>
-  }
-</div>
+    @if (donor && isPurchaseComplete) {
+      <div>
+        <h2>Transfer Instructions</h2>
+        <p>
+          Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account
+          using the following details
+        </p>
+        <p><strong>Recipient</strong> {{ accountHolderName }}</p>
+        <p><strong>Sort Code:</strong> {{ sortCode }}</p>
+        <p><strong>Account Number:</strong> {{ accountNumber }}</p>
+      </div>
+    }
+  </div>
 </main>

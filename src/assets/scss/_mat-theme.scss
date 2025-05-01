@@ -1,31 +1,31 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 // suppressing warnings about duplicate styles:
 // https://github.com/angular/components/blob/main/guides/duplicate-theming-styles.md
 mat.$theme-ignore-duplication-warnings: true;
 
 $tbg-primary: (
-  100: #2C089B,
-  200: #2C089B,
-  500: #2C089B,
-  700: #2C089B,
-  800: #2C089B,
+  100: #2c089b,
+  200: #2c089b,
+  500: #2c089b,
+  700: #2c089b,
+  800: #2c089b,
   contrast: (
     200: black,
     500: white,
     800: white,
-  )
+  ),
 );
 
 $tbg-secondary: (
-  100: #2AF135,
-  500: #2AF135,
-  700: #2AF135,
-  800: #2AF135,
+  100: #2af135,
+  500: #2af135,
+  700: #2af135,
+  800: #2af135,
   contrast: (
     500: black,
     800: rgba(black, 0.87),
-  )
+  ),
 );
 
 $tbg-error-red: (
@@ -34,7 +34,7 @@ $tbg-error-red: (
   700: #990000,
   contrast: (
     500: black,
-  )
+  ),
 );
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -47,31 +47,33 @@ $donate-warn: mat.m2-define-palette($tbg-error-red);
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
 $app-typography: mat.m2-define-typography-config(
-  $font-family:   '"Euclid Triangle", sans-serif',
-  $headline-1:     mat.m2-define-typography-level(112px, 112px, 300),
-  $headline-2:     mat.m2-define-typography-level(56px, 56px, 400),
-  $headline-3:     mat.m2-define-typography-level(45px, 48px, 400),
-  $headline-4:     mat.m2-define-typography-level(34px, 40px, 400),
-  $headline-5:      mat.m2-define-typography-level(24px, 32px, 400),
-  $headline-6:         mat.m2-define-typography-level(20px, 32px, 500),
-  $subtitle-1:  mat.m2-define-typography-level(16px, 28px, 400),
-  $body-1:  mat.m2-define-typography-level(15px, 24px, 400),
-  $subtitle-2:        mat.m2-define-typography-level(14px, 24px, 500),
-  $body-2:        mat.m2-define-typography-level(14px, 20px, 400),
-  $caption:       mat.m2-define-typography-level(12px, 20px, 400),
-  $button:        mat.m2-define-typography-level(14px, 14px, 500),
+  $font-family: '"Euclid Triangle", sans-serif',
+  $headline-1: mat.m2-define-typography-level(112px, 112px, 300),
+  $headline-2: mat.m2-define-typography-level(56px, 56px, 400),
+  $headline-3: mat.m2-define-typography-level(45px, 48px, 400),
+  $headline-4: mat.m2-define-typography-level(34px, 40px, 400),
+  $headline-5: mat.m2-define-typography-level(24px, 32px, 400),
+  $headline-6: mat.m2-define-typography-level(20px, 32px, 500),
+  $subtitle-1: mat.m2-define-typography-level(16px, 28px, 400),
+  $body-1: mat.m2-define-typography-level(15px, 24px, 400),
+  $subtitle-2: mat.m2-define-typography-level(14px, 24px, 500),
+  $body-2: mat.m2-define-typography-level(14px, 20px, 400),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400),
+  $button: mat.m2-define-typography-level(14px, 14px, 500),
 );
 
 // Create the theme object (a Sass map containing all of the palettes).
-$donate-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $donate-primary,
-    accent: $donate-accent,
-    warn:  $donate-warn,
-  ),
-  typography: $app-typography,
-  density: 0,
-));
+$donate-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $donate-primary,
+      accent: $donate-accent,
+      warn: $donate-warn,
+    ),
+    typography: $app-typography,
+    density: 0,
+  )
+);
 
 @include mat.elevation-classes();
 @include mat.app-background();

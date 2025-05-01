@@ -1,9 +1,9 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from '@angular/material/icon';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -15,23 +15,21 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @NgModule({
-    imports: [
-        ...allChildComponentImports,
-        CampaignDetailsRoutingModule,
-        CampaignInfoComponent,
-        CurrencyPipe,
-        FontAwesomeModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
-        MatTabsModule,
-        OptimisedImagePipe,
-        TimeLeftPipe,
-    ],
-    declarations: [CampaignDetailsComponent],
-    providers: [
-        DatePipe,
-    ],
+  imports: [
+    ...allChildComponentImports,
+    CampaignDetailsRoutingModule,
+    CampaignInfoComponent,
+    CurrencyPipe,
+    FontAwesomeModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    OptimisedImagePipe,
+    TimeLeftPipe,
+  ],
+  declarations: [CampaignDetailsComponent],
+  providers: [DatePipe],
 })
 export class CampaignDetailsModule {}

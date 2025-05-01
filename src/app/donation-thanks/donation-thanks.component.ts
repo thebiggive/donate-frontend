@@ -1,31 +1,30 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {MatDialog} from '@angular/material/dialog';
-import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
-import {MatomoTracker} from 'ngx-matomo-client';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { MatomoTracker } from 'ngx-matomo-client';
 
-import {Campaign} from '../campaign.model';
-import {CampaignService} from '../campaign.service';
-import {Credentials} from '../credentials.model';
-import {Donation, isLargeDonation, OVERSEAS} from '../donation.model';
-import {DonationThanksSetPasswordDialogComponent} from './donation-thanks-set-password-dialog.component';
-import {DonationService} from '../donation.service';
-import {environment} from '../../environments/environment';
-import {minPasswordLength} from '../../environments/common';
-import {IdentityService} from '../identity.service';
-import {PageMetaService} from '../page-meta.service';
-import {Person} from '../person.model';
-import {myAccountPath} from '../app-routing';
-import {flags} from "../featureFlags";
-import {WidgetInstance} from "friendly-challenge";
-import {GIFT_AID_FACTOR} from '../Money';
+import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
+import { Credentials } from '../credentials.model';
+import { Donation, isLargeDonation } from '../donation.model';
+import { DonationService } from '../donation.service';
+import { environment } from '../../environments/environment';
+import { minPasswordLength } from '../../environments/common';
+import { IdentityService } from '../identity.service';
+import { PageMetaService } from '../page-meta.service';
+import { Person } from '../person.model';
+import { myAccountPath } from '../app-routing';
+import { flags } from '../featureFlags';
+import { WidgetInstance } from 'friendly-challenge';
+import { GIFT_AID_FACTOR } from '../Money';
 
 @Component({
-    selector: 'app-donation-thanks',
-    templateUrl: './donation-thanks.component.html',
-    styleUrl: './donation-thanks.component.scss',
-    standalone: false
+  selector: 'app-donation-thanks',
+  templateUrl: './donation-thanks.component.html',
+  styleUrl: './donation-thanks.component.scss',
+  standalone: false,
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId!: string;
@@ -82,7 +81,7 @@ export class DonationThanksComponent implements OnInit {
   }
 
   private loadPerson = () => {
-    this.identityService.getPerson({refresh: true}).subscribe((person: Person | null) => {
+    this.identityService.getPerson({ refresh: true }).subscribe((person: Person | null) => {
       this.loggedIn = !!person && !!person.has_password;
 
       if (person) {
@@ -92,20 +91,6 @@ export class DonationThanksComponent implements OnInit {
       this.isDataLoaded = true;
     });
   };
-
-  protected get showRegistrationPrompt(): boolean
-  {
-    if (! this.flags.offerNewAccountAfterDonation) {
-      return false;
-    }
-
-    return !this.registrationComplete &&  // if they already registered they can't register again.
-      !this.loggedIn && // if they registered and logged in they can't register again
-      !!this.person // if we don't know who they are any more they can't register.
-                    // This is likely because they already registered but selected "don't log in",
-                    // then refreshed the page.
-  }
-
 
   /**
    * Must be public in order for re-tries to invoke it in an anonymous context.
@@ -123,7 +108,7 @@ export class DonationThanksComponent implements OnInit {
     }
 
     this.donationService.get(donationLocalCopy).subscribe(
-      donation => this.setDonation(donation),
+      (donation) => this.setDonation(donation),
       // Get error may occur e.g. after a DB reset; unlikely recoverable within the
       // page view so treat it like a timeout. Error message encourages donors to
       // refresh to try loading again when any server problem's resolved.
@@ -141,8 +126,7 @@ export class DonationThanksComponent implements OnInit {
    * Returns undefined in case the person is not yet loaded from the backend so we don't know
    * what their balance is. Compare exactly to false to see if they have a zero balance.
    */
-  protected get hasDonationFunds()
-  {
+  protected get hasDonationFunds() {
     const cashBalance = this.person?.cash_balance;
 
     if (cashBalance === undefined) {
@@ -158,41 +142,16 @@ export class DonationThanksComponent implements OnInit {
     return gbpCashBalance > 0;
   }
 
-  protected get showNoFundsRemainingMessage(): boolean
-  {
-    return this.donation?.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
+  protected get showNoFundsRemainingMessage(): boolean {
+    return this.donation?.pspMethodType === 'customer_balance' && this.hasDonationFunds === false;
   }
 
-  protected get cashBalanceInPounds(): number
-  {
-    return  (this.person?.cash_balance?.gbp || 0) / 100;
-  }
-
-  async openSetPasswordDialog() {
-    const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
-      data: { person: this.person },
-    });
-    passwordSetDialog.afterClosed().subscribe((data: {password?: string, stayLoggedIn?: boolean}) => {
-      if (data.password) {
-        this.setPassword(data.password, data.stayLoggedIn || false);
-      }
-    });
-
-    if (! this.friendlyCaptchaWidget) {
-      this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
-        doneCallback: (solution) => {
-          this.friendlyCaptchaSolution = solution;
-        },
-        errorCallback: () => {
-        },
-      });
-
-      await this.friendlyCaptchaWidget.start()
-    }
+  protected get cashBalanceInPounds(): number {
+    return (this.person?.cash_balance?.gbp || 0) / 100;
   }
 
   login() {
-    if (! this.friendlyCaptchaSolution) {
+    if (!this.friendlyCaptchaSolution) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then
       // we auto-logged-in with the password the donor just chose.
@@ -206,7 +165,7 @@ export class DonationThanksComponent implements OnInit {
     };
 
     this.identityService.login(credentials).subscribe({
-      next: _response => {
+      next: (_response) => {
         // It's still the same person, just an upgraded / "complete" token. So for now just recycle the ID. We'll probably improve
         // `/auth` to return the ID separately soon, so we can do a normal login form that's able to call this without
         // having to decode the JWT (though maybe that's a good thing for the frontend to be able to do anyway?).
@@ -221,51 +180,6 @@ export class DonationThanksComponent implements OnInit {
     });
   }
 
-  private setPassword(password: string, stayLoggedIn: boolean) {
-    if (! flags.offerNewAccountAfterDonation) {
-      throw new Error("Donor not expected to set password this way now.")
-    }
-
-    if (!this.person) {
-      this.matomoTracker.trackEvent('identity_error', 'person_password_set_missing_data', 'No person in component');
-      this.registerError = 'Cannot set password without a person';
-      return;
-    }
-
-    this.person.raw_password = password;
-    this.identityService.update(this.person).subscribe({
-      next: () => { // Success. Must subscribe for call to fire.
-        this.registerError = undefined;
-        this.registrationComplete = true;
-        this.matomoTracker.trackEvent('identity', 'person_password_set', 'Account password creation complete');
-
-        // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
-        if (stayLoggedIn) {
-          this.login()
-        } else {
-          // Otherwise we should remove even the temporary ID token.
-          this.identityService.logout();
-        }
-      },
-      error: async (error: HttpErrorResponse) => {
-        const htmlErrorDescription = error.error?.error?.htmlDescription as string|undefined;
-        if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
-          this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
-        } else if (htmlErrorDescription) {
-          // we bypass security because we trust the Identity server.
-          this.registerErrorDescriptionHtml = this.sanitizer.bypassSecurityTrustHtml(htmlErrorDescription)
-        } else {
-          this.registerErrorDescription = error.error?.error?.description
-        }
-
-        this.registerError = error.message;
-        this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
-        this.friendlyCaptchaWidget?.reset();
-        await this.friendlyCaptchaWidget?.start();
-      },
-    });
-  }
-
   private setDonation(donation: Donation) {
     if (donation === undefined || !donation.firstName || !donation.lastName || !donation.emailAddress) {
       this.matomoTracker.trackEvent('donate', 'thank_you_lookup_failed', `Donation ID ${this.donationId}`);
@@ -274,13 +188,9 @@ export class DonationThanksComponent implements OnInit {
     }
 
     this.donation = donation;
-    this.campaignService.getOneById(donation.projectId).subscribe(campaign => {
+    this.campaignService.getOneById(donation.projectId).subscribe((campaign) => {
       this.campaign = campaign;
-      this.pageMeta.setCommon(
-        `Thank you for donating to the "${campaign.title}" campaign`,
-        ``,
-        campaign.bannerUri,
-      );
+      this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.bannerUri);
       this.setSocialShares(campaign);
     });
 
@@ -293,7 +203,7 @@ export class DonationThanksComponent implements OnInit {
         'donate',
         'thank_you_fully_loaded',
         `Donation to campaign ${donation.projectId}`,
-        donation.donationAmount
+        donation.donationAmount,
       );
 
       this.totalPaid = donation.totalPaid;
@@ -323,23 +233,28 @@ export class DonationThanksComponent implements OnInit {
       setTimeout(
         () => this.checkDonation(),
         // Exponential back-off from e.g. 2s to 32s.
-        this.calculateExponentialBackoffMs(this.tries)
+        this.calculateExponentialBackoffMs(this.tries),
       );
       return;
     }
 
-    this.matomoTracker.trackEvent('donate', 'thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
+    this.matomoTracker.trackEvent(
+      'donate',
+      'thank_you_timed_out_pre_complete',
+      `Donation to campaign ${donation.projectId}`,
+    );
     this.timedOut = true;
   }
 
   calculateExponentialBackoffMs(tries: number) {
-    return (this.retryBaseIntervalSeconds * 1000) * 2 ** tries;
+    return this.retryBaseIntervalSeconds * 1000 * 2 ** tries;
   }
-
 
   private setSocialShares(campaign: Campaign) {
     const prefix = environment.donateUriPrefix;
     this.encodedShareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
-    this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
+    this.encodedPrefilledText = encodeURIComponent(
+      'I just donated to this campaign, please support their good cause by making a donation.',
+    );
   }
 }

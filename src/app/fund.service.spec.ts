@@ -4,13 +4,15 @@ import { TestBed } from '@angular/core/testing';
 import { environment } from '../environments/environment';
 import { Fund } from './fund.model';
 import { FundService } from './fund.service';
-import {provideHttpClient, withFetch} from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 describe('FundService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [],
-    providers: [FundService, provideHttpClient(withFetch()), provideHttpClientTesting()]
-}));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [FundService, provideHttpClient(withFetch()), provideHttpClientTesting()],
+    }),
+  );
 
   it('should retrieve Champion Funding details from API', () => {
     const service: FundService = TestBed.inject(FundService);
@@ -26,13 +28,18 @@ describe('FundService', () => {
       logoUri: 'https://example.com/an-image.png',
     };
 
-    service.getOneBySlug('champion-fund-test-slug').subscribe(fund => {
-      expect(fund).toEqual(dummyFund);
-    }, () => {
-      expect(false).toBe(true); // Always fail if observable errors
-    });
+    service.getOneBySlug('champion-fund-test-slug').subscribe(
+      (fund) => {
+        expect(fund).toEqual(dummyFund);
+      },
+      () => {
+        expect(false).toBe(true); // Always fail if observable errors
+      },
+    );
 
-    const request = httpMock.expectOne(`${environment.apiUriPrefix}/funds/services/apexrest/v1.0/funds/slug/champion-fund-test-slug`);
+    const request = httpMock.expectOne(
+      `${environment.apiUriPrefix}/funds/services/apexrest/v1.0/funds/slug/champion-fund-test-slug`,
+    );
     expect(request.request.method).toBe('GET');
     request.flush(dummyFund);
   });

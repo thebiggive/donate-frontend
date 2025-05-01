@@ -1,47 +1,47 @@
-@use '@angular/material' as mat;
-@use '../../abstract';
+@use "@angular/material" as mat;
+@use "../../abstract";
 
 .auth-options {
-    display: flex;
-    justify-content: space-between;
-    max-width: 15rem;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  max-width: 15rem;
+  margin-bottom: 2rem;
 }
 
 .existing-balance-info {
-    @include abstract.make-card(abstract.$box-shadow-hard);
-    padding: 1rem;
-    margin-bottom: 3rem;
+  @include abstract.make-card(abstract.$box-shadow-hard);
+  padding: 1rem;
+  margin-bottom: 3rem;
 }
 
 .mat-stepper-vertical {
-    margin-top: 8px;
+  margin-top: 8px;
 }
 
 button[mat-button] {
-    background-color: mat.m2-get-color-from-palette(abstract.$donate-primary);
-    color: white;
-    box-shadow: abstract.$box-shadow-hard;
+  background-color: mat.m2-get-color-from-palette(abstract.$donate-primary);
+  color: white;
+  box-shadow: abstract.$box-shadow-hard;
 }
 
 .tip-text {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #giftAidOptIn {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .error {
-    color: mat.m2-get-color-from-palette(abstract.$donate-warn);
-    font-size: 1rem; // slightly smaller text
-    margin: 0;
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
+  font-size: 1rem; // slightly smaller text
+  margin: 0;
 }
 
 #addressWrapper {
-    display: inline-grid;
-    width: 50%;
-    padding: 0 30px 60px 30px;
+  display: inline-grid;
+  width: 50%;
+  padding: 0 30px 60px 30px;
 }
 
 button#my-account-link {

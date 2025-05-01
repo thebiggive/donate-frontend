@@ -1,17 +1,11 @@
 <h2>Verify your email</h2>
 
-<p>Enter the 6-digit code we sent to {{emailAddress}}</p>
+<p>Enter the 6-digit code we sent to {{ emailAddress }}</p>
 
-<form
-  [formGroup]="emailConfirmationForm"
-  (keydown.enter)="onFormSubmit()"
->
+<form [formGroup]="emailConfirmationForm" (keydown.enter)="onFormSubmit()">
   <biggive-text-input spaceBelow="4">
     <label slot="label" for="code">Verification code</label>
-    <input
-      slot="input"
-      matInput type="email" id="code" formControlName="code" autocapitalize="off"
-      [maxlength]="6">
+    <input slot="input" matInput type="email" id="code" formControlName="code" autocapitalize="off" [maxlength]="6" />
   </biggive-text-input>
 
   <div aria-live="polite">
@@ -38,5 +32,4 @@
       />
     }
   </div>
-
 </form>

@@ -11,9 +11,9 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { ResetPasswordComponent } from './reset-password.component';
-import {MatomoModule} from "ngx-matomo-client";
-import {provideHttpClient, withFetch} from '@angular/common/http';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { MatomoModule } from 'ngx-matomo-client';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
@@ -22,8 +22,7 @@ describe('ResetPasswordComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [
-      ],
+      declarations: [],
       imports: [
         FormsModule,
         MatButtonModule,
@@ -43,18 +42,15 @@ describe('ResetPasswordComponent', () => {
           },
         ]),
       ],
-      providers: [
-        InMemoryStorageService,
-        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ],
+      providers: [InMemoryStorageService, { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService }],
     });
   });
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [],
-    providers: [provideHttpClient(withFetch()), provideHttpClientTesting()]
+      imports: [],
+      providers: [provideHttpClient(withFetch()), provideHttpClientTesting()],
     });
 
     fixture = TestBed.createComponent(ResetPasswordComponent);

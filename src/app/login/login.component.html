@@ -6,8 +6,8 @@
       <biggive-page-section>
         <div class="heading-wrapper">
           <biggive-heading
-            space-above=0
-            space-below=6
+            space-above="0"
+            space-below="6"
             html-element="h1"
             size="1"
             align="center"
@@ -15,7 +15,9 @@
           ></biggive-heading>
         </div>
         @if (isNewRegistration) {
-          <p id="registrationCompleteText">Welcome to Big Give! You are now registered as a donor. Please log in to continue.</p>
+          <p id="registrationCompleteText">
+            Welcome to Big Give! You are now registered as a donor. Please log in to continue.
+          </p>
         }
         @if (forgotPassword) {
           <div>
@@ -26,8 +28,13 @@
                   <biggive-text-input spaceBelow="4">
                     <label slot="label" for="loginEmailAddress">Email address *</label>
                     <input
-                      slot="input" matInput type="email" id="ResetPasswordEmailAddress" formControlName="emailAddress"
-                      autocapitalize="off">
+                      slot="input"
+                      matInput
+                      type="email"
+                      id="ResetPasswordEmailAddress"
+                      formControlName="emailAddress"
+                      autocapitalize="off"
+                    />
                   </biggive-text-input>
                 </form>
                 <div aria-live="polite">
@@ -39,10 +46,14 @@
                 </div>
                 <div class="actions">
                   <div>
+                    <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+                    <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
                     <a (click)="this.forgotPassword = false">Return to Login page</a>
+                    <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+                    <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
                   </div>
                   <div id="reset-password-button">
-                    @if (! userAskedForResetLink) {
+                    @if (!userAskedForResetLink) {
                       <biggive-button
                         space-above="5"
                         colour-scheme="primary"
@@ -51,7 +62,7 @@
                         size="medium"
                         rounded="false"
                         (click)="resetPasswordClicked()"
-                        />
+                      />
                     }
                   </div>
                   <div>
@@ -64,40 +75,44 @@
               @if (userAskedForResetLink) {
                 <div>
                   @if (resetPasswordSuccess === undefined) {
-                    <mat-spinner [diameter]="40"
-                    aria-label="Loading your details"></mat-spinner>
+                    <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
                   }
                   @if (resetPasswordSuccess) {
                     <p>Please check your email and click on the password reset link received.</p>
                   }
                   @if (resetPasswordSuccess === false) {
-                    <p class="error">Sorry, we encountered a problem. Please <a
-                    href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.</p>
+                    <p class="error">
+                      Sorry, we encountered a problem. Please
+                      <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.
+                    </p>
                   }
                 </div>
               }
             </div>
           </div>
         } @else {
-          @if (redirectPath.startsWith('/regular-giving')) {
-            <p>Please log-in or <a href="{{registerLink}}">register</a> for a Big Give donation account to set up your regular giving agreement.</p>
+          @if (redirectPath.startsWith("/regular-giving")) {
+            <p>
+              Please log-in or <a href="{{ registerLink }}">register</a> for a Big Give donation account to set up your
+              regular giving agreement.
+            </p>
             <p>You will be able to log-in any time to see your donations or cancel the agreement.</p>
           }
-          <form
-            [formGroup]="loginForm"
-            (keydown.enter)="login()"
-            >
+          <form [formGroup]="loginForm" (keydown.enter)="login()">
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginEmailAddress">Email address *</label>
               <input
                 slot="input"
-                matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
+                matInput
+                type="email"
+                id="loginEmailAddress"
+                formControlName="emailAddress"
+                autocapitalize="off"
+              />
             </biggive-text-input>
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
-              <input
-                slot="input"
-                matInput type="password" id="loginPassword" formControlName="password">
+              <input slot="input" matInput type="password" id="loginPassword" formControlName="password" />
             </biggive-text-input>
             <div aria-live="polite">
               @if (loginError) {
@@ -109,7 +124,11 @@
           </form>
           <div class="actions">
             <div>
+              <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+              <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
               <a (click)="this.forgotPassword = true">Forgot Password?</a>
+              <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+              <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
             </div>
             <div id="login-button">
               <div aria-live="polite">
@@ -117,7 +136,7 @@
                   <mat-spinner color="primary" diameter="30" aria-label="Logging in"></mat-spinner>
                 }
               </div>
-              @if (! loggingIn) {
+              @if (!loggingIn) {
                 <biggive-button
                   space-above="5"
                   spaceBelow="0"
@@ -128,7 +147,7 @@
                   size="medium"
                   rounded="false"
                   (click)="login()"
-                  />
+                />
               }
             </div>
 
@@ -143,8 +162,8 @@
           data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
           #frccaptcha
         ></div>
-        <hr style="margin: 20px auto;">
-        <a href="{{registerLink}}">Create new donation account</a>
+        <hr style="margin: 20px auto" />
+        <a href="{{ registerLink }}">Create new donation account</a>
       </biggive-page-section>
     </div>
   </main>

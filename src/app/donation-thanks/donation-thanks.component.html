@@ -4,34 +4,37 @@
   }
 
   @if (!complete && !noAccess && !timedOut) {
-    <mat-spinner class="complete-spinner" color="primary"
-    diameter="30" aria-label="Loading donation details"></mat-spinner>
+    <mat-spinner
+      class="complete-spinner"
+      color="primary"
+      diameter="30"
+      aria-label="Loading donation details"
+    ></mat-spinner>
   }
 
   @if (isDataLoaded) {
     <div>
       @if (noAccess) {
         <p class="error">
-          Sorry, you don't have access to this page. To keep your information secure we only allow viewing this
-          page temporarily after making a donation. To see donation details please check your email for a donation
-          receipt.</p>
-        <p>If you have set a donor account password you may also
-          view your <a href="/my-account/donations">donation history</a>.
+          Sorry, you don't have access to this page. To keep your information secure we only allow viewing this page
+          temporarily after making a donation. To see donation details please check your email for a donation receipt.
+        </p>
+        <p>
+          If you have set a donor account password you may also view your
+          <a href="/my-account/donations">donation history</a>.
         </p>
       }
       @if (timedOut) {
         <p class="error" aria-live="assertive">
           Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
-          busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
-          your donation is processed.
+          busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes
+          when your donation is processed.
         </p>
       }
       <div aria-live="polite">
         @if (complete) {
           <div>
-            <div class="screenreader-only">
-              Thank you! Your generous donation has been made.
-            </div>
+            <div class="screenreader-only">Thank you! Your generous donation has been made.</div>
           </div>
         }
       </div>
@@ -40,51 +43,26 @@
           <div class="header-box">
             <h2>Thank you!</h2>
             <p class="thank-you-text">Your generous donation has been made.</p>
-            @if (showRegistrationPrompt) {
-              <div>
-                <p>For a smoother giving experience, create a Big Give account. Your information will be saved
-                  securely, making future donations quicker and easier.
-                </p>
-                @if (showRegistrationPrompt) {
-                  <div class="cta">
-                    <div class="button-wrapper">
-                      <biggive-button
-                        space-below="0"
-                        colour-scheme="white"
-                        is-past-campaign="false"
-                        is-future-campaign="false"
-                        label="{{'Create my account'}}"
-                        open-in-new-tab="false"
-                        full-width="true"
-                        size="medium"
-                        rounded="false"
-                        centered="false"
-                        button-id="save-details-button"
-                        (click)="openSetPasswordDialog()">
-                      </biggive-button>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
             <div aria-live="polite">
               @if (registrationComplete) {
                 <div>
-                  <p  id="registrationCompleteText">
-                    <strong>You are now registered@if (loggedIn) {
-                      <span> and logged in</span>
-                    }.</strong>
+                  <p id="registrationCompleteText">
+                    <strong
+                      >You are now registered
+                      @if (loggedIn) {
+                        <span> and logged in</span>
+                      }
+                      .</strong
+                    >
                   </p>
-                  <p>
-                    You can now donate faster using your chosen email address and password.
-                  </p>
+                  <p>You can now donate faster using your chosen email address and password.</p>
                 </div>
               }
             </div>
             @if (registrationComplete && loggedIn) {
               <div class="cta">
                 <div class="button-wrapper">
-                  <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'"/>
+                  <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'" />
                 </div>
               </div>
             }
@@ -99,28 +77,31 @@
               <p>
                 Your donation funds balance is
                 <!-- we know this is £0 here but displaying it dynamically just in case we're wrong -->
-                <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong>.
-                Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
+                <strong>{{ cashBalanceInPounds | exactCurrency: "GBP" }}</strong
+                >. Visit <a href="/{{ myAccountPath }}">My Account</a> to top up.
               </p>
             }
             @if (hasDonationFunds) {
               <p>
-                Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong>.
-                Make another donation to use the balance.
+                Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency: "GBP" }}</strong
+                >. Make another donation to use the balance.
               </p>
             }
           </div>
-          <hr aria-hidden="true">
+          <hr aria-hidden="true" />
           <div class="donation-summary">
-            <p><strong>Hi {{ donation.firstName }},</strong></p>
+            <p>
+              <strong>Hi {{ donation.firstName }},</strong>
+            </p>
             <p><strong>Your donation summary</strong></p>
-            <p>Your donation of
-              <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+            <p>
+              Your donation of
+              <strong class="figure">{{ donation.donationAmount | exactCurrency: donation.currencyCode }}</strong>
               is worth
-              <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
+              <strong class="figure">{{ totalValue | exactCurrency: donation.currencyCode }}</strong>
               to {{ donation.charityName }}!
             </p>
-            <br/>
+            <br />
             @if (campaign?.thankYouMessage) {
               <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
             }
@@ -129,20 +110,22 @@
             <biggive-page-section colourScheme="primary" primaryFullBleed="true">
               <div id="thank-you-large-donation-wrapper">
                 <p class="thank-you-large-donation-text">
-                  Thank you for your incredible commitment to supporting this campaign; your donation will make a significant
-                  difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
-                  become one of our match funding Champions. By leveraging your support as match funding, you could help this
-                  charity and many others double the difference of their donations.
+                  Thank you for your incredible commitment to supporting this campaign; your donation will make a
+                  significant difference. As a valued supporter, we're excited to share an exclusive opportunity with
+                  you – the chance to become one of our match funding Champions. By leveraging your support as match
+                  funding, you could help this charity and many others double the difference of their donations.
                 </p>
                 <p class="thank-you-large-donation-text">
-                  <a target="_blank" href="https://biggive.org/funders/">Learn more about joining our Champion community</a>
+                  <a target="_blank" href="https://biggive.org/funders/"
+                    >Learn more about joining our Champion community</a
+                  >
                 </p>
               </div>
             </biggive-page-section>
           }
           <div>
             @if (!donationIsLarge) {
-              <hr aria-hidden="true">
+              <hr aria-hidden="true" />
             }
             @if (donationIsLarge) {
               <div class="large-donation-spacer"></div>
@@ -150,86 +133,89 @@
             <div class="receipt">
               <p><strong>Your Receipt</strong></p>
               <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
-              <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
-              <br>
-                <table>
-                  <tr class="donationAmount">
-                    <td>Your donation</td>
-                    <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
-                  </tr>
-                  @if (donation.matchedAmount > 0) {
-                    <tr>
-                      <td>Matched Amount</td>
-                      <td>{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</td>
-                    </tr>
-                  }
-                  @if (giftAidAmount > 0) {
-                    <tr>
-                      <td>Gift Aid Amount</td>
-                      <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
-                    </tr>
-                  }
-                  @if (donation.tipAmount > 0) {
-                    <tr>
-                      <td>Tip Amount</td>
-                      <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
-                    </tr>
-                  }
+              <p>{{ donation.createdTime | date: "mediumDate" }}, {{ donation.createdTime | date: "shortTime" }}</p>
+              <br />
+              <table>
+                <tr class="donationAmount">
+                  <td>Your donation</td>
+                  <td>{{ donation.donationAmount | exactCurrency: donation.currencyCode }}</td>
+                </tr>
+                @if (donation.matchedAmount > 0) {
                   <tr>
-                    <td colspan="2"><hr aria-hidden="true"></td>
+                    <td>Matched Amount</td>
+                    <td>{{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
-                  <tr class="receives">
-                    <td>Charity Receives</td>
-                    <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
+                }
+                @if (giftAidAmount > 0) {
+                  <tr>
+                    <td>Gift Aid Amount</td>
+                    <td>{{ giftAidAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
-                  <tr class="total">
-                    <td><strong>Total amount you have been charged</strong></td>
-                    <td><strong>{{ totalPaid | exactCurrency:donation.currencyCode }}</strong></td>
+                }
+                @if (donation.tipAmount > 0) {
+                  <tr>
+                    <td>Tip Amount</td>
+                    <td>{{ donation.tipAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
-                </table>
-              </div>
-              <hr class="shorter" aria-hidden="true">
+                }
+                <tr>
+                  <td colspan="2"><hr aria-hidden="true" /></td>
+                </tr>
+                <tr class="receives">
+                  <td>Charity Receives</td>
+                  <td>{{ totalValue | exactCurrency: donation.currencyCode }}</td>
+                </tr>
+                <tr class="total">
+                  <td><strong>Total amount you have been charged</strong></td>
+                  <td>
+                    <strong>{{ totalPaid | exactCurrency: donation.currencyCode }}</strong>
+                  </td>
+                </tr>
+              </table>
             </div>
-            <div class="socials">
-              <p>Boost your impact by sharing on social media</p>
-              <div class="social-icons-wrapper">
-                <span class="separator"></span>
-                <biggive-social-icon
-                  service="Facebook"
-                  label-prefix="Share"
-                  url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
-                  icon-colour="black"
-                  wide="true"
-                ></biggive-social-icon>
-                <span class="separator"></span>
-                <biggive-social-icon
-                  service="Twitter"
-                  label-prefix="Share"
-                  url="https://x.com/intent/post?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
-                  background-colour="tertiary"
-                  icon-colour="black"
-                  wide="true"
-                ></biggive-social-icon>
-                <span class="separator"></span>
-                <biggive-social-icon
-                  service="LinkedIn"
-                  label-prefix="Share"
-                  url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
-                  background-colour="tertiary"
-                  icon-colour="black"
-                  wide="true"
-                ></biggive-social-icon>
-              </div>
-              <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
-            </div>
+            <hr class="shorter" aria-hidden="true" />
           </div>
-        }
+          <div class="socials">
+            <p>Boost your impact by sharing on social media</p>
+            <div class="social-icons-wrapper">
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="Facebook"
+                label-prefix="Share"
+                url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}"
+                background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="Twitter"
+                label-prefix="Share"
+                url="https://x.com/intent/post?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
+                background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="LinkedIn"
+                label-prefix="Share"
+                url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
+                background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+            </div>
+            <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
+          </div>
+        </div>
+      }
       <div
         class="frc-captcha"
         [attr.data-sitekey]="friendlyCaptchaSiteKey"
         data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
         #frccaptcha
       ></div>
-      </div>
-    }
-  </main>
+    </div>
+  }
+</main>

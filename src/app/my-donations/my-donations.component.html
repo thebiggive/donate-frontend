@@ -3,93 +3,93 @@
   <div>
     <biggive-page-section>
       <div class="heading-wrapper">
-        <biggive-heading
-          colour="tertiary"
-          size="1"
-          align="center"
-          text="Your Donation History"
-        ></biggive-heading>
+        <biggive-heading colour="tertiary" size="1" align="center" text="Your Donation History"></biggive-heading>
       </div>
     </biggive-page-section>
-     <biggive-page-section>
-        @if (donations.length > 0) {
-          @if (atLeastOneLargeRecentDonation) {
-            <p>
-              Thank you for your generous support. Every donation you have made has helped to make an extraordinary
-              difference. As a valued supporter, we would like to share an opportunity with you – the chance to
-              become one of our match funding Champions. By leveraging your support as match funding, you could continue
-              helping charities to double the impact of their donations.
-            </p>
-            <p>
-              <a href="https://biggive.org/funders/">Learn more about joining our Champion community</a> and
-              <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on upcoming
-              campaigns.
-            </p>
-          } @else {
-            <p>
-              Thank you for your generous support. Every donation you have made has helped to make an extraordinary
-              difference. <a href="https://mailchi.mp/biggive/news">Join our mailing list</a> to stay up to date on
-              upcoming campaigns.
-            </p>
-          }
-
+    <biggive-page-section>
+      @if (donations.length > 0) {
+        @if (atLeastOneLargeRecentDonation) {
           <p>
-            For detailed donation receipts, please check the emails sent from hello&#64;biggive.org. We are unable to
-            display any donations you may have made without logging in.
+            Thank you for your generous support. Every donation you have made has helped to make an extraordinary
+            difference. As a valued supporter, we would like to share an opportunity with you – the chance to become one
+            of our match funding Champions. By leveraging your support as match funding, you could continue helping
+            charities to double the impact of their donations.
           </p>
-
-          <biggive-grid columnCount="2">
-            @for (donation of donations; track donation.transactionId) {
-              <biggive-container-card
-                card-colour="white"
-                background-colour="primary"
-              >
-                @if (donation.mandate) {
-                  <div class="badge">Regular Giving</div>
-                }
-                <div class="donation">
-                  <div>
-                    <p>{{this.displayMethodType(donation)}}</p>
-                    <h3>{{ donation.charityName }}</h3>
-                  </div>
-                    <ul>
-                      <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
-                      @if(shouldShowTipForDonation(donation)) {
-                        <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
-                      }
-                      <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
-                      @if (donation.matchedAmount > 0) {
-                        <li>Matched Amount: {{donation.matchedAmount | exactCurrency:donation.currencyCode }}</li>
-                      }
-                      @if (donation.giftAidAmount > 0) {
-                        <li>Gift Aid Amount: {{donation.giftAidAmount | exactCurrency:donation.currencyCode }}</li>
-                      }
-                      <li>Charity receives: {{donation.totalValue | exactCurrency:donation.currencyCode }}</li>
-                    </ul>
-                    <ul>
-                      <li>Date: {{ donation.collectedTime | date: 'mediumDate' }}</li>
-                      <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
-                    </ul>
-                </div>
-                @if (donation.mandate) {
-                  <div class="mandate">
-                    <a href="{{'/' + myRegularGivingPath + '/' + donation.mandate.uuid}}">See Mandate</a>
-                  </div>
-                }
-              </biggive-container-card>
-            }
-          </biggive-grid>
+          <p>
+            <a href="https://biggive.org/funders/">Learn more about joining our Champion community</a> and
+            <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on upcoming
+            campaigns.
+          </p>
         } @else {
           <p>
-            No donations found for this account. <a href="/explore">Make your first donation</a> to see it here.
+            Thank you for your generous support. Every donation you have made has helped to make an extraordinary
+            difference. <a href="https://mailchi.mp/biggive/news">Join our mailing list</a> to stay up to date on
+            upcoming campaigns.
           </p>
-
-          <p><em>If you can’t find your previous donations, please get in touch with hello&#64;biggive.org and our team
-            is on hand to help. Only donations that you made as a logged-in user will be displayed here.</em></p>
-
-            <p>You can also <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on
-              upcoming campaigns.</p>
         }
-          </biggive-page-section>
+
+        <p>
+          For detailed donation receipts, please check the emails sent from hello&#64;biggive.org. We are unable to
+          display any donations you may have made without logging in.
+        </p>
+
+        <biggive-grid columnCount="2">
+          @for (donation of donations; track donation.transactionId) {
+            <biggive-container-card card-colour="white" background-colour="primary">
+              @if (donation.mandate) {
+                <div class="badge">Regular Giving</div>
+              }
+              <div class="donation">
+                <div>
+                  <p>{{ this.displayMethodType(donation) }}</p>
+                  <h3>{{ donation.charityName }}</h3>
+                </div>
+                <ul>
+                  <li>Amount: {{ donation.donationAmount | exactCurrency: donation.currencyCode }}</li>
+                  @if (shouldShowTipForDonation(donation)) {
+                    <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency: donation.currencyCode }}</li>
+                  }
+                  <li>
+                    <strong>Total paid: {{ donation.totalPaid | exactCurrency: donation.currencyCode }}</strong>
+                  </li>
+                  @if (donation.matchedAmount > 0) {
+                    <li>Matched Amount: {{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</li>
+                  }
+                  @if (donation.giftAidAmount > 0) {
+                    <li>Gift Aid Amount: {{ donation.giftAidAmount | exactCurrency: donation.currencyCode }}</li>
+                  }
+                  <li>Charity receives: {{ donation.totalValue | exactCurrency: donation.currencyCode }}</li>
+                </ul>
+                <ul>
+                  <li>Date: {{ donation.collectedTime | date: "mediumDate" }}</li>
+                  <li>
+                    Payment Reference: <span class="reference">{{ donation.transactionId }}</span>
+                  </li>
+                </ul>
+              </div>
+              @if (donation.mandate) {
+                <div class="mandate">
+                  <a href="{{ '/' + myRegularGivingPath + '/' + donation.mandate.uuid }}">See Mandate</a>
+                </div>
+              }
+            </biggive-container-card>
+          }
+        </biggive-grid>
+      } @else {
+        <p>No donations found for this account. <a href="/explore">Make your first donation</a> to see it here.</p>
+
+        <p>
+          <em
+            >If you can’t find your previous donations, please get in touch with hello&#64;biggive.org and our team is
+            on hand to help. Only donations that you made as a logged-in user will be displayed here.</em
+          >
+        </p>
+
+        <p>
+          You can also <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on
+          upcoming campaigns.
+        </p>
+      }
+    </biggive-page-section>
   </div>
 </main>

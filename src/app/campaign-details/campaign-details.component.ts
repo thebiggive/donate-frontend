@@ -9,19 +9,16 @@ import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
-import {Toast} from "../toast.service";
+import { Toast } from '../toast.service';
 
 @Component({
-    // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
-    encapsulation: ViewEncapsulation.None,
-    selector: 'app-campaign-details',
-    templateUrl: './campaign-details.component.html',
-    styleUrl: './campaign-details.component.scss',
-    providers: [
-        TimeLeftPipe,
-        DatePipe
-    ],
-    standalone: false
+  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+  encapsulation: ViewEncapsulation.None,
+  selector: 'app-campaign-details',
+  templateUrl: './campaign-details.component.html',
+  styleUrl: './campaign-details.component.scss',
+  providers: [TimeLeftPipe, DatePipe],
+  standalone: false,
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign!: Campaign;
@@ -32,7 +29,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
-  private timer: any; // State update setTimeout reference, for client side when donations open soon
+  private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -44,18 +41,20 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private location: Location,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
     private toast: Toast,
     public timeLeftPipe: TimeLeftPipe,
   ) {
-    route.queryParams.forEach((params: Params) => {
-      if (params.fromFund) {
-        this.fromFund = true;
-      }
-    }).catch(console.error);
+    route.queryParams
+      .forEach((params: Params) => {
+        if (params.fromFund) {
+          this.fromFund = true;
+        }
+      })
+      .catch(console.error);
   }
 
   ngOnDestroy() {
@@ -86,7 +85,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       if (msToLaunch > 0 && msToLaunch < 86400000) {
         this.timer = setTimeout(() => {
           this.donateEnabled = true;
-         }, msToLaunch);
+        }, msToLaunch);
       }
     }
 
@@ -98,17 +97,17 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
 
-    this.pageMeta.setCommon(
-      campaign.title,
-      summaryStart,
-      campaign.bannerUri,
-    );
+    this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {
-      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube-nocookie.com/embed/${campaign.video.key}`);
+      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.youtube-nocookie.com/embed/${campaign.video.key}`,
+      );
     } else if (campaign.video && campaign.video.provider === 'vimeo') {
-      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}?dnt=1`); // dnt = do not track
+      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://player.vimeo.com/video/${campaign.video.key}?dnt=1`,
+      ); // dnt = do not track
     }
 
     if (campaign.hidden) {

@@ -1,5 +1,5 @@
-import {Injectable} from "@angular/core";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * Displays messages in "Toast" style
@@ -8,19 +8,13 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   providedIn: 'root',
 })
 export class Toast {
-  constructor(
-    private snackBar: MatSnackBar,
-  ){}
+  constructor(private snackBar: MatSnackBar) {}
 
   public showSuccess(message: string) {
-    this.snackBar.open(
-      message,
-      undefined,
-      {
-        duration: this.getDuration(message),
-        panelClass: 'success-bar',
-      }
-    );
+    this.snackBar.open(message, undefined, {
+      duration: this.getDuration(message),
+      panelClass: 'success-bar',
+    });
   }
 
   /**
@@ -28,14 +22,10 @@ export class Toast {
    * will display for a longer time.
    */
   public showError(message: string) {
-    this.snackBar.open(
-      message,
-      undefined,
-      {
-        duration: this.getDuration(message),
-        panelClass: 'error-bar',
-      }
-    );
+    this.snackBar.open(message, undefined, {
+      duration: this.getDuration(message),
+      panelClass: 'error-bar',
+    });
   }
 
   /**

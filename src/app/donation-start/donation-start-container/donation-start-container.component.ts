@@ -1,29 +1,29 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {Campaign} from "../../campaign.model";
-import {CampaignService} from '../../campaign.service';
+import { Campaign } from '../../campaign.model';
+import { CampaignService } from '../../campaign.service';
 import { Donation } from '../../donation.model';
-import {Person} from "../../person.model";
-import {IdentityService} from "../../identity.service";
-import {environment} from "../../../environments/environment";
-import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
-import {ImageService} from "../../image.service";
+import { Person } from '../../person.model';
+import { IdentityService } from '../../identity.service';
+import { environment } from '../../../environments/environment';
+import { DonationStartFormComponent } from '../donation-start-form/donation-start-form.component';
+import { ImageService } from '../../image.service';
 
 @Component({
-    templateUrl: './donation-start-container.component.html',
-    styleUrl: './donation-start-container.component.scss',
-    standalone: false
+  templateUrl: './donation-start-container.component.html',
+  styleUrl: './donation-start-container.component.scss',
+  standalone: false,
 })
-export class DonationStartContainerComponent implements AfterViewInit, OnInit{
+export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   campaign!: Campaign;
   campaignOpenOnLoad!: boolean;
   donation: Donation | undefined = undefined;
   personId?: string;
   loggedInEmailAddress?: string;
 
-  @ViewChild('donation_start_form') donationStartForm!: DonationStartFormComponent
-  public reservationExpiryDate: Date| undefined = undefined;
+  @ViewChild('donation_start_form') donationStartForm!: DonationStartFormComponent;
+  public reservationExpiryDate: Date | undefined = undefined;
   public donor: Person | undefined;
   public bannerUri!: string | null;
 
@@ -32,8 +32,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -52,7 +51,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     }
 
     this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
-    this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
+    this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe((uri) => (this.bannerUri = uri));
   }
 
   ngAfterViewInit() {
@@ -70,7 +69,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
-    const date = new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+    const date = new Date(environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime());
     this.reservationExpiryDate = date;
   }
 
@@ -90,7 +89,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
         this.loggedInEmailAddress = person.email_address;
         // `await` to ensure that credit balance is set before checking for resumable donations.
-        await this.donationStartForm.loadPerson(person, id, jwt);
+        await this.donationStartForm.loadPerson(person, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
 
         if (this.identityService.isTokenForFinalisedUser(jwt)) {
@@ -98,7 +97,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
         }
       },
       error: (err) => {
-        console.log('Could not load Person info: ', err)
+        console.log('Could not load Person info: ', err);
         this.donationStartForm.showCaptcha();
       },
     });
@@ -111,5 +110,5 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   setDonation = (donation?: Donation) => {
     this.donation = donation;
     this.updateReservationExpiryTime();
-  }
+  };
 }

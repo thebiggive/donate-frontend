@@ -1,57 +1,70 @@
-import {brandColour} from "@biggive/components/dist/types/globals/brand-colour"
-import {environment} from "../../environments/environment";
+import { brandColour } from '@biggive/components/dist/types/globals/brand-colour';
+import { environment } from '../../environments/environment';
 
 export type HighlightCard = {
-  campaignFamily?: campaignFamilyName | null, // SF may return null; some Donate code leaves it undefined for now
+  campaignFamily?: campaignFamilyName | null; // SF may return null; some Donate code leaves it undefined for now
   background: {
     // colour appears 'behind' the image, only seen if image doesn't load or during loading.
     color?: brandColour;
-    image: URL
-  },
+    image: URL;
+  };
   // There is ambiguity in the components library about whether brand-6 is grey or turquoise. Best to avoid using brand-6 and
   // use brand-mhf-turquoise instead.
   // See https://github.com/thebiggive/donate-frontend/pull/1076#issuecomment-1523472452
   // For other colour details see https://github.com/thebiggive/components/blob/develop/src/globals/brand-colour.ts
-  icon?: {color: brandColour},
-  headerText: string,
-  bodyText: string,
+  icon?: { color: brandColour };
+  headerText: string;
+  bodyText: string;
   button: {
-      text: string,
-      href: URL,
-  },
-}
-
-export type campaignFamilyName =
-  'christmasChallenge'
-  |'summerGive'
-  |'greenMatchFund'
-  |'womenGirls'
-  |'mentalHealthFund'
-  |'artsforImpact'
-  |'smallCharity'
-  |'emergencyMatch';
-
-export type SfApiHighlightCard = Omit<HighlightCard, 'background'|'icon'|'button'> & {
-  cardStyle: 'DONATE_NOW' | 'SEE_RESULTS' | 'APPLY_NOW' | 'SAVE_THE_DATE' | 'JOIN_MAILING_LIST' | 'REGISTER_INTEREST' | 'EXPLORE',
-  button: {
-    text: string,
-    href: string
-  }
+    text: string;
+    href: URL;
+  };
 };
 
-const replaceURLOrigin = (experienceUriPrefix: string, blogUriPrefix: string, donateUriPrefix: string, urlFromApi: string): URL => {
+export type campaignFamilyName =
+  | 'christmasChallenge'
+  | 'summerGive'
+  | 'greenMatchFund'
+  | 'womenGirls'
+  | 'mentalHealthFund'
+  | 'artsforImpact'
+  | 'smallCharity'
+  | 'emergencyMatch';
 
+export type SfApiHighlightCard = Omit<HighlightCard, 'background' | 'icon' | 'button'> & {
+  cardStyle:
+    | 'DONATE_NOW'
+    | 'SEE_RESULTS'
+    | 'APPLY_NOW'
+    | 'SAVE_THE_DATE'
+    | 'JOIN_MAILING_LIST'
+    | 'REGISTER_INTEREST'
+    | 'EXPLORE';
+  button: {
+    text: string;
+    href: string;
+  };
+};
+
+const replaceURLOrigin = (
+  experienceUriPrefix: string,
+  blogUriPrefix: string,
+  donateUriPrefix: string,
+  urlFromApi: string,
+): URL => {
   const href = urlFromApi
     .replace('https://donate.biggive.org', donateUriPrefix)
     .replace('https://biggive.org', blogUriPrefix)
-    .replace('https://community.biggive.org', experienceUriPrefix)
-  ;
-
+    .replace('https://community.biggive.org', experienceUriPrefix);
   return new URL(href);
-}
+};
 
-export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, blogUriPrefix: string, donateUriPrefix: string, sfApiHighlightCard: SfApiHighlightCard, ): HighlightCard => {
-
+export const SFAPIHighlightCardToHighlightCard = (
+  experienceUriPrefix: string,
+  blogUriPrefix: string,
+  donateUriPrefix: string,
+  sfApiHighlightCard: SfApiHighlightCard,
+): HighlightCard => {
   const campaignFamilyColours: Record<campaignFamilyName, brandColour> = {
     emergencyMatch: 'brand-emf-yellow',
     christmasChallenge: 'brand-cc-red',
@@ -65,24 +78,27 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
 
-  let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
+  const href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
 
   const color = iconColor(sfApiHighlightCard, campaignFamilyColours);
   return {
     campaignFamily: sfApiHighlightCard.campaignFamily,
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
-    icon: {color},
-    background: {image: backgroundImageUrl, color },
+    icon: { color },
+    background: { image: backgroundImageUrl, color },
     button: {
       text: sfApiHighlightCard.button.text,
       href: href,
-    }
+    },
   };
 };
 
-function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours: Record<campaignFamilyName, brandColour>) {
-  const defaultColor = "primary";
+function iconColor(
+  sfApiHighlightCard: SfApiHighlightCard,
+  campaignFamilyColours: Record<campaignFamilyName, brandColour>,
+) {
+  const defaultColor = 'primary';
 
   if (sfApiHighlightCard.campaignFamily == null) {
     return defaultColor;
@@ -92,7 +108,6 @@ function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours
 }
 
 function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix: string) {
-
   const defaultBackground = new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
 
   if (sfApiHighlightCard.cardStyle === 'JOIN_MAILING_LIST') {
@@ -106,8 +121,8 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
     emergencyMatch: new URL('/assets/images/emergency-card.webp', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
-    summerGive:  new URL('/assets/images/colour-orange.png', donateUriPrefix),
-    greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+    summerGive: new URL('/assets/images/colour-orange.png', donateUriPrefix),
+    greenMatchFund: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
     womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
     mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix),
@@ -118,18 +133,21 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  const cards = apiHighlightCards.map(
-    card => SFAPIHighlightCardToHighlightCard(
+  const cards = apiHighlightCards.map((card) =>
+    SFAPIHighlightCardToHighlightCard(
       environment.experienceUriPrefix,
       environment.blogUriPrefix,
       environment.donateUriPrefix,
-      card
-    ));
-
-  // temp code, remove after GMF 2025
-  cards.sort((cardA, cardB) =>
-    (Number)(cardB.campaignFamily === 'greenMatchFund') - (Number)(cardA.campaignFamily === 'greenMatchFund')
+      card,
+    ),
   );
 
-  return cards
+  if (new Date() < new Date('2025-06-31')) {
+    cards.sort(
+      (cardA, cardB) =>
+        Number(cardB.campaignFamily === 'greenMatchFund') - Number(cardA.campaignFamily === 'greenMatchFund'),
+    );
+  }
+
+  return cards;
 }

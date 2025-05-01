@@ -1,27 +1,31 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <link rel="canonical" href="https://donate-staging.thebiggivetest.org.uk"> <!-- Must be <link/> index 0 -->
-  <link rel="preconnect" href="https://sf-api-staging.thebiggivetest.org.uk">
-  <link rel="preconnect" href="https://images-staging.thebiggivetest.org.uk">
-  <link rel="preconnect" href="https://identity-staging.thebiggivetest.org.uk">
-  <link rel="preconnect" href="https://matchbot-staging.thebiggivetest.org.uk">
-  <meta charset="utf-8">
-  <base href="/d/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
-  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
-  <script src="/assets/custom-libs/modernizr.js"></script> <!-- Just webp support detection -->
-</head>
-<body>
-  <app-root id="app"></app-root>
-  <p style="display: none" id="unsupported-message"><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
-  <script>
-    var ie = (window.navigator.userAgent.indexOf('Trident/') > 0);
-    if (ie) {
-      document.getElementById('app').style.display = 'none';
-      document.getElementById('unsupported-message').style.display = 'block';
-    }
-  </script>
-</body>
+  <head>
+    <link rel="canonical" href="https://donate-staging.thebiggivetest.org.uk" />
+    <!-- Must be <link/> index 0 -->
+    <link rel="preconnect" href="https://sf-api-staging.thebiggivetest.org.uk" />
+    <link rel="preconnect" href="https://images-staging.thebiggivetest.org.uk" />
+    <link rel="preconnect" href="https://identity-staging.thebiggivetest.org.uk" />
+    <link rel="preconnect" href="https://matchbot-staging.thebiggivetest.org.uk" />
+    <meta charset="utf-8" />
+    <base href="/d/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+    <script src="/assets/custom-libs/modernizr.js"></script>
+    <!-- Just webp support detection -->
+  </head>
+  <body>
+    <app-root id="app"></app-root>
+    <p style="display: none" id="unsupported-message">
+      <a href="https://browsehappy.com/">Please upgrade your browser to continue.</a>
+    </p>
+    <script>
+      var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
+      if (ie) {
+        document.getElementById("app").style.display = "none";
+        document.getElementById("unsupported-message").style.display = "block";
+      }
+    </script>
+  </body>
 </html>

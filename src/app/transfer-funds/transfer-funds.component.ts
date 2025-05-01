@@ -1,40 +1,40 @@
-import {isPlatformBrowser} from '@angular/common';
-import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSelectChange} from '@angular/material/select';
-import {MatomoTracker} from 'ngx-matomo-client';
-import {EMPTY} from 'rxjs';
-import {debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { EMPTY } from 'rxjs';
+import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 
-import {Campaign} from '../campaign.model';
-import {CampaignService} from '../campaign.service';
-import {DonationService} from '../donation.service';
-import {DonorAccountService} from '../donor-account.service';
-import {Donation, maximumDonationAmountForFundedDonation, OVERSEAS} from '../donation.model';
-import {DonationCreatedResponse} from '../donation-created-response.model';
-import {environment} from '../../environments/environment';
-import {FundingInstruction} from '../fundingInstruction.model';
-import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
-import {GiftAidAddress} from '../gift-aid-address.model';
-import {IdentityService} from '../identity.service';
-import {Person} from '../person.model';
-import {AddressService} from '../address.service';
-import {getCurrencyMinValidator} from '../validators/currency-min';
-import {getCurrencyMaxValidator} from '../validators/currency-max';
-import {Toast} from '../toast.service';
-import {GIFT_AID_FACTOR} from '../Money';
+import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
+import { DonationService } from '../donation.service';
+import { DonorAccountService } from '../donor-account.service';
+import { Donation, maximumDonationAmountForFundedDonation, OVERSEAS } from '../donation.model';
+import { DonationCreatedResponse } from '../donation-created-response.model';
+import { environment } from '../../environments/environment';
+import { FundingInstruction } from '../fundingInstruction.model';
+import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { GiftAidAddress } from '../gift-aid-address.model';
+import { IdentityService } from '../identity.service';
+import { Person } from '../person.model';
+import { AddressService } from '../address.service';
+import { getCurrencyMinValidator } from '../validators/currency-min';
+import { getCurrencyMaxValidator } from '../validators/currency-max';
+import { Toast } from '../toast.service';
+import { GIFT_AID_FACTOR } from '../Money';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
  * available for GBP campaigns and UK donors for now.
  */
 @Component({
-    selector: 'app-transfer-funds',
-    templateUrl: './transfer-funds.component.html',
-    styleUrl: './transfer-funds.component.scss',
-    standalone: false
+  selector: 'app-transfer-funds',
+  templateUrl: './transfer-funds.component.html',
+  styleUrl: './transfer-funds.component.scss',
+  standalone: false,
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];
@@ -68,7 +68,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private donorAccountService: DonorAccountService,
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private addressService: AddressService,
     private toast: Toast,
   ) {}
@@ -79,34 +79,33 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     }
 
     const formGroups: {
-      amounts: FormGroup,
-      giftAid: FormGroup
-      marketing: FormGroup,
+      amounts: FormGroup;
+      giftAid: FormGroup;
+      marketing: FormGroup;
     } = {
       amounts: this.formBuilder.group({
-        creditAmount: new FormControl(
-          null, {
-            validators: [
-              Validators.required,
-              getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
-              getCurrencyMaxValidator(environment.maximumCreditAmount),
-              Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-            ],
-            updateOn: "blur",
-          }),
-        tipPercentage: new FormControl(this.initialTipSuggestedPercentage, {updateOn: "blur"}),
+        creditAmount: new FormControl(null, {
+          validators: [
+            Validators.required,
+            getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
+            getCurrencyMaxValidator(environment.maximumCreditAmount),
+            Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+          ],
+          updateOn: 'blur',
+        }),
+        tipPercentage: new FormControl(this.initialTipSuggestedPercentage, { updateOn: 'blur' }),
         customTipAmount: new FormControl(null, {
           validators: [
-          // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
-          // validation rule below, but it's good to add the explicit check for future-proofness
-          getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
-          // Below we validate the tip as a donation because when transfering funds, tips are
-          // set as real donations to a dedicated Big Give SF campaign.
-          // See MAT-266 and the Slack thread linked in its description for more context.
-          getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
-          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+            // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
+            // validation rule below, but it's good to add the explicit check for future-proofness
+            getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
+            // Below we validate the tip as a donation because when transfering funds, tips are
+            // set as real donations to a dedicated Big Give SF campaign.
+            // See MAT-266 and the Slack thread linked in its description for more context.
+            getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
+            Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
           ],
-          updateOn: "blur",
+          updateOn: 'blur',
         }),
       }),
       giftAid: this.formBuilder.group({
@@ -116,37 +115,36 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         homeOutsideUK: [null],
         homePostcode: [null],
       }),
-      marketing: this.formBuilder.group( {
+      marketing: this.formBuilder.group({
         optInTbgEmail: [null], // See also setConditionalValidators(); only required if no existing tip's pending.
-      })
+      }),
       // T&Cs agreement is implicit through submitting the form.
     };
 
     this.creditForm = this.formBuilder.group(formGroups);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const amountsGroup: any = this.creditForm.get('amounts');
     if (amountsGroup != null) {
       this.amountsGroup = amountsGroup;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const giftAidGroup: any = this.creditForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
 
-    this.marketingGroup = this.creditForm.get('marketing') as FormGroup<any>;
+    this.marketingGroup = this.creditForm.get('marketing') as FormGroup;
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
-    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
-    if (giftAidChecked) {
-      this.isOptedIntoGiftAid = true;
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe((giftAidChecked) => {
+      if (giftAidChecked) {
+        this.isOptedIntoGiftAid = true;
         this.giftAidGroup.controls['homePostcode']!.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
-        this.giftAidGroup.controls['homeAddress']!.setValidators([
-          Validators.required,
-          Validators.maxLength(255),
-        ]);
+        this.giftAidGroup.controls['homeAddress']!.setValidators([Validators.required, Validators.maxLength(255)]);
       } else {
         this.isOptedIntoGiftAid = false;
         this.giftAidGroup.controls['homePostcode']!.setValidators([]);
@@ -158,7 +156,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     });
 
     // get the tips campaign data on page load
-    this.campaignService.getOneById(environment.creditTipsCampaign).subscribe(campaign => {
+    this.campaignService.getOneById(environment.creditTipsCampaign).subscribe((campaign) => {
       this.campaign = campaign;
     });
   }
@@ -168,26 +166,27 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return;
     }
 
-    const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
-      startWith(''),
-      // https://stackoverflow.com/a/51470735/2803757
-      debounceTime(400),
-      distinctUntilChanged(),
-      // switchMap *seems* like the best operator to swap out the Observable on the value change
-      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
-      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
-      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-      switchMap((initialAddress: any) => {
-        if (!initialAddress) {
-          return EMPTY;
-        }
+    const observable =
+      this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
+        startWith(''),
+        // https://stackoverflow.com/a/51470735/2803757
+        debounceTime(400),
+        distinctUntilChanged(),
+        // switchMap *seems* like the best operator to swap out the Observable on the value change
+        // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
+        // hope this may also cancel previous outstanding lookup resolutions that are in flight?
+        // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
+        switchMap((initialAddress: string | undefined) => {
+          if (!initialAddress) {
+            return EMPTY;
+          }
 
-        this.loadingAddressSuggestions = true;
-        return this.addressService.getSuggestions(initialAddress);
-      }),
-    ) || EMPTY;
+          this.loadingAddressSuggestions = true;
+          return this.addressService.getSuggestions(initialAddress);
+        }),
+      ) || EMPTY;
 
-    observable.subscribe(suggestions => {
+    observable.subscribe((suggestions) => {
       this.loadingAddressSuggestions = false;
       this.addressSuggestions = suggestions;
     });
@@ -207,37 +206,42 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
     // Autocomplete's value.url should be an address we can /get.
-    this.addressService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
-      const addressParts = [address.line_1];
-      if (address.line_2) {
-        addressParts.push(address.line_2);
-      }
-      addressParts.push(address.town_or_city);
+    this.addressService.get(event.option.value.url).subscribe(
+      (address: GiftAidAddress) => {
+        const addressParts = [address.line_1];
+        if (address.line_2) {
+          addressParts.push(address.line_2);
+        }
+        addressParts.push(address.town_or_city);
 
-      this.giftAidGroup.patchValue({
-        homeAddress: addressParts.join(', '),
-        homeBuildingNumber: address.building_number,
-        homePostcode: address.postcode,
-      });
-    }, error => {
-      console.log('Postcode resolve error', error);
-    });
+        this.giftAidGroup.patchValue({
+          homeAddress: addressParts.join(', '),
+          homeBuildingNumber: address.building_number,
+          homePostcode: address.postcode,
+        });
+      },
+      (error) => {
+        console.log('Postcode resolve error', error);
+      },
+    );
   }
 
   createAccount(): void {
-    if (! this.donor) {
-      throw new Error("Donor info not loaded");
+    if (!this.donor) {
+      throw new Error('Donor info not loaded');
     }
     this.isLoading = true;
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
-      this.identityService.getFundingInstructions(idAndJWT?.id, idAndJWT.jwt).subscribe((response: FundingInstruction) => {
-        this.isLoading = false;
-        this.isPurchaseComplete = true;
-        this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
-        this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
-        this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
-      });
+      this.identityService
+        .getFundingInstructions(idAndJWT?.id, idAndJWT.jwt)
+        .subscribe((response: FundingInstruction) => {
+          this.isLoading = false;
+          this.isPurchaseComplete = true;
+          this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
+          this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
+          this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
+        });
 
       this.createAndFinaliseTipDonation();
     }
@@ -257,7 +261,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.creditForm.get('amounts')?.get('customTipAmount')?.updateValueAndValidity();
   }
 
-  giftAidAmount() : number {
+  giftAidAmount(): number {
     // Gift Aid on the tip only when buying credits!
     return this.calculatedTipAmount() * GIFT_AID_FACTOR;
   }
@@ -283,8 +287,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   /**
-  * @returns Amount without any £/$s
-  */
+   * @returns Amount without any £/$s
+   */
   sanitiseCurrency(amount: string): number {
     return Number((amount || '0').replace('£', '').replace('$', ''));
   }
@@ -294,8 +298,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       this.customTip() &&
       this.amountsGroup.value.customTipAmount &&
       this.sanitiseCurrency(this.amountsGroup.value.customTipAmount) === 0
-    )
-    {
+    ) {
       return false;
     }
 
@@ -310,7 +313,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
    * In whole currency unit, e.g. pounds. Always a whole number because Donation Fund tips are in fact donations / payment intents to BG,
    * and we don't support partial pounds for those for now.
    */
-  calculatedTipAmount() : number {
+  calculatedTipAmount(): number {
     const unsanitisedCreditAmount = this.amountsGroup.value.creditAmount;
 
     if (!unsanitisedCreditAmount) {
@@ -320,7 +323,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     if (this.customTip()) {
       const unsanitisedCustomTipAmount = this.amountsGroup.value.customTipAmount;
       if (unsanitisedCustomTipAmount) {
-        return this.sanitiseCurrency(unsanitisedCustomTipAmount)
+        return this.sanitiseCurrency(unsanitisedCustomTipAmount);
       }
       return 0;
     }
@@ -334,7 +337,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   cancelPendingTips() {
     this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
       // Theoretically this could be multiple tips, but in practice almost always 0 or 1, so singular is the less confusing copy.
-      this.toast.showSuccess('Pending tip cancelled. To continue, enter a new tip amount to support Big Give when you transfer, or 0.');
+      this.toast.showSuccess(
+        'Pending tip cancelled. To continue, enter a new tip amount to support Big Give when you transfer, or 0.',
+      );
       this.loadPerson();
     });
   }
@@ -370,7 +375,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
-    this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
+    this.identityService.get(id, jwt, { withTipBalances: true }).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
       this.identityService.loginStatusChanged.emit(true);
@@ -410,15 +415,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return [];
     }
 
-    return [
-      Validators.required,
-      Validators.pattern(this.postcodeRegExp),
-    ];
+    return [Validators.required, Validators.pattern(this.postcodeRegExp)];
   }
 
   private createAndFinaliseTipDonation() {
     if (this.donor === undefined) {
-      throw new Error("Cannot create donation without logged in donor");
+      throw new Error('Cannot create donation without logged in donor');
     }
 
     // The donation amount to Big Give is whatever the user is 'tipping' in the Buy Credits form.
@@ -472,19 +474,15 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.donor.id, this.identityService.getJWT())
-      .subscribe({
-        next: this.newDonationSuccess.bind(this),
-        error: this.newDonationError.bind(this),
-      });
+    this.donationService.create(donation, this.donor.id, this.identityService.getJWT()).subscribe({
+      next: this.newDonationSuccess.bind(this),
+      error: this.newDonationError.bind(this),
+    });
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
-    const createResponseMissingData = (
-      !response.donation.charityId ||
-      !response.donation.donationId ||
-      !response.donation.projectId
-    );
+    const createResponseMissingData =
+      !response.donation.charityId || !response.donation.donationId || !response.donation.projectId;
     if (createResponseMissingData) {
       this.matomoTracker.trackEvent(
         'donate_error',
@@ -501,6 +499,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private newDonationError(response: any) {
     let errorMessage: string;
     if (response.message) {
@@ -515,8 +514,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   /**
    * We only check for GBP balances for now, as we only support UK bank transfers rn
    */
-  protected get hasDonationFunds()
-  {
+  protected get hasDonationFunds() {
     return this.donor?.cash_balance?.['gbp'];
   }
 }

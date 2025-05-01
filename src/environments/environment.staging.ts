@@ -7,7 +7,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
-  friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
+  friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ',
   environmentId: 'staging',
   production: false,
   productionLike: true,
@@ -26,8 +26,8 @@ export const environment: Environment = {
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
   matomoAbTest: {
-    name: "zeroTipTextAB",
-    variantName: "B",
+    name: 'zeroTipTextAB',
+    variantName: 'B',
     startDate: '2024/09/25 00:00:00 UTC',
     endDate: undefined,
   },
@@ -38,10 +38,11 @@ export const environment: Environment = {
   psps: {
     stripe: {
       enabled: true,
-      publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
+      publishableKey:
+        'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  reservationMinutes: 3,
+  reservationMinutes: 30,
   showDebugInfo: false,
 };
 
@@ -52,4 +53,4 @@ export const environment: Environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+import 'zone.js/plugins/zone-error'; // Included with Angular CLI.

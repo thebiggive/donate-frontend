@@ -1,11 +1,11 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ChangeRegularGivingComponent} from './change-regular-giving.component';
-import {provideHttpClient, withFetch} from '@angular/common/http';
-import {MatomoModule} from 'ngx-matomo-client';
-import {ActivatedRoute} from '@angular/router';
-import {InMemoryStorageService} from 'ngx-webstorage-service';
-import {TBG_DONATE_STORAGE} from '../donation.service';
+import { ChangeRegularGivingComponent } from './change-regular-giving.component';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { MatomoModule } from 'ngx-matomo-client';
+import { ActivatedRoute } from '@angular/router';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
+import { TBG_DONATE_STORAGE } from '../donation.service';
 
 describe('ChangeRegularGivingComponent', () => {
   let component: ChangeRegularGivingComponent;
@@ -15,29 +15,29 @@ describe('ChangeRegularGivingComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         MatomoModule.forRoot({
-          siteId: "",
-          trackerUrl: "",
+          siteId: '',
+          trackerUrl: '',
         }),
       ],
       providers: [
         {
-          provide: ActivatedRoute, useValue: {
-            snapshot: {data: {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
                 paymentMethods: {
                   adHocMethods: [],
-                  regularGivingPaymentMethod: {
-
-                  },
+                  regularGivingPaymentMethod: {},
                 },
-              }},
-          }
+              },
+            },
+          },
         },
         InMemoryStorageService,
-        {provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService},
+        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChangeRegularGivingComponent);
     component = fixture.componentInstance;

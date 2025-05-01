@@ -13,12 +13,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import {MatomoModule} from "ngx-matomo-client";
+import { MatomoModule } from 'ngx-matomo-client';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TransferFundsComponent } from './transfer-funds.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
@@ -51,18 +51,15 @@ describe('TransferFundsComponent', () => {
           },
         ]),
       ],
-      providers: [
-        InMemoryStorageService,
-        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ],
+      providers: [InMemoryStorageService, { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService }],
     });
   });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [],
-    providers: [provideHttpClient(withFetch()), provideHttpClientTesting()]
+      imports: [],
+      providers: [provideHttpClient(withFetch()), provideHttpClientTesting()],
     });
 
     fixture = TestBed.createComponent(TransferFundsComponent);

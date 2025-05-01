@@ -1,28 +1,28 @@
-@use '../../abstract';
+@use "../../abstract";
 
 h5 {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .icon-container {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .icons {
-    @include abstract.format-icon-container;
+  @include abstract.format-icon-container;
 }
 
 .icon-wrapper {
-    @include abstract.format-icon-list-item;
+  @include abstract.format-icon-list-item;
 
-    fa-icon.ng-fa-icon {
-        color: abstract.$colour-primary; // #2C089B
-        font-size: 40px;
-        min-width: 4rem;
-        text-align: center;
-    }
+  fa-icon.ng-fa-icon {
+    color: abstract.$colour-primary; // #2C089B
+    font-size: 40px;
+    min-width: 4rem;
+    text-align: center;
+  }
 
-    .c-icon-title {
-        @include abstract.format-icon-title;
-    }
+  .c-icon-title {
+    @include abstract.format-icon-title;
+  }
 }

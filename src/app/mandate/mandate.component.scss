@@ -1,4 +1,4 @@
-@use '../../abstract';
+@use "../../abstract";
 
 mat-spinner.complete-spinner {
   margin: 3rem auto;
@@ -152,7 +152,9 @@ div.clearfix {
       margin-bottom: 1rem;
     }
 
-    caption, th, td {
+    caption,
+    th,
+    td {
       text-align: left;
 
       @media #{abstract.$breakpoint-sm} {
@@ -174,7 +176,8 @@ div.clearfix {
     width: 100%;
   }
   .receives {
-    th, td {
+    th,
+    td {
       background-color: abstract.$colour-highlight;
       padding: 5px;
     }
@@ -188,7 +191,8 @@ div.clearfix {
   margin-bottom: 50px;
 }
 
-#mandate.cancelled, #mandate.campaign-ended {
+#mandate.cancelled,
+#mandate.campaign-ended {
   background: rgb(0 0 0 / 8%);
   padding: 2em;
   border-radius: 4px;

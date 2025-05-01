@@ -1,21 +1,16 @@
-import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {FormGroup} from "@angular/forms";
-import {DonationService} from "../donation.service";
-import {Donation, OVERSEAS} from "../donation.model";
-import {Campaign} from "../campaign.model";
-import {sanitiseCurrency} from "./sanitiseCurrency";
+import { FormGroup } from '@angular/forms';
+import { DonationService } from '../donation.service';
+import { Donation, OVERSEAS } from '../donation.model';
+import { sanitiseCurrency } from './sanitiseCurrency';
 
-
-export function updateDonationFromForm
-(event: StepperSelectionEvent,
- tipValue: number|undefined,
- donation: Donation,
- paymentGroup: FormGroup,
- amountsGroup: FormGroup,
- giftAidGroup: FormGroup,
- donationService: DonationService,
- campaign: Campaign,
- marketingGroup: FormGroup,
+export function updateDonationFromForm(
+  tipValue: number | undefined,
+  donation: Donation,
+  paymentGroup: FormGroup,
+  amountsGroup: FormGroup,
+  giftAidGroup: FormGroup,
+  donationService: DonationService,
+  marketingGroup: FormGroup,
 ) {
   if (paymentGroup) {
     donation.emailAddress = paymentGroup.value.emailAddress;
