@@ -73,6 +73,9 @@ declare let _paq: {
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
   providers: [ExactCurrencyPipe],
 })

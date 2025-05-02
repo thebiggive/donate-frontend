@@ -37,6 +37,9 @@ import { detect } from 'detect-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
