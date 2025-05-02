@@ -291,7 +291,7 @@ export class DonationStartFormComponent
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
-      if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
+      if (environment.matomoAbTest && Object.prototype.hasOwnProperty.call(globalThis, '_paq')) {
         _paq.push([
           'AbTesting::create',
           {

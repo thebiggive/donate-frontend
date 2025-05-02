@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
 
     if (
       environment.environmentId !== 'regression' &&
-      !queryParams.hasOwnProperty('noredirect') &&
+      !Object.prototype.hasOwnProperty.call(queryParams, 'noredirect') &&
       redirectPath !== null
     ) {
       if (isPlatformBrowser(this.platformId)) {

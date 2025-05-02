@@ -322,7 +322,7 @@ export function getStripeFriendlyError(
   }
 
   if (!error || (!error.message && !error.code)) {
-    if (error && error.hasOwnProperty('description')) {
+    if (error && Object.prototype.hasOwnProperty.call(error, 'description')) {
       // not sure why TS doesn't recognise that it must have a description because I just checked
       // with hasOwnProperty.
       // @ts-expect-error Property description does not exist on type

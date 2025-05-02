@@ -66,7 +66,6 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      "no-prototype-builtins": "off",
     },
   },
   ...compat
