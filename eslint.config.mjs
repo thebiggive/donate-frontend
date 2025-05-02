@@ -66,7 +66,6 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      "no-extra-boolean-cast": "off",
       "no-prototype-builtins": "off",
       "no-unexpected-multiline": "off",
     },
