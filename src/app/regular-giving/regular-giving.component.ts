@@ -464,15 +464,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.stripeElements) {
       this.stripeElements.update({ amount: this.getDonationAmountPence() });
     } else {
-      this.stripeElements = this.stripeService.stripeElements(
-        {
+      this.stripeElements = this.stripeService.stripeElements({
+        money: {
           amount: this.getDonationAmountPence(),
           currency: this.campaign.currencyCode,
         },
-        'off_session',
-        this.campaign,
-        this.stripeCustomerSession.stripeSessionSecret,
-      );
+        futureUsage: 'off_session',
+        campaign: this.campaign,
+        customerSessionClientSecret: this.stripeCustomerSession.stripeSessionSecret,
+      });
     }
 
     if (this.stripePaymentElement) {

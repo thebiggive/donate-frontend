@@ -140,25 +140,35 @@ export class StripeService {
       amount: this.amountIncTipInMinorUnit(donation),
     };
 
-    return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
+    const mat390KeepOldBehavour = environment.environmentId === 'production';
+
+    return this.stripeElements({
+      money: money,
+
+      // future usage is up to the donor to decide by ticking "Save payment details for future purchases" inside
+      // the iframe or not. But we currently we are passing on_session, and need to test this change carefully
+      // before changing in prod.
+      futureUsage: mat390KeepOldBehavour ? 'on_session' : null,
+      campaign: campaign,
+      customerSessionClientSecret: customerSessionClientSecret,
+    });
   }
 
   /**
    *
-   * @param money . Amount must be in minor units, e.g. pence
-   * @param futureUsage
-   * @param campaign
-   * @param customerSessionClientSecret
+   * @param money - amount must be in minor units
    */
-  public stripeElements(
-    money: {
-      currency: string;
-      amount: number;
-    },
-    futureUsage: 'off_session' | 'on_session',
-    campaign: Campaign,
-    customerSessionClientSecret: string | undefined,
-  ) {
+  public stripeElements({
+    money,
+    futureUsage,
+    campaign,
+    customerSessionClientSecret,
+  }: {
+    money: { currency: string; amount: number };
+    futureUsage: 'off_session' | 'on_session' | null;
+    campaign: Campaign;
+    customerSessionClientSecret: string | undefined;
+  }) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
