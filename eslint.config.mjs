@@ -67,7 +67,6 @@ export default [
         },
       ],
       "no-prototype-builtins": "off",
-      "no-unexpected-multiline": "off",
     },
   },
   ...compat
