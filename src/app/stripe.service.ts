@@ -140,7 +140,15 @@ export class StripeService {
       amount: this.amountIncTipInMinorUnit(donation),
     };
 
-    return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
+    return this.stripeElements({
+      money: money,
+
+      // future usage is up to the donor to decide by ticking "Save payment details for future purchases" inside
+      // the iframe or not.
+      futureUsage: null,
+      campaign: campaign,
+      customerSessionClientSecret: customerSessionClientSecret,
+    });
   }
 
   /**
@@ -150,15 +158,17 @@ export class StripeService {
    * @param campaign
    * @param customerSessionClientSecret
    */
-  public stripeElements(
-    money: {
-      currency: string;
-      amount: number;
-    },
-    futureUsage: 'off_session' | 'on_session',
-    campaign: Campaign,
-    customerSessionClientSecret: string | undefined,
-  ) {
+  public stripeElements({
+    money,
+    futureUsage,
+    campaign,
+    customerSessionClientSecret,
+  }: {
+    money: { currency: string; amount: number };
+    futureUsage: 'off_session' | 'on_session' | null;
+    campaign: Campaign;
+    customerSessionClientSecret: string | undefined;
+  }) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
