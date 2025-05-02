@@ -84,28 +84,28 @@ describe('DonationThanksComponent', () => {
   it('Considers donation of £5k to be large', () => {
     // Calling private setDonation method for test. Not a fan of doing this, but I couldn't work out how to get the
     // async stuff to happen to make this happen via a call to checkDonation in the test.
-    // @ts-ignore private visibility error
+    // @ts-expect-error private visibility error
     component.setDonation(donationOf(5_000, 'GBP'));
 
     expect(component.donationIsLarge).toBeTrue();
   });
 
   it('Considers donation of under £5k to be not large', () => {
-    // @ts-ignore private visibility error
+    // @ts-expect-error private visibility error
     component.setDonation(donationOf(4999, 'GBP'));
 
     expect(component.donationIsLarge).toBeFalse();
   });
 
   it('Considers donation of €5k to be not large', () => {
-    // @ts-ignore private visibility error
+    // @ts-expect-error private visibility error
     component.setDonation(donationOf(5000, 'EUR'));
 
     expect(component.donationIsLarge).toBeFalse();
   });
 
   it('Considers donation of under €5k to be not large', () => {
-    // @ts-ignore private visibility error
+    // @ts-expect-error private visibility error
     component.setDonation(donationOf(4999, 'EUR'));
 
     expect(component.donationIsLarge).toBeFalse();

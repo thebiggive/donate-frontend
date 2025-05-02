@@ -165,7 +165,7 @@ export class DonationService {
       // should never happen given fix made now to AddressService.loadAddress but just in case:
 
       console.error('Donation.homeAddress is object, should be string');
-      // @ts-expect-error:
+      // @ts-expect-error 'Property address does not exist on type string'
       donation.homeAddress = donation.homeAddress.address;
     }
 

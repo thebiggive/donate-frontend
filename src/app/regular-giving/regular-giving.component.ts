@@ -484,7 +484,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
-      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
+      // @ts-expect-error Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }

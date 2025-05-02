@@ -72,7 +72,7 @@ describe('CookiePreferenceService', () => {
   });
 
   it('Should set a cookie to show the user accepts all cookies', (done) => {
-    // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
+    // @ts-expect-error - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
       expect(JSON.parse(value).agreedToAll).toBe(true);
@@ -92,7 +92,7 @@ describe('CookiePreferenceService', () => {
   });
 
   it('Should set a cookie to show the user accepts specified', (done) => {
-    // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
+    // @ts-expect-error - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
       expect(JSON.parse(value)).toEqual({

@@ -323,8 +323,9 @@ export function getStripeFriendlyError(
 
   if (!error || (!error.message && !error.code)) {
     if (error && error.hasOwnProperty('description')) {
-      // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
+      // not sure why TS doesn't recognise that it must have a description because I just checked
       // with hasOwnProperty.
+      // @ts-expect-error Property description does not exist on type
       return `${prefix}${error!.description}`;
     }
     return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;

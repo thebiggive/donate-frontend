@@ -38,7 +38,7 @@ export class ResetPasswordComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.token = params.token;
       this.identityService.checkTokenValid(this.token).subscribe({
-        // @ts-ignore Not sure how to make subscribe() happy with the type narrowing
+        // @ts-expect-error: Not sure how to make subscribe() happy with the type narrowing
         next: (response: { valid: boolean }) => {
           this.tokenValid = response.valid;
         },
