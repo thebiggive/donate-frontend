@@ -48,11 +48,6 @@ export default [
         },
       ],
 
-      // The following rules are recommend by either angular-eslint typescript-eslint, but we were not following
-      // them in all places at time of setting up eslint. Leaving them turned off for now as a sort of crude baseline.
-      // Consider turning any or all of them back on and fixing issues.
-      "@angular-eslint/prefer-standalone": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -67,9 +62,6 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      "no-extra-boolean-cast": "off",
-      "no-prototype-builtins": "off",
-      "no-unexpected-multiline": "off",
     },
   },
   ...compat

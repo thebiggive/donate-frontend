@@ -11,6 +11,9 @@ import { CampaignService } from '../campaign.service';
   selector: 'app-charity',
   templateUrl: './charity.component.html',
   styleUrl: 'charity.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class CharityComponent implements OnInit {

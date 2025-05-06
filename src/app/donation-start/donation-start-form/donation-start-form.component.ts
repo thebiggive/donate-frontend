@@ -73,6 +73,9 @@ declare let _paq: {
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
   providers: [ExactCurrencyPipe],
 })
@@ -291,7 +294,7 @@ export class DonationStartFormComponent
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
-      if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
+      if (environment.matomoAbTest && Object.prototype.hasOwnProperty.call(globalThis, '_paq')) {
         _paq.push([
           'AbTesting::create',
           {
@@ -1403,7 +1406,7 @@ export class DonationStartFormComponent
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
-      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
+      // @ts-expect-error Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }

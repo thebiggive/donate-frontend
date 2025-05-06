@@ -44,14 +44,14 @@ export function errorDescription(error: BackendError | unknown): string {
     return 'Sorry, something went wrong';
   }
 
-  // @ts-expect-error
+  // @ts-expect-error ' Property error does not exist on type object'
   const errorDetail = error?.error.error;
 
   return (
     errorDetail.description ||
     errorDetail.publicMessage ||
     errorDetail.message ||
-    // @ts-expect-error
+    // @ts-expect-error 'Property message does not exist on type object'
     error?.message ||
     'Sorry, something went wrong'
   );

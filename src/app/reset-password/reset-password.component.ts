@@ -9,6 +9,8 @@ import { minPasswordLength } from '../../environments/common';
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class ResetPasswordComponent implements OnInit {
@@ -38,7 +40,7 @@ export class ResetPasswordComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.token = params.token;
       this.identityService.checkTokenValid(this.token).subscribe({
-        // @ts-ignore Not sure how to make subscribe() happy with the type narrowing
+        // @ts-expect-error: Not sure how to make subscribe() happy with the type narrowing
         next: (response: { valid: boolean }) => {
           this.tokenValid = response.valid;
         },

@@ -24,6 +24,9 @@ import { GIFT_AID_FACTOR } from '../Money';
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
   styleUrl: './donation-thanks.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class DonationThanksComponent implements OnInit {

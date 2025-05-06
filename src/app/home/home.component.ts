@@ -13,6 +13,9 @@ import { NavigationService } from '../navigation.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: 'home.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class HomeComponent implements OnInit {
@@ -47,7 +50,7 @@ export class HomeComponent implements OnInit {
 
     if (
       environment.environmentId !== 'regression' &&
-      !queryParams.hasOwnProperty('noredirect') &&
+      !Object.prototype.hasOwnProperty.call(queryParams, 'noredirect') &&
       redirectPath !== null
     ) {
       if (isPlatformBrowser(this.platformId)) {

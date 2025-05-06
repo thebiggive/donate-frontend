@@ -22,6 +22,9 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
       useClass: DonationStartFormStubComponent,
     },
   ],
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 class DonationStartFormStubComponent {

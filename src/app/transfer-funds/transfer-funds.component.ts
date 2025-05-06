@@ -34,6 +34,8 @@ import { GIFT_AID_FACTOR } from '../Money';
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
   styleUrl: './transfer-funds.component.scss',
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {

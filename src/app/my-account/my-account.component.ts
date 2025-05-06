@@ -14,6 +14,9 @@ import { environment } from '../../environments/environment';
   templateUrl: './my-account.component.html',
   styleUrl: './my-account.component.scss',
   providers: [DatePipe],
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class MyAccountComponent implements OnInit {
