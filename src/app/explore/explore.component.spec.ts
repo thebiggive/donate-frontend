@@ -128,7 +128,7 @@ describe('ExploreComponent', () => {
   function makeComponentWithCampaign(campaign: Campaign) {
     const noop = () => {};
 
-    // @ts-expect-error
+    // @ts-expect-error 'Argument of type string is not assignable to parameter of type object'
     const pipe = new TimeLeftPipe('browser', {
       markForCheck: noop,
     } as unknown as ChangeDetectorRef);

@@ -205,7 +205,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       // only concerned with email address errors as we are not using other parts of the form for this action.
       if (emailErrors?.['required']) {
         this.error = 'Email address is required';
-      } else if (!!emailErrors?.['pattern']) {
+      } else if (emailErrors?.['pattern']) {
         this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
       } else {
         console.error({ registrationFormWithErrors: this.registrationForm });

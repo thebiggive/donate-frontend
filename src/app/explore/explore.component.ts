@@ -48,6 +48,9 @@ const endPipeToken = 'timeLeftToEndPipe';
     { provide: endPipeToken, useClass: TimeLeftPipe },
     DatePipe,
   ],
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {

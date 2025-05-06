@@ -18,6 +18,9 @@ import { Toast } from '../toast.service';
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
   providers: [TimeLeftPipe, DatePipe],
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {

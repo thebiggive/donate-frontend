@@ -7,6 +7,9 @@ import { LoginModalComponent } from '../../login-modal/login-modal.component';
   selector: 'app-donation-start-login',
   templateUrl: './donation-start-login.component.html',
   styleUrl: './donation-start-login.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class DonationStartLoginComponent {

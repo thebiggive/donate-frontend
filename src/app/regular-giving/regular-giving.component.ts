@@ -464,15 +464,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.stripeElements) {
       this.stripeElements.update({ amount: this.getDonationAmountPence() });
     } else {
-      this.stripeElements = this.stripeService.stripeElements(
-        {
+      this.stripeElements = this.stripeService.stripeElements({
+        money: {
           amount: this.getDonationAmountPence(),
           currency: this.campaign.currencyCode,
         },
-        'off_session',
-        this.campaign,
-        this.stripeCustomerSession.stripeSessionSecret,
-      );
+        futureUsage: 'off_session',
+        campaign: this.campaign,
+        customerSessionClientSecret: this.stripeCustomerSession.stripeSessionSecret,
+      });
     }
 
     if (this.stripePaymentElement) {
@@ -484,7 +484,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
-      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
+      // @ts-expect-error Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }

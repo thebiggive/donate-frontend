@@ -13,6 +13,9 @@ import { ImageService } from '../../image.service';
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrl: './donation-start-container.component.scss',
+
+  // predates use of standalone
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit {
