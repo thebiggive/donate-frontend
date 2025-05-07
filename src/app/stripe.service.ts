@@ -140,15 +140,12 @@ export class StripeService {
       amount: this.amountIncTipInMinorUnit(donation),
     };
 
-    const mat390KeepOldBehavour = environment.environmentId === 'production';
-
     return this.stripeElements({
       money: money,
 
       // future usage is up to the donor to decide by ticking "Save payment details for future purchases" inside
-      // the iframe or not. But we currently we are passing on_session, and need to test this change carefully
-      // before changing in prod.
-      futureUsage: mat390KeepOldBehavour ? 'on_session' : null,
+      // the iframe or not.
+      futureUsage: null,
       campaign: campaign,
       customerSessionClientSecret: customerSessionClientSecret,
     });
@@ -165,7 +162,7 @@ export class StripeService {
     customerSessionClientSecret,
   }: {
     money: { currency: string; amount: number };
-    futureUsage: 'off_session' | 'on_session' | null;
+    futureUsage: 'off_session' | null;
     campaign: Campaign;
     customerSessionClientSecret: string | undefined;
   }) {
