@@ -64,6 +64,7 @@ import { WidgetInstance } from 'friendly-challenge';
 import { Toast } from '../../toast.service';
 import { GIFT_AID_FACTOR } from '../../Money';
 import { noLongNumberValidator } from '../../validators/noLongNumberValidator';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -256,6 +257,7 @@ export class DonationStartFormComponent
     private router: Router,
     private stripeService: StripeService,
     private toast: Toast,
+    private liveAnnouncer: LiveAnnouncer,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.selectedCountryCode = this.defaultCountryCode;
@@ -1862,6 +1864,8 @@ export class DonationStartFormComponent
       // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
       // loaded from browser storage into a new load of this page.
       this.donation.matchReservedAmount = 0;
+
+      this.liveAnnouncer.announce('Match funding has expired');
 
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true,
