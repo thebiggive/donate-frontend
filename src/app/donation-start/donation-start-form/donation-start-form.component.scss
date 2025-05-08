@@ -4,6 +4,14 @@
 
 @include abstract.binary-options();
 
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .mat-stepper-horizontal,
 .mat-stepper-vertical {
   background: none;

@@ -8,6 +8,7 @@
 }
 @if (campaignOpenOnLoad) {
   <form class="c-donate-form" (keydown.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
+    <h1 class="visually-hidden">Donating to {{ campaign.charity.name }}</h1>
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
       <mat-step
         formGroupName="amounts"
