@@ -29,6 +29,7 @@ import { CancelMandateComponent } from './cancel-mandate/cancel-mandate.componen
 import { ChangeRegularGivingComponent } from './change-regular-giving/change-regular-giving.component';
 import { setupIntentResolver } from './setupIntent.resolver';
 import { EmailVerificationTokenResolver } from './email-verification-token.resolver';
+import { bigGiveName } from '../environments/common';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -108,7 +109,7 @@ export const routes: (Route & {
       stats: CampaignStatsResolver,
       highlights: HighlightCardsResolver,
     },
-    title: undefined,
+    title: bigGiveName,
     loadChildren: () => import('./home/home.module').then((c) => c.HomeModule),
   },
   {

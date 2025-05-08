@@ -16,6 +16,7 @@ import { environment as stagingEnvironment } from '../environments/environment.s
 import { Donation } from './donation.model';
 import { Campaign } from './campaign.model';
 import { countryISO2 } from './countries';
+import { bigGiveName } from '../environments/common';
 
 @Injectable({
   providedIn: 'root',
@@ -240,7 +241,7 @@ export class StripeService {
           },
         },
       },
-      business: { name: 'Big Give' },
+      business: { name: bigGiveName },
     });
   }
 
