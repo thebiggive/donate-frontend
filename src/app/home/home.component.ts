@@ -8,6 +8,7 @@ import { PageMetaService } from '../page-meta.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import { environment } from '../../environments/environment';
 import { NavigationService } from '../navigation.service';
+import { bigGiveName, tagLine } from '../../environments/common';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +43,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pageMeta.setCommon('Big Give', 'Big Give – discover campaigns and donate', '/assets/images/social-banner.png');
+    this.pageMeta.setCommon(bigGiveName, `${bigGiveName} – ${tagLine}`, '/assets/images/social-banner.png');
     this.stats = this.route.snapshot.data['stats'];
     this.highlightCards = this.route.snapshot.data['highlights'];
     const queryParams = this.route.snapshot.queryParams;
