@@ -32,6 +32,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { supportedBrowsers } from '../supportedBrowsers';
 import { detect } from 'detect-browser';
+import { PageMetaService } from './page-meta.service';
 
 @Component({
   selector: 'app-root',
@@ -88,6 +89,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     @Inject(PLATFORM_ID) private platformId: object,
     private matomoTracker: MatomoTracker,
     private router: Router,
+    private pageMeta: PageMetaService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
