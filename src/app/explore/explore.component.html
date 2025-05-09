@@ -124,11 +124,7 @@
       <div>
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots more to choose from.
-          <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-          <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-          <a tabindex="0" (click)="clear()">View all campaigns here</a>.
-          <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
-          <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
+          <a href (click)="clear()">View all campaigns here</a>.
         </p>
       </div>
     }

@@ -63,11 +63,7 @@
     </form>
   </mat-dialog-content>
   <mat-dialog-actions style="justify-content: space-between">
-    <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-    <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-    <a (click)="forgotPasswordClicked()">Forgot Password?</a>
-    <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
-    <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
+    <a href (click)="forgotPasswordClicked()">Forgot Password?</a>
     <div>
       <button
         id="login-modal-submit"
