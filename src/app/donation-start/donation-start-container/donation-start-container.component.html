@@ -67,4 +67,16 @@
       }
     </div>
   </div>
+  <div aria-live="polite">
+    @if (isOffline$ | async) {
+      <div
+        id="offline-warning"
+        style="width: 100%; position: fixed; bottom: 0; left: 0; z-index: 10; background-color: red"
+      >
+        <div style="margin: 0.7em; font-size: 1.5em; width: fit-content; color: white; text-transform: uppercase">
+          Offline
+        </div>
+      </div>
+    }
+  </div>
 </main>
