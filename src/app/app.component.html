@@ -58,7 +58,7 @@ dismiss the banner when it needs to to click on stuff behind it.
     isPlatformBrowser &&
     (userHasExpressedCookiePreference$ | async) === false)
 ) {
-  <div role="region" aria-label="Cookie preference" id="cookie-banner">
+  <div role="region" aria-label="Our website uses cookies" id="cookie-banner">
     <biggive-cookie-banner
       [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
       [blogUriPrefix]="environment.blogUriPrefix"
