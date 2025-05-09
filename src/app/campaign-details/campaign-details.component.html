@@ -20,14 +20,10 @@
         </a>
       }
       @if (campaign.parentRef && !fromFund) {
-        <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-        <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-        <a class="" mat-icon-button (click)="goBackToMetacampaign()">
+        <a href class="" mat-icon-button (click)="goBackToMetacampaign()">
           <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
           All participating campaigns
         </a>
-        <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
-        <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
       }
       @if (!campaign.parentRef) {
         <a mat-icon-button routerLink="/explore">
