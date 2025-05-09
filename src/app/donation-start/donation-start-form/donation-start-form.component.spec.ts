@@ -31,6 +31,7 @@ import { StripeService } from '../../stripe.service';
 import { Donation } from '../../donation.model';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { Toast } from '../../toast.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 function makeDonationStartFormComponent(donationService: DonationService) {
   const mockIdentityService = TestBed.inject(IdentityService);
@@ -61,6 +62,7 @@ function makeDonationStartFormComponent(donationService: DonationService) {
     {
       showError: () => {},
     } as unknown as Toast,
+    undefined as unknown as LiveAnnouncer,
   );
 
   donationStartFormComponent.campaign = { currencyCode: 'GBP' } as Campaign;
