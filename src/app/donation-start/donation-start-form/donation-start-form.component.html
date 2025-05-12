@@ -613,6 +613,18 @@
               if this message persists.
             </p>
           }
+          @if (finalPreSubmitUpdateFailed) {
+            <button
+              style="width: 40%"
+              type="button"
+              class="continue b-w-100 b-rt-0"
+              mat-raised-button
+              color="primary"
+              (click)="runFinalPreSubmitUpdate()"
+            >
+              Retry
+            </button>
+          }
           @if (retrying) {
             <p class="error" aria-live="polite">It looks like our system is a bit busy, one moment please&hellip;</p>
           }
@@ -670,7 +682,7 @@
               </tr>
             </table>
           }
-          @if (!submitting && !runningFinalPreSubmitUpdate) {
+          @if (!submitting && !runningFinalPreSubmitUpdate && !finalPreSubmitUpdateFailed) {
             <button
               (click)="submit()"
               (keyup.enter)="submit()"

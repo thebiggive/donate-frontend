@@ -239,6 +239,7 @@ export class DonationStartFormComponent
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
+  protected finalPreSubmitUpdateFailed = false;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -793,10 +794,11 @@ export class DonationStartFormComponent
     return person;
   }
 
-  private runFinalPreSubmitUpdate() {
+  protected runFinalPreSubmitUpdate() {
     // Even if next guard fails, we want to prevent attempting to pay.
     this.runningFinalPreSubmitUpdate = true;
 
+    let donationUpdateError = false;
     const requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
     // Set class prop `donationUpdateError` true if any required props missing.
     requiredDonationProperties.forEach((value, index) => {
@@ -810,11 +812,13 @@ export class DonationStartFormComponent
           `Donation not set or form invalid ${errorCodeDetail}`,
         );
         this.toast.showError(errorMessage);
-        this.donationUpdateError = true;
+        donationUpdateError = true;
         this.stripeError = errorMessage;
         this.stripeResponseErrorCode = undefined;
       }
     });
+
+    this.donationUpdateError = donationUpdateError;
 
     // First part of clause should be redundant but TS doesn't track enough to know that(?)
     if (!this.donation || this.donationUpdateError) {
@@ -834,6 +838,7 @@ export class DonationStartFormComponent
         next: async (donation: Donation) => {
           this.donationService.updateLocalDonation(donation);
           this.runningFinalPreSubmitUpdate = false;
+          this.finalPreSubmitUpdateFailed = false;
         },
         error: (response: HttpErrorResponse) => {
           let errorMessageForTracking: string;
@@ -848,6 +853,8 @@ export class DonationStartFormComponent
           this.donationUpdateError = true;
           this.toast.showError("Sorry, we can't submit your donation right now.");
           this.submitting = false;
+          this.runningFinalPreSubmitUpdate = false;
+          this.finalPreSubmitUpdateFailed = true;
         },
       });
   }
