@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { Campaign } from '../campaign.model';
+import {Campaign, CampaignSchema} from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
@@ -50,7 +50,7 @@ export class CampaignInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.campaign = this.route.snapshot.data.campaign;
+    this.campaign = CampaignSchema.parse(this.route.snapshot.data.campaign);
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
     this.campaignFinished = CampaignService.isInPast(this.campaign);
     this.campaignTarget = this.currencyPipe.transform(

@@ -1930,7 +1930,7 @@ export class DonationStartFormComponent
       'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
       'Cancel',
       donation,
-      this.campaign.surplusDonationInfo,
+      this.campaign.surplusDonationInfo || '',
     );
   }
 
@@ -1955,7 +1955,7 @@ export class DonationStartFormComponent
       'Remember, every penny helps, and you can continue to make a <strong>partially matched donation</strong> to the charity!',
       'Cancel and release match funds',
       donation,
-      this.campaign.surplusDonationInfo,
+      this.campaign.surplusDonationInfo || '',
     );
   }
 

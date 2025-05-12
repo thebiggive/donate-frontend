@@ -4,12 +4,16 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
-import { Campaign } from '../campaign.model';
+import {Campaign, CampaignSchema} from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { Toast } from '../toast.service';
+import {catchError} from 'rxjs/operators';
+import {async} from 'rxjs';
+import {ZodError} from 'zod';
+import e from 'express';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -35,7 +39,13 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
 
   ngOnInit() {
-    this.campaign = this.route.snapshot.data.campaign;
+    try {
+      this.campaign = CampaignSchema.parse(this.route.snapshot.data.campaign);
+    }
+    catch (e: any) {
+      const error: ZodError = e;
+      alert(error.message);
+    }
     this.setSecondaryProps(this.campaign);
   }
 
