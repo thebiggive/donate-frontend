@@ -117,14 +117,14 @@ export class StripeService {
       return;
     }
 
-    this.didInit = true;
-
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
     // the library's objects, which allows for better IDE hinting and more
     // checks that we are handling Stripe objects as intended.
     // See https://github.com/stripe/stripe-js
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
+
+    this.didInit = true;
   }
 
   public stripeElementsForDonation(
@@ -300,6 +300,10 @@ export class StripeService {
       elements: stripeElements,
       redirect: 'if_required',
     });
+  }
+
+  get isInitialised(): boolean {
+    return this.didInit;
   }
 }
 
