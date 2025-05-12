@@ -336,7 +336,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return Math.floor(creditAmount * (tipPercentage / 100));
   }
 
-  cancelPendingTips() {
+  cancelPendingTips(event: Event) {
+    event.preventDefault();
     this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
       // Theoretically this could be multiple tips, but in practice almost always 0 or 1, so singular is the less confusing copy.
       this.toast.showSuccess(

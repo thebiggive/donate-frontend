@@ -347,7 +347,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  clear() {
+  clear(event: Event) {
+    event.preventDefault();
     this.searchService.reset(this.defaultSort, false);
   }
 

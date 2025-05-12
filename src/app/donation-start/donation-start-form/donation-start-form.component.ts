@@ -2376,4 +2376,10 @@ export class DonationStartFormComponent
   showCaptcha() {
     this.shouldShowCaptcha = true;
   }
+
+  hideDebugInfo(event: Event) {
+    event.preventDefault();
+
+    this.showDebugInfo = false;
+  }
 }

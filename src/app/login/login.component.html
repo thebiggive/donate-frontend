@@ -48,7 +48,7 @@
                   <div>
                     <!--                    Href attribute below is needed to make this act like a link for keyboard users, i.e focusable and-->
                     <!--                    clickable using keyboard. -->
-                    <a href (click)="this.forgotPassword = false">Return to Login page</a>
+                    <a href="javascript:void(null)" (click)="this.forgotPassword = false">Return to Login page</a>
                   </div>
                   <div id="reset-password-button">
                     @if (!userAskedForResetLink) {
@@ -122,7 +122,7 @@
           </form>
           <div class="actions">
             <div>
-              <a href (click)="this.forgotPassword = true">Forgot Password?</a>
+              <a href="javascript:void(null)" (click)="this.forgotPassword = true">Forgot Password?</a>
             </div>
             <div id="login-button">
               <div aria-live="polite">
