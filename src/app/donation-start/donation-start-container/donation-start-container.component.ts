@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Campaign } from '../../campaign.model';
@@ -9,6 +9,9 @@ import { IdentityService } from '../../identity.service';
 import { environment } from '../../../environments/environment';
 import { DonationStartFormComponent } from '../donation-start-form/donation-start-form.component';
 import { ImageService } from '../../image.service';
+import { fromEvent, merge, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   templateUrl: './donation-start-container.component.html',
@@ -30,12 +33,23 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   public donor: Person | undefined;
   public bannerUri!: string | null;
 
+  isOffline$: Observable<boolean>;
+
   constructor(
     public identityService: IdentityService,
     private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isOffline$ = merge(of(null), fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(
+        map(() => !navigator.onLine),
+      );
+    } else {
+      this.isOffline$ = of(false);
+    }
+  }
 
   async ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
