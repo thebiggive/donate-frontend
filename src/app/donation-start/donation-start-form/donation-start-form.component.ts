@@ -794,7 +794,17 @@ export class DonationStartFormComponent
     return person;
   }
 
-  protected runFinalPreSubmitUpdate() {
+  protected retryFinalPreSubmitUpdate(): void {
+    this.matomoTracker.trackEvent(
+      'donate',
+      'donate_final_presumbit_retry_pressed',
+      `Donation pre-submit update retried`,
+    );
+
+    this.runFinalPreSubmitUpdate();
+  }
+
+  protected runFinalPreSubmitUpdate(): void {
     // Even if next guard fails, we want to prevent attempting to pay.
     this.runningFinalPreSubmitUpdate = true;
 
@@ -2393,6 +2403,8 @@ export class DonationStartFormComponent
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   retryDonationCreate(): void {
+    this.matomoTracker.trackEvent('donate', 'donate_create_retry_pressed', `Donation creation retried`);
+
     this.createDonationAndMaybePerson();
   }
 
