@@ -2403,11 +2403,7 @@ export class DonationStartFormComponent
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   retryDonationCreate(): void {
-    this.matomoTracker.trackEvent(
-      'donate',
-      'donate_create_retry_pressed',
-      `Donation creation retried`,
-    );
+    this.matomoTracker.trackEvent('donate', 'donate_create_retry_pressed', `Donation creation retried`);
 
     this.createDonationAndMaybePerson();
   }
