@@ -239,6 +239,7 @@ export class DonationStartFormComponent
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
+  protected finalPreSubmitUpdateFailed = false;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -292,7 +293,11 @@ export class DonationStartFormComponent
        * "Cannot read properties of undefined (reading 'setValue')". Not sure why, but we can send any error to the
        * console at least.
        */
-      this.stripeService.init().catch(console.error);
+      this.stripeService.init().catch((error) => {
+        // no need to tell tell the user about the error just yet. We will try initilisint stripe again
+        // when they hit continue to go to step 2, and block progress until sucessful.
+        console.error(error);
+      });
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
@@ -789,10 +794,11 @@ export class DonationStartFormComponent
     return person;
   }
 
-  private runFinalPreSubmitUpdate() {
+  protected runFinalPreSubmitUpdate() {
     // Even if next guard fails, we want to prevent attempting to pay.
     this.runningFinalPreSubmitUpdate = true;
 
+    let donationUpdateError = false;
     const requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
     // Set class prop `donationUpdateError` true if any required props missing.
     requiredDonationProperties.forEach((value, index) => {
@@ -806,11 +812,13 @@ export class DonationStartFormComponent
           `Donation not set or form invalid ${errorCodeDetail}`,
         );
         this.toast.showError(errorMessage);
-        this.donationUpdateError = true;
+        donationUpdateError = true;
         this.stripeError = errorMessage;
         this.stripeResponseErrorCode = undefined;
       }
     });
+
+    this.donationUpdateError = donationUpdateError;
 
     // First part of clause should be redundant but TS doesn't track enough to know that(?)
     if (!this.donation || this.donationUpdateError) {
@@ -830,6 +838,7 @@ export class DonationStartFormComponent
         next: async (donation: Donation) => {
           this.donationService.updateLocalDonation(donation);
           this.runningFinalPreSubmitUpdate = false;
+          this.finalPreSubmitUpdateFailed = false;
         },
         error: (response: HttpErrorResponse) => {
           let errorMessageForTracking: string;
@@ -844,6 +853,8 @@ export class DonationStartFormComponent
           this.donationUpdateError = true;
           this.toast.showError("Sorry, we can't submit your donation right now.");
           this.submitting = false;
+          this.runningFinalPreSubmitUpdate = false;
+          this.finalPreSubmitUpdateFailed = true;
         },
       });
   }
@@ -1229,13 +1240,13 @@ export class DonationStartFormComponent
    * the first Continue button and by the step header click handler, which I think helped guard
    * against a scenario where one might get 'stuck' without seeing the amount error that explains why.
    */
-  progressToNonAmountsStep() {
-    const success = this.validateAmountsCreateDonorDonationIfPossible();
+  async progressToNonAmountsStep() {
+    const success = await this.validateAmountsCreateDonorDonationIfPossible();
 
     success && this.next();
   }
 
-  private validateAmountsCreateDonorDonationIfPossible(): boolean {
+  private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
       this.toast.showError(
@@ -1243,6 +1254,18 @@ export class DonationStartFormComponent
       );
 
       return false;
+    }
+
+    if (!this.stripeService.isInitialised) {
+      try {
+        await this.stripeService.init();
+      } catch (error: unknown) {
+        console.error('Stripe init error', error);
+        this.toast.showError(
+          'Sorry, could not connect to the Stripe payment service. Please check your internet connection and try again',
+        );
+        return false;
+      }
     }
 
     if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
@@ -2368,6 +2391,10 @@ export class DonationStartFormComponent
 
   protected showCardReuseMessage = false;
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
+
+  retryDonationCreate(): void {
+    this.createDonationAndMaybePerson();
+  }
 
   hideCaptcha() {
     this.shouldShowCaptcha = false;
