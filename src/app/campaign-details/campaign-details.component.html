@@ -20,7 +20,7 @@
         </a>
       }
       @if (campaign.parentRef && !fromFund) {
-        <a href class="" mat-icon-button (click)="goBackToMetacampaign()">
+        <a href class="" mat-icon-button (click)="goBackToMetacampaign($event)">
           <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
           All participating campaigns
         </a>

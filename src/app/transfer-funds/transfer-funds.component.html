@@ -46,7 +46,7 @@
                 <p>Thank you for choosing to tip Big Give {{ pendingTipBalance / 100 | exactCurrency: "GBP" }}.</p>
                 <p>
                   We will collect this tip when you make your bank transfer. Need to change this? You can
-                  <a href (click)="cancelPendingTips()">cancel the tip</a>
+                  <a href (click)="cancelPendingTips($event)">cancel the tip</a>
                   and then optionally make a new one.
                 </p>
               </div>
