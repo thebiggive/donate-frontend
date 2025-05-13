@@ -798,7 +798,7 @@ export class DonationStartFormComponent
     this.matomoTracker.trackEvent(
       'donate',
       'donate_final_presumbit_retry_pressed',
-      `Donation creation retried`,
+      `Donation pre-submit update retried`,
     );
 
     this.runFinalPreSubmitUpdate();
