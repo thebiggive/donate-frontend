@@ -5,7 +5,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet, TitleStrategy } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -23,6 +23,7 @@ import { CampaignStatsResolver } from './campaign-stats-resolver';
 import { PastDonationsResolver } from './past-donations.resolver';
 import { PaymentMethodsResolver } from './payment-methods.resolver';
 import { HighlightCardsResolver } from './highlight-cards-resolver';
+import { BigGiveTitleStrategy } from '../BigGiveTitleStrategy';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 
@@ -72,6 +73,7 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    { provide: TitleStrategy, useClass: BigGiveTitleStrategy },
     provideHttpClient(withFetch()),
   ],
 })

@@ -7,6 +7,7 @@ import { MoneyPipe } from '../money.pipe';
 import { myRegularGivingPath } from '../app-routing';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RegularGivingService } from '../regularGiving.service';
+import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-mandate',
@@ -32,6 +33,7 @@ export class MandateComponent implements OnInit {
     private route: ActivatedRoute,
     private regularGivingService: RegularGivingService,
     private router: Router,
+    private readonly pageMeta: PageMetaService,
   ) {
     this.mandate = this.route.snapshot.data.mandate;
     this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
@@ -47,6 +49,11 @@ export class MandateComponent implements OnInit {
       // they just want to review and/or manage it.
       await this.router.navigateByUrl(`/${myRegularGivingPath}/${this.mandate.id}`);
     }
+
+    const title = this.isThanksPage
+      ? 'Thank you! Your Regular Giving to ' + this.mandate.charityName
+      : 'Your Regular Giving to ' + this.mandate.charityName;
+    this.pageMeta.setCommon(title);
   }
 
   /**

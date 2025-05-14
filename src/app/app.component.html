@@ -6,40 +6,45 @@
     </div>
   </div>
 }
-@if (currentUrlWithoutHash$ | async; as currentUrl) {
-  <div class="skip-to-content-link">
-    <!--
-    Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
-    which is needed for links to assets but would break this.
-    -->
-    <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
-  </div>
-}
 
-@if (isDataLoaded) {
-  <biggive-main-menu
-    [donateUrlPrefix]="donateUriPrefix"
-    [blogUrlPrefix]="blogUriPrefix"
-    [experienceUrlPrefix]="experienceUriPrefix"
-    [isLoggedIn]="isLoggedIn"
-    [smallCharityWeekEnabled]="true"
-    [someCampaignHasHomePageRedirect]="someCampaignHasHomePageRedirect()"
-  ></biggive-main-menu>
-}
+<header>
+  @if (currentUrlWithoutHash$ | async; as currentUrl) {
+    <div class="skip-to-content-link">
+      <!--
+      Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+      which is needed for links to assets but would break this.
+      -->
+      <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
+    </div>
+  }
+
+  @if (isDataLoaded) {
+    <biggive-main-menu
+      [donateUrlPrefix]="donateUriPrefix"
+      [blogUrlPrefix]="blogUriPrefix"
+      [experienceUrlPrefix]="experienceUriPrefix"
+      [isLoggedIn]="isLoggedIn"
+      [smallCharityWeekEnabled]="true"
+      [someCampaignHasHomePageRedirect]="someCampaignHasHomePageRedirect()"
+    ></biggive-main-menu>
+  }
+</header>
 
 <a id="content">
   <!-- target for "skip to content" link -->
 </a>
 <router-outlet></router-outlet>
 
-<biggive-footer
-  [headingLevel]="3"
-  [usePresetFooter]="true"
-  [donateUrlPrefix]="donateUriPrefix"
-  [blogUrlPrefix]="blogUriPrefix"
-  [experienceUrlPrefix]="experienceUriPrefix"
-  [smallCharityWeekEnabled]="true"
-></biggive-footer>
+<footer>
+  <biggive-footer
+    [headingLevel]="3"
+    [usePresetFooter]="true"
+    [donateUrlPrefix]="donateUriPrefix"
+    [blogUrlPrefix]="blogUriPrefix"
+    [experienceUrlPrefix]="experienceUriPrefix"
+    [smallCharityWeekEnabled]="true"
+  ></biggive-footer>
+</footer>
 
 <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
 for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
@@ -53,7 +58,7 @@ dismiss the banner when it needs to to click on stuff behind it.
     isPlatformBrowser &&
     (userHasExpressedCookiePreference$ | async) === false)
 ) {
-  <div id="cookie-banner">
+  <div role="region" aria-label="Our website uses cookies" id="cookie-banner">
     <biggive-cookie-banner
       [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
       [blogUriPrefix]="environment.blogUriPrefix"

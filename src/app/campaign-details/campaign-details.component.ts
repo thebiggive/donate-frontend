@@ -67,7 +67,8 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async goBackToMetacampaign() {
+  async goBackToMetacampaign(event: Event) {
+    event.preventDefault();
     const url = `/${this.campaign.parentRef}`;
 
     if (this.navigationService.isLastUrl(url)) {

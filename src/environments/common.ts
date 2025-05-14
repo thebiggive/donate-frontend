@@ -9,3 +9,6 @@ export const campaignHiddenMessage =
  */
 export const currencyPipeDigitsInfo = '1.0-0';
 export const minPasswordLength = 12;
+
+export const bigGiveName = 'Big Give';
+export const tagLine = `discover campaigns and donate`;

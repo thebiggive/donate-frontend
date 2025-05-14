@@ -74,7 +74,7 @@ export default [
     files: ["**/*.html"],
 
     rules: {
-      // add any customisations wanted for rules in html files here.
+      "@angular-eslint/template/no-positive-tabindex": ["error"],
     },
   },
 ];

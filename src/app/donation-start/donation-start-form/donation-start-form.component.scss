@@ -103,7 +103,7 @@ div .c-banner {
   background-color: white;
 }
 
-div.donationInfoWrapper {
+h1.donationInfoWrapper {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
@@ -111,7 +111,12 @@ div.donationInfoWrapper {
   flex-direction: column;
   gap: 40px;
 
-  div {
+  span {
+    display: block;
+  }
+
+  span.side {
+    font-weight: normal;
     flex-basis: 40%;
   }
 

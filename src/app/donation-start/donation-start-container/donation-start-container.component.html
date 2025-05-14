@@ -67,4 +67,11 @@
       }
     </div>
   </div>
+  <div aria-live="polite">
+    @if (isOffline$ | async) {
+      <div id="offline-warning">
+        <div>Offline</div>
+      </div>
+    }
+  </div>
 </main>

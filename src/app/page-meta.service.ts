@@ -4,6 +4,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
+import { makeTitle } from '../BigGiveTitleStrategy';
 
 /**
  * Encapsulates common logic for setting pages' key metadata consistently across basic HTML meta tags and
@@ -20,7 +21,7 @@ export class PageMetaService {
     private title: Title,
   ) {}
 
-  setCommon(title: string, description: string, imageUri: string | null) {
+  setCommon(title: string, description: string = '', imageUri: string | null = null) {
     const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
     const links = this.dom.getElementsByTagName('link');
@@ -31,9 +32,7 @@ export class PageMetaService {
     const link = links[0];
     link.setAttribute('href', canonicalUri);
 
-    if (!title.includes('Big Give')) {
-      title = `${title} – Big Give`;
-    }
+    title = makeTitle(title);
 
     this.title.setTitle(title);
     this.meta.updateTag({ property: 'og:title', content: title });
