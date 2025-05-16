@@ -13,6 +13,21 @@ mat-spinner.complete-spinner {
   width: 100%;
 }
 
+main {
+  @media #{abstract.$breakpoint-sm} {
+    font-size: 1rem;
+  }
+  @media #{abstract.$breakpoint-md} {
+    font-size: 1.1rem;
+  }
+  @media #{abstract.$breakpoint-lg} {
+    font-size: 1.2rem;
+  }
+  @media #{abstract.$breakpoint-xl} {
+    font-size: 1.4rem;
+  }
+}
+
 hr {
   width: 80%;
   color: #868686;
@@ -156,19 +171,6 @@ div.clearfix {
     th,
     td {
       text-align: left;
-
-      @media #{abstract.$breakpoint-sm} {
-        font-size: 1rem;
-      }
-      @media #{abstract.$breakpoint-md} {
-        font-size: 1.1rem;
-      }
-      @media #{abstract.$breakpoint-lg} {
-        font-size: 1.2rem;
-      }
-      @media #{abstract.$breakpoint-xl} {
-        font-size: 1.4rem;
-      }
     }
   }
   hr {
