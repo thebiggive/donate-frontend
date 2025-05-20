@@ -153,7 +153,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected get title() {
     if (!this.metaCampaign) {
-      return 'Big Give';
+      return 'Explore Campaigns - Big Give';
     }
 
     if (!this.fund) {
@@ -347,7 +347,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  clear() {
+  clear(event: Event) {
+    event.preventDefault();
     this.searchService.reset(this.defaultSort, false);
   }
 

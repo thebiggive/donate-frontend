@@ -44,22 +44,10 @@
             @if (donorHasPendingTipBalance) {
               <div>
                 <p>Thank you for choosing to tip Big Give {{ pendingTipBalance / 100 | exactCurrency: "GBP" }}.</p>
-
-                <!--
-                Following eslint rules disabled as they were not in place at the time this code was written, and also
-                to check that it's possible to disable rules in-place in Angular html files.
-
-                I'm also not sure why an `a` tag wouldn't support focus by default. Possibly because its doesn't have an
-                href. -->
-                <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-                <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
                 <p>
                   We will collect this tip when you make your bank transfer. Need to change this? You can
-                  <a (click)="cancelPendingTips()">cancel the tip</a>
+                  <a href (click)="cancelPendingTips($event)">cancel the tip</a>
                   and then optionally make a new one.
-
-                  <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
-                  <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
                 </p>
               </div>
             }

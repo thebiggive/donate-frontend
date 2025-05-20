@@ -27,7 +27,7 @@
     @if (campaign.categories.length > 0) {
       <h5>Categories</h5>
       <hr />
-      <div class="icons">
+      <ul class="icons">
         @for (category of campaign.categories; track $index) {
           <li class="icon-wrapper">
             <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
@@ -37,7 +37,7 @@
             </span>
           </li>
         }
-      </div>
+      </ul>
     }
 
     @if (campaign.beneficiaries.length > 0) {

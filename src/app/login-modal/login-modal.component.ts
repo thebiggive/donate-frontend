@@ -109,7 +109,8 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  forgotPasswordClicked(): void {
+  forgotPasswordClicked(event: Event): void {
+    event.preventDefault();
     this.forgotPassword = true;
   }
 }
