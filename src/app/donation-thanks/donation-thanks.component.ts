@@ -191,7 +191,7 @@ export class DonationThanksComponent implements OnInit {
     }
 
     this.donation = donation;
-    this.campaignService.getOneById(donation.projectId).subscribe((campaign) => {
+    this.campaignService.getOneById(donation.projectId, { dataSource: 'salesforce' }).subscribe((campaign) => {
       this.campaign = campaign;
       this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.bannerUri);
       this.setSocialShares(campaign);

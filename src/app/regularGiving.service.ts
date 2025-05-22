@@ -73,7 +73,7 @@ export class RegularGivingService {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       const IDAndJWT = this.identityService.getIdAndJWT()!;
       return this.http.post<unknown>(
-        `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
+        `${environment.matchbotApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
         mandate,
         personAuthHttpOptions,
       ) as Observable<MandateCreateResponse>;
@@ -90,7 +90,7 @@ export class RegularGivingService {
       return this.http
         .get<{
           mandates: Mandate[];
-        }>(`${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`, personAuthHttpOptions)
+        }>(`${environment.matchbotApiPrefix}/regular-giving/my-donation-mandates`, personAuthHttpOptions)
         .pipe(map((response) => response.mandates));
     });
   }
@@ -100,7 +100,7 @@ export class RegularGivingService {
       return this.http
         .get<{
           mandate: Mandate;
-        }>(`${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`, personAuthHttpOptions)
+        }>(`${environment.matchbotApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`, personAuthHttpOptions)
         .pipe(map((response) => response.mandate));
     });
   }
@@ -108,7 +108,7 @@ export class RegularGivingService {
   public cancel(mandate: Mandate, { cancellationReason }: { cancellationReason: string }): Observable<unknown> {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.post(
-        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandate.id}/cancel`,
+        `${environment.matchbotApiPrefix}/regular-giving/my-donation-mandates/${mandate.id}/cancel`,
         {
           cancellationReason: cancellationReason,
           mandateUUID: mandate.id,
@@ -155,7 +155,7 @@ export class RegularGivingService {
       this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
         const IDAndJWT = this.identityService.getIdAndJWT()!;
         return this.http.put<unknown>(
-          `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
+          `${environment.matchbotApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
           { paymentMethodId },
           personAuthHttpOptions,
         );
@@ -168,7 +168,7 @@ export class RegularGivingService {
       this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
         const IDAndJWT = this.identityService.getIdAndJWT()!;
         return this.http.delete<unknown>(
-          `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
+          `${environment.matchbotApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
           personAuthHttpOptions,
         );
       }),

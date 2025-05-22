@@ -33,7 +33,7 @@ export class DonorAccountService {
           return of(null);
         }
 
-        return this.http.get(`${environment.donationsApiPrefix}/people/${identityPerson.id}/donor-account`, {
+        return this.http.get(`${environment.matchbotApiPrefix}/people/${identityPerson.id}/donor-account`, {
           headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
         }) as Observable<DonorAccount>;
       }),

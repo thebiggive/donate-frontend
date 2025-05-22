@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Resolve, ResolveFn, Route, Router } from '@angular/router';
 
 import { CampaignListResolver } from './campaign-list.resolver';
-import { CampaignResolver } from './campaign.resolver';
+import { MatchbotCampaignResolver, SalesforceCampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CampaignStatsResolver } from './campaign-stats-resolver';
 import { HighlightCardsResolver } from './highlight-cards-resolver';
@@ -130,7 +130,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component using campaign name
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
     },
     loadChildren: () => import('./campaign-details/campaign-details.module').then((c) => c.CampaignDetailsModule),
   },
@@ -148,7 +148,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component using campaign name
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: flags.useMatchbotCampaignApi ? MatchbotCampaignResolver : SalesforceCampaignResolver,
     },
     loadChildren: () =>
       import('./donation-start/donation-start-container/donation-start-container.module').then(
@@ -190,7 +190,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
       highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
@@ -200,7 +200,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
       highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
@@ -243,7 +243,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
       highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
@@ -315,7 +315,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
       highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module').then((c) => c.ExploreModule),
@@ -360,7 +360,7 @@ if (flags.regularGivingEnabled) {
     component: RegularGivingComponent,
     canActivate: [requireLogin],
     resolve: {
-      campaign: CampaignResolver,
+      campaign: SalesforceCampaignResolver,
       donor: LoggedInPersonResolver,
       donorAccount: DonorAccountResolver,
     },
