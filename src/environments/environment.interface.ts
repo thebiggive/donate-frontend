@@ -16,7 +16,7 @@ export interface Environment {
   production: boolean;
   productionLike: boolean;
   creditTipsCampaign: string;
-  apiUriPrefix: string;
+  sfApiUriPrefix: string;
   creditDonationsEnabled: boolean;
 
   /** Prefix for pages served by this Angular application */

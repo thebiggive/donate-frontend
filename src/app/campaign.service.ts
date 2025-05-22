@@ -149,7 +149,7 @@ export class CampaignService {
 
   getForCharity(charityId: string): Observable<CampaignSummary[]> {
     return this.http.get<CampaignSummary[]>(
-      `${environment.apiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
+      `${environment.sfApiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
     );
   }
 
@@ -200,11 +200,11 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
-    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}/campaigns`, { params });
+    return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
   }
 
   getOneById(campaignId: string): Observable<Campaign> {
-    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
+    return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
   }
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
@@ -215,18 +215,18 @@ export class CampaignService {
       return new Observable();
     }
 
-    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
+    return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 
   getCampaignImpactStats() {
     return this.http
-      .get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
+      .get<CampaignStats>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/stats`)
       .pipe(map(formatCampaignStats));
   }
 
   getHomePageHighlightCards(): Observable<HighlightCard[]> {
     return this.http
-      .get<SfApiHighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`)
+      .get<SfApiHighlightCard[]>(`${environment.sfApiUriPrefix}${this.apiPath}/highlight-service`)
       .pipe(map(SFHighlightCardsToFEHighlightCards));
   }
 }

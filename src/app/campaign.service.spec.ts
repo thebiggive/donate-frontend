@@ -105,7 +105,7 @@ describe('CampaignService', () => {
     );
 
     const request = httpMock.expectOne(
-      `${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`,
+      `${environment.sfApiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`,
     );
     expect(request.request.method).toBe('GET');
     request.flush(dummyCampaign);

@@ -12,7 +12,7 @@ export const environment: Environment = {
   production: false,
   productionLike: false,
   creditTipsCampaign: 'a056900002LDXWgAAP',
-  apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
+  sfApiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateUriPrefix: 'http://localhost:4200',
   blogUriPrefix: 'http://localhost:30003',
