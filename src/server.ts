@@ -50,7 +50,7 @@ app.use(
         'connect-src': [
           'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
           new URL(environment.sfApiUriPrefix).host,
-          new URL(environment.donationsApiPrefix).host,
+          new URL(environment.matchbotApiPrefix).host,
           new URL(environment.identityApiPrefix).host,
           matomoUriBase,
           'api.getAddress.io',

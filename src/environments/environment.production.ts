@@ -12,7 +12,7 @@ export const environment: Environment = {
   experienceUriPrefix: 'https://community.biggive.org',
   blogUriPrefix: 'https://biggive.org',
   sharedCookieDomain: '.biggive.org',
-  donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
+  matchbotApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 2,

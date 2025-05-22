@@ -32,7 +32,7 @@ export interface Environment {
 
   /** Prefix for pages served by the SF Experience Cloud */
   experienceUriPrefix: string;
-  donationsApiPrefix: string;
+  matchbotApiPrefix: string;
   getSiteControlId: string;
   identityApiPrefix: string;
   matomoSiteId: number | null;

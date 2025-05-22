@@ -219,7 +219,7 @@ export class CampaignService {
       case 'salesforce':
         return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
       case 'matchbot':
-        return this.http.get<Campaign>(`${environment.donationsApiPrefix}/campaigns/${campaignId}`);
+        return this.http.get<Campaign>(`${environment.matchbotApiPrefix}/campaigns/${campaignId}`);
     }
   }
 
