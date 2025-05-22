@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 
 import { routes } from './app-routing';
 import { CampaignListResolver } from './campaign-list.resolver';
-import { CampaignResolver } from './campaign.resolver';
+import { MatchbotCampaignResolver, SalesforceCampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
@@ -58,7 +58,8 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
   ],
   providers: [
     CampaignListResolver,
-    CampaignResolver,
+    SalesforceCampaignResolver,
+    MatchbotCampaignResolver,
     CampaignStatsResolver,
     CharityCampaignsResolver,
     HighlightCardsResolver,

@@ -203,8 +203,24 @@ export class CampaignService {
     return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
   }
 
-  getOneById(campaignId: string): Observable<Campaign> {
-    return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
+  /**
+   * Gets details of a campaign from a system. At time of writing this is always salesforce, but we are in
+   * process of changing it over to matchbot.
+   */
+  getOneById(
+    campaignId: string,
+    {
+      dataSource,
+    }: {
+      dataSource: 'salesforce' | 'matchbot';
+    },
+  ): Observable<Campaign> {
+    switch (dataSource) {
+      case 'salesforce':
+        return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
+      case 'matchbot':
+        return this.http.get<Campaign>(`${environment.donationsApiPrefix}/campaigns/${campaignId}`);
+    }
   }
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
