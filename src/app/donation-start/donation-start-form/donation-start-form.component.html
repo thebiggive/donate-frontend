@@ -1,13 +1,3 @@
-@if (showDebugInfo) {
-  <div style="outline: solid green 1px; position: fixed; top: 200px; left: 50px; width: 400px; background: white">
-    Customer: Email: {{ donor?.email_address }} <br />
-    ID: {{ donor?.id }} <br />
-    Stripe ID {{ donor?.stripe_customer_id }} <br /><br />
-    Donation {{ donation?.donationAmount }} <br />PSP customer ID: {{ donation?.pspCustomerId }} <br />
-
-    <a href (click)="hideDebugInfo($event)">(dismiss)</a>
-  </div>
-}
 @if (campaignOpenOnLoad) {
   <form class="c-donate-form" (keydown.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
