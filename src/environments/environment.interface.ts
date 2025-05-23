@@ -16,7 +16,7 @@ export interface Environment {
   production: boolean;
   productionLike: boolean;
   creditTipsCampaign: string;
-  apiUriPrefix: string;
+  sfApiUriPrefix: string;
   creditDonationsEnabled: boolean;
 
   /** Prefix for pages served by this Angular application */
@@ -32,7 +32,7 @@ export interface Environment {
 
   /** Prefix for pages served by the SF Experience Cloud */
   experienceUriPrefix: string;
-  donationsApiPrefix: string;
+  matchbotApiPrefix: string;
   getSiteControlId: string;
   identityApiPrefix: string;
   matomoSiteId: number | null;

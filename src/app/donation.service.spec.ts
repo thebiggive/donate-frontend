@@ -89,7 +89,7 @@ describe('DonationService', () => {
         },
       );
 
-      const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations`);
+      const mockPost = httpMock.expectOne(`${environment.matchbotApiPrefix}/donations`);
       expect(mockPost.request.method).toEqual('POST');
       expect(mockPost.cancelled).toBeFalsy();
       expect(mockPost.request.responseType).toEqual('json');
@@ -203,7 +203,7 @@ describe('DonationService', () => {
       // After it finds a local match, getProbablyResumableDonation() will hit the server for the latest copy via
       // `DonationService.get()`.
       const mockGet = httpMock.expectOne((request) =>
-        request.url.startsWith(`${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`),
+        request.url.startsWith(`${environment.matchbotApiPrefix}/donations/${inputDonation.donationId}`),
       );
       expect(mockGet.request.method).toBe('GET');
       expect(mockGet.cancelled).toBeFalsy();

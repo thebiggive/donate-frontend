@@ -14,6 +14,6 @@ export class FundService {
   constructor(private http: HttpClient) {}
 
   getOneBySlug(fundSlug: string): Observable<Fund> {
-    return this.http.get<Fund>(`${environment.apiUriPrefix}${this.apiPath}/slug/${fundSlug}`);
+    return this.http.get<Fund>(`${environment.sfApiUriPrefix}${this.apiPath}/slug/${fundSlug}`);
   }
 }

@@ -170,7 +170,7 @@ export class DonationService {
     }
 
     return this.http.put<Donation>(
-      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
@@ -185,7 +185,7 @@ export class DonationService {
 
     const response = (await firstValueFrom(
       this.http.get(
-        `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
+        `${environment.matchbotApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
         getPersonAuthHttpOptions(jwt),
       ),
     )) as { data: PaymentMethod[]; regularGivingPaymentMethod?: PaymentMethod };
@@ -209,8 +209,8 @@ export class DonationService {
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
     const endpoint = personId
-      ? `${environment.donationsApiPrefix}/people/${personId}${this.apiPath}`
-      : `${environment.donationsApiPrefix}${this.apiPath}`;
+      ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}`
+      : `${environment.matchbotApiPrefix}${this.apiPath}`;
 
     return this.http.post<DonationCreatedResponse>(endpoint, donation, getPersonAuthHttpOptions(jwt));
   }
@@ -222,7 +222,7 @@ export class DonationService {
     const cacheBuster = Math.floor(new Date().getTime() / 1000);
 
     return this.http.get<Donation>(
-      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}?cb=${cacheBuster}`,
+      `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}?cb=${cacheBuster}`,
       this.getAuthHttpOptions(donation),
     );
   }
@@ -341,7 +341,7 @@ export class DonationService {
     }
 
     return this.http.delete<{ data: PaymentMethod[] }>(
-      `${environment.donationsApiPrefix}/people/${personId}/payment_methods/${paymentMethodId}`,
+      `${environment.matchbotApiPrefix}/people/${personId}/payment_methods/${paymentMethodId}`,
       getPersonAuthHttpOptions(jwt),
     );
   }
@@ -356,7 +356,7 @@ export class DonationService {
       expiry: { month: number; year: number };
     },
   ) {
-    const url = `${environment.donationsApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
+    const url = `${environment.matchbotApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
 
     return this.http.put<{ data: PaymentMethod[] }>(
       url,
@@ -383,7 +383,7 @@ export class DonationService {
     { confirmationToken }: { confirmationToken?: ConfirmationToken },
   ): Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }> {
     return this.http.post<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>(
-      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`,
+      `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
       {
         stripeConfirmationTokenId: confirmationToken?.id,
       },
@@ -404,7 +404,7 @@ export class DonationService {
         return this.http
           .get<{
             donations: CompleteDonation[];
-          }>(`${environment.donationsApiPrefix}/people/${person.id}/donations`, getPersonAuthHttpOptions(jwt))
+          }>(`${environment.matchbotApiPrefix}/people/${person.id}/donations`, getPersonAuthHttpOptions(jwt))
           .pipe(map((response) => response.donations));
       }),
     );
@@ -425,7 +425,7 @@ export class DonationService {
             donations: Donation[];
           }>(
             'DELETE',
-            `${environment.donationsApiPrefix}/people/${person.id}/donations?campaignId=${campaignId}&paymentMethodType=customer_balance`,
+            `${environment.matchbotApiPrefix}/people/${person.id}/donations?campaignId=${campaignId}&paymentMethodType=customer_balance`,
             getPersonAuthHttpOptions(jwt),
           )
           .pipe(map((response) => response.donations));
@@ -442,7 +442,7 @@ export class DonationService {
 
     return firstValueFrom(
       this.http.post(
-        `${environment.donationsApiPrefix}/people/${person.id}/create-customer-session`,
+        `${environment.matchbotApiPrefix}/people/${person.id}/create-customer-session`,
         { campaignId: campaign?.id },
         getPersonAuthHttpOptions(jwt),
       ) as Observable<StripeCustomerSession>,
@@ -455,7 +455,7 @@ export class DonationService {
     return (
       await firstValueFrom(
         this.http.post(
-          `${environment.donationsApiPrefix}/people/${person.id}/create-setup-intent`,
+          `${environment.matchbotApiPrefix}/people/${person.id}/create-setup-intent`,
           {},
           getPersonAuthHttpOptions(jwt),
         ) as Observable<{ setupIntent: SetupIntent }>,
