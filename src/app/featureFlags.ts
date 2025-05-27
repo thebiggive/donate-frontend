@@ -16,9 +16,9 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'development':
       return { regularGivingEnabled: true, useMatchbotCampaignApi: true };
     case 'regression':
-      return { regularGivingEnabled: true, useMatchbotCampaignApi: false };
+      return { regularGivingEnabled: true, useMatchbotCampaignApi: true };
     case 'staging':
-      return { regularGivingEnabled: true, useMatchbotCampaignApi: false };
+      return { regularGivingEnabled: true, useMatchbotCampaignApi: true };
     case 'production':
       return { regularGivingEnabled: false, useMatchbotCampaignApi: false };
   }

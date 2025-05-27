@@ -95,7 +95,7 @@ describe('CampaignService', () => {
 
     const dummyCampaign: Campaign = getDummyCampaign();
 
-    service.getOneById('a051r00001EywjpAAB', { dataSource: 'salesforce' }).subscribe(
+    service.getOneById('a051r00001EywjpAAB').subscribe(
       (campaign) => {
         expect(campaign).toEqual(dummyCampaign);
       },
@@ -104,9 +104,7 @@ describe('CampaignService', () => {
       },
     );
 
-    const request = httpMock.expectOne(
-      `${environment.sfApiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`,
-    );
+    const request = httpMock.expectOne(`${environment.matchbotApiPrefix}/campaigns/a051r00001EywjpAAB`);
     expect(request.request.method).toBe('GET');
     request.flush(dummyCampaign);
   });
