@@ -1,7 +1,7 @@
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  */
-export type Campaign = {
+export type CampaignOrMetaCampaign = {
   id: string;
   aims: string[];
   amountRaised: number;
@@ -89,3 +89,12 @@ export type Campaign = {
       parentUsesSharedFunds: false;
     }
 );
+
+// for the moment MetaCampaign and Campaign are aliases of the same type as they are served together in the SF
+// backend, but I'm intending to make them separate in matchbot and so move fields that are not common to the individual
+// types below.
+
+export type MetaCampaign = CampaignOrMetaCampaign;
+
+/** AKA Charity Campaign */
+export type Campaign = CampaignOrMetaCampaign;

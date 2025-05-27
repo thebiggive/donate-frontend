@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Campaign } from './campaign.model';
+import { Campaign, MetaCampaign } from './campaign.model';
 import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
@@ -24,7 +24,7 @@ export class CampaignService {
   /**
    * See also the less forgiving variant `campaignIsOpenLessForgiving`.
    */
-  static isOpenForDonations(campaign: Campaign): boolean {
+  static isOpenForDonations(campaign: Campaign | MetaCampaign): boolean {
     if (campaign.hidden || !campaign.ready) {
       return false;
     }
@@ -53,7 +53,7 @@ export class CampaignService {
     return campaign ? new Date(campaign.startDate) <= new Date() && new Date(campaign.endDate) > new Date() : false;
   }
 
-  static isInFuture(campaign: Campaign | CampaignSummary): boolean {
+  static isInFuture(campaign: Campaign | MetaCampaign | CampaignSummary): boolean {
     if (campaign.status === 'Active' || campaign.status === 'Expired') {
       return false;
     }
@@ -61,11 +61,11 @@ export class CampaignService {
     return new Date(campaign.startDate) > new Date();
   }
 
-  static isInPast(campaign: Campaign | CampaignSummary): boolean {
+  static isInPast(campaign: Campaign | MetaCampaign | CampaignSummary): boolean {
     return campaign.status === 'Expired' || new Date(campaign.endDate) < new Date();
   }
 
-  static getRelevantDate(campaign: Campaign | CampaignSummary): Date | undefined {
+  static getRelevantDate(campaign: Campaign | MetaCampaign | CampaignSummary): Date | undefined {
     let dateToUse: Date | undefined;
 
     if (this.isInFuture(campaign)) {
@@ -77,7 +77,7 @@ export class CampaignService {
     return dateToUse;
   }
 
-  static campaignDurationInDays(campaign: Campaign): number {
+  static campaignDurationInDays(campaign: MetaCampaign): number {
     return Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
   }
 
@@ -207,7 +207,7 @@ export class CampaignService {
   /**
    * Gets details of a campaign from a backend system - currently SF in prod but changing over to matchbot
    */
-  getOneById(campaignId: string): Observable<Campaign> {
+  getCharityCampaignById(campaignId: string): Observable<Campaign> {
     switch (flags.useMatchbotCampaignApi) {
       case false:
         return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
@@ -216,7 +216,7 @@ export class CampaignService {
     }
   }
 
-  getOneBySlug(campaignSlug: string): Observable<Campaign> {
+  getMetaCampaignBySlug(campaignSlug: string): Observable<MetaCampaign> {
     if (!campaignSlug) {
       // TODO consider removing handling for this edge case once we call this
       // only on pages that have data binding completed as part of the router
@@ -224,7 +224,7 @@ export class CampaignService {
       return new Observable();
     }
 
-    return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
+    return this.http.get<MetaCampaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 
   getCampaignImpactStats() {
