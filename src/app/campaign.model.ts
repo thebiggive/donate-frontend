@@ -73,6 +73,12 @@ export type Campaign = {
   target?: number;
   thankYouMessage?: string;
   video?: { provider: string; key: string };
+
+  /**
+   * List of errors encountered by the backend in rendering this campaign. Intended to help us catch any issues
+   * that come up in MAT-405 work before release.
+   * */
+  errors?: string[];
 } & (
   | {
       // If parentUsesSharedFunds then we expect the backend to tell us how much of those parental shared funds are available
