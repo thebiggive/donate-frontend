@@ -87,6 +87,13 @@ app.use(
         'child-src': frameAndChildSrc,
       },
     },
+    referrerPolicy: {
+      // see https://helmetjs.github.io/#referrer-policy - helmet default is `no-referrer`.
+      // strict-origin-when-cross-origin  is the browser default since 2020. We need to include
+      // our referring origin header specifically to enable the fundraisingregulator.org.uk
+      // verification badge in our footer, and this matches what we have in WP.
+      policy: 'strict-origin-when-cross-origin',
+    },
   }),
 );
 app.use(morgan('combined')); // Log requests to stdout in Apache-like format
