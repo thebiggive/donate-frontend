@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
 import { map } from 'rxjs/operators';
+import { flags } from './featureFlags';
 
 @Injectable({
   providedIn: 'root',
@@ -204,21 +205,13 @@ export class CampaignService {
   }
 
   /**
-   * Gets details of a campaign from a system. At time of writing this is always salesforce, but we are in
-   * process of changing it over to matchbot.
+   * Gets details of a campaign from a backend system - currently SF in prod but changing over to matchbot
    */
-  getOneById(
-    campaignId: string,
-    {
-      dataSource,
-    }: {
-      dataSource: 'salesforce' | 'matchbot';
-    },
-  ): Observable<Campaign> {
-    switch (dataSource) {
-      case 'salesforce':
+  getOneById(campaignId: string): Observable<Campaign> {
+    switch (flags.useMatchbotCampaignApi) {
+      case false:
         return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
-      case 'matchbot':
+      case true:
         return this.http.get<Campaign>(`${environment.matchbotApiPrefix}/campaigns/${campaignId}`);
     }
   }

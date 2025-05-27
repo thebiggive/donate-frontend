@@ -11,7 +11,7 @@ import { SearchService } from './search.service';
 import { logCampaignCalloutError } from './logCampaignCalloutError';
 
 @Injectable({ providedIn: 'root' })
-export abstract class CampaignResolver implements Resolve<Campaign> {
+export class CampaignResolver implements Resolve<Campaign> {
   constructor(
     public campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
@@ -42,7 +42,7 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
         return EMPTY;
       }
 
-      return this.loadWithStateCache(campaignId, (identifier: string) => this.getOneById(identifier));
+      return this.loadWithStateCache(campaignId, (identifier: string) => this.campaignService.getOneById(identifier));
     }
 
     if (campaignSlug && fundSlug && campaignSlug !== 'campaign') {
@@ -71,8 +71,6 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
       this.campaignService.getOneBySlug(identifier),
     );
   }
-
-  abstract getOneById(identifier: string): Observable<Campaign>;
 
   private loadWithStateCache(
     identifier: string,
@@ -113,7 +111,6 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
 
     return observable;
   }
-
   /**
    * Makes sure we aren't doing API requests for clearly off "slugs", including if dev mode SSR
    * is being used and the `/d/` base doesn't totally make sense. Mostly this would happen on `/explore`
@@ -121,19 +118,5 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
    */
   private plausibleIdentifier(identifier: string): boolean {
     return !!identifier && identifier !== 'd' && identifier !== 'null';
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class MatchbotCampaignResolver extends CampaignResolver {
-  getOneById(identifier: string) {
-    return this.campaignService.getOneById(identifier, { dataSource: 'matchbot' });
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class SalesforceCampaignResolver extends CampaignResolver {
-  getOneById(identifier: string) {
-    return this.campaignService.getOneById(identifier, { dataSource: 'salesforce' });
   }
 }
