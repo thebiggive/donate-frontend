@@ -32,8 +32,10 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   public reservationExpiryDate: Date | undefined = undefined;
   public donor: Person | undefined;
   public bannerUri!: string | null;
+  protected readonly environment = environment;
 
   isOffline$: Observable<boolean>;
+  showDebugInfo = environment.showDebugInfo;
 
   constructor(
     public identityService: IdentityService,
@@ -128,4 +130,10 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
     this.donation = donation;
     this.updateReservationExpiryTime();
   };
+
+  hideDebugInfo(event: Event) {
+    event.preventDefault();
+
+    this.showDebugInfo = false;
+  }
 }

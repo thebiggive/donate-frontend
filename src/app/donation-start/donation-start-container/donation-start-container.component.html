@@ -64,6 +64,26 @@
           </div>
           <app-campaign-info [campaign]="campaign"></app-campaign-info>
         </div>
+        @if (showDebugInfo) {
+          <div style="outline: 1px solid black; padding: 1em">
+            <strong>Debug info</strong>
+            <br />
+            Customer: Email: {{ donor?.email_address }} <br />
+            ID: {{ donor?.id }} <br />
+            Stripe ID {{ donor?.stripe_customer_id }} <br /><br />
+            Donation {{ donation?.donationAmount }} <br />PSP customer ID: {{ donation?.pspCustomerId }} <br />
+
+            <a href (click)="hideDebugInfo($event)">(dismiss)</a>
+          </div>
+        }
+        @if (campaign.errors && environment.environmentId !== "production") {
+          <strong style="color: red">Campaign Errors</strong>
+          <ol>
+            @for (error of campaign.errors; track error) {
+              <li>{{ error }}</li>
+            }
+          </ol>
+        }
       }
     </div>
   </div>
