@@ -1,7 +1,7 @@
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  */
-export type CampaignOrMetaCampaign = {
+type CampaignOrMetaCampaign = {
   id: string;
   aims: string[];
   amountRaised: number;
