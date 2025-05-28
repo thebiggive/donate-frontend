@@ -54,7 +54,7 @@ type CampaignOrMetaCampaign = {
    **/
   startDate: string;
   // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
-  status: 'Active' | 'Expired' | 'Preview';
+  status: 'Active' | 'Expired' | 'Preview' | null;
   summary: string;
   title: string;
   updates: Array<{ content: string; modifiedDate: Date }>;
