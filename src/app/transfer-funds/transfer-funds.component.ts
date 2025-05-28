@@ -158,7 +158,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     });
 
     // get the tips campaign data on page load
-    this.campaignService.getOneById(environment.creditTipsCampaign).subscribe((campaign) => {
+    this.campaignService.getCharityCampaignById(environment.creditTipsCampaign).subscribe((campaign) => {
       this.campaign = campaign;
     });
   }

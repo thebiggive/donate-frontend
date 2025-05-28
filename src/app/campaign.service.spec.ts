@@ -95,7 +95,7 @@ describe('CampaignService', () => {
 
     const dummyCampaign: Campaign = getDummyCampaign();
 
-    service.getOneById('a051r00001EywjpAAB').subscribe(
+    service.getCharityCampaignById('a051r00001EywjpAAB').subscribe(
       (campaign) => {
         expect(campaign).toEqual(dummyCampaign);
       },

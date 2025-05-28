@@ -25,7 +25,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
-import { Campaign } from '../campaign.model';
+import { MetaCampaign } from '../campaign.model';
 import { Fund } from '../fund.model';
 import { NavigationService } from '../navigation.service';
 import { FundService } from '../fund.service';
@@ -60,7 +60,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * This component is used both for pages about specific meta-campagins, and for the general 'explore' page.
    * This will be undefined in the latter case.
    */
-  protected metaCampaign: Campaign | undefined;
+  protected metaCampaign: MetaCampaign | undefined;
 
   individualCampaigns: CampaignSummary[] = [];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
@@ -206,7 +206,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  private setFundSpecificProps(fund: Fund, metaCampaign: Campaign) {
+  private setFundSpecificProps(fund: Fund, metaCampaign: MetaCampaign) {
     this.tickerMainMessage =
       this.currencyPipe.transform(fund.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' +
@@ -238,13 +238,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.setPageMetadata(metaCampaign);
   }
 
-  private setSecondaryPropsAndRun(metaCampaign: Campaign | undefined) {
+  private setSecondaryPropsAndRun(metaCampaign: MetaCampaign | undefined) {
     this.searchService.reset(this.defaultSort, true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
     this.setPageMetadata(metaCampaign);
   }
 
-  private setPageMetadata(metaCampaign?: Campaign) {
+  private setPageMetadata(metaCampaign?: MetaCampaign) {
     if (metaCampaign) {
       this.pageMeta.setCommon(
         this.title,
@@ -532,7 +532,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     return isCompletedMetaCampaign ? 'amountRaised' : 'matchFundsRemaining';
   }
 
-  private setTickerParams(metaCampaign: Campaign) {
+  private setTickerParams(metaCampaign: MetaCampaign) {
     // Does not necessarily imply 0 raised. We occasionally open child campaigns before their parents, so it
     // is possible for the parent `campaign` here to raise more than 0 before it formally opens.
     const campaignInFuture = CampaignService.isInFuture(metaCampaign);
