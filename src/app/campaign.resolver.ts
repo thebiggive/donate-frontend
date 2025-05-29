@@ -5,13 +5,13 @@ import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Campaign } from './campaign.model';
+import { Campaign, MetaCampaign } from './campaign.model';
 import { CampaignService, SearchQuery } from './campaign.service';
 import { SearchService } from './search.service';
 import { logCampaignCalloutError } from './logCampaignCalloutError';
 
 @Injectable({ providedIn: 'root' })
-export abstract class CampaignResolver implements Resolve<Campaign> {
+export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
   constructor(
     public campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
@@ -21,7 +21,13 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
     private state: TransferState,
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Campaign> {
+  /**
+   * May return either a charity campaign or a metacampaign, depending on whether a campaignId or campaignSlug
+   * is passed in the route.paramMap
+   *
+   * @param route
+   */
+  resolve(route: ActivatedRouteSnapshot): Observable<Campaign | MetaCampaign> {
     const campaignId = route.paramMap.get('campaignId');
     const campaignSlug = route.paramMap.get('campaignSlug');
     const fundSlug = route.paramMap.get('fundSlug');
@@ -42,7 +48,9 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
         return EMPTY;
       }
 
-      return this.loadWithStateCache(campaignId, (identifier: string) => this.getOneById(identifier));
+      return this.loadWithStateCache(campaignId, (identifier: string) =>
+        this.campaignService.getCharityCampaignById(identifier),
+      );
     }
 
     if (campaignSlug && fundSlug && campaignSlug !== 'campaign') {
@@ -68,23 +76,21 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
     }
 
     return this.loadWithStateCache(campaignSlug || '', (identifier: string) =>
-      this.campaignService.getOneBySlug(identifier),
+      this.campaignService.getMetaCampaignBySlug(identifier),
     );
   }
 
-  abstract getOneById(identifier: string): Observable<Campaign>;
-
   private loadWithStateCache(
     identifier: string,
-    method: (identifier: string) => Observable<Campaign>,
-  ): Observable<Campaign> {
+    method: (identifier: string) => Observable<Campaign | MetaCampaign>,
+  ): Observable<Campaign | MetaCampaign> {
     if (!this.plausibleIdentifier(identifier)) {
       // Make sure we don't do `/null` API requests, on /explore for e.g.
       return EMPTY;
     }
 
     const platformIndicator = isPlatformBrowser(this.platformId) ? 'browser' : 'server';
-    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}-${platformIndicator}`);
+    const campaignKey = makeStateKey<Campaign | MetaCampaign>(`campaign-${identifier}-${platformIndicator}`);
     const campaign = this.state.get(campaignKey, undefined);
     if (campaign) {
       return of(campaign);
@@ -113,7 +119,6 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
 
     return observable;
   }
-
   /**
    * Makes sure we aren't doing API requests for clearly off "slugs", including if dev mode SSR
    * is being used and the `/d/` base doesn't totally make sense. Mostly this would happen on `/explore`
@@ -121,19 +126,5 @@ export abstract class CampaignResolver implements Resolve<Campaign> {
    */
   private plausibleIdentifier(identifier: string): boolean {
     return !!identifier && identifier !== 'd' && identifier !== 'null';
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class MatchbotCampaignResolver extends CampaignResolver {
-  getOneById(identifier: string) {
-    return this.campaignService.getOneById(identifier, { dataSource: 'matchbot' });
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class SalesforceCampaignResolver extends CampaignResolver {
-  getOneById(identifier: string) {
-    return this.campaignService.getOneById(identifier, { dataSource: 'salesforce' });
   }
 }
