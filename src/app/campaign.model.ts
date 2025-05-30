@@ -1,12 +1,35 @@
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
+ *
+ * Represents an individual campaign to raise funds for one charity - distinct from a metacampaign
+ * which has its own model
  */
-type CampaignOrMetaCampaign = {
+export type Campaign = {
   id: string;
-  aims: string[];
-  amountRaised: number;
-  additionalImageUris: Array<{ uri: string; order: number }>;
+  title: string;
+  currencyCode: 'GBP' | 'USD';
+  hidden: boolean;
+  ready: boolean;
+  summary: string;
   bannerUri: string;
+  amountRaised: number;
+  /**
+   * Total value of remaining match funds that may be used for this campaign in currency major units.
+   * Is reduced when a donation is confirmed or pre-authorised for this campaign or one it shares funds with.
+   */
+  matchFundsRemaining: number;
+  donationCount: number;
+  /**
+   * ISO 8601 formatted datetime
+   **/
+  startDate: string;
+  /**
+   * ISO 8601 formatted datetime
+   **/
+  endDate: string;
+  matchFundsTotal: number;
+  aims: string[];
+  additionalImageUris: Array<{ uri: string; order: number }>;
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];
@@ -27,43 +50,18 @@ type CampaignOrMetaCampaign = {
     website: string;
   };
   countries: string[];
-  currencyCode: 'GBP' | 'USD';
-  donationCount: number;
-  /**
-   * ISO 8601 formatted datetime
-   **/
-  endDate: string;
   impactReporting: string | null;
   impactSummary: string | null;
   isMatched: boolean;
-
-  /**
-   * Total value of remaining match funds that may be used for this campaign in currency major units.
-   * Is reduced when a donation is confirmed or pre-authorised for this campaign or one it shares funds with.
-   */
-  matchFundsRemaining: number;
-
-  matchFundsTotal: number;
   problem: string | null;
   quotes: Array<{ person: string; quote: string }>;
-  ready: boolean;
   solution: string | null;
-
-  /**
-   * ISO 8601 formatted datetime
-   **/
-  startDate: string;
   // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
   status: 'Active' | 'Expired' | 'Preview' | null;
-  summary: string;
-  title: string;
   updates: Array<{ content: string; modifiedDate: Date }>;
-  usesSharedFunds: boolean;
   alternativeFundUse?: string;
-  campaignCount?: number;
   championOptInStatement?: string;
   championRef?: string;
-  hidden: boolean;
   logoUri?: string;
   parentAmountRaised?: number;
   parentDonationCount?: number;
@@ -73,7 +71,6 @@ type CampaignOrMetaCampaign = {
   target?: number;
   thankYouMessage?: string;
   video?: { provider: string; key: string };
-
   /**
    * List of errors encountered by the backend in rendering this campaign. Intended to help us catch any issues
    * that come up in MAT-405 work before release.
@@ -89,12 +86,3 @@ type CampaignOrMetaCampaign = {
       parentUsesSharedFunds: false;
     }
 );
-
-// for the moment MetaCampaign and Campaign are aliases of the same type as they are served together in the SF
-// backend, but I'm intending to make them separate in matchbot and so move fields that are not common to the individual
-// types below.
-
-export type MetaCampaign = CampaignOrMetaCampaign;
-
-/** AKA Charity Campaign */
-export type Campaign = CampaignOrMetaCampaign;

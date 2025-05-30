@@ -5,10 +5,11 @@ import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Campaign, MetaCampaign } from './campaign.model';
+import { Campaign } from './campaign.model';
 import { CampaignService, SearchQuery } from './campaign.service';
 import { SearchService } from './search.service';
 import { logCampaignCalloutError } from './logCampaignCalloutError';
+import { MetaCampaign } from './metaCampaign.model';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {

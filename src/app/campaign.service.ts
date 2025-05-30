@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Campaign, MetaCampaign } from './campaign.model';
+import { Campaign } from './campaign.model';
 import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
@@ -10,6 +10,7 @@ import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
 import { map } from 'rxjs/operators';
 import { flags } from './featureFlags';
+import { MetaCampaign } from './metaCampaign.model';
 
 @Injectable({
   providedIn: 'root',
