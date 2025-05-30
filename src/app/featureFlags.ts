@@ -22,7 +22,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'staging':
       return { regularGivingEnabled: true, useMatchbotCampaignApi: true };
     case 'production':
-      return { regularGivingEnabled: false, useMatchbotCampaignApi: false };
+      return { regularGivingEnabled: false, useMatchbotCampaignApi: true };
   }
 };
 
