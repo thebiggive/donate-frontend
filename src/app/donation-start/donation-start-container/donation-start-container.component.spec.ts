@@ -134,7 +134,6 @@ describe('DonationStartContainer', () => {
       updates: [],
       usesSharedFunds: false,
       alternativeFundUse: 'Some information about what happens if funds are not used',
-      campaignCount: undefined,
       championOptInStatement: undefined,
       championRef: undefined,
       hidden: false,
