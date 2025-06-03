@@ -25,7 +25,6 @@ import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
-import { MetaCampaign } from '../campaign.model';
 import { Fund } from '../fund.model';
 import { NavigationService } from '../navigation.service';
 import { FundService } from '../fund.service';
@@ -33,6 +32,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
 import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
+import { MetaCampaign } from '../metaCampaign.model';
 
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
