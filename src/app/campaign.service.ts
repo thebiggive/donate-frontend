@@ -149,10 +149,19 @@ export class CampaignService {
     return query;
   }
 
-  getForCharity(charityId: string): Observable<CampaignSummary[]> {
+  getForCharity(charityId: string): Observable<
+    | CampaignSummary[]
+    | {
+        charityName: string;
+        campaigns: CampaignSummary[];
+      }
+  > {
     if (flags.useMatchbotCampaignApi) {
       // use matchbot here when its ready
-      return this.http.get<CampaignSummary[]>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
+      return this.http.get<{
+        charityName: string;
+        campaigns: CampaignSummary[];
+      }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
     } else {
       return this.http.get<CampaignSummary[]>(
         `${environment.sfApiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
