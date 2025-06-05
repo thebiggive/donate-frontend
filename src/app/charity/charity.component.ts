@@ -18,6 +18,7 @@ import { CampaignService } from '../campaign.service';
 })
 export class CharityComponent implements OnInit {
   campaigns!: CampaignSummary[];
+  charityName: string | undefined;
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   constructor(
@@ -27,12 +28,23 @@ export class CharityComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.campaigns = this.route.snapshot.data.campaigns.sort((a: CampaignSummary, b: CampaignSummary) => {
+    let campaignsFromApi: CampaignSummary[];
+
+    if (this.route.snapshot.data.campaigns.campaigns) {
+      // using matchbot API with new response structure
+      this.charityName = this.route.snapshot.data.campaigns.charityName;
+      campaignsFromApi = this.route.snapshot.data.campaigns.campaigns;
+    } else {
+      campaignsFromApi = this.route.snapshot.data.campaigns;
+      this.charityName = campaignsFromApi[0]?.charity.name;
+    }
+
+    this.campaigns = campaignsFromApi.sort((a: CampaignSummary, b: CampaignSummary) => {
       return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
     });
 
     this.pageMeta.setCommon(
-      this.campaigns[0] ? `${this.campaigns[0].charity.name} Campaigns` : 'Campaigns Archive',
+      this.charityName ? `${this.charityName} Campaigns` : 'Campaigns Archive',
       'Archive of Big Give match funded campaigns',
       null,
     );

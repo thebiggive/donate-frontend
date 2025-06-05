@@ -7,13 +7,28 @@ import { CampaignSummary } from './campaign-summary.model';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class CharityCampaignsResolver implements Resolve<CampaignSummary[]> {
+export class CharityCampaignsResolver
+  implements
+    Resolve<
+      | CampaignSummary[]
+      | {
+          charityName: string;
+          campaigns: CampaignSummary[];
+        }
+    >
+{
   constructor(
     private campaignService: CampaignService,
     private router: Router,
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<CampaignSummary[]> {
+  resolve(route: ActivatedRouteSnapshot): Observable<
+    | CampaignSummary[]
+    | {
+        charityName: string;
+        campaigns: CampaignSummary[];
+      }
+  > {
     const charityId = route.paramMap.get('charityId');
 
     // Edge case for our legacy redirector seems to have returned string 'null' as the
