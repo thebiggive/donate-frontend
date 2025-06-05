@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Campaign, MetaCampaign } from './campaign.model';
+import { Campaign } from './campaign.model';
 import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
@@ -10,6 +10,7 @@ import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
 import { map } from 'rxjs/operators';
 import { flags } from './featureFlags';
+import { MetaCampaign } from './metaCampaign.model';
 
 @Injectable({
   providedIn: 'root',
@@ -148,10 +149,24 @@ export class CampaignService {
     return query;
   }
 
-  getForCharity(charityId: string): Observable<CampaignSummary[]> {
-    return this.http.get<CampaignSummary[]>(
-      `${environment.sfApiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
-    );
+  getForCharity(charityId: string): Observable<
+    | CampaignSummary[]
+    | {
+        charityName: string;
+        campaigns: CampaignSummary[];
+      }
+  > {
+    if (flags.useMatchbotCampaignApi) {
+      // use matchbot here when its ready
+      return this.http.get<{
+        charityName: string;
+        campaigns: CampaignSummary[];
+      }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
+    } else {
+      return this.http.get<CampaignSummary[]>(
+        `${environment.sfApiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
+      );
+    }
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
