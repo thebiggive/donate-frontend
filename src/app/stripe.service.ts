@@ -177,10 +177,10 @@ export class StripeService {
       mode: 'payment',
       amount: money.amount,
       currency: money.currency.toLowerCase(),
-      setupFutureUsage: futureUsage,
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
+      ...(futureUsage ? { setupFutureUsage: futureUsage } : {}),
     };
 
     return this.stripe.elements(elementOptions);
