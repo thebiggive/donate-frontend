@@ -66,8 +66,6 @@ describe('CampaignService', () => {
       championRef: undefined,
       hidden: false,
       logoUri: undefined,
-      parentAmountRaised: undefined,
-      parentDonationCount: undefined,
       parentRef: undefined,
       parentTarget: undefined,
       surplusDonationInfo: undefined,
@@ -169,9 +167,12 @@ describe('CampaignService', () => {
   it('should return the % raised for the parent campaign when its parent does use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = true;
+    if (!campaign.parentUsesSharedFunds) {
+      throw new Error('Throwing error in impossible case to narrow type as required on next line');
+    }
+    campaign.parentAmountRaised = 1000;
     campaign.amountRaised = 98;
     campaign.target = 200;
-    campaign.parentAmountRaised = 1000;
     campaign.parentTarget = 2000;
 
     expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);

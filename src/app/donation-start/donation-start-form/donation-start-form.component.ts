@@ -870,10 +870,19 @@ export class DonationStartFormComponent
   /**
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
+   *
+   * This event seems to fire whenever an element is set up too, which can even be when the Payment Element is invisible
+   * and the donor is using donation funds.
    */
   async onStripeCardChange(
     state: StripeElementChangeEvent & { value: { type: string; payment_method?: PaymentMethod } | undefined },
   ) {
+    // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
+    // end up validating presence of invisible fields.
+    if (state.empty && this.creditPenceToUse > 0) {
+      return;
+    }
+
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -1851,7 +1860,7 @@ export class DonationStartFormComponent
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
       data: { donation },
-      disableClose: true,
+      disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
     reuseDialog.afterClosed().subscribe({ next: this.getDialogResponseFn(donation) });
@@ -1899,7 +1908,7 @@ export class DonationStartFormComponent
       this.liveAnnouncer.announce('Match funding has expired');
 
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
-        disableClose: true,
+        disableClose: true, // No 'escape' key close; must choose one of the two options.
         role: 'alertdialog',
       });
       continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
@@ -2220,7 +2229,7 @@ export class DonationStartFormComponent
   ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
-      disableClose: true,
+      disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
     continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
@@ -2243,6 +2252,9 @@ export class DonationStartFormComponent
         // Required for all use cases.
         this.donation = donation;
         this.donationChangeCallBack(donation);
+        // Normally the modal shouldn't change fundamentals that affect what needs validation, but ensure the form's in sync
+        // just in case.
+        this.setConditionalValidators();
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
