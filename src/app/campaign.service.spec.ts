@@ -167,7 +167,7 @@ describe('CampaignService', () => {
   it('should return the % raised for the parent campaign when its parent does use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = true;
-    if (! campaign.parentUsesSharedFunds) {
+    if (!campaign.parentUsesSharedFunds) {
       throw new Error('Throwing error in impossible case to narrow type as required on next line');
     }
     campaign.parentAmountRaised = 1000;
