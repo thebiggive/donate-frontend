@@ -81,7 +81,7 @@ export type Campaign = {
       parentDonationCount: number;
       parentMatchFundsRemaining: number;
       parentAmountRaised?: number;
-}
+    }
   | {
       parentUsesSharedFunds: false;
     }
