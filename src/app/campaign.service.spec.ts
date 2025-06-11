@@ -66,7 +66,6 @@ describe('CampaignService', () => {
       championRef: undefined,
       hidden: false,
       logoUri: undefined,
-      parentAmountRaised: undefined,
       parentRef: undefined,
       parentTarget: undefined,
       surplusDonationInfo: undefined,
@@ -170,6 +169,8 @@ describe('CampaignService', () => {
     campaign.parentUsesSharedFunds = true;
     campaign.amountRaised = 98;
     campaign.target = 200;
+    // @ts-expect-error - in prod we never assign parentAmountRaised or afaik mutate campaign in any way and its inferred to only exist if
+    // parentUsesSharedFunds is true. For now here we're treating campaigns as mutable so inference doesn't work the same way
     campaign.parentAmountRaised = 1000;
     campaign.parentTarget = 2000;
 

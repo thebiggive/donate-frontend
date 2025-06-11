@@ -135,7 +135,6 @@ describe('DonationStartForm', () => {
       championRef: undefined,
       hidden: false,
       logoUri: undefined,
-      parentAmountRaised: undefined,
       parentRef: undefined,
       parentTarget: undefined,
       surplusDonationInfo: undefined,
