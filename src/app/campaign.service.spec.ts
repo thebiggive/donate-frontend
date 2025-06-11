@@ -167,11 +167,12 @@ describe('CampaignService', () => {
   it('should return the % raised for the parent campaign when its parent does use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = true;
+    if (! campaign.parentUsesSharedFunds) {
+      throw new Error('Throwing error in impossible case to narrow type as required on next line');
+    }
+    campaign.parentAmountRaised = 1000;
     campaign.amountRaised = 98;
     campaign.target = 200;
-    // @ts-expect-error - in prod we never assign parentAmountRaised or afaik mutate campaign in any way and its inferred to only exist if
-    // parentUsesSharedFunds is true. For now here we're treating campaigns as mutable so inference doesn't work the same way
-    campaign.parentAmountRaised = 1000;
     campaign.parentTarget = 2000;
 
     expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);
