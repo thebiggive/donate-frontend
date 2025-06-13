@@ -64,7 +64,6 @@ export type Campaign = {
   championRef?: string;
   logoUri?: string;
   parentRef?: string;
-  parentTarget?: number;
   surplusDonationInfo?: string;
   target?: number;
   thankYouMessage?: string;
@@ -80,7 +79,8 @@ export type Campaign = {
       parentUsesSharedFunds: true;
       parentDonationCount: number;
       parentMatchFundsRemaining: number;
-      parentAmountRaised?: number;
+      parentAmountRaised: number;
+      parentTarget: number;
     }
   | {
       parentUsesSharedFunds: false;

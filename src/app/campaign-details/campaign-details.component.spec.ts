@@ -84,7 +84,6 @@ describe('CampaignDetailsComponent', () => {
       hidden: false,
       logoUri: undefined,
       parentRef: undefined,
-      parentTarget: undefined,
       surplusDonationInfo: undefined,
       target: 1234,
       thankYouMessage: undefined,

@@ -270,7 +270,7 @@ export class IdentityService {
   }
 
   async requestEmailAuthToken(emailAddress: string, { captcha_code }: { captcha_code: string }): Promise<object> {
-    const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
+    const uri = `${environment.identityApiPrefix}/emailVerificationToken`;
 
     return firstValueFrom(
       this.http.post(

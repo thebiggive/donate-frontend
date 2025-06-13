@@ -156,7 +156,7 @@ export class CampaignService {
         campaigns: CampaignSummary[];
       }
   > {
-    if (flags.useMatchbotCampaignApi) {
+    if (flags.useMatchbotCharityApi) {
       // use matchbot here when its ready
       return this.http.get<{
         charityName: string;
