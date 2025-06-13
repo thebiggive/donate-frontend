@@ -239,7 +239,16 @@ export class CampaignService {
       return new Observable();
     }
 
-    return this.http.get<MetaCampaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
+    switch (flags.useMatchbotMetaCampaignApi) {
+      case false:
+        return this.http.get<MetaCampaign>(
+          `${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`,
+        );
+      case true:
+        return this.http
+          .get<{ metaCampaign: MetaCampaign }>(`${environment.matchbotApiPrefix}/meta-campaigns/${campaignSlug}`)
+          .pipe(map(({ metaCampaign }) => metaCampaign));
+    }
   }
 
   getCampaignImpactStats() {
