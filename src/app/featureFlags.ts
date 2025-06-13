@@ -18,18 +18,43 @@ type flags = {
    * so that matchbot won't need to act as a proxy for SF for this api route.
    */
   readonly useMatchbotCharityApi: boolean;
+
+  /**
+   * Another part of MAT-405 like useMatchbotCharityApi
+   */
+  readonly useMatchbotMetaCampaignApi: boolean;
 };
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
-      return { regularGivingEnabled: true, useMatchbotCampaignApi: true, useMatchbotCharityApi: true };
+      return {
+        regularGivingEnabled: true,
+        useMatchbotCampaignApi: true,
+        useMatchbotCharityApi: true,
+        useMatchbotMetaCampaignApi: true,
+      };
     case 'regression':
-      return { regularGivingEnabled: true, useMatchbotCampaignApi: true, useMatchbotCharityApi: false };
+      return {
+        regularGivingEnabled: true,
+        useMatchbotCampaignApi: true,
+        useMatchbotCharityApi: false,
+        useMatchbotMetaCampaignApi: false,
+      };
     case 'staging':
-      return { regularGivingEnabled: true, useMatchbotCampaignApi: true, useMatchbotCharityApi: false };
+      return {
+        regularGivingEnabled: true,
+        useMatchbotCampaignApi: true,
+        useMatchbotCharityApi: false,
+        useMatchbotMetaCampaignApi: false,
+      };
     case 'production':
-      return { regularGivingEnabled: false, useMatchbotCampaignApi: true, useMatchbotCharityApi: false };
+      return {
+        regularGivingEnabled: false,
+        useMatchbotCampaignApi: true,
+        useMatchbotCharityApi: false,
+        useMatchbotMetaCampaignApi: false,
+      };
   }
 };
 
