@@ -64,7 +64,6 @@ export type Campaign = {
   championRef?: string;
   logoUri?: string;
   parentRef?: string;
-  parentTarget?: number;
   surplusDonationInfo?: string;
   target?: number;
   thankYouMessage?: string;
@@ -75,13 +74,14 @@ export type Campaign = {
    * */
   errors?: string[];
 } & (
-  | {
+  {
       // If parentUsesSharedFunds then we expect the backend to tell us how much of those parental shared funds are available
       parentUsesSharedFunds: true;
       parentDonationCount: number;
       parentMatchFundsRemaining: number;
-      parentAmountRaised?: number;
-    }
+      parentAmountRaised: number;
+      parentTarget: number;
+}
   | {
       parentUsesSharedFunds: false;
     }
