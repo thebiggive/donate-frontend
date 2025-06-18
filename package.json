@@ -54,7 +54,7 @@
     "morgan": "^1.10.0",
     "ngx-cookie-service": "^20.0.1",
     "ngx-infinite-scroll": "^20.0.0",
-    "ngx-matomo-client": "github:Huumii/ngx-matomo-client#main",
+    "ngx-matomo-client": "^8.0.0",
     "ngx-webstorage-service": "^5.0.0",
     "rxjs": "^7.8.1",
     "swiper": "^11.0.5",
