@@ -17,5 +17,5 @@ export class DonationStartMatchConfirmDialogComponent {
     statusDetail: string; // Rendered as trusted HTML
     title: string;
     surplusDonationInfo: string;
-}>(MAT_DIALOG_DATA);
+  }>(MAT_DIALOG_DATA);
 }

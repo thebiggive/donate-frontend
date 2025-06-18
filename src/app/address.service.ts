@@ -29,7 +29,6 @@ export type HomeAddress = { homeAddress: string; homeBuildingNumber: string; hom
 export class AddressService {
   private http = inject(HttpClient);
 
-
   getSuggestions(partialAddress: string): Observable<GiftAidAddressSuggestion[]> {
     // Get up to top 20 suggestions – the maximum allowed.
     const uri = `${environment.postcodeLookupUri}/autocomplete/${encodeURIComponent(partialAddress)}?top=20&api-key=${environment.postcodeLookupKey}`;

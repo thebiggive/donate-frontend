@@ -9,7 +9,6 @@ import { CompleteDonation } from './donation.model';
 export class PastDonationsResolver implements Resolve<CompleteDonation[]> {
   private donationService = inject(DonationService);
 
-
   resolve(_route: ActivatedRouteSnapshot): Observable<CompleteDonation[]> {
     return this.donationService.getPastDonations();
   }

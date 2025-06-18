@@ -15,5 +15,5 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
 export class DonationStartOfferReuseDialogComponent {
   data = inject<{
     donation: Donation;
-}>(MAT_DIALOG_DATA);
+  }>(MAT_DIALOG_DATA);
 }

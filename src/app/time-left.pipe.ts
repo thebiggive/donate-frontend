@@ -43,7 +43,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     const ref = inject(ChangeDetectorRef);
 
     super(ref);
-  
+
     this.ref = ref;
   }
 

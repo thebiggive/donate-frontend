@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import {Component, Input, OnInit, inject, InjectionToken} from '@angular/core';
+import { Component, Input, OnInit, inject, InjectionToken } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 

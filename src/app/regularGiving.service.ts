@@ -67,7 +67,6 @@ export class RegularGivingService {
   private http = inject(HttpClient);
   private identityService = inject(IdentityService);
 
-
   public startMandate(mandate: StartMandateParams): Observable<MandateCreateResponse> {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       const IDAndJWT = this.identityService.getIdAndJWT()!;

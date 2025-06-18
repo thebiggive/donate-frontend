@@ -20,7 +20,6 @@ export class CharityCampaignsResolver
   private campaignService = inject(CampaignService);
   private router = inject(Router);
 
-
   resolve(route: ActivatedRouteSnapshot): Observable<
     | CampaignSummary[]
     | {

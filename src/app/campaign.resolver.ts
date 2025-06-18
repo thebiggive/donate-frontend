@@ -20,7 +20,6 @@ export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
   private router = inject(Router);
   private state = inject(TransferState);
 
-
   /**
    * May return either a charity campaign or a metacampaign, depending on whether a campaignId or campaignSlug
    * is passed in the route.paramMap

@@ -25,7 +25,6 @@ export type EmailVerificationToken =
 export class EmailVerificationTokenResolver implements Resolve<EmailVerificationToken | null> {
   private identityService = inject(IdentityService);
 
-
   async resolve(route: ActivatedRouteSnapshot): Promise<EmailVerificationToken | null> {
     const secretNumber = route.queryParams['c'];
     const personUUID = route.queryParams['u'];

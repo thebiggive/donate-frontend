@@ -8,7 +8,6 @@ import { SetupIntent } from '@stripe/stripe-js';
 export class setupIntentResolver implements Resolve<SetupIntent> {
   private donationService = inject(DonationService);
 
-
   async resolve(_route: ActivatedRouteSnapshot): Promise<SetupIntent> {
     return this.donationService.createSetupIntent();
   }

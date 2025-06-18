@@ -15,7 +15,6 @@ export class HighlightCardsResolver implements Resolve<readonly HighlightCard[]>
   private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
 
-
   resolve(_route: ActivatedRouteSnapshot): Observable<readonly HighlightCard[]> {
     return this.campaignService.getHomePageHighlightCards().pipe(
       // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error

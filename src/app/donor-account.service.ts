@@ -13,7 +13,6 @@ export class DonorAccountService {
   private http = inject(HttpClient);
   private identityService = inject(IdentityService);
 
-
   /**
    * Returns the DonorAccount as held in Matchbot for the logged-in user. Currently needed for building the regular
    * giving signup form, likely to be used in future on the "My Account" page etc.

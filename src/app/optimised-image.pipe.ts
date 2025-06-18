@@ -9,7 +9,6 @@ import { ImageService } from './image.service';
 export class OptimisedImagePipe implements PipeTransform {
   private imageService = inject(ImageService);
 
-
   transform(originalUri: string | null, width: number = 830): Promise<string | null> {
     return new Promise((resolve, reject) => {
       this.imageService.getImageUri(originalUri, width).subscribe({

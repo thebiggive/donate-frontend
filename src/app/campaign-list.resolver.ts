@@ -12,7 +12,6 @@ export class CampaignListResolver {
   private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
 
-
   resolve(_: ActivatedRouteSnapshot) {
     const defaultListQuery = {
       limit: CampaignService.perPage,

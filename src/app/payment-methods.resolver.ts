@@ -11,7 +11,6 @@ export class PaymentMethodsResolver
 {
   private donationService = inject(DonationService);
 
-
   resolve(
     _route: ActivatedRouteSnapshot,
   ): Observable<{ adHocMethods: PaymentMethod[]; regularGivingPaymentMethod?: PaymentMethod }> {

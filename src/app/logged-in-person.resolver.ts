@@ -9,7 +9,6 @@ import { Person } from './person.model';
 export class LoggedInPersonResolver implements Resolve<Person | null> {
   private identityService = inject(IdentityService);
 
-
   resolve(_route: ActivatedRouteSnapshot): Observable<Person | null> {
     return this.identityService.getLoggedInPerson();
   }

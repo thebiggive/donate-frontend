@@ -18,7 +18,6 @@ export class PageMetaService {
   private router = inject(Router);
   private title = inject(Title);
 
-
   setCommon(title: string, description: string = '', imageUri: string | null = null) {
     const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;

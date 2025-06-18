@@ -9,7 +9,6 @@ import { DonorAccount } from './donorAccount.model';
 export class DonorAccountResolver implements Resolve<DonorAccount | null> {
   private donorAccountService = inject(DonorAccountService);
 
-
   resolve(_route: ActivatedRouteSnapshot): Observable<DonorAccount | null> {
     return this.donorAccountService.getLoggedInDonorAccount();
   }

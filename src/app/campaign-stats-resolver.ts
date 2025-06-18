@@ -15,7 +15,6 @@ export class CampaignStatsResolver implements Resolve<FormattedCampaignStats> {
   private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
 
-
   resolve(_route: ActivatedRouteSnapshot): Observable<FormattedCampaignStats> {
     return this.campaignService.getCampaignImpactStats().pipe(
       // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error

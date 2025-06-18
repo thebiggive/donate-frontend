@@ -16,7 +16,6 @@ declare let _gscq: {
 export class GetSiteControlService {
   private router = inject(Router);
 
-
   /**
    * For safely allowing in CSP.
    */

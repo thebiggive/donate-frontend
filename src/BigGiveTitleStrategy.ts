@@ -7,7 +7,6 @@ import { bigGiveName } from './environments/common';
 export class BigGiveTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
 
-
   override updateTitle(routerState: RouterStateSnapshot): void {
     const title = this.buildTitle(routerState);
     if (title !== undefined) {

@@ -9,7 +9,6 @@ import { RegularGivingService } from './regularGiving.service';
 export class MandateResolver implements Resolve<Observable<Mandate>> {
   private regularGivingService = inject(RegularGivingService);
 
-
   resolve(route: ActivatedRouteSnapshot): Observable<Mandate> {
     const mandateId = route.paramMap.get('mandateId');
     if (!mandateId) {
