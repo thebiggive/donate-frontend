@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
@@ -36,7 +36,6 @@ export class DonationThanksComponent implements OnInit {
   private identityService = inject(IdentityService);
   private matomoTracker = inject(MatomoTracker);
   private pageMeta = inject(PageMetaService);
-  private sanitizer = inject(DomSanitizer);
 
   @Input({ required: true }) private donationId!: string;
 

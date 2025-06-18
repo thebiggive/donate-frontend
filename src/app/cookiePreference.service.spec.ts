@@ -10,7 +10,9 @@ describe('CookiePreferenceService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [mockCookieService],
+      providers: [{
+        provide: CookieService, useValue: mockCookieService,
+      }],
     });
   });
 
@@ -20,7 +22,7 @@ describe('CookiePreferenceService', () => {
       return '';
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -36,7 +38,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": true}';
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -52,7 +54,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": true}}';
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -68,7 +70,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": false}}';
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -93,7 +95,7 @@ describe('CookiePreferenceService', () => {
       done();
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.agreeToAll();
   });
@@ -113,7 +115,7 @@ describe('CookiePreferenceService', () => {
       done();
     };
 
-    const service = new CookiePreferenceService();
+    const service = TestBed.runInInjectionContext(() => new CookiePreferenceService());
 
     service.storePreferences({
       agreedToAll: false,

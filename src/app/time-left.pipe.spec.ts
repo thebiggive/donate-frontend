@@ -16,10 +16,10 @@ describe('TimeLeftPipe', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{
-        provide: PLATFORM_ID, useValue: 'browser',
-        cdRefMock,
-      }],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: ChangeDetectorRef, useValue: cdRefMock },
+      ],
     });
 
     pipe = TestBed.runInInjectionContext(() => new TimeLeftPipe());
