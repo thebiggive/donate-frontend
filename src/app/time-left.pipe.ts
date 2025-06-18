@@ -1,5 +1,5 @@
 import { AsyncPipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Inject, Pipe, PipeTransform, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Pipe, PipeTransform, PLATFORM_ID, inject } from '@angular/core';
 import { interval, Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
@@ -13,6 +13,9 @@ import { map, startWith } from 'rxjs/operators';
   pure: false,
 })
 export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
+  private platformId = inject(PLATFORM_ID);
+  private ref: ChangeDetectorRef;
+
   // static for access from object context and in interval callbacks
   public static unitDefinitions = [
     {
@@ -36,11 +39,12 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
   timer?: Observable<string>;
   value?: Date;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
-    private ref: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const ref = inject(ChangeDetectorRef);
+
     super(ref);
+  
+    this.ref = ref;
   }
 
   public static format(date: Date) {

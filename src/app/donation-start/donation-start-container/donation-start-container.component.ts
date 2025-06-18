@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Campaign } from '../../campaign.model';
@@ -22,6 +22,12 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: false,
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit {
+  identityService = inject(IdentityService);
+  private imageService = inject(ImageService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   campaign!: Campaign;
   campaignOpenOnLoad!: boolean;
   donation: Donation | undefined = undefined;
@@ -37,13 +43,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   isOffline$: Observable<boolean>;
   showDebugInfo = environment.showDebugInfo;
 
-  constructor(
-    public identityService: IdentityService,
-    private imageService: ImageService,
-    private route: ActivatedRoute,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.isOffline$ = merge(of(null), fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(
         map(() => !navigator.onLine),

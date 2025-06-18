@@ -1,6 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState } from '@angular/core';
+import { Injectable, InjectionToken, makeStateKey, PLATFORM_ID, TransferState, inject } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent } from '@stripe/stripe-js';
@@ -27,22 +27,18 @@ export type StripeCustomerSession = { stripeSessionSecret: string };
   providedIn: 'root',
 })
 export class DonationService {
+  private defaultCountryCode = inject(COUNTRY_CODE, { optional: true });
+  private http = inject(HttpClient);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private platformId = inject(PLATFORM_ID);
+  private sessionStorage = inject<StorageService>(SESSION_STORAGE);
+  private cookieService = inject(CookieService);
+  private storage = inject<StorageService>(TBG_DONATE_STORAGE);
+  private state = inject(TransferState);
+
   private readonly apiPath = '/donations';
-  private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
-
-  constructor(
-    @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
-    private http: HttpClient,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: object,
-
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
-    private cookieService: CookieService,
-    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
-
-    private state: TransferState,
-  ) {}
+  private readonly storageKey = `${environment.donateUriPrefix}/v2`;
 
   deriveDefaultCountry() {
     // Only server-rendered, CloudFront-fronted requests set this token. In other

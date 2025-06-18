@@ -1,18 +1,5 @@
 import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
-import {
-  AfterViewChecked,
-  Component,
-  HostListener,
-  Inject,
-  Input,
-  makeStateKey,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  StateKey,
-  TransferState,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewChecked, Component, HostListener, Input, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, StateKey, TransferState, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -54,6 +41,23 @@ const endPipeToken = 'timeLeftToEndPipe';
   standalone: false,
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
+  private campaignService = inject(CampaignService);
+  private currencyPipe = inject(CurrencyPipe);
+  private datePipe = inject(DatePipe);
+  private fundService = inject(FundService);
+  private matomoTracker = inject(MatomoTracker);
+  private navigationService = inject(NavigationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private pageMeta = inject(PageMetaService);
+  private scroller = inject(ViewportScroller);
+  searchService = inject(SearchService);
+  private platformId = inject(PLATFORM_ID);
+  private state = inject(TransferState);
+  private timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
+  private timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
+  private sessionStorage = inject<StorageService>(SESSION_STORAGE);
+
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
 
   /**
@@ -120,25 +124,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       : [
           'a056900002SEVVPAA5', // Christmas Challenge 2024
         ];
-
-  constructor(
-    private campaignService: CampaignService,
-    private currencyPipe: CurrencyPipe,
-    private datePipe: DatePipe,
-    private fundService: FundService,
-    private matomoTracker: MatomoTracker,
-    private navigationService: NavigationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private pageMeta: PageMetaService,
-    private scroller: ViewportScroller,
-    public searchService: SearchService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private state: TransferState,
-    @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
-    @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
-  ) {}
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, Optional, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RESPONSE } from '../../express.tokens';
 import { Response } from 'express';
@@ -20,6 +20,13 @@ import { bigGiveName, tagLine } from '../../environments/common';
   standalone: false,
 })
 export class HomeComponent implements OnInit {
+  private navigationService = inject(NavigationService);
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+  private response = inject<Response>(RESPONSE, { optional: true });
+
   stats!: {
     totalRaisedFormatted: string;
     totalCountFormatted: string;
@@ -32,15 +39,6 @@ export class HomeComponent implements OnInit {
   protected mayBeAboutToRedirect: boolean = true;
 
   protected highlightCards!: HighlightCard[];
-
-  public constructor(
-    private navigationService: NavigationService,
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-    @Optional() @Inject(RESPONSE) private response: Response,
-  ) {}
 
   ngOnInit() {
     this.pageMeta.setCommon(bigGiveName, `${bigGiveName} – ${tagLine}`, '/assets/images/social-banner.png');

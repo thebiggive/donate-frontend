@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ComponentsModule } from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +42,13 @@ export type LoginNavigationState = {
   styleUrl: 'login.component.scss',
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly identityService = inject(IdentityService);
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
 
@@ -65,14 +72,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   protected registerLink!: string;
   protected isNewRegistration: boolean = false;
 
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly identityService: IdentityService,
-    private readonly pageMeta: PageMetaService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor() {
     const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
     this.isNewRegistration = !!state?.newAccountRegistration;
   }

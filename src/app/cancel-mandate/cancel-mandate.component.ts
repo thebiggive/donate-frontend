@@ -32,6 +32,11 @@ import { Observable, Subscription } from 'rxjs';
   styleUrl: './cancel-mandate.component.scss',
 })
 export class CancelMandateComponent implements OnInit, OnDestroy {
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly regularGivingService = inject(RegularGivingService);
+  private readonly router = inject(Router);
+  private readonly toaster = inject(Toast);
+
   protected mandate$: Observable<Mandate>;
   protected readonly reasonMaxLength = 500;
 
@@ -41,13 +46,9 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   protected processing = false;
   private mandateSubscription?: Subscription;
 
-  public constructor(
-    route: ActivatedRoute,
-    private readonly pageMeta: PageMetaService,
-    private readonly regularGivingService: RegularGivingService,
-    private readonly router: Router,
-    private readonly toaster: Toast,
-  ) {
+  public constructor() {
+    const route = inject(ActivatedRoute);
+
     this.mandate$ = this.regularGivingService.getActiveMandate(route.snapshot.paramMap.get('mandateId') || '');
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
@@ -10,10 +10,9 @@ import { switchMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class DonorAccountService {
-  constructor(
-    private http: HttpClient,
-    private identityService: IdentityService,
-  ) {}
+  private http = inject(HttpClient);
+  private identityService = inject(IdentityService);
+
 
   /**
    * Returns the DonorAccount as held in Matchbot for the logged-in user. Currently needed for building the regular

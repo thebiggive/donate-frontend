@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -29,17 +29,15 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
   ],
 })
 export class UpdateCardModalComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<UpdateCardModalComponent>>(MatDialogRef);
+  private formBuilder = inject(FormBuilder);
+
   form!: FormGroup;
   card?: PaymentMethod.Card;
   formattedCardExpiry?: string;
   readonly COUNTRIES = COUNTRIES;
   countryCode: string | undefined;
   postalCode: string | undefined;
-
-  constructor(
-    private dialogRef: MatDialogRef<UpdateCardModalComponent>,
-    private formBuilder: FormBuilder,
-  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({

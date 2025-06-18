@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 import { IdentityService } from './identity.service';
@@ -23,7 +23,8 @@ export type EmailVerificationToken =
 
 @Injectable({ providedIn: 'root' })
 export class EmailVerificationTokenResolver implements Resolve<EmailVerificationToken | null> {
-  constructor(private identityService: IdentityService) {}
+  private identityService = inject(IdentityService);
+
 
   async resolve(route: ActivatedRouteSnapshot): Promise<EmailVerificationToken | null> {
     const secretNumber = route.queryParams['c'];

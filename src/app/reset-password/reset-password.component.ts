@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,11 @@ import { minPasswordLength } from '../../environments/common';
   standalone: false,
 })
 export class ResetPasswordComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   minPasswordLength: number;
   passwordForm!: FormGroup;
   savingNewPassword: boolean = false;
@@ -22,12 +27,7 @@ export class ResetPasswordComponent implements OnInit {
   token!: string;
   tokenValid: boolean | undefined = undefined;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {
+  constructor() {
     this.minPasswordLength = minPasswordLength;
   }
 

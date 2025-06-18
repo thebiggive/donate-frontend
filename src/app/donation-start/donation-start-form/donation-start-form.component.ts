@@ -1,20 +1,7 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
@@ -83,6 +70,24 @@ declare let _paq: {
 export class DonationStartFormComponent
   implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
 {
+  cardIconsService = inject(CardIconsService);
+  private cd = inject(ChangeDetectorRef);
+  private conversionTrackingService = inject(ConversionTrackingService);
+  dialog = inject(MatDialog);
+  private donationService = inject(DonationService);
+  private elRef = inject<ElementRef>(ElementRef);
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private pageMeta = inject(PageMetaService);
+  private addressService = inject(AddressService);
+  private platformId = inject(PLATFORM_ID);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private stripeService = inject(StripeService);
+  private toast = inject(Toast);
+  private liveAnnouncer = inject(LiveAnnouncer);
+
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
    * will not have covered GA on a tip as well. So if this is true and they go back and add a tip we will need to
@@ -239,25 +244,9 @@ export class DonationStartFormComponent
   private friendlyCaptchaWidget: WidgetInstance | undefined;
   protected finalPreSubmitUpdateFailed = false;
 
-  constructor(
-    public cardIconsService: CardIconsService,
-    private cd: ChangeDetectorRef,
-    private conversionTrackingService: ConversionTrackingService,
-    public dialog: MatDialog,
-    private donationService: DonationService,
-    @Inject(ElementRef) private elRef: ElementRef,
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private pageMeta: PageMetaService,
-    private addressService: AddressService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private route: ActivatedRoute,
-    private router: Router,
-    private stripeService: StripeService,
-    private toast: Toast,
-    private liveAnnouncer: LiveAnnouncer,
-  ) {
+  constructor() {
+    const route = this.route;
+
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.selectedCountryCode = this.defaultCountryCode;
 

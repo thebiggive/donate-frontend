@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
@@ -17,10 +17,9 @@ export class CharityCampaignsResolver
         }
     >
 {
-  constructor(
-    private campaignService: CampaignService,
-    private router: Router,
-  ) {}
+  private campaignService = inject(CampaignService);
+  private router = inject(Router);
+
 
   resolve(route: ActivatedRouteSnapshot): Observable<
     | CampaignSummary[]

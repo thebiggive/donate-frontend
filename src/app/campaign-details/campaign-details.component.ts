@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -24,6 +24,17 @@ import { Toast } from '../toast.service';
   standalone: false,
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
+  private datePipe = inject(DatePipe);
+  private location = inject(Location);
+  private navigationService = inject(NavigationService);
+  private pageMeta = inject(PageMetaService);
+  private platformId = inject(PLATFORM_ID);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private sanitizer = inject(DomSanitizer);
+  private toast = inject(Toast);
+  timeLeftPipe = inject(TimeLeftPipe);
+
   campaign!: Campaign;
   campaignInPast = false;
   donateEnabled = true;
@@ -39,18 +50,9 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.setSecondaryProps(this.campaign);
   }
 
-  constructor(
-    private datePipe: DatePipe,
-    private location: Location,
-    private navigationService: NavigationService,
-    private pageMeta: PageMetaService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private route: ActivatedRoute,
-    private router: Router,
-    private sanitizer: DomSanitizer,
-    private toast: Toast,
-    public timeLeftPipe: TimeLeftPipe,
-  ) {
+  constructor() {
+    const route = this.route;
+
     route.queryParams
       .forEach((params: Params) => {
         if (params.fromFund) {

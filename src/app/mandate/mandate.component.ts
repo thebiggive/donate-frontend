@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ComponentsModule } from '@biggive/components-angular';
 import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
@@ -16,6 +16,11 @@ import { PageMetaService } from '../page-meta.service';
   styleUrl: './mandate.component.scss',
 })
 export class MandateComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private regularGivingService = inject(RegularGivingService);
+  private router = inject(Router);
+  private readonly pageMeta = inject(PageMetaService);
+
   protected mandate!: Mandate;
   protected readonly cancelPath;
   private mandateRefreshTimer: number | undefined;
@@ -29,12 +34,7 @@ export class MandateComponent implements OnInit {
    */
   protected isThanksPage;
 
-  constructor(
-    private route: ActivatedRoute,
-    private regularGivingService: RegularGivingService,
-    private router: Router,
-    private readonly pageMeta: PageMetaService,
-  ) {
+  constructor() {
     this.mandate = this.route.snapshot.data.mandate;
     this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
     this.isThanksPage = !!this.route.snapshot.data['isThanks'];

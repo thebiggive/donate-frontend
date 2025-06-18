@@ -1,16 +1,5 @@
 import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  HostListener,
-  Inject,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  signal,
-  ViewChild,
-  WritableSignal,
-} from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal, inject } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveMainMenu } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -43,6 +32,16 @@ import { detect } from 'detect-browser';
   standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
+  private baseHref = inject(APP_BASE_HREF);
+  private identityService = inject(IdentityService);
+  private donationService = inject(DonationService);
+  private getSiteControlService = inject(GetSiteControlService);
+  private navigationService = inject(NavigationService);
+  private cookiePreferenceService = inject(CookiePreferenceService);
+  private platformId = inject(PLATFORM_ID);
+  private matomoTracker = inject(MatomoTracker);
+  private router = inject(Router);
+
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
@@ -78,17 +77,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private loginStatusChangeSubscription: Subscription | undefined;
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
-  constructor(
-    @Inject(APP_BASE_HREF) private baseHref: string,
-    private identityService: IdentityService,
-    private donationService: DonationService,
-    private getSiteControlService: GetSiteControlService,
-    private navigationService: NavigationService,
-    private cookiePreferenceService: CookiePreferenceService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private matomoTracker: MatomoTracker,
-    private router: Router,
-  ) {
+  constructor() {
+    const navigationService = this.navigationService;
+    const router = this.router;
+
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
     this.existingCookiePreferences = this.cookiePreferenceService

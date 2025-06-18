@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -30,6 +30,10 @@ import { BackendError, errorDescription } from '../backendError';
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
+  private dialogRef = inject<MatDialogRef<LoginModalComponent>>(MatDialogRef);
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+
   loginForm!: FormGroup;
   loggingIn = false;
   loginError?: string;
@@ -42,12 +46,6 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
-
-  constructor(
-    private dialogRef: MatDialogRef<LoginModalComponent>,
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({

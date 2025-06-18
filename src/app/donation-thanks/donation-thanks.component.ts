@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -30,6 +30,14 @@ import { GIFT_AID_FACTOR } from '../Money';
   standalone: false,
 })
 export class DonationThanksComponent implements OnInit {
+  private campaignService = inject(CampaignService);
+  dialog = inject(MatDialog);
+  private donationService = inject(DonationService);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private pageMeta = inject(PageMetaService);
+  private sanitizer = inject(DomSanitizer);
+
   @Input({ required: true }) private donationId!: string;
 
   campaign?: Campaign;
@@ -66,15 +74,7 @@ export class DonationThanksComponent implements OnInit {
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
 
-  constructor(
-    private campaignService: CampaignService,
-    public dialog: MatDialog,
-    private donationService: DonationService,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private pageMeta: PageMetaService,
-    private sanitizer: DomSanitizer,
-  ) {
+  constructor() {
     this.minPasswordLength = minPasswordLength;
   }
 

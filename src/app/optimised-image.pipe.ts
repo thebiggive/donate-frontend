@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 
 import { ImageService } from './image.service';
 
@@ -7,7 +7,8 @@ import { ImageService } from './image.service';
   standalone: true,
 })
 export class OptimisedImagePipe implements PipeTransform {
-  constructor(private imageService: ImageService) {}
+  private imageService = inject(ImageService);
+
 
   transform(originalUri: string | null, width: number = 830): Promise<string | null> {
     return new Promise((resolve, reject) => {

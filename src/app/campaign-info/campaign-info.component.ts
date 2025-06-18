@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -28,6 +28,13 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
 })
 export class CampaignInfoComponent implements OnInit {
+  private currencyPipe = inject(CurrencyPipe);
+  datePipe = inject(DatePipe);
+  private route = inject(ActivatedRoute);
+  integerPipe = inject<DecimalPipe>(integerPipeToken);
+  timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
+  timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
+
   additionalImageUris: Array<string | null> = [];
   @Input({ required: true }) campaign!: Campaign;
   campaignOpen!: boolean;
@@ -39,15 +46,6 @@ export class CampaignInfoComponent implements OnInit {
    * specific campaign otherwise.
    */
   donationCount!: number;
-
-  constructor(
-    private currencyPipe: CurrencyPipe,
-    public datePipe: DatePipe,
-    private route: ActivatedRoute,
-    @Inject(integerPipeToken) public integerPipe: DecimalPipe,
-    @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
-    @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
-  ) {}
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;

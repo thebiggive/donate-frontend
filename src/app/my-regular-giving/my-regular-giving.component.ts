@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageMetaService } from '../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -13,12 +13,10 @@ import { MoneyPipe } from '../money.pipe';
   styleUrl: './my-regular-giving.component.scss',
 })
 export class MyRegularGivingComponent implements OnInit {
-  protected mandates!: Mandate[];
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
 
-  constructor(
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-  ) {}
+  protected mandates!: Mandate[];
 
   ngOnInit() {
     this.pageMeta.setCommon('Your Regular Giving Mandates', 'Donations you make to support charities each month', null);

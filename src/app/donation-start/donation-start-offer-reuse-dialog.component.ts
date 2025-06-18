@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -13,5 +13,7 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
   imports: [...allChildComponentImports, ExactCurrencyPipe, MatButtonModule, MatDialogModule, PopupStandaloneComponent],
 })
 export class DonationStartOfferReuseDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { donation: Donation }) {}
+  data = inject<{
+    donation: Donation;
+}>(MAT_DIALOG_DATA);
 }

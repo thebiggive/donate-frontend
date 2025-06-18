@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
@@ -16,11 +16,11 @@ import { MetaCampaign } from './metaCampaign.model';
   providedIn: 'root',
 })
 export class CampaignService {
+  private http = inject(HttpClient);
+
   static perPage = 6;
 
   private apiPath = '/campaigns/services/apexrest/v1.0' as const;
-
-  constructor(private http: HttpClient) {}
 
   /**
    * See also the less forgiving variant `campaignIsOpenLessForgiving`.

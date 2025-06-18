@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageMetaService } from '../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -20,14 +20,12 @@ import { myRegularGivingPath } from '../app-routing';
   styleUrl: './my-donations.component.scss',
 })
 export class MyDonationsComponent implements OnInit {
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
+
   protected donations!: EnrichedDonation[];
   protected atLeastOneLargeRecentDonation?: boolean;
   protected readonly myRegularGivingPath = myRegularGivingPath;
-
-  constructor(
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-  ) {}
 
   ngOnInit() {
     this.pageMeta.setCommon('Your Donation History', 'Your Big Give donations', null);

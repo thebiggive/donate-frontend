@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,8 @@ import { DonorAccount } from './donorAccount.model';
 
 @Injectable({ providedIn: 'root' })
 export class DonorAccountResolver implements Resolve<DonorAccount | null> {
-  constructor(private donorAccountService: DonorAccountService) {}
+  private donorAccountService = inject(DonorAccountService);
+
 
   resolve(_route: ActivatedRouteSnapshot): Observable<DonorAccount | null> {
     return this.donorAccountService.getLoggedInDonorAccount();

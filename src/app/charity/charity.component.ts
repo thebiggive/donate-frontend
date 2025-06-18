@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';
@@ -17,15 +17,13 @@ import { CampaignService } from '../campaign.service';
   standalone: false,
 })
 export class CharityComponent implements OnInit {
+  private datePipe = inject(DatePipe);
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
+
   campaigns!: CampaignSummary[];
   charityName: string | undefined;
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
-
-  constructor(
-    private datePipe: DatePipe,
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-  ) {}
 
   ngOnInit(): void {
     let campaignsFromApi: CampaignSummary[];

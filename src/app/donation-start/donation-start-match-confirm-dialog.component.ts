@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -11,14 +11,11 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
   imports: [...allChildComponentImports, MatButtonModule, MatDialogModule, PopupStandaloneComponent],
 })
 export class DonationStartMatchConfirmDialogComponent {
-  constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      cancelCopy: string;
-      status: string; // Rendered as trusted HTML
-      statusDetail: string; // Rendered as trusted HTML
-      title: string;
-      surplusDonationInfo: string;
-    },
-  ) {}
+  data = inject<{
+    cancelCopy: string;
+    status: string; // Rendered as trusted HTML
+    statusDetail: string; // Rendered as trusted HTML
+    title: string;
+    surplusDonationInfo: string;
+}>(MAT_DIALOG_DATA);
 }

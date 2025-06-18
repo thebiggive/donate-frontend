@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign } from '../campaign.model';
 import { ComponentsModule } from '@biggive/components-angular';
@@ -89,6 +89,15 @@ const over18DefaultValue = environment.environmentId === 'regression';
   styleUrl: './regular-giving.component.scss',
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private toast = inject(Toast);
+  private regularGivingService = inject(RegularGivingService);
+  private router = inject(Router);
+  private pageMeta = inject(PageMetaService);
+  private stripeService = inject(StripeService);
+  private donationService = inject(DonationService);
+  private addressService = inject(AddressService);
+
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
       requiredNotBlankValidator,
@@ -172,17 +181,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * is quite baked into the logic for matching regular giving in matchbot.
    */
   public readonly standardNumberOfDonationsMatched = 3;
-
-  constructor(
-    private route: ActivatedRoute,
-    private toast: Toast,
-    private regularGivingService: RegularGivingService,
-    private router: Router,
-    private pageMeta: PageMetaService,
-    private stripeService: StripeService,
-    private donationService: DonationService,
-    private addressService: AddressService,
-  ) {}
 
   ngOnInit() {
     const donor: Person | null = this.route.snapshot.data['donor'];

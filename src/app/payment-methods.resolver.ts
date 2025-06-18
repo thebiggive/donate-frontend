@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { from, Observable } from 'rxjs';
 
@@ -9,7 +9,8 @@ import { PaymentMethod } from '@stripe/stripe-js';
 export class PaymentMethodsResolver
   implements Resolve<{ adHocMethods: PaymentMethod[]; regularGivingPaymentMethod?: PaymentMethod }>
 {
-  constructor(private donationService: DonationService) {}
+  private donationService = inject(DonationService);
+
 
   resolve(
     _route: ActivatedRouteSnapshot,

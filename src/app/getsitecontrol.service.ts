@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
@@ -14,7 +14,8 @@ declare let _gscq: {
   providedIn: 'root',
 })
 export class GetSiteControlService {
-  constructor(private router: Router) {}
+  private router = inject(Router);
+
 
   /**
    * For safely allowing in CSP.

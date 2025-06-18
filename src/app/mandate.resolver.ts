@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,8 @@ import { RegularGivingService } from './regularGiving.service';
 
 @Injectable({ providedIn: 'root' })
 export class MandateResolver implements Resolve<Observable<Mandate>> {
-  constructor(private regularGivingService: RegularGivingService) {}
+  private regularGivingService = inject(RegularGivingService);
+
 
   resolve(route: ActivatedRouteSnapshot): Observable<Mandate> {
     const mandateId = route.paramMap.get('mandateId');

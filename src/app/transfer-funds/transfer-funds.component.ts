@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterContentInit, Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,6 +39,17 @@ import { GIFT_AID_FACTOR } from '../Money';
   standalone: false,
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
+  private formBuilder = inject(FormBuilder);
+  dialog = inject(MatDialog);
+  private campaignService = inject(CampaignService);
+  private donationService = inject(DonationService);
+  private donorAccountService = inject(DonorAccountService);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private platformId = inject(PLATFORM_ID);
+  private addressService = inject(AddressService);
+  private toast = inject(Toast);
+
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoading: boolean = false;
   isPurchaseComplete = false;
@@ -61,19 +72,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
   donor: Person | undefined = undefined;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    public dialog: MatDialog,
-    private campaignService: CampaignService,
-    private donationService: DonationService,
-    private donorAccountService: DonorAccountService,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private addressService: AddressService,
-    private toast: Toast,
-  ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {

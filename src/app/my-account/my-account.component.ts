@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageMetaService } from '../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../identity.service';
@@ -20,15 +20,17 @@ import { environment } from '../../environments/environment';
   standalone: false,
 })
 export class MyAccountComponent implements OnInit {
+  private pageMeta = inject(PageMetaService);
+  dialog = inject(MatDialog);
+  private identityService = inject(IdentityService);
+  private router = inject(Router);
+
   public person!: Person;
   protected readonly actions: HighlightCard[];
 
-  constructor(
-    private pageMeta: PageMetaService,
-    public dialog: MatDialog,
-    private identityService: IdentityService,
-    private router: Router,
-  ) {
+  constructor() {
+    const identityService = this.identityService;
+
     this.identityService = identityService;
 
     this.actions = [

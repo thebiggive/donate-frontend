@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, inject } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -18,6 +18,10 @@ import { EmailVerificationToken } from './email-verification-token.resolver';
   providedIn: 'root',
 })
 export class IdentityService {
+  private http = inject(HttpClient);
+  private matomoTracker = inject(MatomoTracker);
+  private cookieService = inject(CookieService);
+
   /** Cookie to share with WP which needs to know whether we're logged in as a donor to be able to show the
    * correct menu variant but does not need access to the actual session cookie that holds the JWT.
    */
@@ -32,12 +36,6 @@ export class IdentityService {
 
   // Tracks and changes login status; shared between e.g. outer app menu and specific pages.
   loginStatusChanged = new EventEmitter<boolean>();
-
-  constructor(
-    private http: HttpClient,
-    private matomoTracker: MatomoTracker,
-    private cookieService: CookieService,
-  ) {}
 
   login(credentials: Credentials): Observable<{ id: string; jwt: string }> {
     return this.http

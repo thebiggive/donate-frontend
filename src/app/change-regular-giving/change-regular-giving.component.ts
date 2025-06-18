@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   PaymentIntentOrSetupIntentResult,
@@ -23,6 +23,12 @@ import { requiredNotBlankValidator } from '../validators/notBlank';
   styleUrl: './change-regular-giving.component.scss',
 })
 export class ChangeRegularGivingComponent implements OnInit {
+  private stripeService = inject(StripeService);
+  private regularGivingService = inject(RegularGivingService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private toaster = inject(Toast);
+
   protected setupIntent: SetupIntent;
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;
 
@@ -40,13 +46,7 @@ export class ChangeRegularGivingComponent implements OnInit {
     billingPostcode: new FormControl('', [requiredNotBlankValidator]),
   });
 
-  constructor(
-    private stripeService: StripeService,
-    private regularGivingService: RegularGivingService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toaster: Toast,
-  ) {
+  constructor() {
     this.paymentMethods = this.route.snapshot.data.paymentMethods;
     this.setupIntent = this.route.snapshot.data.setupIntent;
   }

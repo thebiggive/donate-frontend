@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState } from '@angular/core';
+import { Injectable, makeStateKey, PLATFORM_ID, TransferState, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY, Observable, of } from 'rxjs';
@@ -13,14 +13,13 @@ import { MetaCampaign } from './metaCampaign.model';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
-  constructor(
-    public campaignService: CampaignService,
-    private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: object,
-    public searchService: SearchService,
-    private router: Router,
-    private state: TransferState,
-  ) {}
+  campaignService = inject(CampaignService);
+  private matomoTracker = inject(MatomoTracker);
+  private platformId = inject(PLATFORM_ID);
+  searchService = inject(SearchService);
+  private router = inject(Router);
+  private state = inject(TransferState);
+
 
   /**
    * May return either a charity campaign or a metacampaign, depending on whether a campaignId or campaignSlug

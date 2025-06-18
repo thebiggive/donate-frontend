@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ComponentsModule } from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,6 +44,14 @@ import { minPasswordLength } from '../../environments/common';
   styleUrl: 'register.component.scss',
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly identityService = inject(IdentityService);
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly router = inject(Router);
+  private sanitizer = inject(DomSanitizer);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private platformId = inject(PLATFORM_ID);
+
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha!: ElementRef<HTMLElement>;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
@@ -69,15 +77,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected verificationCodeSupplied?: string;
   protected emailVerificationToken?: EmailVerificationToken;
 
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly identityService: IdentityService,
-    private readonly pageMeta: PageMetaService,
-    private readonly router: Router,
-    private sanitizer: DomSanitizer,
-    private readonly activatedRoute: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor() {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
   }
 
