@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 

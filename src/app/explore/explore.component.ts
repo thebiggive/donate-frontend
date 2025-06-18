@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { skip, Subscription } from 'rxjs';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';

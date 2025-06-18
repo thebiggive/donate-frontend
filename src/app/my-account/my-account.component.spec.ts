@@ -8,7 +8,7 @@ import { TBG_DONATE_STORAGE } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { MyAccountComponent } from './my-account.component';
 import { ActivatedRoute } from '@angular/router';
-import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 
 describe('MyAccountComponent', () => {
   let component: MyAccountComponent;

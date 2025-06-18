@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 

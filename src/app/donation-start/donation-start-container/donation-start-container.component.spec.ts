@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 import { DonationStartContainerComponent } from './donation-start-container.component';
 import { DonationStartFormComponent } from '../donation-start-form/donation-start-form.component';
 import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756

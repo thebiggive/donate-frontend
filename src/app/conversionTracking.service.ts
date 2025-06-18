@@ -1,4 +1,4 @@
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { Injectable, inject } from '@angular/core';
 import { Donation } from './donation.model';
 import { Campaign } from './campaign.model';

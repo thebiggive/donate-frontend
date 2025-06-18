@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';

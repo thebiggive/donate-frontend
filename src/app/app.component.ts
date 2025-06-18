@@ -2,7 +2,7 @@ import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal, inject } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveMainMenu } from '@biggive/components-angular';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { filter, map } from 'rxjs/operators';
 
 import { DonationService } from './donation.service';

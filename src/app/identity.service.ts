@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, inject } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { delay, map, retry, tap } from 'rxjs/operators';
 

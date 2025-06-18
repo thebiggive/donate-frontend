@@ -10,7 +10,7 @@ import { CompleteDonation, Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
 import { Person } from './person.model';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
 import { map, switchMap } from 'rxjs/operators';
 import { IdentityService, getPersonAuthHttpOptions } from './identity.service';
 import { completeStatuses, DonationStatus, resumableStatuses } from './donation-status.type';

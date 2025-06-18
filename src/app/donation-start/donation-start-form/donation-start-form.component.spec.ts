@@ -13,7 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatomoTracker as MatomoClientTracker, MatomoModule } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
@@ -50,7 +51,7 @@ function makeDonationStartFormComponent(donationService: DonationService) {
     mockIdentityService,
     {
       trackEvent: () => {},
-    } as unknown as MatomoClientTracker,
+    } as unknown as MatomoTracker,
     undefined as unknown as PageMetaService,
     undefined as unknown as AddressService,
     {},

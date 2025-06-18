@@ -7,7 +7,7 @@ import { DonationCreatedResponse } from './donation-created-response.model';
 import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
-import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
