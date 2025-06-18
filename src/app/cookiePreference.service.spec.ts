@@ -1,5 +1,6 @@
 import { CookiePreferenceService } from './cookiePreference.service';
 import { CookieService } from 'ngx-cookie-service';
+import { TestBed } from '@angular/core/testing';
 
 describe('CookiePreferenceService', () => {
   const mockCookieService: CookieService = {
@@ -7,13 +8,19 @@ describe('CookiePreferenceService', () => {
     set: undefined,
   } as unknown as CookieService;
 
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [mockCookieService],
+    });
+  });
+
   it('should show say user has not expressed cookie preference if no cookie preference cookie is set', (done) => {
     mockCookieService.get = (name) => {
       expect(name).toBe('cookie-preferences');
       return '';
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -29,7 +36,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": true}';
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -45,7 +52,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": true}}';
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -61,7 +68,7 @@ describe('CookiePreferenceService', () => {
       return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": false}}';
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.userHasExpressedCookiePreference().subscribe({
       next: (value) => {
@@ -86,7 +93,7 @@ describe('CookiePreferenceService', () => {
       done();
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.agreeToAll();
   });
@@ -106,7 +113,7 @@ describe('CookiePreferenceService', () => {
       done();
     };
 
-    const service = new CookiePreferenceService(mockCookieService);
+    const service = new CookiePreferenceService();
 
     service.storePreferences({
       agreedToAll: false,

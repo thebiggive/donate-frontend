@@ -9,10 +9,10 @@ describe('OptimisedImagePipe', () => {
     TestBed.configureTestingModule({
       providers: [ImageService],
     });
-  });
 
-  beforeEach(() => {
-    pipe = new OptimisedImagePipe(TestBed.inject(ImageService));
+    pipe = TestBed.runInInjectionContext(() => {
+      return new OptimisedImagePipe();
+    });
   });
 
   it('is instantiated', () => {

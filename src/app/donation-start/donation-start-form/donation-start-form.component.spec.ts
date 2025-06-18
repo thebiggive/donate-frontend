@@ -1,10 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -12,8 +12,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
@@ -23,48 +22,17 @@ import { DonationService, TBG_DONATE_STORAGE } from '../../donation.service';
 import { IdentityService } from '../../identity.service';
 import { TimeLeftPipe } from '../../time-left.pipe';
 import { DonationStartFormComponent } from './donation-start-form.component';
-import { CardIconsService } from '../../card-icons.service';
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core';
-import { ConversionTrackingService } from '../../conversionTracking.service';
-import { PageMetaService } from '../../page-meta.service';
-import { AddressService } from '../../address.service';
-import { StripeService } from '../../stripe.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Donation } from '../../donation.model';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { Toast } from '../../toast.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 function makeDonationStartFormComponent(donationService: DonationService) {
   const mockIdentityService = TestBed.inject(IdentityService);
   spyOn(mockIdentityService, 'isTokenForFinalisedUser').and.returnValue(true);
 
-  const donationStartFormComponent = new DonationStartFormComponent(
-    undefined as unknown as CardIconsService,
-    undefined as unknown as ChangeDetectorRef,
-    {
-      convert: () => {},
-    } as unknown as ConversionTrackingService,
-    undefined as unknown as MatDialog,
-    donationService,
-    undefined as unknown as ElementRef,
-    new FormBuilder(),
-    mockIdentityService,
-    {
-      trackEvent: () => {},
-    } as unknown as MatomoTracker,
-    undefined as unknown as PageMetaService,
-    undefined as unknown as AddressService,
-    {},
-    { snapshot: {} } as unknown as ActivatedRoute,
-    {
-      navigate: () => {},
-    } as unknown as Router,
-    undefined as unknown as StripeService,
-    {
-      showError: () => {},
-    } as unknown as Toast,
-    undefined as unknown as LiveAnnouncer,
-  );
+  TestBed.overrideProvider(DonationService, { useValue: donationService });
+
+  const donationStartFormComponent = new DonationStartFormComponent();
 
   donationStartFormComponent.campaign = { currencyCode: 'GBP' } as Campaign;
 

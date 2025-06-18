@@ -6,21 +6,23 @@ import { TimeLeftPipe } from './time-left.pipe';
 describe('TimeLeftPipe', () => {
   let pipe: TimeLeftPipe;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }],
-    });
-  });
+  const cdRefMock: ChangeDetectorRef = {
+    checkNoChanges: () => null,
+    detach: () => null,
+    detectChanges: () => null,
+    markForCheck: () => null,
+    reattach: () => null,
+  };
 
   beforeEach(() => {
-    const cdRefMock: ChangeDetectorRef = {
-      checkNoChanges: () => null,
-      detach: () => null,
-      detectChanges: () => null,
-      markForCheck: () => null,
-      reattach: () => null,
-    };
-    pipe = new TimeLeftPipe(TestBed.inject(PLATFORM_ID), cdRefMock);
+    TestBed.configureTestingModule({
+      providers: [{
+        provide: PLATFORM_ID, useValue: 'browser',
+        cdRefMock,
+      }],
+    });
+
+    pipe = TestBed.runInInjectionContext(() => new TimeLeftPipe());
   });
 
   it('is instantiated', () => {
