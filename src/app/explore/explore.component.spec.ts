@@ -65,13 +65,10 @@ describe('ExploreComponent', () => {
     });
   });
 
-  beforeEach(() => {
-    const fixture = TestBed.runInInjectionContext(() => TestBed.createComponent(ExploreComponent));
+  it('should create', () => {
+    fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
@@ -122,10 +119,11 @@ describe('ExploreComponent', () => {
     const stubRoute = { queryParams: NEVER } as unknown as ActivatedRoute;
     stubRoute.params = of({});
     stubRoute.snapshot = new ActivatedRouteSnapshot();
-    stubRoute.snapshot.data = { campaign: campaign };
+    stubRoute.snapshot.data = { campaign: campaign, highlights: [] };
 
     TestBed.overrideProvider(ActivatedRoute, { useValue: stubRoute });
 
-    return new ExploreComponent();
+    fixture = TestBed.createComponent(ExploreComponent);
+    return fixture.componentInstance;
   }
 });
