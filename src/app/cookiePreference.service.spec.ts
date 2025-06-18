@@ -10,9 +10,12 @@ describe('CookiePreferenceService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{
-        provide: CookieService, useValue: mockCookieService,
-      }],
+      providers: [
+        {
+          provide: CookieService,
+          useValue: mockCookieService,
+        },
+      ],
     });
   });
 

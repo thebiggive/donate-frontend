@@ -1,18 +1,19 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationThanksComponent } from './donation-thanks.component';
 import { CompleteDonation } from '../donation.model';
-import { MatomoModule } from 'ngx-matomo-client';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DonationThanksComponent', () => {
   let component: DonationThanksComponent;
@@ -25,10 +26,6 @@ describe('DonationThanksComponent', () => {
       imports: [
         MatButtonModule,
         MatDialogModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatProgressSpinnerModule,
         RouterModule.forRoot([
           {
@@ -46,6 +43,7 @@ describe('DonationThanksComponent', () => {
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });
   });

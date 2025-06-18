@@ -1,8 +1,10 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
@@ -10,7 +12,6 @@ import { DonationStartContainerComponent } from './donation-start-container.comp
 import { DonationStartFormComponent } from '../donation-start-form/donation-start-form.component';
 import { TBG_DONATE_STORAGE } from '../../donation.service';
 import { MatomoModule } from 'ngx-matomo-client';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
@@ -39,14 +40,7 @@ describe('DonationStartContainer', () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [DonationStartContainerComponent, DonationStartFormStubComponent],
-      imports: [
-        MatDialogModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-        RouterLink,
-      ],
+      imports: [MatDialogModule, RouterLink],
       providers: [
         {
           provide: ActivatedRoute,
@@ -58,6 +52,7 @@ describe('DonationStartContainer', () => {
           },
         },
         InMemoryStorageService,
+        { provide: MatomoModule, useClass: MatomoTestingModule },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),

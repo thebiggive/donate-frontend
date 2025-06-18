@@ -8,9 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { NEVER, of } from 'rxjs';
 
 import { ExploreComponent } from './explore.component';
@@ -32,10 +33,6 @@ describe('ExploreComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatProgressSpinnerModule,
         MatSelectModule,
         NoopAnimationsModule,
@@ -61,6 +58,7 @@ describe('ExploreComponent', () => {
         },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });
   });
