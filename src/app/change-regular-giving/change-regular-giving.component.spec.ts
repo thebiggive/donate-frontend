@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChangeRegularGivingComponent } from './change-regular-giving.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
+import { MatomoModule } from 'ngx-matomo-client';
 import { ActivatedRoute } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 

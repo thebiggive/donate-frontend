@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveMainMenu } from '@biggive/components-angular';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { filter, map } from 'rxjs/operators';
 
 import { DonationService } from './donation.service';

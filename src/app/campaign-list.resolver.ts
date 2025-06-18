@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 
 import { CampaignService } from './campaign.service';
 import { logCampaignCalloutError } from './logCampaignCalloutError';

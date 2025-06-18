@@ -11,7 +11,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { ResetPasswordComponent } from './reset-password.component';
-import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
+import { MatomoModule } from 'ngx-matomo-client';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 

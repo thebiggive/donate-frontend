@@ -20,7 +20,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { retry } from 'rxjs/operators';
 import {
   ConfirmationTokenResult,

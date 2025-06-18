@@ -3,7 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angula
 import { SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { MatomoTracker } from 'ngx-matomo-client/projects/ngx-matomo-client/core/tracker/matomo-tracker.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';

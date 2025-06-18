@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
-import { MatomoModule } from 'ngx-matomo-client/projects/ngx-matomo-client/core/matomo.module';
+import { MatomoModule } from 'ngx-matomo-client';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
