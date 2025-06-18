@@ -321,7 +321,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     if (!this.blurredSinceLastMajorScroll) {
-      this.cardGrid && (await this.cardGrid.unfocusInputs());
+      if (this.cardGrid) {
+        await this.cardGrid.unfocusInputs();
+      }
       this.blurredSinceLastMajorScroll = true;
     }
 

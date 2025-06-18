@@ -633,7 +633,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     const combinedErrors = [this.optInCharityEmailError, this.optInTBGEmailError].filter(Boolean).join(' ');
-    combinedErrors && this.toast.showError(combinedErrors);
+    if (combinedErrors) {
+      this.toast.showError(combinedErrors);
+    }
 
     return errorFound;
   }
@@ -669,7 +671,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     }
 
-    this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
+    if (this.paymentInfoErrorMessage) {
+      this.toast.showError(this.paymentInfoErrorMessage);
+    }
 
     return !!this.paymentInfoErrorMessage;
   }
@@ -694,7 +698,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.giftAidErrorMessage = errors.join(' ');
 
-    this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
+    if (this.giftAidErrorMessage) {
+      this.toast.showError(this.giftAidErrorMessage);
+    }
 
     return errors.length > 0;
   }

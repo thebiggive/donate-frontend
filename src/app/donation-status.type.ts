@@ -2,7 +2,7 @@
  * For details of status semantics see PHP enum MatchBot\Domain\DonationStatus at
  * https://github.com/thebiggive/matchbot/blob/main/src/Domain/DonationStatus.php
  */
-enum DonationStatusEnum {
+enum _DonationStatusEnum {
   'Cancelled',
   'Chargedback',
   'Collected',
@@ -17,7 +17,7 @@ enum DonationStatusEnum {
 }
 
 // See https://www.typescriptlang.org/docs/handbook/enums.html#enums-at-compile-time
-export type DonationStatus = keyof typeof DonationStatusEnum;
+export type DonationStatus = keyof typeof _DonationStatusEnum;
 
 export const completeStatuses = ['Collected', 'Paid'] as const;
 export const resumableStatuses = ['Pending', 'Reserved'] as const;

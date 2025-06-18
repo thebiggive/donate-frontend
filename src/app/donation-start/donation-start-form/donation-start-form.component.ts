@@ -1249,7 +1249,9 @@ export class DonationStartFormComponent
   async progressToNonAmountsStep() {
     const success = await this.validateAmountsCreateDonorDonationIfPossible();
 
-    success && this.next();
+    if (success) {
+      this.next();
+    }
   }
 
   private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
@@ -2283,9 +2285,10 @@ export class DonationStartFormComponent
             'donate',
             'cancel',
             `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`,
-          ),
-            // Also resets captcha.
-            this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+          );
+
+          // Also resets captcha.
+          this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
 
           // Go back to 1st step to encourage donor to try again
           this.stepper.reset();
