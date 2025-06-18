@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
           replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
         });
       } else {
-        this.response.redirect(302, redirectPath);
+        this.response?.redirect(302, redirectPath);
       }
     } else {
       this.mayBeAboutToRedirect = false;

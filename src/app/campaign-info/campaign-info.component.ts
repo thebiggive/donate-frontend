@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {Component, Input, OnInit, inject, InjectionToken} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -10,9 +10,9 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
-const integerPipeToken = 'integerPipe';
-const openPipeToken = 'timeLeftToOpenPipe';
-const endPipeToken = 'timeLeftToEndPipe';
+const integerPipeToken = new InjectionToken<DecimalPipe>('integerPipe');
+const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
+const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 
 @Component({
   selector: 'app-campaign-info',

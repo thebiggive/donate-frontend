@@ -1,5 +1,19 @@
 import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { AfterViewChecked, Component, HostListener, Input, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, StateKey, TransferState, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  HostListener,
+  Input,
+  makeStateKey,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  StateKey,
+  TransferState,
+  ViewChild,
+  inject,
+  InjectionToken,
+} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -21,8 +35,8 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
 
-const openPipeToken = 'TimeLeftToOpenPipe';
-const endPipeToken = 'timeLeftToEndPipe';
+const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
+const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 
 @Component({
   selector: 'app-explore',

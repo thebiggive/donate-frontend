@@ -58,7 +58,7 @@ export class DonationService {
    * @return Country code as uppercase alpha-2 ISO code, e.g. 'GB', 'VA', 'US' etc
    */
   getDefaultCounty(): string {
-    return this.defaultCountryCode;
+    return this.defaultCountryCode || 'GB';
   }
 
   getDonation(donationId: string): Donation | undefined {
