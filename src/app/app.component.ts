@@ -12,6 +12,7 @@ import {
   inject,
 } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { setAssetPath } from '@biggive/components/dist/components';
 import { BiggiveMainMenu } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { filter, map } from 'rxjs/operators';
@@ -89,6 +90,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
   constructor() {
+    // TODO we should probably work out how to have this in tests' bootstrap, analogous to main.ts
+    // which does the same, instead of repeating it in 2 runtime contexts.
+    setAssetPath(`${environment.donateUriPrefix}/assets`);
+
     const navigationService = this.navigationService;
     const router = this.router;
 
