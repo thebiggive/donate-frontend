@@ -5,7 +5,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
@@ -19,7 +18,6 @@ import { BackendError, errorDescription } from '../backendError';
   templateUrl: 'login-modal.html',
   styleUrl: './login-modal.component.scss',
   imports: [
-    ...allChildComponentImports,
     FormsModule,
     MatButtonModule,
     MatDialogModule,

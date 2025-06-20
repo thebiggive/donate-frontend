@@ -2,8 +2,8 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit, inject, InjectionToken } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BiggiveCampaignHighlights } from '@biggive/components-angular';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
@@ -18,7 +18,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
   selector: 'app-campaign-info',
   templateUrl: './campaign-info.component.html',
   styleUrl: './campaign-info.component.scss',
-  imports: [...allChildComponentImports, FontAwesomeModule],
+  imports: [BiggiveCampaignHighlights, FontAwesomeModule],
   providers: [
     CurrencyPipe,
     DatePipe,

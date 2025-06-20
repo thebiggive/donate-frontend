@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { Mandate } from '../mandate.model';
 import { MoneyPipe } from '../money.pipe';
 import { OrdinalPipe } from '../ordinal.pipe';
@@ -18,7 +18,10 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'app-cancel-mandate',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
     MoneyPipe,
     OrdinalPipe,
     FormsModule,

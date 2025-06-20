@@ -1,5 +1,5 @@
 import { Component, OnInit, PLATFORM_ID, OnDestroy, inject } from '@angular/core';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { ActivatedRoute } from '@angular/router';
 import { UpdateCardModalComponent } from '../update-card-modal/update-card-modal.component';
@@ -19,7 +19,7 @@ import { Toast } from '../toast.service';
 
 @Component({
   selector: 'app-my-payment-methods',
-  imports: [ComponentsModule, ExactCurrencyPipe, FaIconComponent, MatProgressSpinner],
+  imports: [BiggiveButton, BiggiveHeading, BiggivePageSection, ExactCurrencyPipe, FaIconComponent, MatProgressSpinner],
   templateUrl: './my-payment-methods.component.html',
   styleUrl: './my-payment-methods.component.scss',
 })

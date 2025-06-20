@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ComponentsModule } from '@biggive/components-angular';
 import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -11,7 +10,7 @@ import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-mandate',
-  imports: [ComponentsModule, DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
+  imports: [DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
   templateUrl: './mandate.component.html',
   styleUrl: './mandate.component.scss',
 })

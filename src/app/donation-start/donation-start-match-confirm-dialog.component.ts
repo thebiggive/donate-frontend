@@ -2,13 +2,12 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.component';
 
 @Component({
   selector: 'app-donation-start-match-confirm-dialog',
   templateUrl: 'donation-start-match-confirm-dialog.html',
-  imports: [...allChildComponentImports, MatButtonModule, MatDialogModule, PopupStandaloneComponent],
+  imports: [MatButtonModule, MatDialogModule, PopupStandaloneComponent],
 })
 export class DonationStartMatchConfirmDialogComponent {
   data = inject<{

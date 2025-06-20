@@ -5,7 +5,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { COUNTRIES } from '../countries';
 import { MatOptionModule } from '@angular/material/core';
@@ -16,7 +15,6 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
   selector: 'app-update-card-modal',
   templateUrl: 'update-card-modal.html',
   imports: [
-    ...allChildComponentImports,
     FormsModule,
     MatButtonModule,
     MatDialogModule,

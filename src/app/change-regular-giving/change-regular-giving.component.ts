@@ -7,7 +7,6 @@ import {
   StripeElements,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { ComponentsModule } from '@biggive/components-angular';
 import { StripeService } from '../stripe.service';
 import { Toast } from '../toast.service';
 import { RegularGivingService } from '../regularGiving.service';
@@ -15,10 +14,25 @@ import { countryISO2, countryOptions } from '../countries';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { requiredNotBlankValidator } from '../validators/notBlank';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggiveHeading,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 
 @Component({
   selector: 'app-change-regular-giving',
-  imports: [ComponentsModule, MatInput, ReactiveFormsModule],
+  imports: [
+    BiggiveButton,
+    BiggiveFormFieldSelect,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
+    MatInput,
+    ReactiveFormsModule,
+  ],
   templateUrl: './change-regular-giving.component.html',
   styleUrl: './change-regular-giving.component.scss',
 })

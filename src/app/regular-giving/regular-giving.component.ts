@@ -1,7 +1,12 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign } from '../campaign.model';
-import { ComponentsModule } from '@biggive/components-angular';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatStep, MatStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -64,7 +69,10 @@ const over18DefaultValue = environment.environmentId === 'regression';
 @Component({
   selector: 'app-regular-giving',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveFormFieldSelect,
+    BiggivePageSection,
+    BiggiveTextInput,
     FormsModule,
     MatStep,
     MatStepper,

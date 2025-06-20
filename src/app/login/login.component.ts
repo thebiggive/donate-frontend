@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +29,10 @@ export type LoginNavigationState = {
 @Component({
   selector: 'app-login',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
