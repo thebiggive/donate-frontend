@@ -33,8 +33,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/@biggive/components/dist/biggive/assets/fonts/EuclidTriangle/stylesheet.css",
-              "node_modules/material-icons-font/material-icons-font.css"
+              "node_modules/@biggive/components/dist/biggive/assets/fonts/EuclidTriangle/stylesheet.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -241,9 +240,6 @@
         }
       }
     }
-  },
-  "cli": {
-    "schematicCollections": ["@angular-eslint/schematics"]
   },
   "schematics": {
     "@schematics/angular:component": {

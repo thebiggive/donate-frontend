@@ -1,12 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { defineCustomElements } from '@biggive/components/loader';
+import { setAssetPath } from '@biggive/components/dist/components';
 import { register as registerSwiper } from 'swiper/element/bundle';
 
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
+import { environment } from './environments/environment';
 
-// As discussed, this is the modern way to load the component library.
-defineCustomElements(window);
+setAssetPath(`${environment.donateUriPrefix}/assets`);
 
 bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
 

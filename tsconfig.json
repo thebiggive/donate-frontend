@@ -15,7 +15,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
-    "target": "ES2022",
+    "target": "ES2015",
     "module": "ES2022"
   },
   "angularCompilerOptions": {
@@ -23,6 +23,5 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  },
-  "exclude": ["./cypress.config.ts", "**/*.cy.ts"]
+  }
 }

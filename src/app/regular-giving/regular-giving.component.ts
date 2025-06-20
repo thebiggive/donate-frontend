@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Person } from '../person.model';
 import { MandateCreateResponse, RegularGivingService, StartMandateParams } from '../regularGiving.service';
 import { Mandate } from '../mandate.model';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 import { requiredNotBlankValidator } from '../validators/notBlank';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';

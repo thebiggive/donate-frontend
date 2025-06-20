@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MoneyPipe } from '../money.pipe';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RegularGivingService } from '../regularGiving.service';
 import { PageMetaService } from '../page-meta.service';

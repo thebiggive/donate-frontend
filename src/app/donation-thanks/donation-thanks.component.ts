@@ -15,7 +15,7 @@ import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { myAccountPath } from '../app-routing';
+import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
 import { WidgetInstance } from 'friendly-challenge';
 import { GIFT_AID_FACTOR } from '../Money';

@@ -11,7 +11,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { allChildComponentImports } from '../../allChildComponentImports';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 
 @Component({
   selector: 'app-my-donations',
