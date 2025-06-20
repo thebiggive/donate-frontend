@@ -17,11 +17,3 @@
 // import './commands';
 
 import { CampaignStats } from '../../src/app/campaign-stats.model';
-
-Cypress.on('window:before:load', (win) => {
-  // This is a workaround for a race condition in Cypress where the component library
-  // initializes before Angular has a chance to set the asset path. By setting it here,
-  // we ensure it's available at the earliest possible moment.
-  // @ts-ignore
-  win.__BIGGIVE_ASSET_PATH__ = `${Cypress.config('baseUrl')}/assets`;
-});

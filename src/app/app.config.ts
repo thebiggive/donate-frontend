@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
+import { ApplicationConfig, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,

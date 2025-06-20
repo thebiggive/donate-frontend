@@ -15,6 +15,7 @@ import { COUNTRY_CODE } from './app/country-code.token';
 import { GetSiteControlService } from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import { environment } from './environments/environment';
+import { setAssetPath } from '@biggive/components/dist/components';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
@@ -159,6 +160,8 @@ app.get('**', (req, res, next) => {
       ],
     })
     .then(async (html) => {
+      setAssetPath(environment.donateUriPrefix + '/assets');
+
       const hydratedDoc = await renderToString(html, {
         // Don't `removeScripts` like Ionic does: we need them to hand over to browser JS runtime successfully!
         prettyHtml: true,

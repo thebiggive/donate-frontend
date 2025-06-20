@@ -37,13 +37,7 @@ import { detect } from 'detect-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
-  imports: [
-    AsyncPipe,
-    BiggiveCookieBanner,
-    BiggiveFooter,
-    BiggiveMainMenu,
-    RouterOutlet,
-  ],
+  imports: [AsyncPipe, BiggiveCookieBanner, BiggiveFooter, BiggiveMainMenu, RouterOutlet],
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private baseHref = inject(APP_BASE_HREF);
