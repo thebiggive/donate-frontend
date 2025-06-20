@@ -22,7 +22,7 @@
     "cypress:run": "cypress run",
     "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts",
     "prettier": "npx prettier . --write --list-different",
-    "serve:ssr": "node dist/donate-frontend/server/main.server.mjs"
+    "serve:ssr": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
     "@angular/animations": "^20.0.3",
