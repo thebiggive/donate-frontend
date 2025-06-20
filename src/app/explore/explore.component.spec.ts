@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatomoModule } from 'ngx-matomo-client';
@@ -35,7 +34,6 @@ describe('ExploreComponent', () => {
         MatInputModule,
         MatProgressSpinnerModule,
         MatSelectModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
           {

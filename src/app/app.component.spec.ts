@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
@@ -29,7 +28,6 @@ describe('AppComponent', () => {
         MatInputModule,
         MatListModule,
         MatSelectModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         AppComponent,

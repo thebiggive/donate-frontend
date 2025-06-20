@@ -11,7 +11,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
@@ -116,7 +115,6 @@ describe('DonationStartForm', () => {
         MatProgressSpinnerModule,
         MatSelectModule,
         MatStepperModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
           {

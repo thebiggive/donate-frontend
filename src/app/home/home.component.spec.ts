@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home.component';
@@ -26,7 +25,6 @@ describe('HomeComponent', () => {
         MatInputModule,
         MatProgressSpinnerModule,
         MatSelectModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         HomeComponent,

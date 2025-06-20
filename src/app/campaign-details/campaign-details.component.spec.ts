@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
@@ -28,7 +27,6 @@ describe('CampaignDetailsComponent', () => {
         MatIconModule,
         MatProgressSpinnerModule,
         MatTabsModule,
-        NoopAnimationsModule,
         OptimisedImagePipe,
         RouterModule.forRoot([]),
         CampaignDetailsComponent,
