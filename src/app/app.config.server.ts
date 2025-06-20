@@ -1,6 +1,6 @@
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideServerRendering } from '@angular/ssr';
 
 import { appConfig } from './app.config';
 
