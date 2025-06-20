@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller, AsyncPipe } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -14,8 +14,16 @@ import {
   inject,
   InjectionToken,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
+import {
+  BiggiveCampaignCardFilterGrid,
+  BiggiveTotalizer,
+  BiggiveTotalizerTickerItem,
+  BiggiveHeroImage,
+  BiggivePageSection,
+  BiggiveGrid,
+  BiggiveCampaignCard,
+} from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
 
@@ -34,6 +42,10 @@ import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -49,10 +61,22 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     { provide: endPipeToken, useClass: TimeLeftPipe },
     DatePipe,
   ],
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    BiggiveTotalizer,
+    BiggiveTotalizerTickerItem,
+    BiggiveHeroImage,
+    BiggivePageSection,
+    BiggiveCampaignCardFilterGrid,
+    BiggiveGrid,
+    InfiniteScrollDirective,
+    BiggiveCampaignCard,
+    MatProgressSpinner,
+    HighlightCardsComponent,
+    RouterLink,
+    AsyncPipe,
+    CurrencyPipe,
+    OptimisedImagePipe,
+  ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private campaignService = inject(CampaignService);

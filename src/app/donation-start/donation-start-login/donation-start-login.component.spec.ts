@@ -11,8 +11,7 @@ describe('DonationStartLoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [DonationStartLoginComponent],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, DonationStartLoginComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DonationStartLoginComponent);

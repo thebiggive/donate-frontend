@@ -22,7 +22,6 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [AppComponent],
       imports: [
         AsyncPipe,
         MatButtonModule, // Not required but makes test DOM layout more realistic
@@ -33,6 +32,7 @@ describe('AppComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([]),
+        AppComponent,
       ],
       providers: [
         { provide: APP_BASE_HREF, useValue: 'http://some.test.localhost' },

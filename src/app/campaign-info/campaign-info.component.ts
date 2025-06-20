@@ -21,6 +21,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
   imports: [...allChildComponentImports, FontAwesomeModule],
   providers: [
     CurrencyPipe,
+    DatePipe,
     { provide: integerPipeToken, useClass: DecimalPipe },
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
     { provide: openPipeToken, useClass: TimeLeftPipe },

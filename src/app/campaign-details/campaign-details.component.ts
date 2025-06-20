@@ -1,7 +1,7 @@
-import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
+import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
 import { Campaign } from '../campaign.model';
@@ -10,6 +10,21 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { Toast } from '../toast.service';
+import {
+  BiggivePageSection,
+  BiggiveCallToAction,
+  BiggiveFormattedText,
+  BiggiveBrandedImage,
+  BiggiveHeading,
+  BiggiveSocialIcon,
+  BiggiveButton,
+  BiggiveQuote,
+} from '@biggive/components-angular';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CampaignInfoComponent } from '../campaign-info/campaign-info.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -18,10 +33,26 @@ import { Toast } from '../toast.service';
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
   providers: [TimeLeftPipe, DatePipe],
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    BiggivePageSection,
+    BiggiveCallToAction,
+    BiggiveFormattedText,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    BiggiveBrandedImage,
+    BiggiveHeading,
+    BiggiveSocialIcon,
+    BiggiveButton,
+    CampaignInfoComponent,
+    MatTabGroup,
+    MatTab,
+    BiggiveQuote,
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+    OptimisedImagePipe,
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private datePipe = inject(DatePipe);

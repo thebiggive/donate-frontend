@@ -20,7 +20,6 @@ describe('HomeComponent', () => {
   beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [HomeComponent],
       imports: [
         AsyncPipe,
         MatIconModule,
@@ -30,6 +29,7 @@ describe('HomeComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([]),
+        HomeComponent,
       ],
       providers: [
         {

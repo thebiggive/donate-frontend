@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RESPONSE } from '../../express.tokens';
 import { Response } from 'express';
@@ -9,15 +9,30 @@ import { HighlightCard } from '../highlight-cards/HighlightCard';
 import { environment } from '../../environments/environment';
 import { NavigationService } from '../navigation.service';
 import { bigGiveName, tagLine } from '../../environments/common';
+import {
+  BiggiveHeroImage,
+  BiggivePageSection,
+  BiggiveCallToAction,
+  BiggiveHeading,
+  BiggiveButton,
+  BiggiveVideoFeature,
+} from '@biggive/components-angular';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: 'home.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    BiggiveHeroImage,
+    HighlightCardsComponent,
+    BiggivePageSection,
+    BiggiveCallToAction,
+    BiggiveHeading,
+    BiggiveButton,
+    BiggiveVideoFeature,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
 export class HomeComponent implements OnInit {
   private navigationService = inject(NavigationService);

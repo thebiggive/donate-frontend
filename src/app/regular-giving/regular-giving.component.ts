@@ -85,6 +85,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MoneyPipe,
     AsyncPipe,
   ],
+  providers: [],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss',
 })

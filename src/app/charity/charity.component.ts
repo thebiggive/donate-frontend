@@ -1,20 +1,19 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { CampaignService } from '../campaign.service';
+import { BiggiveGrid, BiggiveCampaignCard } from '@biggive/components-angular';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 
 @Component({
   selector: 'app-charity',
   templateUrl: './charity.component.html',
   styleUrl: 'charity.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [RouterLink, BiggiveGrid, BiggiveCampaignCard, AsyncPipe, CurrencyPipe, OptimisedImagePipe],
 })
 export class CharityComponent implements OnInit {
   private datePipe = inject(DatePipe);

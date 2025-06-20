@@ -2,15 +2,15 @@ import { Component, EventEmitter, Input, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Campaign } from '../../campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
+import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 
 @Component({
   selector: 'app-donation-start-login',
   templateUrl: './donation-start-login.component.html',
   styleUrl: './donation-start-login.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [MatButton, RouterLink, ExactCurrencyPipe],
 })
 export class DonationStartLoginComponent {
   dialog = inject(MatDialog);

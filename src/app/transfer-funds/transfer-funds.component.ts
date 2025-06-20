@@ -1,9 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterContentInit, Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocompleteSelectedEvent,
+  MatOption,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
+import { MatSelectChange, MatSelect } from '@angular/material/select';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { EMPTY } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
@@ -25,6 +30,15 @@ import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { Toast } from '../toast.service';
 import { GIFT_AID_FACTOR } from '../Money';
+import { RouterLink } from '@angular/router';
+import { MatStepper, MatStep, MatStepperNext, MatStepLabel } from '@angular/material/stepper';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
@@ -34,9 +48,28 @@ import { GIFT_AID_FACTOR } from '../Money';
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
   styleUrl: './transfer-funds.component.scss',
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    MatStepper,
+    MatStep,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatButton,
+    MatStepperNext,
+    MatStepLabel,
+    MatRadioGroup,
+    MatRadioButton,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatHint,
+    MatProgressSpinner,
+    MatCheckbox,
+    ExactCurrencyPipe,
+  ],
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   private formBuilder = inject(FormBuilder);

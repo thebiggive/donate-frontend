@@ -23,10 +23,7 @@ import { MatomoModule } from 'ngx-matomo-client';
       useClass: DonationStartFormStubComponent,
     },
   ],
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [MatDialogModule, RouterLink],
 })
 class DonationStartFormStubComponent {
   resumeDonationsIfPossible() {}
@@ -39,8 +36,7 @@ describe('DonationStartContainer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [DonationStartContainerComponent, DonationStartFormStubComponent],
-      imports: [MatDialogModule, RouterLink],
+      imports: [MatDialogModule, RouterLink, DonationStartContainerComponent, DonationStartFormStubComponent],
       providers: [
         {
           provide: ActivatedRoute,

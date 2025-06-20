@@ -19,15 +19,27 @@ import { myAccountPath } from '../app-routing';
 import { flags } from '../featureFlags';
 import { WidgetInstance } from 'friendly-challenge';
 import { GIFT_AID_FACTOR } from '../Money';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { BiggiveButton, BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 
 @Component({
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
   styleUrl: './donation-thanks.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    BiggiveButton,
+    FaIconComponent,
+    BiggivePageSection,
+    BiggiveSocialIcon,
+    RouterLink,
+    DatePipe,
+    ExactCurrencyPipe,
+  ],
 })
 export class DonationThanksComponent implements OnInit {
   private campaignService = inject(CampaignService);

@@ -1,21 +1,13 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'; // Used for some Angular Material components' touch support
-import { setAssetPath } from '@biggive/components/dist/components';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { defineCustomElements } from '@biggive/components/loader';
 import { register as registerSwiper } from 'swiper/element/bundle';
 
-import { environment } from './environments/environment';
-import { AppModule } from './app/app.module';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
 
-if (environment.productionLike) {
-  enableProdMode();
-}
+// As discussed, this is the modern way to load the component library.
+defineCustomElements(window);
 
-setAssetPath(`${environment.donateUriPrefix}/assets`);
-
-globalThis.document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-    .catch((err) => console.error(err));
-});
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
 
 registerSwiper();

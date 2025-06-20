@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -15,10 +15,15 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatStep } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { retry } from 'rxjs/operators';
@@ -65,6 +70,15 @@ import { Toast } from '../../toast.service';
 import { GIFT_AID_FACTOR } from '../../Money';
 import { noLongNumberValidator } from '../../validators/noLongNumberValidator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { BiggiveTextInput, BiggiveFormFieldSelect } from '@biggive/components-angular';
+import { MatInput } from '@angular/material/input';
+import { MatHint } from '@angular/material/form-field';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -74,11 +88,29 @@ declare let _paq: {
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
   providers: [ExactCurrencyPipe],
+  imports: [
+    ReactiveFormsModule,
+    MatStepper,
+    MatStep,
+    BiggiveTextInput,
+    MatInput,
+    BiggiveFormFieldSelect,
+    MatHint,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatIcon,
+    MatButton,
+    MatRadioGroup,
+    MatRadioButton,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    MatProgressSpinner,
+    MatCheckbox,
+    PercentPipe,
+    ExactCurrencyPipe,
+  ],
 })
 export class DonationStartFormComponent
   implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit

@@ -21,7 +21,6 @@ describe('CampaignDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [CampaignDetailsComponent],
       imports: [
         CommonModule,
         CurrencyPipe,
@@ -32,6 +31,7 @@ describe('CampaignDetailsComponent', () => {
         NoopAnimationsModule,
         OptimisedImagePipe,
         RouterModule.forRoot([]),
+        CampaignDetailsComponent,
       ],
       providers: [TimeLeftPipe, provideHttpClient(withFetch()), provideHttpClientTesting()],
     }).compileComponents();

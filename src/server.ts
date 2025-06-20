@@ -19,9 +19,25 @@ import { environment } from './environments/environment';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
-const indexHtml = join(serverDistFolder, 'index.server.html');
+
+// conditionally define server-only constants
+let serverDistFolder: string;
+let browserDistFolder: string;
+let indexHtml: string;
+
+// This check prevents browser builds from breaking on the Node.js-specific `import.meta.url`.
+if (typeof window === 'undefined') {
+  serverDistFolder = dirname(fileURLToPath(import.meta.url));
+  browserDistFolder = resolve(serverDistFolder, '../browser');
+  indexHtml = join(serverDistFolder, 'index.server.html');
+} else {
+  // Provide dummy values for browser build to avoid errors, they won't be used.
+  serverDistFolder = '';
+  browserDistFolder = '';
+  indexHtml = '';
+}
+
+setAssetPath(`${environment.donateUriPrefix}/assets`);
 
 enableProdMode();
 const app = express();
@@ -49,9 +65,9 @@ app.use(
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
           'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
-          new URL(environment.sfApiUriPrefix).host,
-          new URL(environment.matchbotApiPrefix).host,
-          new URL(environment.identityApiPrefix).host,
+          // new URL(environment.sfApiUriPrefix).host,
+          // new URL(environment.matchbotApiPrefix).host,
+          // new URL(environment.identityApiPrefix).host,
           matomoUriBase,
           'api.getAddress.io',
           '*.getsitecontrol.com',
@@ -176,7 +192,7 @@ app.get('**', (req, res, next) => {
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
-if (isMainModule(import.meta.url)) {
+if (typeof window === 'undefined' && isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
 
   const server = app.listen(port, () => {

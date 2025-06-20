@@ -1,4 +1,4 @@
-import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser, AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -11,9 +11,9 @@ import {
   WritableSignal,
   inject,
 } from '@angular/core';
-import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { setAssetPath } from '@biggive/components/dist/components';
-import { BiggiveMainMenu } from '@biggive/components-angular';
+import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { filter, map } from 'rxjs/operators';
 
@@ -38,10 +38,7 @@ import { detect } from 'detect-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [BiggiveMainMenu, RouterOutlet, BiggiveFooter, BiggiveCookieBanner, AsyncPipe],
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private baseHref = inject(APP_BASE_HREF);
