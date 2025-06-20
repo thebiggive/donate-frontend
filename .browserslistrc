@@ -5,17 +5,12 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
+Chrome >= 107
+ChromeAndroid >= 107
+Edge >= 107
+Firefox >= 104
+FirefoxAndroid >= 104
 
-> 0.2%
-last 2 versions
-Firefox ESR
-not dead
-not IE 8-11
-
-# First working version of Firefox starting from MacOS High Sierra, Windows 7 and on Linux
-Firefox > 89
-# First working version of Chrome starting from MacOS High Sierra, Windows 7 and on Linux
-Chrome > 84
 # First working version of Safari starting from MacOS High Sierra, Windows 7 and on Linux
 Safari > 14
 # Support for mobile IOS users
