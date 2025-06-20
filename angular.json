@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@biggive/components/hydrate",
+              "compression",
+              "morgan"
+            ],
             "outputPath": "dist/donate-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
