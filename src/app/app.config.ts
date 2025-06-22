@@ -23,15 +23,11 @@ import { BigGiveTitleStrategy } from '../BigGiveTitleStrategy';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 
-// In test environments, Cypress will set `window.__BIGGIVE_ASSET_PATH__` before this script runs.
-// In other environments, we fall back to the environment variable or the window's origin.
-const assetPath = (globalThis.window as any)?.__BIGGIVE_ASSET_PATH__ || `${environment.donateUriPrefix}/assets`;
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
       registerSwiper();
-      setAssetPath(assetPath);
+      setAssetPath(`${environment.donateUriPrefix}/assets`);
       defineCustomElements();
     }),
     provideAnimationsAsync(),
