@@ -3,7 +3,6 @@ import { UpdateCardModalComponent } from './update-card-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -15,7 +14,7 @@ describe('UpdateCardModalComponent', () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [],
-      imports: [FormsModule, MatButtonModule, MatDialogModule, NoopAnimationsModule, ReactiveFormsModule],
+      imports: [FormsModule, MatButtonModule, MatDialogModule, ReactiveFormsModule],
       providers: [InMemoryStorageService, { provide: MatDialogRef, useValue: {} }],
     }).compileComponents();
 

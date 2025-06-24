@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, DOCUMENT, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -14,12 +13,10 @@ import { makeTitle } from '../BigGiveTitleStrategy';
   providedIn: 'root',
 })
 export class PageMetaService {
-  constructor(
-    @Inject(DOCUMENT) private dom: Document,
-    private meta: Meta,
-    private router: Router,
-    private title: Title,
-  ) {}
+  private dom = inject<Document>(DOCUMENT);
+  private meta = inject(Meta);
+  private router = inject(Router);
+  private title = inject(Title);
 
   setCommon(title: string, description: string = '', imageUri: string | null = null) {
     const baseUri = environment.donateUriPrefix;

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { Observable, of } from 'rxjs';
@@ -11,11 +11,9 @@ import { logCampaignCalloutError } from './logCampaignCalloutError';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignStatsResolver implements Resolve<FormattedCampaignStats> {
-  constructor(
-    private campaignService: CampaignService,
-    private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {}
+  private campaignService = inject(CampaignService);
+  private matomoTracker = inject(MatomoTracker);
+  private platformId = inject(PLATFORM_ID);
 
   resolve(_route: ActivatedRouteSnapshot): Observable<FormattedCampaignStats> {
     return this.campaignService.getCampaignImpactStats().pipe(

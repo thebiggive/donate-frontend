@@ -48,17 +48,17 @@ div.mat-expansion-panel-body {
 }
 
 .success-bar {
-  --mdc-snackbar-supporting-text-size: 17px;
-  --mdc-snackbar-supporting-text-font: mat.m2-font-family(abstract.$app-typography);
-  --mdc-snackbar-supporting-text-line-height: 20px;
+  --mat-snackbar-supporting-text-size: 17px;
+  --mat-snackbar-supporting-text-font: mat.m2-font-family(abstract.$app-typography);
+  --mat-snackbar-supporting-text-line-height: 20px;
   background-color: abstract.$colour-primary;
   color: abstract.$colour-primary-contrast;
 }
 
 .error-bar {
-  --mdc-snackbar-supporting-text-size: 17px;
-  --mdc-snackbar-supporting-text-font: mat.m2-font-family(abstract.$app-typography);
-  --mdc-snackbar-supporting-text-line-height: 20px;
+  --mat-snackbar-supporting-text-size: 17px;
+  --mat-snackbar-supporting-text-font: mat.m2-font-family(abstract.$app-typography);
+  --mat-snackbar-supporting-text-line-height: 20px;
   background-color: abstract.$colour-primary-contrast;
   color: #bb2222; // matching angular native palette
 }

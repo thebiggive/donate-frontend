@@ -1,9 +1,8 @@
-import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller, AsyncPipe } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
   HostListener,
-  Inject,
   Input,
   makeStateKey,
   OnDestroy,
@@ -12,9 +11,19 @@ import {
   StateKey,
   TransferState,
   ViewChild,
+  inject,
+  InjectionToken,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
+import {
+  BiggiveCampaignCardFilterGrid,
+  BiggiveTotalizer,
+  BiggiveTotalizerTickerItem,
+  BiggiveHeroImage,
+  BiggivePageSection,
+  BiggiveGrid,
+  BiggiveCampaignCard,
+} from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
 
@@ -33,9 +42,13 @@ import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 
-const openPipeToken = 'TimeLeftToOpenPipe';
-const endPipeToken = 'timeLeftToEndPipe';
+const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
+const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 
 @Component({
   selector: 'app-explore',
@@ -48,12 +61,41 @@ const endPipeToken = 'timeLeftToEndPipe';
     { provide: endPipeToken, useClass: TimeLeftPipe },
     DatePipe,
   ],
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    BiggiveTotalizer,
+    BiggiveTotalizerTickerItem,
+    BiggiveHeroImage,
+    BiggivePageSection,
+    BiggiveCampaignCardFilterGrid,
+    BiggiveGrid,
+    InfiniteScrollDirective,
+    BiggiveCampaignCard,
+    MatProgressSpinner,
+    HighlightCardsComponent,
+    RouterLink,
+    AsyncPipe,
+    CurrencyPipe,
+    OptimisedImagePipe,
+  ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
+  private campaignService = inject(CampaignService);
+  private currencyPipe = inject(CurrencyPipe);
+  private datePipe = inject(DatePipe);
+  private fundService = inject(FundService);
+  private matomoTracker = inject(MatomoTracker);
+  private navigationService = inject(NavigationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private pageMeta = inject(PageMetaService);
+  private scroller = inject(ViewportScroller);
+  searchService = inject(SearchService);
+  private platformId = inject(PLATFORM_ID);
+  private state = inject(TransferState);
+  private timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
+  private timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
+  private sessionStorage = inject<StorageService>(SESSION_STORAGE);
+
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
 
   /**
@@ -120,25 +162,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       : [
           'a056900002SEVVPAA5', // Christmas Challenge 2024
         ];
-
-  constructor(
-    private campaignService: CampaignService,
-    private currencyPipe: CurrencyPipe,
-    private datePipe: DatePipe,
-    private fundService: FundService,
-    private matomoTracker: MatomoTracker,
-    private navigationService: NavigationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private pageMeta: PageMetaService,
-    private scroller: ViewportScroller,
-    public searchService: SearchService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private state: TransferState,
-    @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
-    @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
-  ) {}
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -336,7 +359,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     if (!this.blurredSinceLastMajorScroll) {
-      this.cardGrid && (await this.cardGrid.unfocusInputs());
+      if (this.cardGrid) {
+        await this.cardGrid.unfocusInputs();
+      }
       this.blurredSinceLastMajorScroll = true;
     }
 

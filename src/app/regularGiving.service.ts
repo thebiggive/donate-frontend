@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Mandate } from './mandate.model';
 import { getPersonAuthHttpOptions, IdentityService } from './identity.service';
@@ -64,10 +64,8 @@ export type MandateCreateResponse = {
   providedIn: 'root',
 })
 export class RegularGivingService {
-  constructor(
-    private http: HttpClient,
-    private identityService: IdentityService,
-  ) {}
+  private http = inject(HttpClient);
+  private identityService = inject(IdentityService);
 
   public startMandate(mandate: StartMandateParams): Observable<MandateCreateResponse> {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {

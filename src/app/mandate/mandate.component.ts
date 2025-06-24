@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { ComponentsModule } from '@biggive/components-angular';
+import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MoneyPipe } from '../money.pipe';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RegularGivingService } from '../regularGiving.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-mandate',
-  imports: [ComponentsModule, DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
+  imports: [DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
   templateUrl: './mandate.component.html',
   styleUrl: './mandate.component.scss',
 })
 export class MandateComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private regularGivingService = inject(RegularGivingService);
+  private router = inject(Router);
+  private readonly pageMeta = inject(PageMetaService);
+
   protected mandate!: Mandate;
   protected readonly cancelPath;
   private mandateRefreshTimer: number | undefined;
@@ -29,12 +33,7 @@ export class MandateComponent implements OnInit {
    */
   protected isThanksPage;
 
-  constructor(
-    private route: ActivatedRoute,
-    private regularGivingService: RegularGivingService,
-    private router: Router,
-    private readonly pageMeta: PageMetaService,
-  ) {
+  constructor() {
     this.mandate = this.route.snapshot.data.mandate;
     this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
     this.isThanksPage = !!this.route.snapshot.data['isThanks'];

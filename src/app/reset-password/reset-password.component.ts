@@ -1,19 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
 import { minPasswordLength } from '../../environments/common';
+import { BiggiveHeading } from '@biggive/components-angular';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [BiggiveHeading, MatProgressSpinner, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton],
 })
 export class ResetPasswordComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   minPasswordLength: number;
   passwordForm!: FormGroup;
   savingNewPassword: boolean = false;
@@ -22,12 +30,7 @@ export class ResetPasswordComponent implements OnInit {
   token!: string;
   tokenValid: boolean | undefined = undefined;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {
+  constructor() {
     this.minPasswordLength = minPasswordLength;
   }
 

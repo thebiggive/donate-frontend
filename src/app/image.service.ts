@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import ModernizrAPI = __Modernizr.ModernizrAPI;
 
@@ -9,10 +9,10 @@ declare const Modernizr: ModernizrAPI;
   providedIn: 'root',
 })
 export class ImageService {
+  private platformId = inject(PLATFORM_ID);
+
   /** Track whether we should request images converted to webp to be as small as possible on modern browsers. */
   private webp?: boolean;
-
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   getImageUri(originalImageUri: string | null, width: number): Observable<string | null> {
     if (!originalImageUri) {

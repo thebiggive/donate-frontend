@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, take } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../environments/environment';
@@ -25,6 +25,8 @@ export const agreesToThirdParty = (prefs: CookiePreferences) =>
   providedIn: 'root',
 })
 export class CookiePreferenceService {
+  private cookieService = inject(CookieService);
+
   private cookiePreferences$: Subject<CookiePreferences | undefined>;
 
   private optInToAnalyticsAndTesting$: Subject<CookiePreferences>;
@@ -32,7 +34,7 @@ export class CookiePreferenceService {
   private readonly cookieName = 'cookie-preferences';
   private readonly cookieExpiryPeriodDays = 365;
 
-  constructor(private cookieService: CookieService) {
+  constructor() {
     let cookiePreferences;
     try {
       cookiePreferences = JSON.parse(this.cookieService.get(this.cookieName)) as CookiePreferences;

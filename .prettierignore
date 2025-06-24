@@ -2,3 +2,4 @@ dist
 tmp
 out-tsc
 bazel-out
+src/supportedBrowsers.ts

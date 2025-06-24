@@ -1,19 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatomoTracker as MatomoClientTracker, MatomoModule } from 'ngx-matomo-client';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
@@ -22,54 +22,9 @@ import { DonationService, TBG_DONATE_STORAGE } from '../../donation.service';
 import { IdentityService } from '../../identity.service';
 import { TimeLeftPipe } from '../../time-left.pipe';
 import { DonationStartFormComponent } from './donation-start-form.component';
-import { CardIconsService } from '../../card-icons.service';
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core';
-import { ConversionTrackingService } from '../../conversionTracking.service';
-import { PageMetaService } from '../../page-meta.service';
-import { AddressService } from '../../address.service';
-import { StripeService } from '../../stripe.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Donation } from '../../donation.model';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { Toast } from '../../toast.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-
-function makeDonationStartFormComponent(donationService: DonationService) {
-  const mockIdentityService = TestBed.inject(IdentityService);
-  spyOn(mockIdentityService, 'isTokenForFinalisedUser').and.returnValue(true);
-
-  const donationStartFormComponent = new DonationStartFormComponent(
-    undefined as unknown as CardIconsService,
-    undefined as unknown as ChangeDetectorRef,
-    {
-      convert: () => {},
-    } as unknown as ConversionTrackingService,
-    undefined as unknown as MatDialog,
-    donationService,
-    undefined as unknown as ElementRef,
-    new FormBuilder(),
-    mockIdentityService,
-    {
-      trackEvent: () => {},
-    } as unknown as MatomoClientTracker,
-    undefined as unknown as PageMetaService,
-    undefined as unknown as AddressService,
-    {},
-    { snapshot: {} } as unknown as ActivatedRoute,
-    {
-      navigate: () => {},
-    } as unknown as Router,
-    undefined as unknown as StripeService,
-    {
-      showError: () => {},
-    } as unknown as Toast,
-    undefined as unknown as LiveAnnouncer,
-  );
-
-  donationStartFormComponent.campaign = { currencyCode: 'GBP' } as Campaign;
-
-  donationStartFormComponent.donation = {} as Donation;
-  return donationStartFormComponent;
-}
 
 describe('DonationStartForm', () => {
   let component: DonationStartFormComponent;
@@ -156,15 +111,10 @@ describe('DonationStartForm', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatRadioModule,
         MatProgressSpinnerModule,
         MatSelectModule,
         MatStepperModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
           {
@@ -189,24 +139,24 @@ describe('DonationStartForm', () => {
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });
   });
 
-  beforeEach(() => {
+  it('should create', () => {
     fixture = TestBed.createComponent(DonationStartFormComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
-    // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.
-  });
-
-  it('should create', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     expect(component).toBeTruthy();
   });
 
   it('should have no errors with valid inputs, including for UK Gift Aid, and get correct expected amounts', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -251,6 +201,9 @@ describe('DonationStartForm', () => {
    * homePostcode is not required in this scenario.
    */
   it('should have no errors with a non-UK-resident claim for UK Gift Aid', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -284,6 +237,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have an error with required radio buttons not set', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -329,6 +285,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have missing amount error', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -371,6 +330,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have minimum amount error', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -424,20 +386,32 @@ describe('DonationStartForm', () => {
       getPaymentMethods: () => of({ data: [] }),
     } as unknown as DonationService;
 
-    const sut = makeDonationStartFormComponent(fakeDonationService);
+    TestBed.overrideProvider(DonationService, { useValue: fakeDonationService });
+
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+
+    const identityService = TestBed.inject(IdentityService);
+    spyOn(identityService, 'isTokenForFinalisedUser').and.returnValue(true);
+
+    fixture.detectChanges();
 
     // Ensure form groups are ready, otherwise we get lots of errors from validation updates
     // etc. on undefined elements.
     await waitForAsync(() => {
-      sut.loadPerson({ cash_balance: { gbp: 0 } }, 'jwt');
+      component.loadPerson({ cash_balance: { gbp: 0 } }, 'jwt');
     });
 
-    await sut.payWithStripe();
+    await component.payWithStripe();
 
     expect(finaliseCashBalancePurchaseCalled).toBe(false);
   });
 
   it('should have maximum amount error', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -480,6 +454,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have mis-formatted amount error', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -525,6 +502,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have missing country & postcode & Gift Aid errors in Stripe + UK mode', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
@@ -573,6 +553,9 @@ describe('DonationStartForm', () => {
   });
 
   it('should have missing email address error in Stripe mode', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({

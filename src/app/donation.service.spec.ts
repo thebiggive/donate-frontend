@@ -1,5 +1,9 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService, SESSION_STORAGE } from 'ngx-webstorage-service';
 
 import { Donation } from './donation.model';
@@ -7,9 +11,6 @@ import { DonationCreatedResponse } from './donation-created-response.model';
 import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
-import { MatomoModule } from 'ngx-matomo-client';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 describe('DonationService', () => {
   const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
@@ -43,13 +44,7 @@ describe('DonationService', () => {
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-        RouterModule.forRoot([]),
-      ],
+      imports: [RouterModule.forRoot([])],
       providers: [
         // Inject in-memory storage for tests, in place of local storage and session storage.
         // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
@@ -60,6 +55,7 @@ describe('DonationService', () => {
         InMemoryStorageService,
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     }),
   );

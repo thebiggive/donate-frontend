@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -15,21 +15,40 @@ import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { myAccountPath } from '../app-routing';
+import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
 import { WidgetInstance } from 'friendly-challenge';
 import { GIFT_AID_FACTOR } from '../Money';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { BiggiveButton, BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 
 @Component({
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
   styleUrl: './donation-thanks.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    BiggiveButton,
+    FaIconComponent,
+    BiggivePageSection,
+    BiggiveSocialIcon,
+    RouterLink,
+    DatePipe,
+    ExactCurrencyPipe,
+  ],
 })
 export class DonationThanksComponent implements OnInit {
+  private campaignService = inject(CampaignService);
+  dialog = inject(MatDialog);
+  private donationService = inject(DonationService);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private pageMeta = inject(PageMetaService);
+
   @Input({ required: true }) private donationId!: string;
 
   campaign?: Campaign;
@@ -66,15 +85,7 @@ export class DonationThanksComponent implements OnInit {
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
 
-  constructor(
-    private campaignService: CampaignService,
-    public dialog: MatDialog,
-    private donationService: DonationService,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private pageMeta: PageMetaService,
-    private sanitizer: DomSanitizer,
-  ) {
+  constructor() {
     this.minPasswordLength = minPasswordLength;
   }
 

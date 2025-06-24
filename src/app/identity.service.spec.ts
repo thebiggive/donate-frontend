@@ -1,13 +1,14 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { IdentityService } from './identity.service';
 import { environment } from '../environments/environment';
 import { Person } from './person.model';
-import { MatomoModule } from 'ngx-matomo-client';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 describe('IdentityService', () => {
   const getDummyPerson = (): Person => {
@@ -20,15 +21,14 @@ describe('IdentityService', () => {
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-
-        RouterModule.forRoot([]),
+      imports: [RouterModule.forRoot([])],
+      providers: [
+        IdentityService,
+        InMemoryStorageService,
+        provideHttpClient(withFetch()),
+        provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
-      providers: [IdentityService, InMemoryStorageService, provideHttpClient(withFetch()), provideHttpClientTesting()],
     }),
   );
 

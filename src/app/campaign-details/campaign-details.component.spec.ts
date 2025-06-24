@@ -1,11 +1,10 @@
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
@@ -21,17 +20,15 @@ describe('CampaignDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [CampaignDetailsComponent],
       imports: [
-        CommonModule,
         CurrencyPipe,
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
         MatTabsModule,
-        NoopAnimationsModule,
         OptimisedImagePipe,
         RouterModule.forRoot([]),
+        CampaignDetailsComponent,
       ],
       providers: [TimeLeftPipe, provideHttpClient(withFetch()), provideHttpClientTesting()],
     }).compileComponents();

@@ -1,5 +1,5 @@
 import { MatomoTracker } from 'ngx-matomo-client';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Donation } from './donation.model';
 import { Campaign } from './campaign.model';
 import { environment } from '../environments/environment';
@@ -9,11 +9,11 @@ import { agreesToAnalyticsAndTracking, CookiePreferences, CookiePreferenceServic
   providedIn: 'root',
 })
 export class ConversionTrackingService {
+  private matomoTracker = inject(MatomoTracker);
+  private cookiePreferenceService = inject(CookiePreferenceService);
+
   private analyticsAndTrackingCookiesAllowed: boolean = false;
-  constructor(
-    private matomoTracker: MatomoTracker,
-    private cookiePreferenceService: CookiePreferenceService,
-  ) {
+  constructor() {
     this.cookiePreferenceService
       .userOptInToSomeCookies()
       .subscribe(

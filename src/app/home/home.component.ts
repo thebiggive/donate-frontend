@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, Optional, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RESPONSE } from '../../express.tokens';
 import { Response } from 'express';
@@ -9,17 +9,39 @@ import { HighlightCard } from '../highlight-cards/HighlightCard';
 import { environment } from '../../environments/environment';
 import { NavigationService } from '../navigation.service';
 import { bigGiveName, tagLine } from '../../environments/common';
+import {
+  BiggiveHeroImage,
+  BiggivePageSection,
+  BiggiveCallToAction,
+  BiggiveHeading,
+  BiggiveButton,
+  BiggiveVideoFeature,
+} from '@biggive/components-angular';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: 'home.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    BiggiveHeroImage,
+    HighlightCardsComponent,
+    BiggivePageSection,
+    BiggiveCallToAction,
+    BiggiveHeading,
+    BiggiveButton,
+    BiggiveVideoFeature,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
 export class HomeComponent implements OnInit {
+  private navigationService = inject(NavigationService);
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+  private response = inject<Response>(RESPONSE, { optional: true });
+
   stats!: {
     totalRaisedFormatted: string;
     totalCountFormatted: string;
@@ -32,15 +54,6 @@ export class HomeComponent implements OnInit {
   protected mayBeAboutToRedirect: boolean = true;
 
   protected highlightCards!: HighlightCard[];
-
-  public constructor(
-    private navigationService: NavigationService,
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-    @Optional() @Inject(RESPONSE) private response: Response,
-  ) {}
 
   ngOnInit() {
     this.pageMeta.setCommon(bigGiveName, `${bigGiveName} – ${tagLine}`, '/assets/images/social-banner.png');
@@ -59,7 +72,7 @@ export class HomeComponent implements OnInit {
           replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
         });
       } else {
-        this.response.redirect(302, redirectPath);
+        this.response?.redirect(302, redirectPath);
       }
     } else {
       this.mayBeAboutToRedirect = false;

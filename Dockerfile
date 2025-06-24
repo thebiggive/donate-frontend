@@ -1,6 +1,6 @@
 # Ensure updates are mirrored in `.circleci/config.yml`.
 # Always specify a 3-part version, even if it's x.x.0.
-FROM node:22.14.0
+FROM node:22.16.0
 RUN node --version
 
 WORKDIR /usr/src/app

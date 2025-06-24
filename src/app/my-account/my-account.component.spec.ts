@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { MyAccountComponent } from './my-account.component';
-import { ActivatedRoute } from '@angular/router';
-import { MatomoModule } from 'ngx-matomo-client';
 
 describe('MyAccountComponent', () => {
   let component: MyAccountComponent;
@@ -17,19 +18,14 @@ describe('MyAccountComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MyAccountComponent],
+      imports: [MyAccountComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-      ],
       providers: [
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });
   });

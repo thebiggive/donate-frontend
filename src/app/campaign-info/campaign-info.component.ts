@@ -1,26 +1,27 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject, InjectionToken } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BiggiveCampaignHighlights } from '@biggive/components-angular';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
-const integerPipeToken = 'integerPipe';
-const openPipeToken = 'timeLeftToOpenPipe';
-const endPipeToken = 'timeLeftToEndPipe';
+const integerPipeToken = new InjectionToken<DecimalPipe>('integerPipe');
+const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
+const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 
 @Component({
   selector: 'app-campaign-info',
   templateUrl: './campaign-info.component.html',
   styleUrl: './campaign-info.component.scss',
-  imports: [...allChildComponentImports, FontAwesomeModule],
+  imports: [BiggiveCampaignHighlights, FontAwesomeModule],
   providers: [
     CurrencyPipe,
+    DatePipe,
     { provide: integerPipeToken, useClass: DecimalPipe },
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
     { provide: openPipeToken, useClass: TimeLeftPipe },
@@ -28,6 +29,13 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
 })
 export class CampaignInfoComponent implements OnInit {
+  private currencyPipe = inject(CurrencyPipe);
+  datePipe = inject(DatePipe);
+  private route = inject(ActivatedRoute);
+  integerPipe = inject<DecimalPipe>(integerPipeToken);
+  timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
+  timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
+
   additionalImageUris: Array<string | null> = [];
   @Input({ required: true }) campaign!: Campaign;
   campaignOpen!: boolean;
@@ -39,15 +47,6 @@ export class CampaignInfoComponent implements OnInit {
    * specific campaign otherwise.
    */
   donationCount!: number;
-
-  constructor(
-    private currencyPipe: CurrencyPipe,
-    public datePipe: DatePipe,
-    private route: ActivatedRoute,
-    @Inject(integerPipeToken) public integerPipe: DecimalPipe,
-    @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
-    @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
-  ) {}
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;

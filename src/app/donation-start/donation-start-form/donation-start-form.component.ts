@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -8,17 +8,22 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
   Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   ViewChild,
+  inject,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatStep } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { retry } from 'rxjs/operators';
@@ -65,6 +70,15 @@ import { Toast } from '../../toast.service';
 import { GIFT_AID_FACTOR } from '../../Money';
 import { noLongNumberValidator } from '../../validators/noLongNumberValidator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { BiggiveTextInput, BiggiveFormFieldSelect } from '@biggive/components-angular';
+import { MatInput } from '@angular/material/input';
+import { MatHint } from '@angular/material/form-field';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -74,15 +88,51 @@ declare let _paq: {
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
   providers: [ExactCurrencyPipe],
+  imports: [
+    ReactiveFormsModule,
+    MatStepper,
+    MatStep,
+    BiggiveTextInput,
+    MatInput,
+    BiggiveFormFieldSelect,
+    MatHint,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatIcon,
+    MatButton,
+    MatRadioGroup,
+    MatRadioButton,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    MatProgressSpinner,
+    MatCheckbox,
+    PercentPipe,
+    ExactCurrencyPipe,
+  ],
 })
 export class DonationStartFormComponent
   implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
 {
+  cardIconsService = inject(CardIconsService);
+  private cd = inject(ChangeDetectorRef);
+  private conversionTrackingService = inject(ConversionTrackingService);
+  dialog = inject(MatDialog);
+  private donationService = inject(DonationService);
+  private elRef = inject<ElementRef>(ElementRef);
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private pageMeta = inject(PageMetaService);
+  private addressService = inject(AddressService);
+  private platformId = inject(PLATFORM_ID);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private stripeService = inject(StripeService);
+  private toast = inject(Toast);
+  private liveAnnouncer = inject(LiveAnnouncer);
+
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
    * will not have covered GA on a tip as well. So if this is true and they go back and add a tip we will need to
@@ -239,25 +289,9 @@ export class DonationStartFormComponent
   private friendlyCaptchaWidget: WidgetInstance | undefined;
   protected finalPreSubmitUpdateFailed = false;
 
-  constructor(
-    public cardIconsService: CardIconsService,
-    private cd: ChangeDetectorRef,
-    private conversionTrackingService: ConversionTrackingService,
-    public dialog: MatDialog,
-    private donationService: DonationService,
-    @Inject(ElementRef) private elRef: ElementRef,
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private pageMeta: PageMetaService,
-    private addressService: AddressService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private route: ActivatedRoute,
-    private router: Router,
-    private stripeService: StripeService,
-    private toast: Toast,
-    private liveAnnouncer: LiveAnnouncer,
-  ) {
+  constructor() {
+    const route = this.route;
+
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.selectedCountryCode = this.defaultCountryCode;
 
@@ -1260,7 +1294,9 @@ export class DonationStartFormComponent
   async progressToNonAmountsStep() {
     const success = await this.validateAmountsCreateDonorDonationIfPossible();
 
-    success && this.next();
+    if (success) {
+      this.next();
+    }
   }
 
   private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
@@ -2294,9 +2330,10 @@ export class DonationStartFormComponent
             'donate',
             'cancel',
             `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`,
-          ),
-            // Also resets captcha.
-            this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+          );
+
+          // Also resets captcha.
+          this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
 
           // Go back to 1st step to encourage donor to try again
           this.stepper.reset();
