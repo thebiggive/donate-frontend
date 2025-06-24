@@ -1,13 +1,34 @@
 import { RegularGivingComponent } from './regular-giving.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Toast } from '../toast.service';
 import { RegularGivingService } from '../regularGiving.service';
-import { PageMetaService } from '../page-meta.service';
-import { StripeService } from '../stripe.service';
-import { DonationService } from '../donation.service';
-import { AddressService } from '../address.service';
 import { Campaign } from '../campaign.model';
 import { Money } from '../Money';
+
+import { TestBed } from '@angular/core/testing';
+import { NEVER, of } from 'rxjs';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
+import { TBG_DONATE_STORAGE } from '../donation.service';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
+
+const stubRoute = { queryParams: NEVER } as unknown as ActivatedRoute;
+stubRoute.params = of({});
+stubRoute.snapshot = new ActivatedRouteSnapshot();
+stubRoute.snapshot.data = { donor: null };
+
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    imports: [MatomoTestingModule.forRoot()],
+    providers: [
+      InMemoryStorageService,
+      { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+      RegularGivingComponent,
+      provideHttpClient(withFetch()),
+      { provide: ActivatedRoute, useValue: stubRoute },
+      RegularGivingService,
+    ],
+  });
+});
 
 describe('Match funds are only usable in multiples of £3', () => {
   (
@@ -51,19 +72,7 @@ describe('Match funds are only usable in multiples of £3', () => {
     ] as [Campaign, Money][]
   ).forEach(([campaign, maxMatchable]) => {
     it('Calculates maximum matchable given state of a campaign', () => {
-      const regularGivingComponent = new RegularGivingComponent(
-        // dummy value for all properties. Only function tested for now is effectively static.
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        undefined as any as ActivatedRoute,
-        undefined as any as Toast,
-        undefined as any as RegularGivingService,
-        undefined as any as Router,
-        undefined as any as PageMetaService,
-        undefined as any as StripeService,
-        undefined as any as DonationService,
-        undefined as any as AddressService,
-        /* eslint-enable @typescript-eslint/no-explicit-any */
-      );
+      const regularGivingComponent = TestBed.inject(RegularGivingComponent);
 
       expect(regularGivingComponent.maximumMatchableDonationGivenCampaign(campaign)).toEqual(maxMatchable);
     });

@@ -1,13 +1,11 @@
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { bigGiveName } from './environments/common';
 
 @Injectable()
 export class BigGiveTitleStrategy extends TitleStrategy {
-  constructor(private readonly title: Title) {
-    super();
-  }
+  private readonly title = inject(Title);
 
   override updateTitle(routerState: RouterStateSnapshot): void {
     const title = this.buildTitle(routerState);

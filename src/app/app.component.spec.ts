@@ -8,9 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -21,24 +21,20 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [AppComponent],
       imports: [
         AsyncPipe,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
         MatInputModule,
         MatListModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatSelectModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([]),
+        AppComponent,
       ],
       providers: [
         { provide: APP_BASE_HREF, useValue: 'http://some.test.localhost' },
+        { provide: MatomoModule, useClass: MatomoTestingModule },
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },

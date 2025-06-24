@@ -35,16 +35,18 @@
 </a>
 <router-outlet></router-outlet>
 
-<footer>
-  <biggive-footer
-    [headingLevel]="3"
-    [usePresetFooter]="true"
-    [donateUrlPrefix]="donateUriPrefix"
-    [blogUrlPrefix]="blogUriPrefix"
-    [experienceUrlPrefix]="experienceUriPrefix"
-    [smallCharityWeekEnabled]="true"
-  ></biggive-footer>
-</footer>
+@defer {
+  <footer>
+    <biggive-footer
+      [headingLevel]="3"
+      [usePresetFooter]="true"
+      [donateUrlPrefix]="donateUriPrefix"
+      [blogUrlPrefix]="blogUriPrefix"
+      [experienceUrlPrefix]="experienceUriPrefix"
+      [smallCharityWeekEnabled]="true"
+    ></biggive-footer>
+  </footer>
+}
 
 <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
 for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found

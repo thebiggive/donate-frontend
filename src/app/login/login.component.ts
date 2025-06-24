@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { registerPath } from '../app-routing';
+import { registerPath } from '../app.routes';
 import { WidgetInstance } from 'friendly-challenge';
 import { NavigationService } from '../navigation.service';
 import { errorDescription, BackendError } from '../backendError';
@@ -29,7 +29,10 @@ export type LoginNavigationState = {
 @Component({
   selector: 'app-login',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -42,6 +45,13 @@ export type LoginNavigationState = {
   styleUrl: 'login.component.scss',
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly identityService = inject(IdentityService);
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
 
@@ -65,14 +75,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   protected registerLink!: string;
   protected isNewRegistration: boolean = false;
 
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly identityService: IdentityService,
-    private readonly pageMeta: PageMetaService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor() {
     const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
     this.isNewRegistration = !!state?.newAccountRegistration;
   }

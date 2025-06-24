@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { Mandate } from '../mandate.model';
 import { MoneyPipe } from '../money.pipe';
 import { OrdinalPipe } from '../ordinal.pipe';
@@ -18,7 +18,10 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'app-cancel-mandate',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
     MoneyPipe,
     OrdinalPipe,
     FormsModule,
@@ -32,6 +35,11 @@ import { Observable, Subscription } from 'rxjs';
   styleUrl: './cancel-mandate.component.scss',
 })
 export class CancelMandateComponent implements OnInit, OnDestroy {
+  private readonly pageMeta = inject(PageMetaService);
+  private readonly regularGivingService = inject(RegularGivingService);
+  private readonly router = inject(Router);
+  private readonly toaster = inject(Toast);
+
   protected mandate$: Observable<Mandate>;
   protected readonly reasonMaxLength = 500;
 
@@ -41,13 +49,9 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   protected processing = false;
   private mandateSubscription?: Subscription;
 
-  public constructor(
-    route: ActivatedRoute,
-    private readonly pageMeta: PageMetaService,
-    private readonly regularGivingService: RegularGivingService,
-    private readonly router: Router,
-    private readonly toaster: Toast,
-  ) {
+  public constructor() {
+    const route = inject(ActivatedRoute);
+
     this.mandate$ = this.regularGivingService.getActiveMandate(route.snapshot.paramMap.get('mandateId') || '');
   }
 

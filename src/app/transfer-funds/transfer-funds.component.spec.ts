@@ -1,5 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,14 +12,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TransferFundsComponent } from './transfer-funds.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
@@ -34,15 +34,10 @@ describe('TransferFundsComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatRadioModule,
         MatProgressSpinnerModule,
         MatSelectModule,
         MatStepperModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
           {
@@ -51,7 +46,11 @@ describe('TransferFundsComponent', () => {
           },
         ]),
       ],
-      providers: [InMemoryStorageService, { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService }],
+      providers: [
+        InMemoryStorageService,
+        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        { provide: MatomoModule, useClass: MatomoTestingModule },
+      ],
     });
   });
 

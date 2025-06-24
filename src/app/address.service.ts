@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 
@@ -27,7 +27,7 @@ export type HomeAddress = { homeAddress: string; homeBuildingNumber: string; hom
   providedIn: 'root',
 })
 export class AddressService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getSuggestions(partialAddress: string): Observable<GiftAidAddressSuggestion[]> {
     // Get up to top 20 suggestions – the maximum allowed.

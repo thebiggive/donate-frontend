@@ -1,4 +1,4 @@
-import { AsyncPipe, CurrencyPipe, DatePipe, ViewportScroller } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,23 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-import { MatomoModule, MatomoTracker } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { NEVER, of } from 'rxjs';
 
 import { ExploreComponent } from './explore.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, TransferState } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Campaign } from '../campaign.model';
-import { TimeLeftPipe } from '../time-left.pipe';
-import { CampaignService } from '../campaign.service';
-import { FundService } from '../fund.service';
-import { NavigationService } from '../navigation.service';
-import { PageMetaService } from '../page-meta.service';
-import { SearchService } from '../search.service';
-import { StorageService } from 'ngx-webstorage-service';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -39,13 +32,8 @@ describe('ExploreComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
         MatProgressSpinnerModule,
         MatSelectModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([
           {
@@ -68,17 +56,15 @@ describe('ExploreComponent', () => {
         },
         provideHttpClient(withFetch()),
         provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });
   });
 
-  beforeEach(() => {
+  it('should create', () => {
     fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
@@ -126,59 +112,14 @@ describe('ExploreComponent', () => {
   });
 
   function makeComponentWithCampaign(campaign: Campaign) {
-    const noop = () => {};
-
-    // @ts-expect-error 'Argument of type string is not assignable to parameter of type object'
-    const pipe = new TimeLeftPipe('browser', {
-      markForCheck: noop,
-    } as unknown as ChangeDetectorRef);
-    const timeLeftToOpenPipe = pipe;
-    const timeLeftToClosePipe = pipe;
-
-    const currencyPipe = new CurrencyPipe('en-GB', 'GBP');
-
     const stubRoute = { queryParams: NEVER } as unknown as ActivatedRoute;
     stubRoute.params = of({});
     stubRoute.snapshot = new ActivatedRouteSnapshot();
-    stubRoute.snapshot.data = { campaign: campaign };
+    stubRoute.snapshot.data = { campaign: campaign, highlights: [] };
 
-    const dummyCampaignService = {} as CampaignService;
-    const dummyDatePipe = {} as DatePipe;
-    const dummyFundService = {} as FundService;
-    const dummyMatomoTracker = {
-      trackEvent: () => {},
-    } as unknown as MatomoTracker;
-    const dummyNavigationService = {
-      getPotentialRedirectPathAndUpdateSignal: () => null,
-    } as unknown as NavigationService;
-    const dummyPageMeta = { setCommon: noop } as unknown as PageMetaService;
-    const dummyPLATFORM_ID = {} as object;
-    const dummyRouter = { events: NEVER } as unknown as Router;
-    const dummySearchService = {
-      changed: new EventEmitter(),
-      reset: noop,
-    } as unknown as SearchService;
-    const dummyState = {} as TransferState;
-    const dummyTBG_DONATE_STORAGE = {} as StorageService;
-    const dummyScroller = {} as ViewportScroller;
+    TestBed.overrideProvider(ActivatedRoute, { useValue: stubRoute });
 
-    return new ExploreComponent(
-      dummyCampaignService,
-      currencyPipe,
-      dummyDatePipe,
-      dummyFundService,
-      dummyMatomoTracker,
-      dummyNavigationService,
-      stubRoute,
-      dummyRouter,
-      dummyPageMeta,
-      dummyScroller,
-      dummySearchService,
-      dummyPLATFORM_ID,
-      dummyState,
-      timeLeftToOpenPipe,
-      timeLeftToClosePipe,
-      dummyTBG_DONATE_STORAGE,
-    );
+    fixture = TestBed.createComponent(ExploreComponent);
+    return fixture.componentInstance;
   }
 });

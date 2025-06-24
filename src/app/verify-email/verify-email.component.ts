@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ComponentsModule } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveTextInput } from '@biggive/components-angular';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Toast } from '../toast.service';
@@ -9,7 +9,7 @@ const codeLength = 6;
 
 @Component({
   selector: 'app-verify-email',
-  imports: [ReactiveFormsModule, ComponentsModule, MatInput, MatProgressSpinner],
+  imports: [BiggiveButton, BiggiveTextInput, MatInput, MatProgressSpinner, ReactiveFormsModule],
   templateUrl: './verify-email.component.html',
   styleUrl: './verify-email.component.scss',
 })

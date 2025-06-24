@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageMetaService } from '../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../identity.service';
@@ -8,27 +8,28 @@ import { MatDialog } from '@angular/material/dialog';
 import { flags } from '../featureFlags';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import { environment } from '../../environments/environment';
+import { BiggivePageSection, BiggiveHeading } from '@biggive/components-angular';
+import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
   styleUrl: './my-account.component.scss',
   providers: [DatePipe],
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [BiggivePageSection, BiggiveHeading, HighlightCardsComponent],
 })
 export class MyAccountComponent implements OnInit {
+  private pageMeta = inject(PageMetaService);
+  dialog = inject(MatDialog);
+  private identityService = inject(IdentityService);
+  private router = inject(Router);
+
   public person!: Person;
   protected readonly actions: HighlightCard[];
 
-  constructor(
-    private pageMeta: PageMetaService,
-    public dialog: MatDialog,
-    private identityService: IdentityService,
-    private router: Router,
-  ) {
+  constructor() {
+    const identityService = this.identityService;
+
     this.identityService = identityService;
 
     this.actions = [

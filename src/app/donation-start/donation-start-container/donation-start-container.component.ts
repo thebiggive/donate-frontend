@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { Campaign } from '../../campaign.model';
 import { CampaignService } from '../../campaign.service';
@@ -11,17 +11,35 @@ import { DonationStartFormComponent } from '../donation-start-form/donation-star
 import { ImageService } from '../../image.service';
 import { fromEvent, merge, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, AsyncPipe, DatePipe } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { DonationStartLoginComponent } from '../donation-start-login/donation-start-login.component';
+import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
+import { TimeLeftPipe } from '../../time-left.pipe';
 
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrl: './donation-start-container.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    DonationStartLoginComponent,
+    DonationStartFormComponent,
+    CampaignInfoComponent,
+    AsyncPipe,
+    DatePipe,
+    TimeLeftPipe,
+  ],
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit {
+  identityService = inject(IdentityService);
+  private imageService = inject(ImageService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   campaign!: Campaign;
   campaignOpenOnLoad!: boolean;
   donation: Donation | undefined = undefined;
@@ -37,13 +55,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   isOffline$: Observable<boolean>;
   showDebugInfo = environment.showDebugInfo;
 
-  constructor(
-    public identityService: IdentityService,
-    private imageService: ImageService,
-    private route: ActivatedRoute,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.isOffline$ = merge(of(null), fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(
         map(() => !navigator.onLine),

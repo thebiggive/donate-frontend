@@ -1,18 +1,18 @@
-import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser, AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   HostListener,
-  Inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   signal,
   ViewChild,
   WritableSignal,
+  inject,
 } from '@angular/core';
-import { Event as RouterEvent, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { BiggiveMainMenu } from '@biggive/components-angular';
+import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { filter, map } from 'rxjs/operators';
 
@@ -37,12 +37,19 @@ import { detect } from 'detect-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
-
-  // predates use of standalone
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  imports: [AsyncPipe, BiggiveCookieBanner, BiggiveFooter, BiggiveMainMenu, RouterOutlet],
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
+  private baseHref = inject(APP_BASE_HREF);
+  private identityService = inject(IdentityService);
+  private donationService = inject(DonationService);
+  private getSiteControlService = inject(GetSiteControlService);
+  private navigationService = inject(NavigationService);
+  private cookiePreferenceService = inject(CookiePreferenceService);
+  private platformId = inject(PLATFORM_ID);
+  private matomoTracker = inject(MatomoTracker);
+  private router = inject(Router);
+
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
@@ -78,17 +85,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private loginStatusChangeSubscription: Subscription | undefined;
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
-  constructor(
-    @Inject(APP_BASE_HREF) private baseHref: string,
-    private identityService: IdentityService,
-    private donationService: DonationService,
-    private getSiteControlService: GetSiteControlService,
-    private navigationService: NavigationService,
-    private cookiePreferenceService: CookiePreferenceService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private matomoTracker: MatomoTracker,
-    private router: Router,
-  ) {
+  constructor() {
+    const navigationService = this.navigationService;
+    const router = this.router;
+
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
     this.existingCookiePreferences = this.cookiePreferenceService

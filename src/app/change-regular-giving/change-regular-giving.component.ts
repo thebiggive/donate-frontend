@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   PaymentIntentOrSetupIntentResult,
@@ -7,7 +7,6 @@ import {
   StripeElements,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { ComponentsModule } from '@biggive/components-angular';
 import { StripeService } from '../stripe.service';
 import { Toast } from '../toast.service';
 import { RegularGivingService } from '../regularGiving.service';
@@ -15,14 +14,35 @@ import { countryISO2, countryOptions } from '../countries';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { requiredNotBlankValidator } from '../validators/notBlank';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggiveHeading,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 
 @Component({
   selector: 'app-change-regular-giving',
-  imports: [ComponentsModule, MatInput, ReactiveFormsModule],
+  imports: [
+    BiggiveButton,
+    BiggiveFormFieldSelect,
+    BiggiveHeading,
+    BiggivePageSection,
+    BiggiveTextInput,
+    MatInput,
+    ReactiveFormsModule,
+  ],
   templateUrl: './change-regular-giving.component.html',
   styleUrl: './change-regular-giving.component.scss',
 })
 export class ChangeRegularGivingComponent implements OnInit {
+  private stripeService = inject(StripeService);
+  private regularGivingService = inject(RegularGivingService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private toaster = inject(Toast);
+
   protected setupIntent: SetupIntent;
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;
 
@@ -40,13 +60,7 @@ export class ChangeRegularGivingComponent implements OnInit {
     billingPostcode: new FormControl('', [requiredNotBlankValidator]),
   });
 
-  constructor(
-    private stripeService: StripeService,
-    private regularGivingService: RegularGivingService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toaster: Toast,
-  ) {
+  constructor() {
     this.paymentMethods = this.route.snapshot.data.paymentMethods;
     this.setupIntent = this.route.snapshot.data.setupIntent;
   }

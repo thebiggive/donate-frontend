@@ -1,8 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
-import { renderToString } from '@biggive/components/hydrate';
-import { setAssetPath } from '@biggive/components/dist/components';
 import compression from 'compression';
 import { createHash } from 'crypto';
 import express, { Request, Response } from 'express';
@@ -67,7 +65,7 @@ app.use(
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
-          `'sha256-wNvBKHC/AcXH+tcTOtnmNx/Ag5exRdBFD8iL9UUQ8es='`, // "Unsupported browser" inline script.
+          `'sha256-dnnEJuo8OaEvaT7pSSJwaDILUYzBskencbUOdqW8WUg='`, // "Unsupported browser" inline script.
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
@@ -159,16 +157,7 @@ app.get('**', (req, res, next) => {
         { provide: REQUEST, useValue: req },
       ],
     })
-    .then(async (html) => {
-      setAssetPath(`${environment.donateUriPrefix}/assets`);
-      const hydratedDoc = await renderToString(html, {
-        // Don't `removeScripts` like Ionic does: we need them to hand over to browser JS runtime successfully!
-        prettyHtml: true,
-        removeHtmlComments: true,
-      });
-
-      res.send(hydratedDoc.html);
-    })
+    .then((html) => res.send(html))
     .catch((err) => next(err));
 });
 

@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
@@ -19,7 +18,6 @@ import { BackendError, errorDescription } from '../backendError';
   templateUrl: 'login-modal.html',
   styleUrl: './login-modal.component.scss',
   imports: [
-    ...allChildComponentImports,
     FormsModule,
     MatButtonModule,
     MatDialogModule,
@@ -30,6 +28,10 @@ import { BackendError, errorDescription } from '../backendError';
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
+  private dialogRef = inject<MatDialogRef<LoginModalComponent>>(MatDialogRef);
+  private formBuilder = inject(FormBuilder);
+  private identityService = inject(IdentityService);
+
   loginForm!: FormGroup;
   loggingIn = false;
   loginError?: string;
@@ -42,12 +44,6 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
-
-  constructor(
-    private dialogRef: MatDialogRef<LoginModalComponent>,
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({

@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ChangeRegularGivingComponent } from './change-regular-giving.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { MatomoModule } from 'ngx-matomo-client';
 import { ActivatedRoute } from '@angular/router';
+import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
+
 import { TBG_DONATE_STORAGE } from '../donation.service';
+import { ChangeRegularGivingComponent } from './change-regular-giving.component';
 
 describe('ChangeRegularGivingComponent', () => {
   let component: ChangeRegularGivingComponent;
@@ -13,12 +14,6 @@ describe('ChangeRegularGivingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-      ],
       providers: [
         {
           provide: ActivatedRoute,
@@ -36,6 +31,7 @@ describe('ChangeRegularGivingComponent', () => {
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withFetch()),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     }).compileComponents();
 

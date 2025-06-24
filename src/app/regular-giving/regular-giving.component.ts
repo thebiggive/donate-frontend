@@ -1,7 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign } from '../campaign.model';
-import { ComponentsModule } from '@biggive/components-angular';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatStep, MatStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -11,7 +16,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Person } from '../person.model';
 import { MandateCreateResponse, RegularGivingService, StartMandateParams } from '../regularGiving.service';
 import { Mandate } from '../mandate.model';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 import { requiredNotBlankValidator } from '../validators/notBlank';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
@@ -64,7 +69,10 @@ const over18DefaultValue = environment.environmentId === 'regression';
 @Component({
   selector: 'app-regular-giving',
   imports: [
-    ComponentsModule,
+    BiggiveButton,
+    BiggiveFormFieldSelect,
+    BiggivePageSection,
+    BiggiveTextInput,
     FormsModule,
     MatStep,
     MatStepper,
@@ -85,10 +93,20 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MoneyPipe,
     AsyncPipe,
   ],
+  providers: [],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss',
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private toast = inject(Toast);
+  private regularGivingService = inject(RegularGivingService);
+  private router = inject(Router);
+  private pageMeta = inject(PageMetaService);
+  private stripeService = inject(StripeService);
+  private donationService = inject(DonationService);
+  private addressService = inject(AddressService);
+
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
       requiredNotBlankValidator,
@@ -172,17 +190,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * is quite baked into the logic for matching regular giving in matchbot.
    */
   public readonly standardNumberOfDonationsMatched = 3;
-
-  constructor(
-    private route: ActivatedRoute,
-    private toast: Toast,
-    private regularGivingService: RegularGivingService,
-    private router: Router,
-    private pageMeta: PageMetaService,
-    private stripeService: StripeService,
-    private donationService: DonationService,
-    private addressService: AddressService,
-  ) {}
 
   ngOnInit() {
     const donor: Person | null = this.route.snapshot.data['donor'];
@@ -635,7 +642,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     const combinedErrors = [this.optInCharityEmailError, this.optInTBGEmailError].filter(Boolean).join(' ');
-    combinedErrors && this.toast.showError(combinedErrors);
+    if (combinedErrors) {
+      this.toast.showError(combinedErrors);
+    }
 
     return errorFound;
   }
@@ -671,7 +680,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     }
 
-    this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
+    if (this.paymentInfoErrorMessage) {
+      this.toast.showError(this.paymentInfoErrorMessage);
+    }
 
     return !!this.paymentInfoErrorMessage;
   }
@@ -696,7 +707,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.giftAidErrorMessage = errors.join(' ');
 
-    this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
+    if (this.giftAidErrorMessage) {
+      this.toast.showError(this.giftAidErrorMessage);
+    }
 
     return errors.length > 0;
   }

@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, PLATFORM_ID, OnDestroy } from '@angular/core';
-import { ComponentsModule } from '@biggive/components-angular';
+import { Component, OnInit, PLATFORM_ID, OnDestroy, inject } from '@angular/core';
+import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { ActivatedRoute } from '@angular/router';
 import { UpdateCardModalComponent } from '../update-card-modal/update-card-modal.component';
@@ -19,11 +19,19 @@ import { Toast } from '../toast.service';
 
 @Component({
   selector: 'app-my-payment-methods',
-  imports: [ComponentsModule, ExactCurrencyPipe, FaIconComponent, MatProgressSpinner],
+  imports: [BiggiveButton, BiggiveHeading, BiggivePageSection, ExactCurrencyPipe, FaIconComponent, MatProgressSpinner],
   templateUrl: './my-payment-methods.component.html',
   styleUrl: './my-payment-methods.component.scss',
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
+  private donationService = inject(DonationService);
+  private identityService = inject(IdentityService);
+  private route = inject(ActivatedRoute);
+  private regularGivingService = inject(RegularGivingService);
+  dialog = inject(MatDialog);
+  private toaster = inject(Toast);
+  private platformId = inject(PLATFORM_ID);
+
   protected paymentMethods:
     | {
         adHocMethods: PaymentMethod[];
@@ -36,16 +44,6 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
 
   protected registerErrorDescription: string | undefined;
   protected registerSuccessMessage: string | undefined;
-
-  constructor(
-    private donationService: DonationService,
-    private identityService: IdentityService,
-    private route: ActivatedRoute,
-    private regularGivingService: RegularGivingService,
-    public dialog: MatDialog,
-    private toaster: Toast,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {}
 
   ngOnInit(): void {
     this.paymentMethods = this.route.snapshot.data.paymentMethods;

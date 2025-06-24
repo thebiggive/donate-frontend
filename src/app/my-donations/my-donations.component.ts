@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageMetaService } from '../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { BiggiveContainerCard, BiggiveGrid, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import {
   CompleteDonation,
   Donation,
@@ -8,26 +10,22 @@ import {
   isLargeDonation,
   withComputedProperties,
 } from '../donation.model';
-import { DatePipe } from '@angular/common';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
-import { allChildComponentImports } from '../../allChildComponentImports';
-import { myRegularGivingPath } from '../app-routing';
+import { myRegularGivingPath } from '../app.routes';
 
 @Component({
   selector: 'app-my-donations',
-  imports: [...allChildComponentImports, ExactCurrencyPipe, DatePipe],
+  imports: [BiggiveContainerCard, BiggiveGrid, BiggiveHeading, BiggivePageSection, DatePipe, ExactCurrencyPipe],
   templateUrl: './my-donations.component.html',
   styleUrl: './my-donations.component.scss',
 })
 export class MyDonationsComponent implements OnInit {
+  private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
+
   protected donations!: EnrichedDonation[];
   protected atLeastOneLargeRecentDonation?: boolean;
   protected readonly myRegularGivingPath = myRegularGivingPath;
-
-  constructor(
-    private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
-  ) {}
 
   ngOnInit() {
     this.pageMeta.setCommon('Your Donation History', 'Your Big Give donations', null);
