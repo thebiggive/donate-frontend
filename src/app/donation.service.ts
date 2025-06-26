@@ -382,6 +382,7 @@ export class DonationService {
       `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
       {
         stripeConfirmationTokenId: confirmationToken?.id,
+        stripeConfirmationTokenFutureUsage: confirmationToken?.setup_future_usage,
       },
       this.getAuthHttpOptions(donation),
     );
