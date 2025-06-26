@@ -506,7 +506,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.stripePaymentMethodReady = state.complete;
 
     if (state.error) {
-      await this.stripeElements?.fetchUpdates();
       this.stripeError = getStripeFriendlyError(state.error, 'card_change');
       this.toast.showError(this.stripeError);
     } else {

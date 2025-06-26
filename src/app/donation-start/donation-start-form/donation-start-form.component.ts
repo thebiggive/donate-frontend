@@ -928,7 +928,6 @@ export class DonationStartFormComponent
     this.paymentReadinessTracker.onStripeCardChange(state);
 
     if (state.error) {
-      await this.stripeElements?.fetchUpdates();
       this.stripeError = getStripeFriendlyError(state.error, 'card_change');
       this.toast.showError(this.stripeError);
       this.stripeResponseErrorCode = state.error.code;
@@ -1459,14 +1458,13 @@ export class DonationStartFormComponent
     }
   }
 
-  private async prepareStripeElements() {
+  private prepareStripeElements() {
     if (!this.donation) {
       console.log('Donation not ready for Stripe');
       return;
     }
 
     if (this.stripeElements) {
-      await this.stripeElements.fetchUpdates();
       this.stripeService.updateAmount(this.stripeElements, this.donation);
     } else {
       this.stripeElements = this.stripeService.stripeElementsForDonation(
@@ -1477,7 +1475,6 @@ export class DonationStartFormComponent
     }
 
     if (this.stripePaymentElement) {
-      await this.stripeElements.fetchUpdates();
       // Payment element was already ready & we presume mounted.
       return;
     }
@@ -1571,12 +1568,11 @@ export class DonationStartFormComponent
     this.stripePaymentMethodReady = true;
   }
 
-  private async handleStripeError(
+  private handleStripeError(
     error: StripeError | { message: string; code: string; decline_code?: string } | undefined,
     context: 'method_setup' | 'card_change' | 'confirm',
   ) {
     this.submitting = false;
-    await this.stripeElements?.fetchUpdates();
     this.stripeError = getStripeFriendlyError(error, context);
     this.toast.showError(this.stripeError);
     this.stripeResponseErrorCode = error?.code;
