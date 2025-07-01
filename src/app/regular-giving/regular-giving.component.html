@@ -61,6 +61,18 @@
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
               </div>
+
+              @if (showUnmatchedDonationOption) {
+                <mat-checkbox formControlName="unmatched" id="unmatched">Make an unmatched donation</mat-checkbox>
+                <br />
+              }
+              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver"> I am aged 18 or older. </mat-checkbox>
+              @if (ageErrorMessage) {
+                <div class="error">
+                  {{ this.ageErrorMessage }}
+                </div>
+              }
+
               <p>This amount will be taken from your account today and once every month in future</p>
 
               <div aria-live="polite">
@@ -76,38 +88,23 @@
                     {{ this.amountErrorMessage }}
                   </div>
                 }
-                @if (maximumMatchableDonation.amountInPence === 0) {
+                <!--                insufficientMatchFundsAvailable: {{ insufficientMatchFundsAvailable }},-->
+                <!--                unmatched: {{ insufficientMatchFundsAvailable }},-->
+                <!--                newDonationAmountOverMaxMatchable: {{newDonationAmountOverMaxMatchable}}-->
+
+                @if (maximumMatchableDonation.amountInPence === 0 && !unmatched) {
                   <p>
                     There are no match funds currently available for this campaign. Remember, every penny helps. Please
                     continue to make an <strong>unmatched donation</strong> to the charity!
-                    @if (!matchFundsZeroOnLoad) {
-                      <mat-checkbox formControlName="unmatched" id="unmatched">
-                        Make an unmatched donation
-                      </mat-checkbox>
-                    }
                   </p>
-                } @else if (insufficientMatchFundsAvailable) {
+                } @else if (newDonationAmountOverMaxMatchable && !unmatched) {
                   <p>
                     <span class="error">There are limited match funds available</span>, but every penny helps, so you
-                    have two options:
+                    have two options: Reduce your donation amount to a maximum of
+                    {{ maximumMatchableDonation | money }}, or make an unmatched donation using the option above.
                   </p>
-                  <ol>
-                    <li>Reduce your donation amount to a maximum of {{ maximumMatchableDonation | money }}, or</li>
-                    <li>
-                      <mat-checkbox formControlName="unmatched" id="unmatched">
-                        Make an unmatched donation
-                      </mat-checkbox>
-                    </li>
-                  </ol>
                 }
               </div>
-
-              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver"> I am aged 18 or older. </mat-checkbox>
-              @if (ageErrorMessage) {
-                <div class="error">
-                  {{ this.ageErrorMessage }}
-                </div>
-              }
 
               <div style="text-align: center">
                 <button

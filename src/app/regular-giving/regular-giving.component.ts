@@ -262,6 +262,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  protected get showUnmatchedDonationOption() {
+    return this.matchFundsZeroOnLoad || this.newDonationAmountOverMaxMatchable || this.unmatched;
+  }
+
   ngAfterViewInit() {
     // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
     // the select function which is called when the user clicks a step heading, to let us check that all previous
@@ -277,6 +281,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       },
       500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
     );
+  }
+
+  protected get newDonationAmountOverMaxMatchable() {
+    return this.donationAmount.amountInPence > this.maximumMatchableDonation.amountInPence;
   }
 
   async interceptSubmitAndProceedInstead(event: Event) {
