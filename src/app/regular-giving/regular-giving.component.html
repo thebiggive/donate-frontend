@@ -230,6 +230,7 @@
 
               <div style="text-align: center">
                 <button
+                  style="width: 40%"
                   type="button"
                   class="continue b-w-100 b-rt-0"
                   mat-raised-button
@@ -474,11 +475,12 @@
                 }
               </div>
 
-              <div aria-live="polite">
+              <div aria-live="polite" style="text-align: center">
                 @if (!submitting) {
                   <button
                     (click)="submit()"
                     (keyup.enter)="submit()"
+                    style="width: 40%"
                     class="c-donate-button b-donate-button b-w-100 b-rt-1"
                     mat-raised-button
                     color="primary"
