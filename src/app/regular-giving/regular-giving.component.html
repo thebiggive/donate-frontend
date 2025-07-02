@@ -103,14 +103,7 @@
               </div>
 
               <div style="text-align: center">
-                <button
-                  style="width: 40%"
-                  type="button"
-                  class="continue b-w-100 b-rt-0"
-                  mat-raised-button
-                  color="primary"
-                  (click)="this.continue()"
-                >
+                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
                   Continue
                 </button>
               </div>
@@ -222,13 +215,7 @@
               <p></p>
 
               <div style="text-align: center">
-                <button
-                  type="button"
-                  class="continue b-w-100 b-rt-0"
-                  mat-raised-button
-                  color="primary"
-                  (click)="this.continue()"
-                >
+                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
                   Continue
                 </button>
               </div>
@@ -296,14 +283,7 @@
               </div>
 
               <div style="text-align: center">
-                <button
-                  style="width: 40%"
-                  type="button"
-                  class="continue b-w-100 b-rt-0"
-                  mat-raised-button
-                  color="primary"
-                  (click)="this.continue()"
-                >
+                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
                   Continue
                 </button>
               </div>
@@ -390,14 +370,7 @@
               <p></p>
 
               <div style="text-align: center">
-                <button
-                  style="width: 40%"
-                  type="button"
-                  class="continue b-w-100 b-rt-0"
-                  mat-raised-button
-                  color="primary"
-                  (click)="this.continue()"
-                >
+                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
                   Continue
                 </button>
               </div>
@@ -467,12 +440,12 @@
                 }
               </div>
 
-              <div aria-live="polite">
+              <div aria-live="polite" style="text-align: center">
                 @if (!submitting) {
                   <button
                     (click)="submit()"
                     (keyup.enter)="submit()"
-                    class="c-donate-button b-donate-button b-w-100 b-rt-1"
+                    class="c-donate-button continue"
                     mat-raised-button
                     color="primary"
                   >

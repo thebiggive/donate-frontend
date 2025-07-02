@@ -166,7 +166,6 @@
                 if this message persists.
               </p>
               <button
-                style="width: 40%"
                 type="button"
                 class="continue b-w-100 b-rt-0"
                 mat-raised-button
@@ -177,9 +176,8 @@
               </button>
             } @else {
               <button
-                style="width: 40%"
                 type="button"
-                class="continue b-w-100 b-rt-0"
+                class="continue"
                 mat-raised-button
                 color="primary"
                 (click)="progressToNonAmountsStep()"
@@ -309,7 +307,7 @@
           <div style="text-align: center">
             <button
               type="button"
-              class="continue b-w-100 b-rt-0"
+              class="continue"
               mat-raised-button
               color="primary"
               (click)="progressFromStepGiftAid()"
@@ -447,13 +445,7 @@
           </p>
         }
         <div style="text-align: center">
-          <button
-            type="button"
-            class="continue b-w-100 b-rt-0"
-            mat-raised-button
-            color="primary"
-            (click)="continueFromPaymentStep()"
-          >
+          <button type="button" class="continue" mat-raised-button color="primary" (click)="continueFromPaymentStep()">
             Continue
           </button>
         </div>
@@ -572,7 +564,7 @@
         <div style="text-align: center">
           <button
             type="button"
-            class="continue b-w-100 b-rt-0"
+            class="continue"
             mat-raised-button
             color="primary"
             (click)="progressFromStepReceiveUpdates()"
@@ -609,7 +601,7 @@
             <button
               style="width: 40%"
               type="button"
-              class="continue b-w-100 b-rt-0"
+              class="continue"
               mat-raised-button
               color="primary"
               (click)="retryFinalPreSubmitUpdate()"
@@ -678,7 +670,7 @@
             <button
               (click)="submit()"
               (keyup.enter)="submit()"
-              class="c-donate-button b-donate-button b-w-100 b-rt-1"
+              class="continue c-donate-button"
               mat-raised-button
               color="primary"
             >

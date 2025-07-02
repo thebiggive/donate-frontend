@@ -150,10 +150,6 @@ input:disabled {
   }
 }
 
-.b-rt-0 {
-  @include abstract.b-rt-0;
-}
-
 .b-rt-1 {
   @include abstract.b-rt-1;
 }
@@ -309,18 +305,6 @@ div#giftAidAddressContainer > div {
   .mat-icon {
     height: 14px;
   }
-}
-
-button.continue,
-.c-donate-button {
-  margin-top: 22px !important;
-  margin-bottom: 22px !important;
-  padding: 1.5rem;
-  max-width: 300px;
-}
-
-.c-donate-button {
-  @include abstract.make-donate-button;
 }
 
 .c-donate-button-amount {
