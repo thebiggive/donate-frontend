@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -22,6 +22,7 @@ import { routes } from './app.routes';
 import { BigGiveTitleStrategy } from '../BigGiveTitleStrategy';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
+import { BrowserErrorHandler } from './BrowserErrorHandler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -56,6 +57,7 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: TitleStrategy, useClass: BigGiveTitleStrategy },
+    { provide: ErrorHandler, useClass: BrowserErrorHandler },
     provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };
