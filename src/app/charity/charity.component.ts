@@ -14,6 +14,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
   templateUrl: './charity.component.html',
   styleUrl: 'charity.component.scss',
   imports: [RouterLink, BiggiveGrid, BiggiveCampaignCard, AsyncPipe, CurrencyPipe, OptimisedImagePipe],
+  providers: [DatePipe],
 })
 export class CharityComponent implements OnInit {
   private datePipe = inject(DatePipe);
