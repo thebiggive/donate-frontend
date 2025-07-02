@@ -12,7 +12,7 @@ export class Toast {
 
   public showSuccess(message: string) {
     this.snackBar.open(message, undefined, {
-      duration: this.getDuration(message),
+      duration: this.getDuration(message, 2_000, 7_000),
       panelClass: 'success-bar',
     });
   }
@@ -21,9 +21,11 @@ export class Toast {
    * Displays an error message on screen as a "toast" popping up near the bottom of the screen. Longer messages
    * will display for a longer time.
    */
-  public showError(message: string) {
+  public showError(message: string, { minDurationMs = 2_000, maxDurationMs = 7_000 } = {}) {
+    const duration = this.getDuration(message, minDurationMs, maxDurationMs);
+
     this.snackBar.open(message, undefined, {
-      duration: this.getDuration(message),
+      duration: duration,
       panelClass: 'error-bar',
     });
   }
@@ -31,7 +33,7 @@ export class Toast {
   /**
    * formula for duration from https://ux.stackexchange.com/a/85898/7211
    */
-  private getDuration(message: string): number {
-    return Math.min(Math.max(message.length * 50, 2_000), 7_000);
+  private getDuration(message: string, minDurationMs: number, maxDurationMs: number): number {
+    return Math.min(Math.max(message.length * 50, minDurationMs), maxDurationMs);
   }
 }
