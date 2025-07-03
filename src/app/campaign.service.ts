@@ -231,6 +231,17 @@ export class CampaignService {
     }
   }
 
+  getCharityCampaignPreviewById(campaignId: string) {
+    switch (flags.useMatchbotCampaignApi) {
+      case false:
+        return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
+      case true:
+        return this.http
+          .get<{ campaign: Campaign }>(`${environment.matchbotApiPrefix}/campaigns/early-preview/${campaignId}`)
+          .pipe(map((response) => response.campaign));
+    }
+  }
+
   getMetaCampaignBySlug(campaignSlug: string): Observable<MetaCampaign> {
     if (!campaignSlug) {
       // TODO consider removing handling for this edge case once we call this

@@ -47,6 +47,11 @@ export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
         return EMPTY;
       }
 
+      const isEarlyPreview: boolean = !!route.data.isEarlyPreview;
+      if (isEarlyPreview) {
+        return this.campaignService.getCharityCampaignPreviewById(campaignId);
+      }
+
       return this.loadWithStateCache(campaignId, (identifier: string) =>
         this.campaignService.getCharityCampaignById(identifier),
       );

@@ -136,6 +136,17 @@ export const routes: (Route & {
       import('./campaign-details/campaign-details.component').then((c) => c.CampaignDetailsComponent),
   },
   {
+    path: 'campaign-preview/:campaignId',
+    title: undefined, // set from inside component using campaign name
+    pathMatch: 'full',
+    resolve: {
+      campaign: CampaignResolver,
+    },
+    data: { isEarlyPreview: true },
+    loadComponent: () =>
+      import('./campaign-details/campaign-details.component').then((c) => c.CampaignDetailsComponent),
+  },
+  {
     path: 'charity/:charityId',
     title: undefined, // set from inside component using charity name
     pathMatch: 'full',
