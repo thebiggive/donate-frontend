@@ -36,3 +36,21 @@ table.summary {
 .total {
   color: abstract.$colour-primary;
 }
+
+.b-rt-0 {
+  @include abstract.b-rt-0;
+}
+
+.c-donate-button {
+  @include abstract.make-donate-button;
+}
+
+button.continue,
+.c-donate-button {
+  width: 40%;
+  margin-top: 22px !important;
+  margin-bottom: 22px !important;
+  padding: 1.5rem;
+  max-width: 300px;
+  @extend .b-rt-0;
+}

@@ -39,21 +39,21 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
         useMatchbotCharityApi: false,
-        useMatchbotMetaCampaignApi: false,
+        useMatchbotMetaCampaignApi: true, // none of our regression test scenarios actually look at a metacampaign so this doesn't matter.
       };
     case 'staging':
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false,
-        useMatchbotMetaCampaignApi: false,
+        useMatchbotCharityApi: false, // campaign data is not quite complete or up to date enough to use yet in staging
+        useMatchbotMetaCampaignApi: true, // but metacampaign data **is**, since there are only a few relavent metacampaigns
       };
     case 'production':
       return {
         regularGivingEnabled: false,
-        useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false,
-        useMatchbotMetaCampaignApi: false,
+        useMatchbotCampaignApi: true, // must be false for now as campaign data isn't yet complete and up to date in prod matchbot db.
+        useMatchbotCharityApi: false, // ditto for charities
+        useMatchbotMetaCampaignApi: false, // matchbot metaCampaign table is empty in prod right now so must be false
       };
   }
 };
