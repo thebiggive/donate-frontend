@@ -53,7 +53,7 @@
         html-element="h1"
         size="3"
         align="left"
-        [text]="campaign.title"
+        [text]="isEarlyPreview() ? 'PREVIEW: ' + campaign.title : campaign.title"
       >
       </biggive-heading>
 
