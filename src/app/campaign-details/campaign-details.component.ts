@@ -103,7 +103,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         // top of the page and crop it out if they want that.
 
         this.snackBar.open(
-          'This is a privaate preview of your campaign page. Do not share this page with the public.',
+          'This is a private preview of your campaign page. Do not share this page with the public.',
           undefined,
           {
             panelClass: 'success-bar',
