@@ -102,13 +102,13 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         // non-dismissable is OK. It appears no the bottom of the screen so the user can still take a screenshot of the
         // top of the page and crop it out if they want that.
 
-        this.snackBar.open(
-          'This is a private preview of your campaign page. Do not share this page with the public.',
-          undefined,
-          {
-            panelClass: 'success-bar',
-          },
-        );
+        const message = this.campaign.isMatched
+          ? 'This is a private preview of your campaign page (your campaign page URL will be different if your application has been approved). Do not share this page with the general public.'
+          : 'This is a private preview of your campaign page. Do not share this page with the general public.';
+
+        this.snackBar.open(message, undefined, {
+          panelClass: 'success-bar',
+        });
       }
     });
   }
