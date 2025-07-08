@@ -12,8 +12,8 @@ export type SelectedType = {
 const sortOptions = {
   amountRaised: 'Most raised',
   leastRaised: 'Least raised',
-  matchFundsRemaining: 'Match funds remaining',
-  closeToTarget: 'Close to campaign target',
+  matchFundsRemaining: 'Most funds remaining',
+  closeToTarget: 'Nearest target',
   relevance: 'Relevance',
 } as const;
 
