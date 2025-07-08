@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
 import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
-import { CampaignSummary } from './campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
@@ -210,9 +210,11 @@ export class CampaignService {
 
     switch (flags.useMatchbotCampaignApi) {
       case false:
-        return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, {params});
+        return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
       case true:
-        return this.http.get<CampaignSummary[]>(`${environment.matchbotApiPrefix}/campaigns`, {params});
+        return this.http
+          .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
+          .pipe(map((response) => response.campaignSummaries));
     }
   }
 
