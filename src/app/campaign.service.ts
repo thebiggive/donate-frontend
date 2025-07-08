@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
 import { CampaignStats, formatCampaignStats } from './campaign-stats.model';
-import { CampaignSummary } from './campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
@@ -132,18 +132,10 @@ export class CampaignService {
       query.fundSlug = fundSlug;
     }
 
-    if (selected.sortField?.toLowerCase() === 'relevance') {
-      query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
-      query.sortDirection = undefined;
-    } else if (selected.sortField === 'leastRaised') {
-      query.sortDirection = 'asc';
-      query.sortField = 'amountRaised';
-    } else if (selected.sortField === 'closeToTarget') {
-      query.sortDirection = 'asc';
-      query.sortField = 'matchFundsRemaining';
+    if (flags.useMatchbotCampaignSearchApi) {
+      this.sortForMatchbot(query, selected);
     } else {
-      // match funds left and amount raised both make most sense in 'desc' order
-      query.sortDirection = 'desc';
+      this.sortForSalesforce(query, selected);
     }
 
     return query;
@@ -216,7 +208,14 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
-    return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
+    switch (flags.useMatchbotCampaignApi) {
+      case false:
+        return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
+      case true:
+        return this.http
+          .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
+          .pipe(map((response) => response.campaignSummaries));
+    }
   }
 
   /**
@@ -272,6 +271,48 @@ export class CampaignService {
     return this.http
       .get<SfApiHighlightCard[]>(`${environment.sfApiUriPrefix}${this.apiPath}/highlight-service`)
       .pipe(map(SFHighlightCardsToFEHighlightCards));
+  }
+
+  private sortForMatchbot(query: SearchQuery, selected: SelectedType) {
+    switch (selected.sortField?.toLowerCase()) {
+      case 'relevance':
+        query.sortField = 'relevance';
+        query.sortDirection = 'desc';
+        break;
+      case 'amountRaised':
+        query.sortField = 'amountRaised';
+        query.sortDirection = 'desc';
+        break;
+      case 'leastRaised':
+        query.sortField = 'amountRaised';
+        query.sortDirection = 'asc';
+        break;
+      case 'closeToTarget':
+        query.sortField = 'distanceToTarget';
+        query.sortDirection = 'asc';
+        break;
+      case 'matchFundsRemaining':
+      default: // Live campaign UI should choose this default on its own, but also make it the global fallback.
+        query.sortField = 'distanceToTarget';
+        query.sortDirection = 'desc';
+        break;
+    }
+  }
+
+  private sortForSalesforce(query: SearchQuery, selected: SelectedType) {
+    if (selected.sortField?.toLowerCase() === 'relevance') {
+      query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
+      query.sortDirection = undefined;
+    } else if (selected.sortField === 'leastRaised') {
+      query.sortDirection = 'asc';
+      query.sortField = 'amountRaised';
+    } else if (selected.sortField === 'closeToTarget') {
+      query.sortDirection = 'asc';
+      query.sortField = 'matchFundsRemaining';
+    } else {
+      // match funds left and amount raised both make most sense in 'desc' order
+      query.sortDirection = 'desc';
+    }
   }
 }
 
