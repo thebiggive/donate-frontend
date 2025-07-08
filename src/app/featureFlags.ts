@@ -38,15 +38,15 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false,
+        useMatchbotCharityApi: true,
         useMatchbotMetaCampaignApi: true, // none of our regression test scenarios actually look at a metacampaign so this doesn't matter.
       };
     case 'staging':
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false, // campaign data is not quite complete or up to date enough to use yet in staging
-        useMatchbotMetaCampaignApi: true, // but metacampaign data **is**, since there are only a few relavent metacampaigns
+        useMatchbotCharityApi: true,
+        useMatchbotMetaCampaignApi: true,
       };
     case 'production':
       return {
