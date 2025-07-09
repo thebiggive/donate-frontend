@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject, input, effect } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -25,6 +25,7 @@ import { MatIcon } from '@angular/material/icon';
 import { CampaignInfoComponent } from '../campaign-info/campaign-info.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -55,6 +56,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
+  isEarlyPreview = input(false);
   private datePipe = inject(DatePipe);
   private location = inject(Location);
   private navigationService = inject(NavigationService);
@@ -64,6 +66,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private sanitizer = inject(DomSanitizer);
   private toast = inject(Toast);
+  private snackBar = inject(MatSnackBar);
   timeLeftPipe = inject(TimeLeftPipe);
 
   campaign!: Campaign;
@@ -91,6 +94,23 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         }
       })
       .catch(console.error);
+
+    effect(() => {
+      if (this.isEarlyPreview()) {
+        // would have ideally had a dismissable toast but that doesn't seem to be offered by snackbar - we have
+        // to call a function to dismiss it instead of just passing an option to make it user dismissable. I think
+        // non-dismissable is OK. It appears no the bottom of the screen so the user can still take a screenshot of the
+        // top of the page and crop it out if they want that.
+
+        const message = this.campaign.isMatched
+          ? 'This is a private preview of your campaign page (your campaign page URL will be different if your application has been approved). Do not share this page with the general public.'
+          : 'This is a private preview of your campaign page. Do not share this page with the general public.';
+
+        this.snackBar.open(message, undefined, {
+          panelClass: 'success-bar',
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -134,7 +154,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
 
-    this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
+    if (this.isEarlyPreview()) {
+      this.pageMeta.setCommon('PREVIEW: ' + campaign.title, summaryStart, campaign.bannerUri, true);
+    } else {
+      this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
+    }
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {

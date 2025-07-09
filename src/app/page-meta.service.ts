@@ -18,7 +18,7 @@ export class PageMetaService {
   private router = inject(Router);
   private title = inject(Title);
 
-  setCommon(title: string, description: string = '', imageUri: string | null = null) {
+  setCommon(title: string, description: string = '', imageUri: string | null = null, noIndex = false) {
     const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
     const links = this.dom.getElementsByTagName('link');
@@ -45,6 +45,12 @@ export class PageMetaService {
       this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
     } else {
       this.meta.updateTag({ property: 'twitter:card', content: 'summary' });
+    }
+
+    if (noIndex) {
+      this.meta.updateTag({ property: 'robots', content: 'noindex' });
+    } else {
+      this.meta.removeTag('robots');
     }
   }
 }

@@ -25,3 +25,7 @@ export type CampaignSummary = {
   target: number;
   title: string;
 };
+
+export type CampaignSummaryList = {
+  campaignSummaries: CampaignSummary[];
+};

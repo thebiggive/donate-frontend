@@ -12,6 +12,8 @@ type flags = {
    */
   readonly useMatchbotCampaignApi: boolean;
 
+  readonly useMatchbotCampaignSearchApi: boolean;
+
   /**
    * Another part of MAT-405 - but rather than turning on now in prod like useMatchbotCampaignApi
    * planning to leave off until we have made sure that the prod matchbot DB has up-to-date data
@@ -31,6 +33,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
+        useMatchbotCampaignSearchApi: true,
         useMatchbotCharityApi: true,
         useMatchbotMetaCampaignApi: true,
       };
@@ -38,21 +41,24 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false,
+        useMatchbotCampaignSearchApi: true,
+        useMatchbotCharityApi: true,
         useMatchbotMetaCampaignApi: true, // none of our regression test scenarios actually look at a metacampaign so this doesn't matter.
       };
     case 'staging':
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCharityApi: false, // campaign data is not quite complete or up to date enough to use yet in staging
-        useMatchbotMetaCampaignApi: true, // but metacampaign data **is**, since there are only a few relavent metacampaigns
+        useMatchbotCampaignSearchApi: true,
+        useMatchbotCharityApi: true,
+        useMatchbotMetaCampaignApi: true,
       };
     case 'production':
       return {
         regularGivingEnabled: false,
-        useMatchbotCampaignApi: true, // must be false for now as campaign data isn't yet complete and up to date in prod matchbot db.
-        useMatchbotCharityApi: false, // ditto for charities
+        useMatchbotCampaignApi: true,
+        useMatchbotCampaignSearchApi: false,
+        useMatchbotCharityApi: false,
         useMatchbotMetaCampaignApi: false, // matchbot metaCampaign table is empty in prod right now so must be false
       };
   }
