@@ -208,7 +208,7 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
-    switch (flags.useMatchbotCampaignApi) {
+    switch (flags.useMatchbotCampaignSearchApi) {
       case false:
         return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
       case true:
