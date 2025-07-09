@@ -274,7 +274,7 @@ export class CampaignService {
   }
 
   private sortForMatchbot(query: SearchQuery, selected: SelectedType) {
-    switch (selected.sortField?.toLowerCase()) {
+    switch (selected.sortField) {
       case 'relevance':
         query.sortField = 'relevance';
         query.sortDirection = 'desc';
