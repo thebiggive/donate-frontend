@@ -1,6 +1,10 @@
 :host {
 }
 
+* {
+  //outline: 1px solid red;
+}
+
 div.banner {
   height: 600px;
   background-size: cover;
@@ -32,4 +36,32 @@ h1 {
 .teaser {
   margin: 0;
   padding: 0;
+}
+
+
+.logo,  {
+  height: 75px;
+  &.logo-height-1 { height: 50px; }
+  &.logo-height-2 { height: 75px; }
+  &.logo-height-3 { height: 100px; }
+  &.logo-height-4 { height: 125px; }
+  &.logo-height-5 { height: 150px; }
+  &.logo-height-6 { height: 175px; }
+  &.logo-height-7 { height: 200px; }
+  &.logo-height-8 { height: 225px; }
+  &.logo-height-9 { height: 250px; }
+  &.logo-height-10 { height: 275px; }
+}
+
+.logo {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  margin-bottom: 10px;
+
+  img {
+    width: auto;
+    height: 100%;
+    position: relative;
+  }
 }

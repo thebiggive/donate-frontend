@@ -8,7 +8,11 @@
 >
   <div class="sleeve">
     <div class="content-wrap">
-      <div class="logo-space logo-height-3"></div>
+      @if(logo()) {
+      <div class="logo logo-height-3">
+        <img [src]="logo()?.url" [alt]="logo()?.alt"/>
+      </div>
+      }
       <h1 class="main-title">{{ mainTitle() }}</h1>
       <div class="teaser">{{ teaser() }}</div>
     </div>
