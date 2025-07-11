@@ -3,16 +3,24 @@
   [ngStyle]="{
     'background-image': 'url(' + ((mainImageUrl() | optimisedImage: 2000 | async) || '') + ')',
     'background-color': backgroundColour(),
-    color: textColour(),
   }"
 >
   <div class="sleeve">
-    <div class="content-wrap">
-      <div class="logo-space logo-height-3"></div>
+    <div
+      class="content-wrap"
+      [ngStyle]="{
+        'background-color': textBackgroundColour(),
+        color: textColour(),
+      }"
+    >
+      @if (logo()) {
+        <div class="logo">
+          <img [src]="logo()?.url" [alt]="logo()?.alt" />
+        </div>
+      }
       <h1 class="main-title">{{ mainTitle() }}</h1>
       <div class="teaser">{{ teaser() }}</div>
     </div>
   </div>
 </div>
-<!-- todo - add logo above, allow cropping the image as required depending on browser size and identified focal point
-  within image, set background color on the content-wrap element or similar -->
+<!-- todo - allow cropping the image as required depending on browser size and identified focal point within image -->

@@ -30,5 +30,10 @@ export class MetaCampaignBannerComponent {
   /**
    * @todo make this an input and allow to vary per metacampaign
    **/
-  textColour = signal('white');
+  textBackgroundColour = signal('white');
+
+  /**
+   * @todo make this an input and allow to vary per metacampaign
+   **/
+  textColour = signal('black');
 }
