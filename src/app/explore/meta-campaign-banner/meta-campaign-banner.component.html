@@ -3,11 +3,15 @@
   [ngStyle]="{
     'background-image': 'url(' + ((mainImageUrl() | optimisedImage: 2000 | async) || '') + ')',
     'background-color': backgroundColour(),
-    color: textColour(),
   }"
 >
   <div class="sleeve">
-    <div class="content-wrap">
+    <div class="content-wrap"
+         [ngStyle]="{
+            'background-color': textBackgroundColour(),
+            color: textColour(),
+         }"
+    >
       @if(logo()) {
       <div class="logo logo-height-3">
         <img [src]="logo()?.url" [alt]="logo()?.alt"/>

@@ -27,8 +27,10 @@ export class MetaCampaignBannerComponent {
    * */
   backgroundColour = signal('black');
 
+  textBackgroundColour = signal('white');
+
   /**
    * @todo make this an input and allow to vary per metacampaign
    **/
-  textColour = signal('white');
+  textColour = signal('black');
 }
