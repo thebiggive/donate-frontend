@@ -1,6 +1,5 @@
 import { Component, input, signal } from '@angular/core';
 import { AsyncPipe, NgStyle } from '@angular/common';
-import { BiggiveHeroImage } from '@biggive/components-angular';
 import { OptimisedImagePipe } from '../../optimised-image.pipe';
 
 /**
@@ -11,12 +10,12 @@ import { OptimisedImagePipe } from '../../optimised-image.pipe';
  *
  */
 @Component({
-  selector: 'app-banner',
-  imports: [AsyncPipe, BiggiveHeroImage, OptimisedImagePipe, NgStyle],
-  templateUrl: './banner.component.html',
-  styleUrl: './banner.component.scss',
+  selector: 'app-meta-campaign-banner',
+  imports: [AsyncPipe, OptimisedImagePipe, NgStyle],
+  templateUrl: './meta-campaign-banner.component.html',
+  styleUrl: './meta-campaign-banner.component.scss',
 })
-export class BannerComponent {
+export class MetaCampaignBannerComponent {
   logo = input<{ url: string; alt: string | undefined } | undefined>();
   mainTitle = input.required<string>();
   mainImageUrl = input.required<string>();
