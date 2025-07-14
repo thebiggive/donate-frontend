@@ -1,10 +1,29 @@
 <div
   class="banner"
   [ngStyle]="{
-    'background-image': 'url(' + ((mainImageUrl() | optimisedImage: 2000 | async) || '') + ')',
     'background-color': backgroundColour(),
   }"
 >
+  <!-- @todo start collecting alt text for metacampaign banners and output below instead of empty alt:-->
+  <img
+    class="background"
+    [src]="mainImageOptimisedUri.value()"
+    alt=""
+    [ngStyle]="{
+      'object-position': focalPoint().x + '% ' + focalPoint().y + '%',
+    }"
+  />
+  <!-- marker below is just for clarity in development, remove before release -->
+  <div
+    class="focal-point-marker"
+    [ngStyle]="{
+      position: 'absolute',
+      left: focalPoint().x + '%',
+      top: focalPoint().y + '%',
+    }"
+  >
+    ❌
+  </div>
   <div class="sleeve">
     <div
       class="content-wrap"
@@ -23,4 +42,3 @@
     </div>
   </div>
 </div>
-<!-- todo - allow cropping the image as required depending on browser size and identified focal point within image -->

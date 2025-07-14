@@ -1,19 +1,32 @@
 div.banner {
   background-size: cover;
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+
+  img.background {
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 div.sleeve {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   max-width: 1200px;
   height: 600px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .content-wrap {
   width: 40%;
+  min-width: 370px;
   position: relative;
   z-index: 1;
   padding: 30px;
@@ -45,4 +58,16 @@ h1 {
     height: 100%;
     position: relative;
   }
+}
+
+.focal-point-marker {
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  height: 24px;
+  line-height: 1;
 }
