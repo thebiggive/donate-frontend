@@ -42,6 +42,15 @@ export type MetaCampaign = {
   campaignCount?: number;
   usesSharedFunds: boolean;
 
-  /** Whether to apply the new banner layout. Treat undefined as false. */
-  useDon1120Banner?: boolean;
+  bannerLayout?: {
+    backgroundColour: string;
+    textBackgroundColour: string;
+    textColour: string;
+    focalArea: {
+      topLeftXpos: number;
+      topLeftYpos: number;
+      bottomRightXpos: number;
+      bottomRightYpos: number;
+    };
+  };
 };
