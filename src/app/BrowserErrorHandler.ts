@@ -9,10 +9,12 @@ export class BrowserErrorHandler implements ErrorHandler {
 
   handleError(error: Error): void {
     console.error(error);
-    if (['development', 'regression'].includes(environment.environmentId)) {
-      // don't show toast in prod because it won't be useful to real users, don't show in staging until we've
-      // reviewed how it looks and if there are too many errors in dev env
-      this.toast.showError(error.name + ': ' + error.message, { minDurationMs: 5_000, maxDurationMs: 15_000 });
+    if (['development', 'regression', 'staging'].includes(environment.environmentId)) {
+      // don't show toast in prod because it won't be useful to real users
+      this.toast.showError(
+        `${error.name}: ${error.message} (${environment.environmentId} error display, not shown in prod)`,
+        { minDurationMs: 5_000, maxDurationMs: 15_000 },
+      );
     }
 
     if (environment.environmentId !== 'development') {
