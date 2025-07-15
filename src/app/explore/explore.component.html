@@ -17,12 +17,19 @@
     </biggive-totalizer>
   }
 
-  @if (metaCampaign && metaCampaign.useDon1120Banner) {
+  @if (metaCampaign && !!metaCampaign.bannerLayout) {
     <app-meta-campaign-banner
       [logo]="fund?.logoUri ? { url: fund?.logoUri!, alt: fund?.name } : undefined"
       [mainTitle]="title"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
       [mainImageUrl]="metaCampaign.bannerUri"
+      [backgroundColour]="metaCampaign.bannerLayout.backgroundColour"
+      [focalPoint]="{
+        x: metaCampaign.bannerLayout.focalArea.topLeftXpos,
+        y: metaCampaign.bannerLayout.focalArea.topLeftYpos,
+      }"
+      [textBackgroundColour]="metaCampaign.bannerLayout.textBackgroundColour"
+      [textColour]="metaCampaign.bannerLayout.textColour"
     >
     </app-meta-campaign-banner>
   } @else if (metaCampaign) {

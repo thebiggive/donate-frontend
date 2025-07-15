@@ -7,6 +7,7 @@ div.banner {
   img.background {
     object-fit: cover;
     position: absolute;
+    // todo - limit the width to 2,000px and while keeping centred.
     width: 100%;
     height: 100%;
   }
