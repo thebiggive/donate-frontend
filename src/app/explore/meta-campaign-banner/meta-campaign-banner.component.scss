@@ -74,6 +74,8 @@ h1 {
 }
 
 .focal-point-marker {
+  // zero opacity to make it disappear, as not actually part of the design, can be made visible for debugging easily.
+  opacity: 0;
   z-index: 2;
   transform: translate(-50%, -50%);
   pointer-events: none;
