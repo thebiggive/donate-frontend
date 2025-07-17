@@ -1,3 +1,5 @@
+@use "../../../abstract";
+
 div.banner {
   background-size: cover;
   height: 600px;
@@ -23,17 +25,25 @@ div.sleeve {
   height: 600px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 20px;
+  padding: 0;
   box-sizing: border-box;
+  @media #{abstract.$breakpoint-smallish} {
+    padding-left: 20px;
+  }
 }
 
 .content-wrap {
-  width: 40%;
-  min-width: 370px;
   position: relative;
   z-index: 1;
   padding: 30px;
   max-height: 400px;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media #{abstract.$breakpoint-smallish} {
+    width: 450px;
+    padding: 15px;
+  }
 }
 
 h1 {
