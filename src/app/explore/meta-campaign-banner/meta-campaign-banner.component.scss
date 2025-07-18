@@ -36,11 +36,12 @@ div.sleeve {
   box-sizing: border-box;
   height: 100%;
 
-  @media #{abstract.$breakpoint-smallish} {
+  @media (min-width: #{abstract.$smallish}) {
     flex-direction: column;
   }
 
-  @media ("min-width: 480px") {
+  @media (min-width: #{abstract.$smallish + 30px}) {
+    // adding 30px to standard breakpoint to match padding.
     padding-left: 20px;
     align-items: center;
     height: 600px;
@@ -58,12 +59,12 @@ div.sleeve {
   width: 100%;
   max-width: 450px;
 
-  @media #{abstract.$breakpoint-smallish} {
+  @media (min-width: #{abstract.$smallish}) {
     margin-bottom: auto;
     margin-top: auto;
   }
 
-  @media ("min-width: 480px") {
+  @media (min-width: #{abstract.$smallish + 30px}) {
     padding-top: 30px;
     margin-left: 0;
   }
@@ -74,7 +75,7 @@ img.stacked {
   height: 100%;
   object-fit: cover;
 
-  @media #{abstract.$breakpoint-smallish} {
+  @media (min-width: #{abstract.$smallish}) {
     display: none;
   }
 }
