@@ -1,3 +1,5 @@
+@use "../../../abstract";
+
 div.banner {
   background-size: cover;
   height: 600px;
@@ -9,31 +11,73 @@ div.banner {
     position: absolute;
     max-width: 2000px;
     width: 100%;
-    height: 100%;
+    height: 400px;
     left: 50%;
     transform: translateX(-50%);
+    bottom: 0;
+    display: none;
+    @media ("min-width: 450px") {
+      display: block;
+      bottom: initial;
+      height: 100%;
+    }
   }
 }
 
 div.sleeve {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
   justify-content: flex-start;
   max-width: 1200px;
-  height: 600px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 20px;
+  padding: 0;
   box-sizing: border-box;
+  height: 100%;
+
+  @media (min-width: #{abstract.$smallish}) {
+    flex-direction: column;
+  }
+
+  @media (min-width: #{abstract.$smallish + 30px}) {
+    // adding 30px to standard breakpoint to match padding.
+    padding-left: 20px;
+    align-items: center;
+    height: 600px;
+  }
 }
 
 .content-wrap {
-  width: 40%;
-  min-width: 370px;
   position: relative;
-  z-index: 1;
-  padding: 30px;
+  padding-top: 40px;
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 30px;
   max-height: 400px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 450px;
+
+  @media (min-width: #{abstract.$smallish}) {
+    margin-bottom: auto;
+    margin-top: auto;
+  }
+
+  @media (min-width: #{abstract.$smallish + 30px}) {
+    padding-top: 30px;
+    margin-left: 0;
+  }
+}
+
+img.stacked {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  @media (min-width: #{abstract.$smallish}) {
+    display: none;
+  }
 }
 
 h1 {
@@ -61,16 +105,4 @@ h1 {
     height: 100%;
     position: relative;
   }
-}
-
-.focal-point-marker {
-  z-index: 2;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  height: 24px;
-  line-height: 1;
 }
