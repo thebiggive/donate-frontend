@@ -55,7 +55,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
       };
     case 'production':
       return {
-        regularGivingEnabled: false,
+        regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
         useMatchbotCampaignSearchApi: false,
         useMatchbotCharityApi: false,
