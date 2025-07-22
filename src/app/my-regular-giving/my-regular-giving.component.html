@@ -48,11 +48,9 @@
                 </h3>
                 <ul>
                   <li>Amount: {{ mandate.donationAmount | money }}</li>
-                  <!-- @todo-regular-giving consider whether to also show total with match
-                              funds when the next donation will be matched. -->
                   <li>Gift Aid Value: {{ mandate.giftAidAmount | money }}</li>
                   @if (mandate.giftAid) {
-                    <li>Total with gift aid {{ mandate.totalIncGiftAid | money }}</li>
+                    <li>Total with Gift Aid {{ mandate.totalIncGiftAid | money }}</li>
                   }
                   <li>Payment collection day: {{ mandate.schedule.dayOfMonth }}</li>
                   @if (mandate.schedule.expectedNextPaymentDate) {
