@@ -710,7 +710,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (this.giftAid && !this.homeAddressFormValue) {
-      errors.push('Please enter or select your home address if you wish to claim gift aid.');
+      errors.push('Please enter or select your home address if you wish to claim Gift Aid.');
     }
 
     if (this.giftAid && !this.homeOutsideUK && !this.homePostcode) {
