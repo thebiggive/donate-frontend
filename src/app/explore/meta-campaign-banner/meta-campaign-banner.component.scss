@@ -51,7 +51,7 @@ div.sleeve {
 
 .content-wrap {
   position: relative;
-  padding-top: 40px;
+  padding-top: 70px; // includes 30 extra on mobile to make space for overlapping 'main-message-wrap'
   padding-right: 30px;
   padding-left: 30px;
   padding-bottom: 30px;
@@ -63,6 +63,7 @@ div.sleeve {
   @media (min-width: #{abstract.$smallish}) {
     margin-bottom: auto;
     margin-top: auto;
+    padding-top: 40px;
   }
 
   @media (min-width: #{abstract.$smallish + 30px}) {
