@@ -29,6 +29,10 @@ export class HeadingBanner {
   backgroundColour = input.required<string>();
   textBackgroundColour = input.required<string>();
   textColour = input.required<string>();
+  /**
+   * If true the Main Title is shown in a small font, and the teaser is big.
+   */
+  invertedTextSizes = input(false);
   mainImageOptimisedUri = resource({
     params: () => ({ mainImageUrl: this.mainImageUrl() }),
     loader: async ({ params }) => await firstValueFrom(this.imageService.getImageUri(params.mainImageUrl, 2_000)),

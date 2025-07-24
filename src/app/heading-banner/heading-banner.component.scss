@@ -100,9 +100,21 @@ h1 {
   padding: 0;
 }
 
+.invertedTextSizes h1 {
+  font-size: 25px;
+  line-height: inherit;
+  font-weight: bold;
+}
+
 .teaser {
   margin: 0;
   padding: 0;
+}
+
+.invertedTextSizes .teaser {
+  font-size: 47px;
+  line-height: 60px;
+  font-weight: bold;
 }
 
 .logo {
