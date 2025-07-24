@@ -43,6 +43,19 @@
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
+  } @else if (flags.don1120NewBannerStyle) {
+    <app-meta-campaign-banner
+      mainTitle="Explore Campaigns"
+      teaser="The leading online match funding platform"
+      mainImageUrl="/assets/images/banner-explore.jpg"
+      backgroundColour="F6F6F6"
+      [focalPoint]="{
+        x: 70,
+        y: 47,
+      }"
+      textBackgroundColour="#2C089B"
+      textColour="#FFFFFF"
+    />
   } @else {
     <biggive-hero-image
       slug="Explore Campaigns"

@@ -18,6 +18,8 @@ import {
   BiggiveVideoFeature,
 } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
+import { MetaCampaignBannerComponent } from '../explore/meta-campaign-banner/meta-campaign-banner.component';
+import { flags } from '../featureFlags';
 
 @Component({
   selector: 'app-home',
@@ -31,10 +33,12 @@ import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.comp
     BiggiveHeading,
     BiggiveButton,
     BiggiveVideoFeature,
+    MetaCampaignBannerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
 export class HomeComponent implements OnInit {
+  flags = flags;
   private navigationService = inject(NavigationService);
   private pageMeta = inject(PageMetaService);
   private route = inject(ActivatedRoute);
