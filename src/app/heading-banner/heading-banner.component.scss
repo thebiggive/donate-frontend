@@ -24,6 +24,10 @@ div.banner {
   }
 }
 
+div.banner.short {
+  height: 400px;
+}
+
 div.sleeve {
   display: flex;
   flex-direction: column;
@@ -46,6 +50,12 @@ div.sleeve {
 
     align-items: start;
     height: 600px;
+  }
+}
+
+@media (min-width: #{abstract.$smallish + 30px}) {
+  .short div.sleeve {
+    height: 400px;
   }
 }
 

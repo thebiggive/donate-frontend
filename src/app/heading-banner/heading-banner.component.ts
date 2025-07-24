@@ -33,4 +33,10 @@ export class HeadingBanner {
     params: () => ({ mainImageUrl: this.mainImageUrl() }),
     loader: async ({ params }) => await firstValueFrom(this.imageService.getImageUri(params.mainImageUrl, 2_000)),
   });
+
+  /**
+   * Tall version mainly intended for meta-campaigns, short for everything else.
+   * But we may find other places we want the tall image.
+   */
+  height = input.required<'short' | 'tall'>();
 }
