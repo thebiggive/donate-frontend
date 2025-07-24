@@ -219,8 +219,6 @@ export class DonationStartFormComponent
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
-  showAllPaymentMethods: boolean = false;
-
   protected campaignId!: string;
 
   /**
