@@ -1,7 +1,7 @@
 import { Component, inject, input, resource } from '@angular/core';
 import { AsyncPipe, NgStyle } from '@angular/common';
-import { OptimisedImagePipe } from '../../optimised-image.pipe';
-import { ImageService } from '../../image.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { ImageService } from '../image.service';
 import { firstValueFrom } from 'rxjs';
 
 /**
@@ -12,14 +12,17 @@ import { firstValueFrom } from 'rxjs';
  *
  */
 @Component({
-  selector: 'app-meta-campaign-banner',
+  selector: 'app-heading-banner',
   imports: [AsyncPipe, OptimisedImagePipe, NgStyle],
-  templateUrl: './meta-campaign-banner.component.html',
-  styleUrl: './meta-campaign-banner.component.scss',
+  templateUrl: './heading-banner.component.html',
+  styleUrl: './heading-banner.component.scss',
 })
-export class MetaCampaignBannerComponent {
+export class HeadingBanner {
   imageService = inject(ImageService);
   logo = input<{ url: string; alt: string | undefined } | undefined>();
+  /** Optional slightly smaller text to appear above the main title */
+  slug = input('');
+
   mainTitle = input.required<string>();
   mainImageUrl = input.required<string>();
   /** @todo onsider if we need to define a focal area box instead of just a point.
@@ -33,4 +36,10 @@ export class MetaCampaignBannerComponent {
     params: () => ({ mainImageUrl: this.mainImageUrl() }),
     loader: async ({ params }) => await firstValueFrom(this.imageService.getImageUri(params.mainImageUrl, 2_000)),
   });
+
+  /**
+   * Tall version mainly intended for meta-campaigns, short for everything else.
+   * But we may find other places we want the tall image.
+   */
+  height = input.required<'short' | 'tall'>();
 }

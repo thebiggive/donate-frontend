@@ -18,7 +18,7 @@
   }
 
   @if (metaCampaign && !!metaCampaign.bannerLayout) {
-    <app-meta-campaign-banner
+    <app-heading-banner
       [logo]="fund?.logoUri ? { url: fund?.logoUri!, alt: fund?.name } : undefined"
       [mainTitle]="title"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
@@ -30,8 +30,9 @@
       }"
       [textBackgroundColour]="metaCampaign.bannerLayout.textBackgroundColour"
       [textColour]="metaCampaign.bannerLayout.textColour"
+      height="tall"
     >
-    </app-meta-campaign-banner>
+    </app-heading-banner>
   } @else if (metaCampaign) {
     <biggive-hero-image
       [logo]="fund?.logoUri"
@@ -43,6 +44,21 @@
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
+  } @else if (flags.don1120NewBannerStyle) {
+    <app-heading-banner
+      slug="Explore Campaigns"
+      mainTitle="The leading online match funding platform"
+      teaser=""
+      mainImageUrl="/assets/images/banner-explore.jpg"
+      backgroundColour="F6F6F6"
+      [focalPoint]="{
+        x: 70,
+        y: 47,
+      }"
+      textBackgroundColour="#2C089B"
+      textColour="#FFFFFF"
+      height="short"
+    />
   } @else {
     <biggive-hero-image
       slug="Explore Campaigns"

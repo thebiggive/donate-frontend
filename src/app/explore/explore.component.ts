@@ -46,7 +46,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
-import { MetaCampaignBannerComponent } from './meta-campaign-banner/meta-campaign-banner.component';
+import { HeadingBanner } from '../heading-banner/heading-banner.component';
+import { flags } from '../featureFlags';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -77,10 +78,11 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     AsyncPipe,
     CurrencyPipe,
     OptimisedImagePipe,
-    MetaCampaignBannerComponent,
+    HeadingBanner,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
+  flags = flags;
   private campaignService = inject(CampaignService);
   private currencyPipe = inject(CurrencyPipe);
   private datePipe = inject(DatePipe);

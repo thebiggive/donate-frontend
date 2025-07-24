@@ -1,4 +1,4 @@
-@use "../../../abstract";
+@use "../../abstract";
 
 div.banner {
   background-size: cover;
@@ -24,6 +24,10 @@ div.banner {
   }
 }
 
+div.banner.short {
+  height: 400px;
+}
+
 div.sleeve {
   display: flex;
   flex-direction: column;
@@ -46,6 +50,12 @@ div.sleeve {
 
     align-items: start;
     height: 600px;
+  }
+}
+
+@media (min-width: #{abstract.$smallish + 30px}) {
+  .short div.sleeve {
+    height: 400px;
   }
 }
 
@@ -88,6 +98,13 @@ h1 {
   font-weight: bold;
   margin: 0 0 15px;
   padding: 0;
+}
+
+.slug {
+  font-size: 25px;
+  line-height: inherit;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .teaser {
