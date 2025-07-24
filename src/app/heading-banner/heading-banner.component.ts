@@ -1,7 +1,7 @@
 import { Component, inject, input, resource } from '@angular/core';
 import { AsyncPipe, NgStyle } from '@angular/common';
-import { OptimisedImagePipe } from '../../optimised-image.pipe';
-import { ImageService } from '../../image.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { ImageService } from '../image.service';
 import { firstValueFrom } from 'rxjs';
 
 /**
@@ -12,12 +12,12 @@ import { firstValueFrom } from 'rxjs';
  *
  */
 @Component({
-  selector: 'app-meta-campaign-banner',
+  selector: 'app-heading-banner',
   imports: [AsyncPipe, OptimisedImagePipe, NgStyle],
-  templateUrl: './meta-campaign-banner.component.html',
-  styleUrl: './meta-campaign-banner.component.scss',
+  templateUrl: './heading-banner.component.html',
+  styleUrl: './heading-banner.component.scss',
 })
-export class MetaCampaignBannerComponent {
+export class HeadingBanner {
   imageService = inject(ImageService);
   logo = input<{ url: string; alt: string | undefined } | undefined>();
   mainTitle = input.required<string>();

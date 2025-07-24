@@ -18,7 +18,7 @@ import {
   BiggiveVideoFeature,
 } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
-import { MetaCampaignBannerComponent } from '../explore/meta-campaign-banner/meta-campaign-banner.component';
+import { HeadingBanner } from '../heading-banner/heading-banner.component';
 import { flags } from '../featureFlags';
 
 @Component({
@@ -33,7 +33,7 @@ import { flags } from '../featureFlags';
     BiggiveHeading,
     BiggiveButton,
     BiggiveVideoFeature,
-    MetaCampaignBannerComponent,
+    HeadingBanner,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
