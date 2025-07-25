@@ -1,49 +1,12 @@
-<div
-  class="banner"
-  [class.short]="height() === 'short'"
-  [ngStyle]="{
-    'background-color': backgroundColour(),
-  }"
->
-  <!-- @todo start collecting alt text for metacampaign banners and output below instead of empty alt:-->
-  <!-- Background image below only for non-narrow screens -->
-  <img
-    class="background"
-    [src]="mainImageOptimisedUri.value()"
-    alt=""
-    [ngStyle]="{
-      'object-position': focalPoint().x + '% ' + focalPoint().y + '%',
-    }"
-  />
-  <div class="sleeve">
-    <div
-      class="content-wrap"
-      [ngStyle]="{
-        'background-color': textBackgroundColour(),
-        color: textColour(),
-      }"
-    >
-      @if (logo()) {
-        <div class="logo">
-          <img [src]="logo()?.url" [alt]="logo()?.alt" />
-        </div>
-      }
-      @if (slug()) {
-        <div class="slug">{{ slug() }}</div>
-      }
-      <h1 class="main-title">{{ mainTitle() }}</h1>
-      @if (teaser()) {
-        <div class="teaser">{{ teaser() }}</div>
-      }
-    </div>
-    <!-- Stacked image below only for narrow screens -->
-    <img
-      class="stacked"
-      [src]="mainImageOptimisedUri.value()"
-      alt=""
-      [ngStyle]="{
-        'object-position': focalPoint().x + '% ' + focalPoint().y + '%',
-      }"
-    />
-  </div>
-</div>
+<biggive-heading-banner
+  [mainTitle]="mainTitle()"
+  [teaser]="teaser()"
+  [mainImageUrl]="mainImageOptimisedUri.value()"
+  [backgroundColour]="backgroundColour()"
+  [focalPoint]="focalPoint()"
+  [textBackgroundColour]="textBackgroundColour()"
+  [textColour]="textColour()"
+  [height]="height()"
+  [logo]="logo()"
+  [slug]="slug()"
+></biggive-heading-banner>

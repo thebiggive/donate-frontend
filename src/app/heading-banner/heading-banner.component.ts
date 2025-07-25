@@ -1,19 +1,17 @@
-import { Component, inject, input, resource } from '@angular/core';
-import { AsyncPipe, NgStyle } from '@angular/common';
-import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, resource } from '@angular/core';
 import { ImageService } from '../image.service';
 import { firstValueFrom } from 'rxjs';
 
 /**
- * New (July 2025) version of a banner initially to use as a heading on metacampaign pages.
+ * Banner component for use as a page header.
  *
- * Developing for now just as an Angular component rather than in our components library to allow
- * much quicker iteration - can consider moving to components library for sharing with Wordpress when stabalised.
- *
+ * This component delegates to the biggive-heading-banner Stencil component from the components library.
+ * It handles image optimization and passes all properties to the Stencil component.
  */
 @Component({
   selector: 'app-heading-banner',
-  imports: [AsyncPipe, OptimisedImagePipe, NgStyle],
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './heading-banner.component.html',
   styleUrl: './heading-banner.component.scss',
 })
