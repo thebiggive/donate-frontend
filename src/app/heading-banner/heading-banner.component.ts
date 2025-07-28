@@ -1,6 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, resource } from '@angular/core';
 import { ImageService } from '../image.service';
 import { firstValueFrom } from 'rxjs';
+import {BiggiveHeadingBanner} from '@biggive/components-angular';
 
 /**
  * Banner component for use as a page header.
@@ -13,6 +14,9 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './heading-banner.component.html',
+  imports: [
+    BiggiveHeadingBanner
+  ]
 })
 export class HeadingBanner {
   imageService = inject(ImageService);
