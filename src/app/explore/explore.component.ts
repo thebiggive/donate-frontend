@@ -22,7 +22,8 @@ import {
   BiggiveHeroImage,
   BiggivePageSection,
   BiggiveGrid,
-  BiggiveCampaignCard, BiggiveHeadingBanner,
+  BiggiveCampaignCard,
+  BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';

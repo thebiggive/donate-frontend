@@ -15,7 +15,8 @@ import {
   BiggiveCallToAction,
   BiggiveHeading,
   BiggiveButton,
-  BiggiveVideoFeature, BiggiveHeadingBanner,
+  BiggiveVideoFeature,
+  BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { flags } from '../featureFlags';
