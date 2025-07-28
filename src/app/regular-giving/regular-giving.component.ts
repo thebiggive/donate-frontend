@@ -284,6 +284,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected get newDonationAmountOverMaxMatchable() {
+    if (this.maximumMatchableDonation.amountInPence >= maxAmount * 100) {
+      // then the maxAmount is going to be the one the matters, we don't allow a single donation big enough to use
+      // up all these match funds at once. So to simplify what we tell the donor we can return false here, and let
+      // them only get an error about their donation being more than maxAmount, if it is more.
+
+      return false;
+    }
+
     return this.donationAmount.amountInPence > this.maximumMatchableDonation.amountInPence;
   }
 
@@ -702,7 +710,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (this.giftAid && !this.homeAddressFormValue) {
-      errors.push('Please enter or select your home address if you wish to claim gift aid.');
+      errors.push('Please enter or select your home address if you wish to claim Gift Aid.');
     }
 
     if (this.giftAid && !this.homeOutsideUK && !this.homePostcode) {

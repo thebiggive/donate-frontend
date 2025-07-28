@@ -41,4 +41,16 @@ export type MetaCampaign = {
    */
   campaignCount?: number;
   usesSharedFunds: boolean;
+
+  bannerLayout?: {
+    backgroundColour: string;
+    textBackgroundColour: string;
+    textColour: string;
+    focalArea: {
+      topLeftXpos: number;
+      topLeftYpos: number;
+      bottomRightXpos: number;
+      bottomRightYpos: number;
+    };
+  };
 };

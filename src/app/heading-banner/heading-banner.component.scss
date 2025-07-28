@@ -1,0 +1,128 @@
+@use "../../abstract";
+
+div.banner {
+  font-size: 17px;
+  background-size: cover;
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+
+  img.background {
+    object-fit: cover;
+    position: absolute;
+    max-width: 2000px;
+    width: 100%;
+    height: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    display: none;
+    @media ("min-width: 450px") {
+      display: block;
+      bottom: initial;
+      height: 100%;
+    }
+  }
+}
+
+div.banner.short {
+  height: 400px;
+}
+
+div.sleeve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+
+  @media (min-width: #{abstract.$smallish}) {
+    flex-direction: column;
+  }
+
+  @media (min-width: #{abstract.$smallish + 30px}) {
+    // adding 30px to standard breakpoint to match padding.
+    padding-left: 20px;
+
+    align-items: start;
+    height: 600px;
+  }
+}
+
+@media (min-width: #{abstract.$smallish + 30px}) {
+  .short div.sleeve {
+    height: 400px;
+  }
+}
+
+.content-wrap {
+  position: relative;
+  padding-top: 70px; // includes 30 extra on mobile to make space for overlapping 'main-message-wrap'
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+  max-height: 400px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 450px;
+
+  @media (min-width: #{abstract.$smallish}) {
+    margin-bottom: auto;
+    margin-top: auto;
+    padding-top: 40px;
+  }
+
+  @media (min-width: #{abstract.$smallish + 30px}) {
+    padding-top: 30px;
+    margin-left: 0;
+  }
+}
+
+img.stacked {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  @media (min-width: #{abstract.$smallish}) {
+    display: none;
+  }
+}
+
+h1 {
+  font-size: 47px;
+  line-height: 60px;
+  font-weight: bold;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+.slug {
+  font-size: 25px;
+  line-height: inherit;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.teaser {
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  margin-bottom: 10px;
+
+  img {
+    width: auto;
+    height: 100%;
+    position: relative;
+  }
+}

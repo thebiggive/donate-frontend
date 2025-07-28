@@ -10,12 +10,19 @@ $colour-primary: #2c089b;
 $colour-secondary: #ff7272;
 $colour-primary-contrast: #fff;
 
-$full-copy-max-width: 600px;
-$breakpoint-sm: "(min-width: 320px)";
-$breakpoint-smallish: "(min-width: 450px)";
-$breakpoint-md: "(min-width: 600px)";
-$breakpoint-lg: "(min-width: 968px)";
-$breakpoint-xl: "(min-width: 1280px)";
+$sm: 320px;
+$smallish: 450px;
+$md: 600px;
+$lg: 968px;
+$xl: 1280px;
+$full-copy-max-width: $md;
+
+$breakpoint-sm: "(min-width: " + $sm + " )";
+$breakpoint-smallish: "(min-width: " + $smallish + ")";
+$breakpoint-md: "(min-width: " + $md + ")";
+$breakpoint-lg: "(min-width: " + $lg + ")";
+$breakpoint-xl: "(min-width: " + $xl + ")";
+
 $box-shadow-soft:
   0px 11px 15px rgba(0, 0, 0, 0.05),
   0px 9px 46px rgba(0, 0, 0, 0.05),
