@@ -13,7 +13,6 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './heading-banner.component.html',
-  styleUrl: './heading-banner.component.scss',
 })
 export class HeadingBanner {
   imageService = inject(ImageService);
