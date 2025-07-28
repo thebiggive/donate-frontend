@@ -15,10 +15,9 @@ import {
   BiggiveCallToAction,
   BiggiveHeading,
   BiggiveButton,
-  BiggiveVideoFeature,
+  BiggiveVideoFeature, BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
-import { HeadingBanner } from '../heading-banner/heading-banner.component';
 import { flags } from '../featureFlags';
 
 @Component({
@@ -33,7 +32,7 @@ import { flags } from '../featureFlags';
     BiggiveHeading,
     BiggiveButton,
     BiggiveVideoFeature,
-    HeadingBanner,
+    BiggiveHeadingBanner,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
