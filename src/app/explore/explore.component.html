@@ -46,10 +46,7 @@
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
-  } @else if (!metaCampaign) {
-    <!--
-      Above `if` is redundant but works around a limitation of the language that an if block can only have one else
-      -->
+  } @else {
     <biggive-heading-banner
       slug="Explore Campaigns"
       mainTitle="Double the difference"
@@ -66,16 +63,6 @@
       teaserColour="#FFFFFF"
       height="tall"
     />
-  } @else {
-    <biggive-hero-image
-      slug="Explore Campaigns"
-      slug-colour="primary"
-      main-title="The leading online match funding platform"
-      main-image="/assets/images/banner-explore.jpg"
-      colour-scheme="primary"
-      main-image-align-horizontal="right"
-      main-image-align-vertical="center"
-    ></biggive-hero-image>
   }
   <biggive-page-section>
     <div style="position: absolute; margin-top: -6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
