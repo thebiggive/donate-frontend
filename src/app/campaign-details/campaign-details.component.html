@@ -58,7 +58,9 @@
       </biggive-heading>
 
       <biggive-formatted-text default-text-colour="black">
-        <p>{{ campaign.summary }}</p>
+        <!-- we use pre-wrap to allow charities to create the effect of multiple paragraphs by using line-breaks
+             inside their campaign summaries -->
+        <p style="white-space: pre-wrap">{{ formattedCampaignSummary }}</p>
       </biggive-formatted-text>
 
       @if (campaign.charity.website) {
