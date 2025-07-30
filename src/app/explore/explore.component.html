@@ -46,7 +46,10 @@
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
-  } @else if (flags.don1120NewBannerStyle) {
+  } @else if (!metaCampaign) {
+    <!--
+      Above `if` is redundant but works around a limitation of the language that an if block can only have one else
+      -->
     <biggive-heading-banner
       slug="Explore Campaigns"
       mainTitle="Double the difference"
