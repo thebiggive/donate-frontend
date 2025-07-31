@@ -1,32 +1,24 @@
 @if (!mayBeAboutToRedirect) {
   <main>
-    @if (flags.don1120NewBannerStyle) {
-      <app-heading-banner
-        mainTitle="Double the difference"
-        teaser="Hi. We’re Big Give. Our match funding campaigns offer a unique opportunity for you to double the difference you can make in the world for the causes close to your heart."
-        mainImageUrl="/assets/images/homepage-elephant.jpg"
-        backgroundColour="F6F6F6"
-        [focalPoint]="{
-          x: 70,
-          y: 47,
-        }"
-        textBackgroundColour="#FF7272"
-        textColour="#000000"
-        height="tall"
-      />
-      <div style="height: 30px">
-        <!-- space since adding a margin to the following element is hard to feature-flag -->
-      </div>
-    } @else {
-      <biggive-hero-image
-        colour-scheme="primary"
-        main-image="/assets/images/banner-general.jpg"
-        main-title="Double the difference"
-        teaser="Hi. We’re Big Give. Our match funding campaigns offer a unique opportunity for you to double the difference you can make in the world for the causes close to your heart."
-        main-image-align-horizontal="right"
-        main-image-align-vertical="center"
-      ></biggive-hero-image>
-    }
+    <biggive-heading-banner
+      mainTitle="The leading online match funding platform"
+      teaser=""
+      mainImageUrl="/assets/images/homepage-elephant.jpg"
+      backgroundColour="F6F6F6"
+      [focalPoint]="{
+        x: 70,
+        y: 47,
+      }"
+      textBackgroundColour="#FF7272"
+      mainTitleColour="#000000"
+      slugColour="#000000"
+      teaserColour="#000000"
+      height="tall"
+    ></biggive-heading-banner>
+    />
+    <div style="height: 30px">
+      <!-- space since adding a margin to the following element is hard to feature-flag -->
+    </div>
     <div class="b-container">
       <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
     </div>
@@ -135,7 +127,7 @@
           video-url="https://player.vimeo.com/video/860172535"
           main-title="About Big Give"
           main-title-colour="white"
-          teaser="Imagine if your generous gift could have double the impact on the causes you care about. Well, that’s exactly why we exist. Whatever your passion, whatever cause you support, we can help double your donation to make double the difference."
+          teaser="Hi. We’re Big Give. Our match funding campaigns offer a unique opportunity for you to double the difference you can make in the world for the causes close to your heart. Whatever your passion, whatever cause you support, we can help double your donation to make double the difference."
           teaser-colour="white"
           button-url="https://biggive.org/our-story"
           button-label="Learn more about us"

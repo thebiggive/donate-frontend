@@ -18,7 +18,7 @@
   }
 
   @if (metaCampaign && !!metaCampaign.bannerLayout) {
-    <app-heading-banner
+    <biggive-heading-banner
       [logo]="fund?.logoUri ? { url: fund?.logoUri!, alt: fund?.name } : undefined"
       [mainTitle]="title"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
@@ -29,10 +29,12 @@
         y: metaCampaign.bannerLayout.focalArea.topLeftYpos,
       }"
       [textBackgroundColour]="metaCampaign.bannerLayout.textBackgroundColour"
-      [textColour]="metaCampaign.bannerLayout.textColour"
+      [slugColour]="metaCampaign.bannerLayout.textColour"
+      [mainTitleColour]="metaCampaign.bannerLayout.textColour"
+      [teaserColour]="metaCampaign.bannerLayout.textColour"
       height="tall"
     >
-    </app-heading-banner>
+    </biggive-heading-banner>
   } @else if (metaCampaign) {
     <biggive-hero-image
       [logo]="fund?.logoUri"
@@ -44,10 +46,10 @@
       [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
-  } @else if (flags.don1120NewBannerStyle) {
-    <app-heading-banner
+  } @else {
+    <biggive-heading-banner
       slug="Explore Campaigns"
-      mainTitle="The leading online match funding platform"
+      mainTitle="Double the difference"
       teaser=""
       mainImageUrl="/assets/images/explore-tree.jpg"
       backgroundColour="F6F6F6"
@@ -56,19 +58,11 @@
         y: 47,
       }"
       textBackgroundColour="#2C089B"
-      textColour="#FFFFFF"
+      slugColour="#FFFFFF"
+      mainTitleColour="#FFFFFF"
+      teaserColour="#FFFFFF"
       height="tall"
     />
-  } @else {
-    <biggive-hero-image
-      slug="Explore Campaigns"
-      slug-colour="primary"
-      main-title="The leading online match funding platform"
-      main-image="/assets/images/banner-explore.jpg"
-      colour-scheme="primary"
-      main-image-align-horizontal="right"
-      main-image-align-vertical="center"
-    ></biggive-hero-image>
   }
   <biggive-page-section>
     <div style="position: absolute; margin-top: -6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>

@@ -10,15 +10,14 @@ import { environment } from '../../environments/environment';
 import { NavigationService } from '../navigation.service';
 import { bigGiveName, tagLine } from '../../environments/common';
 import {
-  BiggiveHeroImage,
   BiggivePageSection,
   BiggiveCallToAction,
   BiggiveHeading,
   BiggiveButton,
   BiggiveVideoFeature,
+  BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
-import { HeadingBanner } from '../heading-banner/heading-banner.component';
 import { flags } from '../featureFlags';
 
 @Component({
@@ -26,14 +25,13 @@ import { flags } from '../featureFlags';
   templateUrl: './home.component.html',
   styleUrl: 'home.component.scss',
   imports: [
-    BiggiveHeroImage,
     HighlightCardsComponent,
     BiggivePageSection,
     BiggiveCallToAction,
     BiggiveHeading,
     BiggiveButton,
     BiggiveVideoFeature,
-    HeadingBanner,
+    BiggiveHeadingBanner,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })

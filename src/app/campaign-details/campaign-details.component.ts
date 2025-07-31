@@ -175,4 +175,16 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       this.toast.showError(campaignHiddenMessage);
     }
   }
+
+  /**
+   * Collapses sequences of line breaks in the campaign summary then returns a version of the summary with
+   * each line break doubled to appear like a paragraph break.
+   */
+  public get formattedCampaignSummary(): string {
+    if (!this.campaign.summary) {
+      return '';
+    }
+
+    return this.campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+  }
 }

@@ -23,6 +23,7 @@ import {
   BiggivePageSection,
   BiggiveGrid,
   BiggiveCampaignCard,
+  BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
@@ -46,7 +47,6 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
-import { HeadingBanner } from '../heading-banner/heading-banner.component';
 import { flags } from '../featureFlags';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
@@ -78,7 +78,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     AsyncPipe,
     CurrencyPipe,
     OptimisedImagePipe,
-    HeadingBanner,
+    BiggiveHeadingBanner,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
