@@ -13,7 +13,7 @@ export type MetaCampaign = {
   hidden: boolean;
   ready: boolean;
   summary: string;
-  bannerUri: string;
+  bannerUri: string | null;
   amountRaised: number;
 
   /**

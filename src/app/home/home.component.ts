@@ -10,7 +10,6 @@ import { environment } from '../../environments/environment';
 import { NavigationService } from '../navigation.service';
 import { bigGiveName, tagLine } from '../../environments/common';
 import {
-  BiggiveHeroImage,
   BiggivePageSection,
   BiggiveCallToAction,
   BiggiveHeading,
@@ -26,7 +25,6 @@ import { flags } from '../featureFlags';
   templateUrl: './home.component.html',
   styleUrl: 'home.component.scss',
   imports: [
-    BiggiveHeroImage,
     HighlightCardsComponent,
     BiggivePageSection,
     BiggiveCallToAction,
