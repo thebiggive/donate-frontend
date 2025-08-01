@@ -122,7 +122,7 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
     emergencyMatch: new URL('/assets/images/emergency-card.webp', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
     summerGive: new URL('/assets/images/colour-orange.png', donateUriPrefix),
-    greenMatchFund: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+    greenMatchFund: new URL('/assets/images/earth-raise-surfer-card.jpg', donateUriPrefix),
     womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
     mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix),
