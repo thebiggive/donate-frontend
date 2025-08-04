@@ -50,6 +50,11 @@
     </biggive-page-section>
     <biggive-page-section>
       <!-- for available swiper options see https://swiperjs.com/types/interfaces/types_swiper_options.SwiperOptions -->
+
+      <!-- note that we have various image widths, which don't generally match the source images but are chosen
+       to make the logos subjectively look all roughly the same size. Since the logos are transparent/non-rectangular
+       and have varied aspect ratios we can't make them all exactly the same size in any measurable way.
+       -->
       <swiper-container
         class="mySwiper"
         space-between="30"
@@ -66,7 +71,7 @@
           ><img
             src="/assets/images/logo-the-passage-2023.png"
             alt="The Passage - Everyone deserves a place to call home"
-            width="300"
+            width="250"
         /></swiper-slide>
         <swiper-slide
           ><img src="/assets/images/logo-dec.png" alt="Disasters Emergency Committee" width="300"
@@ -84,11 +89,9 @@
           ><img
             src="/assets/images/logo-magic-breakfast-fuel-for-learning.png"
             alt="Magic Breakfast: Fuel for learning"
-            width="300"
+            width="200"
         /></swiper-slide>
-        <swiper-slide
-          ><img src="/assets/images/logo-princes-trust.png" alt="Prince's Trust" width="300"
-        /></swiper-slide>
+        <swiper-slide><img src="/assets/images/logo-kings-trust.png" alt="Kings's Trust" width="162" /></swiper-slide>
         <swiper-slide
           ><img
             src="/assets/images/logo-prisoners-of-conscience-supporting-people-who-defend-human-rights.png"
@@ -96,7 +99,7 @@
             width="300"
         /></swiper-slide>
         <swiper-slide
-          ><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="300"
+          ><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="200"
         /></swiper-slide>
       </swiper-container>
       <div class="charity-carousel-navigation">
