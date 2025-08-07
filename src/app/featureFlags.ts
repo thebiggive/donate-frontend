@@ -58,9 +58,9 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
       return {
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
-        useMatchbotCampaignSearchApi: true,
+        useMatchbotCampaignSearchApi: false,
         useMatchbotCharityApi: false,
-        useMatchbotMetaCampaignApi: true,
+        useMatchbotMetaCampaignApi: false, // matchbot metaCampaign table is empty in prod right now so must be false
       };
   }
 };
