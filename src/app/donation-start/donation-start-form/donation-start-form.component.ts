@@ -1961,6 +1961,16 @@ export class DonationStartFormComponent
     }
   }
 
+  protected cancelExpiryWarningForQA() {
+    if (environment.environmentId === 'production') {
+      return;
+    }
+
+    this.cancelExpiryWarning();
+
+    alert('Cancelled expiry warning - non-prod only function');
+  }
+
   /**
    * Also resets captcha & relevant donation persistence state mgmt,
    * and returns to step 1 so required input can be collected again.

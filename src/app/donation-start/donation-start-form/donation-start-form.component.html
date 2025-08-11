@@ -201,8 +201,13 @@
       @if (campaign.currencyCode === "GBP") {
         <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup" label="Gift Aid">
           <p class="b-mt-40 b-bold b-rt-0">
-            Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every
-            <span class="colour-primary">£1</span> you donate.
+            <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+            <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+            <span (click)="cancelExpiryWarningForQA()">Boost</span> your donation by
+            <span class="colour-primary">25p</span> of Gift Aid for every <span class="colour-primary">£1</span> you
+            donate.
+            <!-- eslint-enable @angular-eslint/template/interactive-supports-focus -->
+            <!-- eslint-enable @angular-eslint/template/click-events-have-key-events -->
           </p>
           <p class="b-grey b-rt-sm">
             I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax
