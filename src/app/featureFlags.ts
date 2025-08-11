@@ -59,7 +59,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         regularGivingEnabled: true,
         useMatchbotCampaignApi: true,
         useMatchbotCampaignSearchApi: true,
-        useMatchbotCharityApi: false,
+        useMatchbotCharityApi: true,
         useMatchbotMetaCampaignApi: true,
       };
   }
