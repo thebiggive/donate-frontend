@@ -1881,6 +1881,8 @@ export class DonationStartFormComponent
       `Found pending donation to campaign ${this.campaignId}`,
     );
 
+    let matchExpired;
+
     // Ensure we do not claim match funds are reserved when offering an old
     // donation if the reservation time is up. See also the on-page-timeout counterpart
     // in `this.expiryWarning`'s timeout callback.
@@ -1890,6 +1892,9 @@ export class DonationStartFormComponent
       environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() < Date.now()
     ) {
       donation.matchReservedAmount = 0;
+      matchExpired = true;
+    } else {
+      matchExpired = false;
     }
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
@@ -1897,7 +1902,7 @@ export class DonationStartFormComponent
       disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
-    reuseDialog.afterClosed().subscribe({ next: this.getDialogResponseFn(donation) });
+    reuseDialog.afterClosed().subscribe({ next: this.getDialogResponseFn(donation, matchExpired) });
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {
@@ -1945,7 +1950,7 @@ export class DonationStartFormComponent
         disableClose: true, // No 'escape' key close; must choose one of the two options.
         role: 'alertdialog',
       });
-      continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+      continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation, true));
     }, msUntilExpiryTime);
   }
 
@@ -1954,6 +1959,16 @@ export class DonationStartFormComponent
       clearTimeout(this.expiryWarning);
       delete this.expiryWarning;
     }
+  }
+
+  protected cancelExpiryWarningForQA() {
+    if (environment.environmentId === 'production') {
+      return;
+    }
+
+    this.cancelExpiryWarning();
+
+    alert('Cancelled expiry warning - non-prod only function');
   }
 
   /**
@@ -2266,7 +2281,7 @@ export class DonationStartFormComponent
       disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
-    continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+    continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation, false));
   }
 
   /**
@@ -2280,7 +2295,7 @@ export class DonationStartFormComponent
    *     the donation fully; or
    * (c) after match funds expire.
    */
-  private getDialogResponseFn(donation: Donation) {
+  private getDialogResponseFn(donation: Donation, matchExpired: boolean) {
     return (proceed: boolean) => {
       if (proceed) {
         // Required for all use cases.
@@ -2316,6 +2331,10 @@ export class DonationStartFormComponent
 
         if (this.stepper.selected?.label === this.yourDonationStepLabel) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
+        }
+
+        if (matchExpired) {
+          this.donationService.removeMatchingExpectation(donation);
         }
 
         return;
