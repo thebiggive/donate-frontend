@@ -400,7 +400,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     const query = this.campaignService.buildQuery(
       this.searchService.selected,
       this.offset,
-      this.metaCampaign?.id,
       this.campaignSlug,
       this.fundSlug,
     );
@@ -458,7 +457,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     const query = this.campaignService.buildQuery(
       this.searchService.selected,
       0,
-      this.metaCampaign?.id,
       this.campaignSlug,
       this.fundSlug,
     );

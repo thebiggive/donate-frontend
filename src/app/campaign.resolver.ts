@@ -61,7 +61,6 @@ export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
       const query = this.campaignService.buildQuery(
         this.searchService.selected,
         0,
-        campaignId ?? undefined,
         campaignSlug,
         fundSlug,
       );

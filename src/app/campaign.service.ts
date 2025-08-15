@@ -107,7 +107,6 @@ export class CampaignService {
   buildQuery(
     selected: SelectedType,
     offset: number,
-    campaignId?: string,
     campaignSlug?: string,
     fundSlug?: string,
     // any predates having this linting rule on.
@@ -119,10 +118,6 @@ export class CampaignService {
       offset,
       ...selected,
     };
-
-    if (campaignId) {
-      query.parentId = campaignId;
-    }
 
     if (campaignSlug) {
       query.parentSlug = campaignSlug;
