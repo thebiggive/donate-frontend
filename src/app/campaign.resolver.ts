@@ -58,12 +58,7 @@ export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
     }
 
     if (campaignSlug && fundSlug && campaignSlug !== 'campaign') {
-      const query = this.campaignService.buildQuery(
-        this.searchService.selected,
-        0,
-        campaignSlug,
-        fundSlug,
-      );
+      const query = this.campaignService.buildQuery(this.searchService.selected, 0, campaignSlug, fundSlug);
       this.campaignService.search(query as SearchQuery).subscribe({
         next: () => {},
         error: () => {

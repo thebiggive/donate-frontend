@@ -454,12 +454,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searched = this.searchService.nonDefaultsActive;
 
     this.offset = 0;
-    const query = this.campaignService.buildQuery(
-      this.searchService.selected,
-      0,
-      this.campaignSlug,
-      this.fundSlug,
-    );
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignSlug, this.fundSlug);
     this.individualCampaigns = [];
     this.loading = true;
 
