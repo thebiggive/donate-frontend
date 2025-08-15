@@ -273,11 +273,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private setPageMetadata(metaCampaign?: MetaCampaign) {
     if (metaCampaign) {
+      const noIndex = !metaCampaign.shouldBeIndexed;
       this.pageMeta.setCommon(
         this.title,
         metaCampaign.summary || 'A match funded campaign with Big Give',
         metaCampaign.bannerUri,
-        ! metaCampaign.shouldBeIndexed
+        noIndex,
       );
     } else {
       this.pageMeta.setCommon(

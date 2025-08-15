@@ -42,6 +42,8 @@ export class CampaignInfoComponent implements OnInit {
   campaignFinished!: boolean;
   campaignRaised!: string; // Formatted
   campaignTarget!: string; // Formatted
+  campaignParentFundsRemaining: string | undefined; // formatted
+
   /**
    * The count of donations to the parent campaign if it shares funds, or to this
    * specific campaign otherwise.
@@ -53,11 +55,21 @@ export class CampaignInfoComponent implements OnInit {
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
     this.campaignFinished = CampaignService.isInPast(this.campaign);
     this.campaignTarget = this.currencyPipe.transform(
-      this.campaign.parentUsesSharedFunds ? this.campaign.parentTarget : this.campaign.target,
+      this.campaign.target,
       this.campaign.currencyCode,
       'symbol',
       currencyPipeDigitsInfo,
     ) as string;
+
+    if (this.campaign.parentUsesSharedFunds) {
+      this.campaignParentFundsRemaining = this.currencyPipe.transform(
+        this.campaign.parentMatchFundsRemaining,
+        this.campaign.currencyCode,
+        'symbol',
+        currencyPipeDigitsInfo,
+      ) as string;
+    }
+
     this.campaignRaised = this.currencyPipe.transform(
       this.campaign.parentUsesSharedFunds ? this.campaign.parentAmountRaised : this.campaign.amountRaised,
       this.campaign.currencyCode,
