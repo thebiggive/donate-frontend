@@ -272,7 +272,8 @@ export class DonationStartFormComponent
   };
 
   private stripeElements: StripeElements | undefined;
-  private selectedPaymentMethodType: string | undefined;
+  /** A method from the Payment Element, if one's been chosen **/
+  private selectedPaymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | null = null;
   private paymentReadinessTracker!: PaymentReadinessTracker;
   public paymentStepErrors: string = '';
   private donationRetryTimeout: number | undefined = undefined;
@@ -907,7 +908,7 @@ export class DonationStartFormComponent
    * and the donor is using donation funds.
    */
   async onStripeCardChange(
-    state: StripeElementChangeEvent & { value: { type: string; payment_method?: PaymentMethod } | undefined },
+    state: StripeElementChangeEvent & { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } },
   ) {
     // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
     // end up validating presence of invisible fields.
@@ -956,8 +957,13 @@ export class DonationStartFormComponent
       return;
     }
 
-    if (state.value) {
-      this.selectedPaymentMethodType = state.value.type;
+    if (state.value?.type) {
+      const newType: 'card' | 'customer_balance' | 'pay_by_bank' = (state.value?.type as 'card' | 'customer_balance' | 'pay_by_bank');
+      this.selectedPaymentMethodType = newType;
+      if (newType !== this.donation.pspMethodType) {
+        this.donation.pspMethodType = newType;
+        this.donationService.updateLocalDonation(this.donation);
+      }
     }
   }
 
@@ -1011,7 +1017,7 @@ export class DonationStartFormComponent
             'stripe_customer_balance_payment_success',
             `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
-          await this.exitPostDonationSuccess(donation, 'donation-funds');
+          await this.exitPostDonationSuccess(donation, 'customer_balance');
         },
         error: (response: HttpErrorResponse) => {
           // I think this is the path to a detailed message in MatchBot `ActionError`s.
@@ -1083,7 +1089,7 @@ export class DonationStartFormComponent
 
           this.refreshDonationAndStripe();
         } else {
-          await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
           return;
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
@@ -1110,7 +1116,7 @@ export class DonationStartFormComponent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+      await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
       return;
     }
 
@@ -2390,9 +2396,7 @@ export class DonationStartFormComponent
 
   private async exitPostDonationSuccess(donation: Donation, stripe_donation_method: string | undefined) {
     const stripeMethod = stripe_donation_method || 'undefined';
-
-    // if not card then we assume it must be a Payment Request Button i.e. Google Pay or Apple Pay.
-    const action = stripe_donation_method === 'card' ? 'stripe_card_payment_success' : 'stripe_prb_payment_success';
+    const action = `stripe_${stripe_donation_method}_payment_success`;
 
     this.matomoTracker.trackEvent(
       'donate',
@@ -2459,8 +2463,8 @@ export class DonationStartFormComponent
     }
   }
 
-  private getPaymentMethodType() {
-    return this.creditPenceToUse > 0 ? 'customer_balance' : 'card';
+  private getPaymentMethodType(): 'customer_balance' | 'card' | 'pay_by_bank' {
+    return this.creditPenceToUse > 0 ? 'customer_balance' : this.selectedPaymentMethodType ?? 'card';
   }
 
   protected showCardReuseMessage = false;
