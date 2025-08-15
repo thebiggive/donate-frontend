@@ -41,6 +41,7 @@ export type MetaCampaign = {
    */
   campaignCount?: number;
   usesSharedFunds: boolean;
+  shouldBeIndexed: boolean;
 
   bannerLayout?: {
     backgroundColour: string;

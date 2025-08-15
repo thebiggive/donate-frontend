@@ -277,6 +277,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.title,
         metaCampaign.summary || 'A match funded campaign with Big Give',
         metaCampaign.bannerUri,
+        ! metaCampaign.shouldBeIndexed
       );
     } else {
       this.pageMeta.setCommon(
