@@ -37,7 +37,7 @@ describe('DonationThanksComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { params: of({ donationId: 'myTestDonationId' }) },
+          useValue: { params: of({ donationId: 'myTestDonationId' }), snapshot: { queryParams: {} } },
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },

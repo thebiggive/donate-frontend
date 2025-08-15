@@ -93,7 +93,7 @@ export class DonationThanksComponent implements OnInit {
   ngOnInit() {
     this.checkDonation();
     this.loadPerson();
-    this.cameFromBank = this.route.snapshot.queryParamMap.get('from') === 'bank';
+    this.cameFromBank = this.route.snapshot.queryParams['from'] === 'bank';
   }
 
   private loadPerson = () => {
