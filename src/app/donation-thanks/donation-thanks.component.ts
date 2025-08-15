@@ -81,7 +81,7 @@ export class DonationThanksComponent implements OnInit {
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaSolution: string | undefined;
-  protected payByBankPossibleError = false
+  protected payByBankPossibleError = false;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
