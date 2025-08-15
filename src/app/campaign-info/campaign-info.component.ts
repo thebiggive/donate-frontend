@@ -36,7 +36,6 @@ export class CampaignInfoComponent implements OnInit {
   timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
   timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
 
-  additionalImageUris: Array<string | null> = [];
   @Input({ required: true }) campaign!: Campaign;
   campaignOpen!: boolean;
   campaignFinished!: boolean;
