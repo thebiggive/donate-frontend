@@ -70,7 +70,7 @@ export class CampaignInfoComponent implements OnInit {
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaisedOfCampaignOrParent(campaign);
+    return CampaignService.percentRaisedOfCampaign(campaign);
   }
 
   getBeneficiaryIcon(beneficiary: string) {

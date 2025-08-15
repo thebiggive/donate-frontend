@@ -96,9 +96,10 @@ export class CampaignService {
   /**
    * Gets % of the parent target if `parentUsesSharedFunds`, or the individual target otherwise.
    */
-  static percentRaisedOfCampaignOrParent(campaign: Campaign): number | undefined {
+  static percentRaisedOfCampaign(campaign: Campaign): number | undefined {
     if (campaign.parentUsesSharedFunds && campaign.parentTarget && campaign.parentAmountRaised) {
-      return Math.round((campaign.parentAmountRaised / campaign.parentTarget) * 100);
+      // percent raised is not meaningful when the campaign shares funds with others.
+      return undefined;
     }
 
     return CampaignService.percentRaisedOfIndividualCampaign(campaign);

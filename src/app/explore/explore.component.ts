@@ -382,7 +382,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    if (this.metaCampaign?.usesSharedFunds) {
+    // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
+    // childCampaign.parentUsesSharedFunds set when appropriate.
+    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
       // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
       return null;
     }
