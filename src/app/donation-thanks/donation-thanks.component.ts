@@ -17,12 +17,11 @@ import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
-import { WidgetInstance } from 'friendly-challenge';
 import { GIFT_AID_FACTOR } from '../Money';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { BiggiveButton, BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 
@@ -48,11 +47,13 @@ export class DonationThanksComponent implements OnInit {
   private identityService = inject(IdentityService);
   private matomoTracker = inject(MatomoTracker);
   private pageMeta = inject(PageMetaService);
+  private route = inject(ActivatedRoute);
 
   @Input({ required: true }) private donationId!: string;
 
   campaign?: Campaign;
   totalPaid?: number;
+  cameFromBank = false; // Set to true if the donor was redirected e.g. after using Pay By Bank.
   complete = false;
   donation?: Donation;
   encodedShareUrl?: string;
@@ -79,8 +80,8 @@ export class DonationThanksComponent implements OnInit {
 
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha!: ElementRef<HTMLElement>;
-  private friendlyCaptchaWidget: WidgetInstance | undefined;
   private friendlyCaptchaSolution: string | undefined;
+  protected payByBankPossibleError = false
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
@@ -92,6 +93,7 @@ export class DonationThanksComponent implements OnInit {
   ngOnInit() {
     this.checkDonation();
     this.loadPerson();
+    this.cameFromBank = this.route.snapshot.queryParamMap.get('from') === 'bank';
   }
 
   private loadPerson = () => {
@@ -201,6 +203,7 @@ export class DonationThanksComponent implements OnInit {
       return;
     }
 
+    this.payByBankPossibleError = false;
     this.donation = donation;
     this.campaignService.getCharityCampaignById(donation.projectId).subscribe((campaign) => {
       this.campaign = campaign;
@@ -239,6 +242,10 @@ export class DonationThanksComponent implements OnInit {
       }
 
       return;
+    }
+
+    if (!this.donationService.isComplete(donation) && this.cameFromBank) {
+      this.payByBankPossibleError = true;
     }
 
     if (this.tries <= this.maxTries) {

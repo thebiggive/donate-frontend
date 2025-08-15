@@ -12,6 +12,10 @@
     ></mat-spinner>
   }
 
+  @if (payByBankPossibleError && donation) {
+    <p aria-live="assertive">Payment may have not have been completed. <a routerLink="/donate/{{ donation.projectId }}">Try again?</a></p>
+  }
+
   @if (isDataLoaded) {
     <div>
       @if (noAccess) {
