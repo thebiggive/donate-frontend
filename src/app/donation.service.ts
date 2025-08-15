@@ -71,7 +71,7 @@ export class DonationService {
     return couplet.donation;
   }
 
-  isResumable(donation: Donation, paymentMethodType: 'card' | 'customer_balance'): boolean {
+  isResumable(donation: Donation, paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank'): boolean {
     return (
       donation.status !== undefined &&
       (resumableStatuses as readonly DonationStatus[]).includes(donation.status) &&
@@ -87,7 +87,7 @@ export class DonationService {
    */
   getProbablyResumableDonation(
     projectId: string,
-    paymentMethodType: 'card' | 'customer_balance',
+    paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank',
   ): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
 
