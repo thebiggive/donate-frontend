@@ -163,7 +163,7 @@ describe('CampaignService', () => {
     expect(CampaignService.percentRaisedOfCampaign(campaign)).toBe(49);
   });
 
-  it('should return undefined its parent does use shared funds', () => {
+  it('should return undefined when its parent does use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = true;
     if (!campaign.parentUsesSharedFunds) {
