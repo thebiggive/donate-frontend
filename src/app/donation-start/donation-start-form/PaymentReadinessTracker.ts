@@ -1,5 +1,5 @@
 import { LONG_NUMBER, MIN_LENGTH_BANNED } from '../../validators/noLongNumberValidator';
-import {PaymentMethod} from '@stripe/stripe-js';
+import { PaymentMethod } from '@stripe/stripe-js';
 
 export type PaymentGroupControls = {
   [key: string]: {
@@ -117,7 +117,7 @@ export class PaymentReadinessTracker {
     this.donorFunds = true;
   }
 
-  onStripeCardChange(state: { complete: boolean, value?: { type: string; payment_method?: PaymentMethod } }) {
+  onStripeCardChange(state: { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } }) {
     this.paymentElementIsComplete = state.complete || state.value?.type === 'pay_by_bank';
   }
 

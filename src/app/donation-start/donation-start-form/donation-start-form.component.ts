@@ -958,7 +958,10 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const newType: 'card' | 'customer_balance' | 'pay_by_bank' = (state.value?.type as 'card' | 'customer_balance' | 'pay_by_bank');
+      const newType: 'card' | 'customer_balance' | 'pay_by_bank' = state.value?.type as
+        | 'card'
+        | 'customer_balance'
+        | 'pay_by_bank';
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;
@@ -2464,7 +2467,7 @@ export class DonationStartFormComponent
   }
 
   private getPaymentMethodType(): 'customer_balance' | 'card' | 'pay_by_bank' {
-    return this.creditPenceToUse > 0 ? 'customer_balance' : this.selectedPaymentMethodType ?? 'card';
+    return this.creditPenceToUse > 0 ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
   }
 
   protected showCardReuseMessage = false;
