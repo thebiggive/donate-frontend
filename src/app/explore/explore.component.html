@@ -114,21 +114,19 @@
                 [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
                 [moreInfoButtonUrl]="'/campaign/' + campaign.id"
                 [organisationName]="campaign.charity.name"
-                [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
+                [primaryFigureLabel]="
+                  campaign.isRegularGiving || campaign.parentUsesSharedFunds ? '' : 'Match Funds Remaining'
+                "
                 [primaryFigureAmount]="
-                  this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving
-                    ? campaign.isRegularGiving
-                      ? ' '
-                      : null
+                  this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving || campaign.parentUsesSharedFunds
+                    ? ' '
                     : (campaign.matchFundsRemaining
                       | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
                 "
                 [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
-                secondary-figure-label="Total Funds Raised"
+                secondary-figure-label="Amount Raised"
                 [secondaryFigureAmount]="
-                  this.metaCampaign?.usesSharedFunds
-                    ? null
-                    : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
+                  campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo
                 "
                 [isFutureCampaign]="isInFuture(campaign)"
                 [isPastCampaign]="isInPast(campaign)"
