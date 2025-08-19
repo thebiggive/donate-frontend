@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -21,9 +21,10 @@ import { GIFT_AID_FACTOR } from '../Money';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { BiggiveButton, BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { Toast } from '../toast.service';
 
 @Component({
   selector: 'app-donation-thanks',
@@ -40,7 +41,7 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
     ExactCurrencyPipe,
   ],
 })
-export class DonationThanksComponent implements OnInit {
+export class DonationThanksComponent implements OnDestroy, OnInit {
   private campaignService = inject(CampaignService);
   dialog = inject(MatDialog);
   private donationService = inject(DonationService);
@@ -48,6 +49,8 @@ export class DonationThanksComponent implements OnInit {
   private matomoTracker = inject(MatomoTracker);
   private pageMeta = inject(PageMetaService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private toast = inject(Toast);
 
   @Input({ required: true }) private donationId!: string;
 
@@ -69,10 +72,12 @@ export class DonationThanksComponent implements OnInit {
   timedOut = false;
   totalValue?: number;
   donationIsLarge: boolean = false;
+  protected beenLoadingForALittleWhile = false;
   private readonly maxTries = 5;
-  private patchedCorePersonInfo = false;
   private person?: Person;
+  private platformId = inject(PLATFORM_ID);
   private readonly retryBaseIntervalSeconds = 2;
+  private slowLoadTimeout?: ReturnType<typeof setTimeout>;
   private tries = 0;
   protected readonly myAccountPath = myAccountPath;
   protected readonly flags = flags;
@@ -94,6 +99,18 @@ export class DonationThanksComponent implements OnInit {
     this.checkDonation();
     this.loadPerson();
     this.cameFromBank = this.route.snapshot.queryParams['from'] === 'bank';
+    if (isPlatformBrowser(this.platformId)) {
+      this.slowLoadTimeout = setTimeout(() => {
+        this.beenLoadingForALittleWhile = true;
+      }, 3_000);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.slowLoadTimeout) {
+      clearTimeout(this.slowLoadTimeout);
+      delete this.slowLoadTimeout;
+    }
   }
 
   private loadPerson = () => {
@@ -246,6 +263,19 @@ export class DonationThanksComponent implements OnInit {
 
     if (!this.donationService.isComplete(donation) && this.cameFromBank) {
       this.payByBankPossibleError = true;
+
+      // Cancelling the flow in test mode added `redirect_status=failed` but this isn't documented at
+      // https://docs.stripe.com/payments/pay-by-bank/accept-a-payment?payment-ui=elements#confirm-with-stripe.js
+      // so for now, we also keep the fallback `payByBankPossibleError` message to report a likely failure without being
+      // certain of the outcome.
+      if (this.route.snapshot.queryParams['redirect_status'] === 'failed') {
+        // If the donation can be resumed the donor should see this toast as the page
+        // redirects to the Donate form and then, a second or two later, a modal offering
+        // them their latest donation to resume or cancel.
+        this.toast.showError('Payment not completed; please resume your donation to continue');
+        this.router.navigateByUrl(`/donate/${this.donation.projectId}`);
+        return;
+      }
     }
 
     if (this.tries <= this.maxTries) {

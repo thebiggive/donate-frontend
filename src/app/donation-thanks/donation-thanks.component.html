@@ -12,10 +12,12 @@
     ></mat-spinner>
   }
 
-  @if (payByBankPossibleError && donation) {
+  @if (payByBankPossibleError && donation && beenLoadingForALittleWhile) {
     <p aria-live="assertive">
-      <!-- @todo Clarify or split this message once we are clear on the cancel/failure modes of Pay By Bank -->
-      Payment may have not have been completed. <a routerLink="/donate/{{ donation.projectId }}">Try again?</a>
+      <!-- Cancelled (and probably also failed?) Pay By Bank flows seem in practice to set `redirect_status` and so donors
+       should be taken off the page without seeing this. But because it's undocumented we keep this as belt and braces for
+       any situation where the donation is still Pending and the donor selected Pay By Bank. -->
+      Payment is not yet complete. <a routerLink="/donate/{{ donation.projectId }}">Try again?</a>
     </p>
   }
 
