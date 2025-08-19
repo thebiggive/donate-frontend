@@ -75,7 +75,7 @@ export class DonationService {
     return (
       donation.status !== undefined &&
       (resumableStatuses as readonly DonationStatus[]).includes(donation.status) &&
-      donation.pspMethodType === paymentMethodType
+      this.isPaymentElementMethod(donation.pspMethodType) === this.isPaymentElementMethod(paymentMethodType)
     );
   }
 
@@ -468,5 +468,9 @@ export class DonationService {
         this.getAuthHttpOptions(donation),
       ),
     );
+  }
+
+  private isPaymentElementMethod(pspMethodType: string): boolean {
+    return ['card', 'pay_by_bank'].includes(pspMethodType);
   }
 }
