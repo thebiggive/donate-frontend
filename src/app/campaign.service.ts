@@ -9,7 +9,6 @@ import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
 import { HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards } from './highlight-cards/HighlightCard';
 import { map } from 'rxjs/operators';
-import { flags } from './featureFlags';
 import { MetaCampaign } from './metaCampaign.model';
 
 @Injectable({
@@ -128,12 +127,7 @@ export class CampaignService {
       query.fundSlug = fundSlug;
     }
 
-    if (flags.useMatchbotCampaignSearchApi) {
-      this.sortForMatchbot(query, selected);
-    } else {
-      this.sortForSalesforce(query, selected);
-    }
-
+    this.sortForMatchbot(query, selected);
     return query;
   }
 
@@ -144,17 +138,10 @@ export class CampaignService {
         campaigns: CampaignSummary[];
       }
   > {
-    if (flags.useMatchbotCharityApi) {
-      // use matchbot here when its ready
-      return this.http.get<{
-        charityName: string;
-        campaigns: CampaignSummary[];
-      }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
-    } else {
-      return this.http.get<CampaignSummary[]>(
-        `${environment.sfApiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`,
-      );
-    }
+    return this.http.get<{
+      charityName: string;
+      campaigns: CampaignSummary[];
+    }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
@@ -204,37 +191,22 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
-    switch (flags.useMatchbotCampaignSearchApi) {
-      case false:
-        return this.http.get<CampaignSummary[]>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns`, { params });
-      case true:
-        return this.http
-          .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
-          .pipe(map((response) => response.campaignSummaries));
-    }
+    return this.http
+      .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
+      .pipe(map((response) => response.campaignSummaries));
   }
 
   /**
    * Gets details of a campaign from a backend system - currently SF in prod but changing over to matchbot
    */
   getCharityCampaignById(campaignId: string): Observable<Campaign> {
-    switch (flags.useMatchbotCampaignApi) {
-      case false:
-        return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
-      case true:
-        return this.http.get<Campaign>(`${environment.matchbotApiPrefix}/campaigns/${campaignId}`);
-    }
+    return this.http.get<Campaign>(`${environment.matchbotApiPrefix}/campaigns/${campaignId}`);
   }
 
   getCharityCampaignPreviewById(campaignId: string) {
-    switch (flags.useMatchbotCampaignApi) {
-      case false:
-        return this.http.get<Campaign>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
-      case true:
-        return this.http
-          .get<{ campaign: Campaign }>(`${environment.matchbotApiPrefix}/campaigns/early-preview/${campaignId}`)
-          .pipe(map((response) => response.campaign));
-    }
+    return this.http
+      .get<{ campaign: Campaign }>(`${environment.matchbotApiPrefix}/campaigns/early-preview/${campaignId}`)
+      .pipe(map((response) => response.campaign));
   }
 
   getMetaCampaignBySlug(campaignSlug: string): Observable<MetaCampaign> {
@@ -245,16 +217,9 @@ export class CampaignService {
       return new Observable();
     }
 
-    switch (flags.useMatchbotMetaCampaignApi) {
-      case false:
-        return this.http.get<MetaCampaign>(
-          `${environment.sfApiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`,
-        );
-      case true:
-        return this.http
-          .get<{ metaCampaign: MetaCampaign }>(`${environment.matchbotApiPrefix}/meta-campaigns/${campaignSlug}`)
-          .pipe(map(({ metaCampaign }) => metaCampaign));
-    }
+    return this.http
+      .get<{ metaCampaign: MetaCampaign }>(`${environment.matchbotApiPrefix}/meta-campaigns/${campaignSlug}`)
+      .pipe(map(({ metaCampaign }) => metaCampaign));
   }
 
   getCampaignImpactStats() {
@@ -292,22 +257,6 @@ export class CampaignService {
         query.sortField = 'distanceToTarget';
         query.sortDirection = 'desc';
         break;
-    }
-  }
-
-  private sortForSalesforce(query: SearchQuery, selected: SelectedType) {
-    if (selected.sortField?.toLowerCase() === 'relevance') {
-      query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
-      query.sortDirection = undefined;
-    } else if (selected.sortField === 'leastRaised') {
-      query.sortDirection = 'asc';
-      query.sortField = 'amountRaised';
-    } else if (selected.sortField === 'closeToTarget') {
-      query.sortDirection = 'asc';
-      query.sortField = 'matchFundsRemaining';
-    } else {
-      // match funds left and amount raised both make most sense in 'desc' order
-      query.sortDirection = 'desc';
     }
   }
 }
