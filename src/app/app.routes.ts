@@ -7,7 +7,6 @@ import { CampaignStatsResolver } from './campaign-stats-resolver';
 import { HighlightCardsResolver } from './highlight-cards-resolver';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { flags } from './featureFlags';
 import { MyDonationsComponent } from './my-donations/my-donations.component';
 import { RegularGivingComponent } from './regular-giving/regular-giving.component';
 import { MandateComponent } from './mandate/mandate.component';
@@ -166,6 +165,40 @@ export const routes: (Route & {
       import('./donation-start/donation-start-container/donation-start-container.component').then(
         (c) => c.DonationStartContainerComponent,
       ),
+  },
+  {
+    path: myRegularGivingPath,
+    title: undefined, // set from inside component
+    resolve: {
+      mandates: myMandatesResolver,
+    },
+    pathMatch: 'full',
+    component: MyRegularGivingComponent,
+    canActivate: [requireLogin],
+  },
+  {
+    path: 'my-account/payment-methods/change-regular-giving',
+    title: 'Change Regular Giving Payment Method',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+      setupIntent: setupIntentResolver,
+    },
+    pathMatch: 'full',
+    component: ChangeRegularGivingComponent,
+    canActivate: [requireLogin],
+  },
+  {
+    path: 'regular-giving/:campaignId',
+    title: undefined, // set from inside component
+    pathMatch: 'full',
+    component: RegularGivingComponent,
+    canActivate: [requireLogin],
+    resolve: {
+      campaign: CampaignResolver,
+      donor: LoggedInPersonResolver,
+      donorAccount: DonorAccountResolver,
+    },
   },
   {
     path: `${myRegularGivingPath}/:mandateId/thanks`,
@@ -339,42 +372,3 @@ export const routes: (Route & {
     component: NotFoundComponent,
   },
 ];
-
-if (flags.regularGivingEnabled) {
-  routes.unshift({
-    path: myRegularGivingPath,
-    title: undefined, // set from inside component
-    resolve: {
-      mandates: myMandatesResolver,
-    },
-    pathMatch: 'full',
-    component: MyRegularGivingComponent,
-    canActivate: [requireLogin],
-  });
-
-  routes.unshift({
-    path: 'my-account/payment-methods/change-regular-giving',
-    title: 'Change Regular Giving Payment Method',
-    resolve: {
-      person: LoggedInPersonResolver,
-      paymentMethods: PaymentMethodsResolver,
-      setupIntent: setupIntentResolver,
-    },
-    pathMatch: 'full',
-    component: ChangeRegularGivingComponent,
-    canActivate: [requireLogin],
-  });
-
-  routes.unshift({
-    path: 'regular-giving/:campaignId',
-    title: undefined, // set from inside component
-    pathMatch: 'full',
-    component: RegularGivingComponent,
-    canActivate: [requireLogin],
-    resolve: {
-      campaign: CampaignResolver,
-      donor: LoggedInPersonResolver,
-      donorAccount: DonorAccountResolver,
-    },
-  });
-}

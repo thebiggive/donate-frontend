@@ -190,8 +190,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: async (error) => {
           this.extractErrorMessage(error);
-          this.friendlyCaptchaWidget.reset();
-          await this.friendlyCaptchaWidget.start();
+          this.friendlyCaptchaWidget?.reset();
+          await this.friendlyCaptchaWidget?.start();
           this.processing = false;
         },
       });
@@ -226,11 +226,10 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch (error: any) {
       this.extractErrorMessage(error);
     } finally {
-      this.friendlyCaptchaWidget.reset();
-      await this.friendlyCaptchaWidget.start();
+      this.friendlyCaptchaWidget?.reset();
+      await this.friendlyCaptchaWidget?.start();
       this.processing = false;
     }
-    return;
   }
 
   private login(captchaResponse: string | undefined) {

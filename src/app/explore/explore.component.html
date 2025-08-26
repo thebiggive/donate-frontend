@@ -88,53 +88,65 @@
         >
           @for (campaign of individualCampaigns; track campaign.id) {
             <div>
-              <!-- note the primary figure amount below in case of regular giving has to be a non-empty string to
+              <!-- note the secondary figure amount below in case of regular giving / shared-funds has to be a non-empty string to
                   make the component
                        reserve space for it to keep the layout consistent. Once we're happy with this layout
-                       consider editing component code to allow this to happen in a more intuitive way
+                       consider editing component code to allow this to happen in a more intuitive way.
 
-                       I think as of Feb 2025 the logic for campaign cards in general has got quite confusing, with too many
-                       differences between how the card appears on the metacampaign, charity, and explore pages. May be worth trying to rework subsantially so we can encapsulate
-                       and replace the tag below with a simple <biggive-campaign-card [campaign]="campaign">. Would require perhaps some changes at SF so we don't have to pass
-                       the metacmpaign, or processing the campaign data in FE before it gets to here. Could also consider moving the `campaign-card` component out of
-                       components library and into this repo for to make it easier to work on if we're not likely to use it anywhere else.
-
-                       Logic for primary figure amount is particularly confusing - we have to pass null here if the campaign is an emergency match fund campaign
-                       as it doesn't make sense to display any primary figure or secondary figure, but the only way to know in FE at present that it's an emergency campaign
-                       is by the fact that it uses match funds and *isn't* regular giving. If it is regular giving we pass a space to take up space in the layout without being visible.
+                       In practice the `|| campaign.isRegularGiving` should be redundant everywhere except on dev machines,
+                        as any campaign that's part of a regular-giving metacampaign will have parentUsesSharedFunds=true.
                        -->
-              <biggive-campaign-card
-                id="campaign-{{ campaign.id }}"
-                [banner]="campaign.imageUri | optimisedImage: 830 | async"
-                [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-                [campaignTitle]="campaign.title"
-                [donateButtonUrl]="
-                  campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id
-                "
-                [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
-                [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-                [organisationName]="campaign.charity.name"
-                [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
-                [primaryFigureAmount]="
-                  this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving
-                    ? campaign.isRegularGiving
-                      ? ' '
-                      : null
-                    : (campaign.matchFundsRemaining
-                      | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
-                "
-                [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
-                secondary-figure-label="Total Funds Raised"
-                [secondaryFigureAmount]="
-                  this.metaCampaign?.usesSharedFunds
-                    ? null
-                    : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)
-                "
-                [isFutureCampaign]="isInFuture(campaign)"
-                [isPastCampaign]="isInPast(campaign)"
-                [datetime]="getRelevantDateAsStr(campaign)"
-              >
-              </biggive-campaign-card>
+              @if (campaign.parentUsesSharedFunds || campaign.isRegularGiving) {
+                <biggive-campaign-card
+                  id="campaign-{{ campaign.id }}"
+                  [banner]="campaign.imageUri | optimisedImage: 830 | async"
+                  [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                  [campaignTitle]="campaign.title"
+                  [donateButtonUrl]="
+                    campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id
+                  "
+                  [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
+                  [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+                  [organisationName]="campaign.charity.name"
+                  [primaryFigureLabel]="'Amount Raised'"
+                  [primaryFigureAmount]="
+                    campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo
+                  "
+                  [progressBarCounter]="undefined"
+                  secondary-figure-label=""
+                  [secondaryFigureAmount]="' '"
+                  [isFutureCampaign]="isInFuture(campaign)"
+                  [isPastCampaign]="isInPast(campaign)"
+                  [datetime]="getRelevantDateAsStr(campaign)"
+                >
+                </biggive-campaign-card>
+              } @else {
+                <biggive-campaign-card
+                  id="campaign-{{ campaign.id }}"
+                  [banner]="campaign.imageUri | optimisedImage: 830 | async"
+                  [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                  [campaignTitle]="campaign.title"
+                  [donateButtonUrl]="
+                    campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id
+                  "
+                  [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
+                  [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+                  [organisationName]="campaign.charity.name"
+                  [primaryFigureLabel]="'Match Funds Remaining'"
+                  [primaryFigureAmount]="
+                    campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo
+                  "
+                  [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
+                  secondary-figure-label="Amount Raised"
+                  [secondaryFigureAmount]="
+                    campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo
+                  "
+                  [isFutureCampaign]="isInFuture(campaign)"
+                  [isPastCampaign]="isInPast(campaign)"
+                  [datetime]="getRelevantDateAsStr(campaign)"
+                >
+                </biggive-campaign-card>
+              }
             </div>
           }
         </biggive-grid>

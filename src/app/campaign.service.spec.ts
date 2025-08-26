@@ -160,10 +160,10 @@ describe('CampaignService', () => {
     campaign.amountRaised = 98;
     campaign.target = 200;
 
-    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(49);
+    expect(CampaignService.percentRaisedOfCampaign(campaign)).toBe(49);
   });
 
-  it('should return the % raised for the parent campaign when its parent does use shared funds', () => {
+  it('should return undefined when its parent does use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = true;
     if (!campaign.parentUsesSharedFunds) {
@@ -174,6 +174,6 @@ describe('CampaignService', () => {
     campaign.target = 200;
     campaign.parentTarget = 2000;
 
-    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);
+    expect(CampaignService.percentRaisedOfCampaign(campaign)).toBe(undefined);
   });
 });

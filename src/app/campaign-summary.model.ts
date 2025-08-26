@@ -3,6 +3,8 @@ export type CampaignSummary = {
   isRegularGiving: boolean;
   id: string;
   amountRaised: number;
+  parentRef: string | null;
+  parentUsesSharedFunds: boolean;
   beneficiaries: string[];
   categories: string[];
   championName: string;

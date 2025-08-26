@@ -273,10 +273,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private setPageMetadata(metaCampaign?: MetaCampaign) {
     if (metaCampaign) {
+      const noIndex = !metaCampaign.shouldBeIndexed;
       this.pageMeta.setCommon(
         this.title,
         metaCampaign.summary || 'A match funded campaign with Big Give',
         metaCampaign.bannerUri,
+        noIndex,
       );
     } else {
       this.pageMeta.setCommon(
@@ -382,7 +384,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    if (this.metaCampaign?.usesSharedFunds) {
+    // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
+    // childCampaign.parentUsesSharedFunds set when appropriate.
+    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
       // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
       return null;
     }
@@ -400,7 +404,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     const query = this.campaignService.buildQuery(
       this.searchService.selected,
       this.offset,
-      this.metaCampaign?.id,
       this.campaignSlug,
       this.fundSlug,
     );
@@ -455,13 +458,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searched = this.searchService.nonDefaultsActive;
 
     this.offset = 0;
-    const query = this.campaignService.buildQuery(
-      this.searchService.selected,
-      0,
-      this.metaCampaign?.id,
-      this.campaignSlug,
-      this.fundSlug,
-    );
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignSlug, this.fundSlug);
     this.individualCampaigns = [];
     this.loading = true;
 

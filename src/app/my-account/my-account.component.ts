@@ -5,7 +5,6 @@ import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { flags } from '../featureFlags';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import { environment } from '../../environments/environment';
 import { BiggivePageSection, BiggiveHeading } from '@biggive/components-angular';
@@ -57,9 +56,7 @@ export class MyAccountComponent implements OnInit {
           href: new URL(environment.donateUriPrefix + '/my-account/donations'),
         },
       },
-    ];
-    if (flags.regularGivingEnabled) {
-      this.actions.push({
+      {
         background: {
           color: 'brand-afa-pink',
           image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg'),
@@ -70,8 +67,8 @@ export class MyAccountComponent implements OnInit {
           text: '',
           href: new URL(environment.donateUriPrefix + '/my-account/regular-giving'),
         },
-      });
-    }
+      },
+    ];
   }
 
   ngOnInit() {

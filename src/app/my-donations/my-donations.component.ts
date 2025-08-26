@@ -53,6 +53,8 @@ export class MyDonationsComponent implements OnInit {
         return 'Card payment';
       case 'customer_balance':
         return 'Donation Funds payment';
+      case 'pay_by_bank':
+        return 'Pay By Bank';
     }
   }
 

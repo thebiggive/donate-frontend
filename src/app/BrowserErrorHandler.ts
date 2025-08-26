@@ -9,7 +9,9 @@ export class BrowserErrorHandler implements ErrorHandler {
 
   handleError(error: Error): void {
     console.error(error);
-    if (['development', 'regression', 'staging'].includes(environment.environmentId)) {
+    // for now not including 'regression' in the list below, as the error message may be interferring with the bots
+    // ability to click a button.
+    if (['development', 'staging'].includes(environment.environmentId)) {
       // don't show toast in prod because it won't be useful to real users
       this.toast.showError(
         `${error.name}: ${error.message} (${environment.environmentId} error display, not shown in prod)`,
