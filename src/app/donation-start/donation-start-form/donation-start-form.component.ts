@@ -1120,7 +1120,11 @@ export class DonationStartFormComponent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      this.matomoTracker.trackEvent('donate', 'exit_pi_status_' + result.paymentIntent.status, '3DS or PBB PI probable success');
+      this.matomoTracker.trackEvent(
+        'donate',
+        'exit_pi_status_' + result.paymentIntent.status,
+        '3DS or PBB PI probable success',
+      );
       await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
       return;
     }
