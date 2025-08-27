@@ -1092,6 +1092,7 @@ export class DonationStartFormComponent
 
           this.refreshDonationAndStripe();
         } else {
+          this.matomoTracker.trackEvent('donate', 'exit_requires_action_non_error', 'Assuming 3DS or PBB success');
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
           return;
         }
@@ -1119,6 +1120,7 @@ export class DonationStartFormComponent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
+      this.matomoTracker.trackEvent('donate', 'exit_pi_status_' + result.paymentIntent.status, '3DS or PBB PI probable success');
       await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
       return;
     }
@@ -2410,6 +2412,7 @@ export class DonationStartFormComponent
 
     this.cancelExpiryWarning();
     await this.router.navigate(['thanks', donation.donationId], {
+      queryParams: this.selectedPaymentMethodType === 'pay_by_bank' ? { from: 'bank' } : {},
       replaceUrl: true,
     });
   }

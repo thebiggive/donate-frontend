@@ -266,8 +266,9 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
 
       // Cancelling the flow in test mode added `redirect_status=failed` but this isn't documented at
       // https://docs.stripe.com/payments/pay-by-bank/accept-a-payment?payment-ui=elements#confirm-with-stripe.js
-      // so for now, we also keep the fallback `payByBankPossibleError` message to report a likely failure without being
-      // certain of the outcome.
+      // Also, if this page is on desktop but the flow failed on mobile then the redirect comes from our app and we don't
+      // get any of the extra context params. So we still need the fallback `payByBankPossibleError` message to report a
+      // likely failure without being certain of the outcome.
       if (this.route.snapshot.queryParams['redirect_status'] === 'failed') {
         // If the donation can be resumed the donor should see this toast as the page
         // redirects to the Donate form and then, a second or two later, a modal offering
