@@ -96,23 +96,6 @@ export class CampaignInfoComponent implements OnInit {
     // Champion ref can be an ID if there's no slug, which doesn't really work but in practice Donate
     // redirects to the overall `parentRef`. In the absence of support for non-linked names this is probably
     // the best fallback.
-    let url = `/${this.campaign.parentRef}/${this.campaign.championRef}`;
-
-    const temporaryGreggsIds = [
-      'a05WS000004MEy5YAG',
-      'a05WS000004HasnYAC',
-      'a05WS000004PumJYAS',
-      'a05WS000004GkCfYAK',
-      'a05WS000004aiMnYAI',
-      'a05WS000004EqZ7YAK',
-      'a05WS000004ZLAXYA4',
-      'a05WS000004P41JYAS',
-    ];
-
-    if (temporaryGreggsIds.includes(this.campaign.id)) {
-      url = 'https://www.greggsfoundation.org.uk';
-    }
-
-    return url;
+    return `/${this.campaign.parentRef}/${this.campaign.championRef}`;
   }
 }
