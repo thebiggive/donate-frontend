@@ -98,13 +98,11 @@ We want donations to work as widely as possible within the constraints set by ou
 donors' security.
 
 Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support
-release cycles. Where we want to communicate specific brands that should work we are likely best off mirroring [Stripe's appendix](https://stripe.com/docs/js/appendix/supported_browsers)
-for Stripe.js, as we must depend on that library for donations.
+release cycles.
 
-We no longer support any versions of Internet Explorer as Stripe dropped support from February 2022, meaning
-we cannot offer a meaningfully functional experience to IE donors.
-
-See [`.browserslistrc`](./.browserslistrc) for the specific instructions that tell the Angular build system what support is needed during builds.
+Specifically, we intended to support the browser versions referenced in [`.browserslistrc`](./.browserslistrc) which is used in the
+Angular build - but work is in progress to expand testing on older versions, check whether there are any additional versions we can
+and should support or versions we include in the list here where the site is not currently usable.
 
 ## Docker configuration
 
