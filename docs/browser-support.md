@@ -21,3 +21,16 @@ ensure that they work on all those browsers. However, some bugs will inevitably 
 if they do encounter a bug when using one of our supported browsers.
 
 We may also need to specify operating system versions to add detail above, particularly in the case of iOS.
+
+Users running an unsupported browser will see a warning on the site.
+
+## For Developers:
+
+When updating the supported browser list please also review .browserslistrc and the `supportedBrowsers` npm script.
+.browserslistrc is used to configure the angular build process, while the supportedBrowsers script controls which
+browsers we show a "not supported" message to. These can be edited independently to allow working around any Angular /
+vite issues when we ask it to support older browsers, and/or configuring angular to attempt to support older browsers than
+the app as a whole, including e.g. stripe and 3DS, is usable with.
+
+Also consider updating settings in the regression test project (e.g. `wdio.testingbot-all.conf.cjs`,
+`wdio.testingbot-safari.conf.cjs`, etc) to reflect our supported browser selection.
