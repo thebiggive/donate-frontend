@@ -104,6 +104,8 @@ Specifically, we intended to support the browser versions referenced in [`.brows
 Angular build - but work is in progress to expand testing on older versions, check whether there are any additional versions we can
 and should support or versions we include in the list here where the site is not currently usable.
 
+For more detail see the [Browser Support](./docs/browser-support.md) document.
+
 ## Docker configuration
 
 The `Dockerfile` in this repository and its `npm` scripts are used for Server-Side Rendering support and containerised deployments in AWS
