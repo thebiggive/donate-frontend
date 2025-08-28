@@ -44,6 +44,8 @@ testem.log
 /typings
 /cypress/screenshots
 
+src/supportedBrowsers.ts
+
 # System Files
 .DS_Store
 Thumbs.db
