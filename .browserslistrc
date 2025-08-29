@@ -5,13 +5,14 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
-Chrome >= 107
-ChromeAndroid >= 107
-Edge >= 107
-Firefox >= 104
-FirefoxAndroid >= 104
+Chrome >= 107 # released 2022-10-25
+ChromeAndroid >= 107 # released 2022-10-25
+
+Edge >= 107 # released 2022-10-27
+Firefox >= 104 # released 2022-10-23
+FirefoxAndroid >= 104 # released 2022-10-23
 
 # First working version of Safari starting from MacOS High Sierra, Windows 7 and on Linux
-Safari > 14
+Safari > 14 # released 2020-09-16
 # Support for mobile IOS users
-iOS >= 15.0
+iOS >= 15.0 # released 2021-06-07

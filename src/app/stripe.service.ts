@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   ConfirmationTokenResult,
   CustomFontSource,
@@ -17,6 +17,7 @@ import { Donation } from './donation.model';
 import { Campaign } from './campaign.model';
 import { countryISO2 } from './countries';
 import { bigGiveName } from '../environments/common';
+import { Toast } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ import { bigGiveName } from '../environments/common';
 export class StripeService {
   private didInit = false;
   private stripe?: Stripe | null;
+  private toast = inject(Toast);
 
   private readonly fonts: CustomFontSource[];
 
@@ -250,9 +252,20 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    return await this.stripe.handleNextAction({
+    const timer = window.setTimeout(() => {
+      this.toast.showError(
+        'If you do not see an authentication request from your payment card issue you may wish to try donating with different browser or device.',
+        { minDurationMs: 20_000 },
+      );
+    }, 45_000);
+
+    const result = await this.stripe.handleNextAction({
       clientSecret: clientSecret,
     });
+
+    window.clearTimeout(timer);
+
+    return result;
   }
 
   private amountIncTipInMinorUnit(donation: Donation) {
