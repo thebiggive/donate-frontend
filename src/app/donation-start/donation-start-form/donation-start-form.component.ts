@@ -908,7 +908,10 @@ export class DonationStartFormComponent
    * and the donor is using donation funds.
    */
   async onStripeCardChange(
-    state: StripeElementChangeEvent & { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } },
+    state: StripeElementChangeEvent & {
+      complete: boolean;
+      value?: { type: PaymentMethodType; payment_method?: PaymentMethod };
+    },
   ) {
     // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
     // end up validating presence of invisible fields.
