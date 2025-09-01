@@ -70,7 +70,7 @@ export class CampaignInfoComponent implements OnInit {
     }
 
     this.campaignRaised = this.currencyPipe.transform(
-      this.campaign.parentUsesSharedFunds ? this.campaign.parentAmountRaised : this.campaign.amountRaised,
+      this.campaign.amountRaised,
       this.campaign.currencyCode,
       'symbol',
       currencyPipeDigitsInfo,
