@@ -273,7 +273,7 @@ export class DonationStartFormComponent
 
   private stripeElements: StripeElements | undefined;
   /** A method from the Payment Element, if one's been chosen **/
-  private selectedPaymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | 'apple_pay' | 'google_play' | (string & {}) | null  = null;
+  private selectedPaymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | null = null;
   private paymentReadinessTracker!: PaymentReadinessTracker;
   public paymentStepErrors: string = '';
   private donationRetryTimeout: number | undefined = undefined;
@@ -958,7 +958,10 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const newType = state.value?.type;
+      const newType: 'card' | 'customer_balance' | 'pay_by_bank' = state.value?.type as
+        | 'card'
+        | 'customer_balance'
+        | 'pay_by_bank';
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;
@@ -2463,7 +2466,7 @@ export class DonationStartFormComponent
     }
   }
 
-  private getPaymentMethodType(): 'customer_balance' | 'card' | 'pay_by_bank' | "apple_pay" | "google_pay" | (string & {}){
+  private getPaymentMethodType(): 'customer_balance' | 'card' | 'pay_by_bank' {
     return this.creditPenceToUse > 0 ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
   }
 

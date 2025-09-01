@@ -78,7 +78,7 @@ export interface Donation {
 
   optInChampionEmail?: boolean;
 
-  pspMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | 'apple_pay' | 'google_pay' | (string & {});
+  pspMethodType: 'card' | 'customer_balance' | 'pay_by_bank';
 
   /**
    * Unique ID for a CCampaign / project assigned by Big Give, in Salesforce
