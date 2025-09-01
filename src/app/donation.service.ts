@@ -71,7 +71,10 @@ export class DonationService {
     return couplet.donation;
   }
 
-  isResumable(donation: Donation, paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank'): boolean {
+  isResumable(
+    donation: Donation,
+    paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | 'apple_pay' | 'google_pay' | (string & {}),
+  ): boolean {
     return (
       donation.status !== undefined &&
       (resumableStatuses as readonly DonationStatus[]).includes(donation.status) &&
