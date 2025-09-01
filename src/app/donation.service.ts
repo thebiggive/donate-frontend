@@ -470,7 +470,19 @@ export class DonationService {
     );
   }
 
-  private isPaymentElementMethod(pspMethodType: string): boolean {
-    return ['card', 'pay_by_bank'].includes(pspMethodType);
+  private isPaymentElementMethod(pspMethodType: PaymentMethodType): boolean {
+    switch (pspMethodType) {
+      case 'card':
+      case 'pay_by_bank':
+      case 'apple_pay':
+      case 'google_pay':
+        return true;
+
+      case 'customer_balance':
+        return false;
+
+      default:
+        throw new Error('Unexpected payment method type: ' + pspMethodType);
+    }
   }
 }
