@@ -17,6 +17,20 @@ export const maximumDonationAmountForCardDonation = 25_000;
 export const maximumDonationAmountForFundedDonation = 200_000;
 
 /**
+ * payment method type identifier as returned from Stripe. We include `string & {}` in the union instead of than `never`
+ * to account for possible other methods stripe could be configured to use in future, and rather than simply `string`
+ * to prevent Tyepscript from simplifying the entire union down to string so that we can still see the likely options
+ * when we use this type.
+ */
+export type PaymentMethodType =
+  | 'card'
+  | 'customer_balance'
+  | 'pay_by_bank'
+  | 'apple_pay'
+  | 'google_pay'
+  | (string & {});
+
+/**
  * Placeholder for postcode and country code used when a donor from outside the UK claims gift aid
  * See also \MatchBot\Domain\Donation::OVERSEAS
  * */
@@ -78,7 +92,7 @@ export interface Donation {
 
   optInChampionEmail?: boolean;
 
-  pspMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | 'apple_pay' | 'google_pay' | (string & {});
+  pspMethodType: PaymentMethodType;
 
   /**
    * Unique ID for a CCampaign / project assigned by Big Give, in Salesforce

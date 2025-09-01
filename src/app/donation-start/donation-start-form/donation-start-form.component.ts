@@ -42,7 +42,7 @@ import { Campaign } from '../../campaign.model';
 import { CardIconsService } from '../../card-icons.service';
 import { campaignHiddenMessage } from '../../../environments/common';
 import { countryOptions } from '../../countries';
-import { Donation, maximumDonationAmount, OVERSEAS } from '../../donation.model';
+import { Donation, maximumDonationAmount, OVERSEAS, PaymentMethodType } from '../../donation.model';
 import { DonationCreatedResponse } from '../../donation-created-response.model';
 import { DonationService } from '../../donation.service';
 import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
@@ -2470,13 +2470,7 @@ export class DonationStartFormComponent
     }
   }
 
-  private getPaymentMethodType():
-    | 'customer_balance'
-    | 'card'
-    | 'pay_by_bank'
-    | 'apple_pay'
-    | 'google_pay'
-    | (string & {}) {
+  private getPaymentMethodType(): PaymentMethodType {
     return this.creditPenceToUse > 0 ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
   }
 

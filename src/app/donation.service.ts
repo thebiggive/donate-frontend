@@ -6,7 +6,7 @@ import { firstValueFrom, Observable, of } from 'rxjs';
 import { ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent } from '@stripe/stripe-js';
 
 import { COUNTRY_CODE } from './country-code.token';
-import { CompleteDonation, Donation } from './donation.model';
+import { CompleteDonation, Donation, PaymentMethodType } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
 import { Person } from './person.model';
@@ -71,10 +71,7 @@ export class DonationService {
     return couplet.donation;
   }
 
-  isResumable(
-    donation: Donation,
-    paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | 'apple_pay' | 'google_pay' | (string & {}),
-  ): boolean {
+  isResumable(donation: Donation, paymentMethodType: PaymentMethodType): boolean {
     return (
       donation.status !== undefined &&
       (resumableStatuses as readonly DonationStatus[]).includes(donation.status) &&
@@ -90,7 +87,7 @@ export class DonationService {
    */
   getProbablyResumableDonation(
     projectId: string,
-    paymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank',
+    paymentMethodType: PaymentMethodType,
   ): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
 
