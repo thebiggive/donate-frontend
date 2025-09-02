@@ -20,6 +20,7 @@ export const environment: Environment = {
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
+  matchbotApiOrigin: 'https://matchbot-staging.thebiggivetest.org.uk',
   matchbotApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',

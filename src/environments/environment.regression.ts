@@ -20,6 +20,7 @@ export const environment: Environment = {
   sharedCookieDomain: '.thebiggivetest.org.uk',
   blogUriPrefix: 'https://biggive.org',
   experienceUriPrefix: 'https://thebiggive--regtest1.sandbox.my.site.com',
+  matchbotApiOrigin: 'https://matchbot-regression.thebiggivetest.org.uk',
   matchbotApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
