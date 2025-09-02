@@ -16,7 +16,9 @@
     "
     secondary-stat-icon="Heart"
     [secondaryStatText]="
-      donationCount === 1 ? '1 donation' : integerPipe.transform(donationCount, '1.0-0') + ' donations'
+      campaign.donationCount === 1
+        ? '1 donation'
+        : integerPipe.transform(campaign.donationCount, '1.0-0') + ' donations'
     "
     [championName]="campaign.championName"
     [championUrl]="championUrl"

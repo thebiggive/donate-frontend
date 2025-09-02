@@ -43,12 +43,6 @@ export class CampaignInfoComponent implements OnInit {
   campaignTarget!: string; // Formatted
   campaignParentFundsRemaining: string | undefined; // formatted
 
-  /**
-   * The count of donations to the parent campaign if it shares funds, or to this
-   * specific campaign otherwise.
-   */
-  donationCount!: number;
-
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
@@ -75,9 +69,6 @@ export class CampaignInfoComponent implements OnInit {
       'symbol',
       currencyPipeDigitsInfo,
     ) as string;
-    this.donationCount = this.campaign.parentUsesSharedFunds
-      ? this.campaign.parentDonationCount || 0
-      : this.campaign.donationCount;
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {

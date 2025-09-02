@@ -134,7 +134,6 @@ describe('DonationStartContainer', () => {
       parentAmountRaised: undefined,
       parentDonationCount: undefined,
       parentRef: undefined,
-      parentTarget: undefined,
       surplusDonationInfo: undefined,
       target: 2000.01,
       thankYouMessage: undefined,
