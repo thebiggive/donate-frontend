@@ -169,10 +169,8 @@ describe('CampaignService', () => {
     if (!campaign.parentUsesSharedFunds) {
       throw new Error('Throwing error in impossible case to narrow type as required on next line');
     }
-    campaign.parentAmountRaised = 1000;
     campaign.amountRaised = 98;
     campaign.target = 200;
-    campaign.parentTarget = 2000;
 
     expect(CampaignService.percentRaisedOfCampaign(campaign)).toBe(undefined);
   });

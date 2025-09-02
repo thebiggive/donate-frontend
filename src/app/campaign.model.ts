@@ -77,10 +77,7 @@ export type Campaign = {
   | {
       // If parentUsesSharedFunds then we expect the backend to tell us how much of those parental shared funds are available
       parentUsesSharedFunds: true;
-      parentDonationCount: number;
       parentMatchFundsRemaining: number;
-      parentAmountRaised: number;
-      parentTarget: number;
     }
   | {
       parentUsesSharedFunds: false;
