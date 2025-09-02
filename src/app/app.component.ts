@@ -138,7 +138,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
       const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
       if (!browserIsSupported) {
-        this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported by Big Give, and you may not be able to use the site using ths browser. Please try another browser.`;
+        // todo capitalise first letter of browser name
+        this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
       }
 
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
