@@ -22,10 +22,7 @@ export const maximumDonationAmountForFundedDonation = 200_000;
  * to prevent Tyepscript from simplifying the entire union down to string so that we can still see the likely options
  * when we use this type.
  */
-export type PaymentMethodType =
-  | 'card'
-  | 'customer_balance'
-  | 'pay_by_bank';
+export type PaymentMethodType = 'card' | 'customer_balance' | 'pay_by_bank';
 
 /**
  * Placeholder for postcode and country code used when a donor from outside the UK claims gift aid
