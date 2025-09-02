@@ -16,12 +16,6 @@ export function maximumDonationAmount(currencyCode: string, creditPenceToUse: nu
 export const maximumDonationAmountForCardDonation = 25_000;
 export const maximumDonationAmountForFundedDonation = 200_000;
 
-/**
- * payment method type identifier as returned from Stripe. We include `string & {}` in the union instead of than `never`
- * to account for possible other methods stripe could be configured to use in future, and rather than simply `string`
- * to prevent Tyepscript from simplifying the entire union down to string so that we can still see the likely options
- * when we use this type.
- */
 export type PaymentMethodType = 'card' | 'customer_balance' | 'pay_by_bank';
 
 /**
