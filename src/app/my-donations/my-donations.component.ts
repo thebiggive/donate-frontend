@@ -51,21 +51,10 @@ export class MyDonationsComponent implements OnInit {
     switch (donation.pspMethodType) {
       case 'card':
         return 'Card payment';
-      // in practice Apple Pay and Google Pay currently get saved as 'card' by matchbot so would end up being displayed
-      // here as card. But in case matchbot does start distinguishing them in future we may as well display them with their proper names:
-      case 'apple_pay':
-        return 'Apple Pay';
-      case 'google_pay':
-        return 'Google Pay';
       case 'customer_balance':
         return 'Donation Funds payment';
       case 'pay_by_bank':
         return 'Pay By Bank';
-      default:
-        console.error(
-          `Unexpected payment method type to display for donation: ${donation.donationId}: ${donation.pspMethodType}`,
-        );
-        return donation.pspMethodType;
     }
   }
 

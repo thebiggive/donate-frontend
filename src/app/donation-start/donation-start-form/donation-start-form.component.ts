@@ -910,7 +910,7 @@ export class DonationStartFormComponent
   async onStripeCardChange(
     state: StripeElementChangeEvent & {
       complete: boolean;
-      value?: { type: PaymentMethodType; payment_method?: PaymentMethod };
+      value?: { type: PaymentMethodType | 'apple_pay' | 'google_pay'; payment_method?: PaymentMethod };
     },
   ) {
     // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
@@ -961,7 +961,9 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const newType = state.value?.type;
+      const newType = ['card', 'apple_pay', 'google_pay'].includes(state.value?.type) ? 'card' : state.value?.type;
+          console.log('payment method from event', selectedSavedPaymentMethod);
+    console.log('original type (phasing out)', state.value?.type);
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;

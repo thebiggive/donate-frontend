@@ -25,10 +25,7 @@ export const maximumDonationAmountForFundedDonation = 200_000;
 export type PaymentMethodType =
   | 'card'
   | 'customer_balance'
-  | 'pay_by_bank'
-  | 'apple_pay'
-  | 'google_pay'
-  | (string & {});
+  | 'pay_by_bank';
 
 /**
  * Placeholder for postcode and country code used when a donor from outside the UK claims gift aid
