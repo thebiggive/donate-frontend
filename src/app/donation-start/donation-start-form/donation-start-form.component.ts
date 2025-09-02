@@ -961,9 +961,24 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const newType = ['card', 'apple_pay', 'google_pay'].includes(state.value?.type) ? 'card' : state.value?.type;
+      const elementEventType = state.value?.type;
+      let newType: PaymentMethodType;
+
+      switch (state.value?.type) {
+        case 'card':
+        case 'apple_pay':
+        case 'google_pay':
+          newType = 'card';
+          break;
+        case 'pay_by_bank':
+          newType = 'pay_by_bank';
+          break;
+        case 'customer_balance':
+          newType = 'customer_balance';
+      }
+
       console.log('payment method from event', selectedSavedPaymentMethod);
-      console.log('original type (phasing out)', state.value?.type);
+      console.log('original type (phasing out)', elementEventType);
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;

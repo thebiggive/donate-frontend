@@ -474,8 +474,6 @@ export class DonationService {
     switch (pspMethodType) {
       case 'card':
       case 'pay_by_bank':
-      case 'apple_pay':
-      case 'google_pay':
         return true;
 
       case 'customer_balance':
