@@ -906,6 +906,8 @@ export class DonationStartFormComponent
    *
    * This event seems to fire whenever an element is set up too, which can even be when the Payment Element is invisible
    * and the donor is using donation funds.
+   *
+   * `state.value.type` is an undocumented Payment Element event type; don't use it as a Payment Intent `type` verbatim.
    */
   async onStripeCardChange(
     state: StripeElementChangeEvent & {
@@ -961,7 +963,6 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const elementEventType = state.value?.type;
       let newType: PaymentMethodType;
 
       switch (state.value?.type) {
@@ -977,8 +978,6 @@ export class DonationStartFormComponent
           newType = 'customer_balance';
       }
 
-      console.log('payment method from event', selectedSavedPaymentMethod);
-      console.log('original type (phasing out)', elementEventType);
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;
