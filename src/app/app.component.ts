@@ -138,9 +138,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
       const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
       if (!browserIsSupported) {
-        // todo capitalise first letter of browser name
-        this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
+        this.browserSupportedMessage = `Your current browser: ${capitalize(detect()?.name)} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
       }
+
 
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
         if (agreesToThirdParty(preferences)) {
@@ -169,6 +169,18 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     });
 
     this.updatePersonInfo();
+
+    function capitalize(str: string | undefined): string {
+      if (str === undefined) {
+        return '(Unknown)';
+      }
+
+      if (str.toLowerCase() === 'ios') {
+        return 'iOS';
+      }
+
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    }
   }
 
   ngOnDestroy() {
