@@ -106,7 +106,8 @@ app.get('/robots.txt', (_req: Request, res: Response) => {
   if (environment.production) {
     res.send('User-agent: *\nAllow: /\n\n' + sitemapLine);
   } else {
-    res.send('User-agent: *\nDisallow: /\n\n' + sitemapLine);
+    // no need for sitemap outside prod.
+    res.send('User-agent: *\nDisallow: /\n');
   }
 });
 
