@@ -141,7 +141,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.browserSupportedMessage = `Your current browser: ${capitalize(detect()?.name)} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
       }
 
-
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
         if (agreesToThirdParty(preferences)) {
           this.getSiteControlService.init();

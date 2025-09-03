@@ -5,14 +5,9 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
-
-# Chrome 67 seems fine with vite, 61 crashes it. So somewhere in this range will probably be our Android/Chrome baseline.
-# TODO work out how far back we can go.
-# TODO if we're not 100% happy with the Android answer, test having these 2 diverge again and see if we really need old desktop Chrome
-# in range to support old Android Chrome.
-# TODO try to figure out if there are specific features in Android 6-8 which break in practice as things stand; compare donor email from ~CC24.
-Chrome >= 67 # released tbc
-ChromeAndroid >= 67 # released tbc
+# Chrome 64 seems fine with vite, 63 crashes it.
+Chrome >= 64 # released 2018-01-24
+ChromeAndroid >= 64 # 2018-01-24
 
 Edge >= 107 # released 2022-10-27
 Firefox >= 104 # released 2022-10-23
