@@ -18,6 +18,7 @@ export const environment: Environment = {
   blogUriPrefix: 'http://localhost:30003',
   sharedCookieDomain: 'localhost',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
+  matchbotApiOrigin: 'http://localhost:30030',
   matchbotApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'http://localhost:30050/v1',
