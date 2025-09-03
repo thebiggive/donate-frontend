@@ -179,7 +179,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         return 'iOS';
       }
 
-      return str.charAt(0).toUpperCase() + str.slice(1)
+      return str.charAt(0).toUpperCase() + str.slice(1);
     }
   }
 
