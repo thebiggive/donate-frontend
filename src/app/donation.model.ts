@@ -16,6 +16,8 @@ export function maximumDonationAmount(currencyCode: string, creditPenceToUse: nu
 export const maximumDonationAmountForCardDonation = 25_000;
 export const maximumDonationAmountForFundedDonation = 200_000;
 
+export type PaymentMethodType = 'card' | 'customer_balance' | 'pay_by_bank';
+
 /**
  * Placeholder for postcode and country code used when a donor from outside the UK claims gift aid
  * See also \MatchBot\Domain\Donation::OVERSEAS
@@ -78,7 +80,7 @@ export interface Donation {
 
   optInChampionEmail?: boolean;
 
-  pspMethodType: 'card' | 'customer_balance' | 'pay_by_bank';
+  pspMethodType: PaymentMethodType;
 
   /**
    * Unique ID for a CCampaign / project assigned by Big Give, in Salesforce

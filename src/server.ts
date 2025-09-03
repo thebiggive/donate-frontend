@@ -101,10 +101,13 @@ app.use(morgan('combined')); // Log requests to stdout in Apache-like format
  */
 app.get('/robots.txt', (_req: Request, res: Response) => {
   res.type('text/plain');
+  const sitemapLine = `Sitemap: ${environment.matchbotApiOrigin}/sitemap`;
+
   if (environment.production) {
-    res.send('User-agent: *\nAllow: /');
+    res.send('User-agent: *\nAllow: /\n\n' + sitemapLine);
   } else {
-    res.send('User-agent: *\nDisallow: /');
+    // no need for sitemap outside prod.
+    res.send('User-agent: *\nDisallow: /\n');
   }
 });
 

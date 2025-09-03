@@ -42,7 +42,7 @@ import { Campaign } from '../../campaign.model';
 import { CardIconsService } from '../../card-icons.service';
 import { campaignHiddenMessage } from '../../../environments/common';
 import { countryOptions } from '../../countries';
-import { Donation, maximumDonationAmount, OVERSEAS } from '../../donation.model';
+import { Donation, maximumDonationAmount, OVERSEAS, PaymentMethodType } from '../../donation.model';
 import { DonationCreatedResponse } from '../../donation-created-response.model';
 import { DonationService } from '../../donation.service';
 import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
@@ -273,7 +273,7 @@ export class DonationStartFormComponent
 
   private stripeElements: StripeElements | undefined;
   /** A method from the Payment Element, if one's been chosen **/
-  private selectedPaymentMethodType: 'card' | 'customer_balance' | 'pay_by_bank' | null = null;
+  private selectedPaymentMethodType: PaymentMethodType | null = null;
   private paymentReadinessTracker!: PaymentReadinessTracker;
   public paymentStepErrors: string = '';
   private donationRetryTimeout: number | undefined = undefined;
@@ -906,9 +906,14 @@ export class DonationStartFormComponent
    *
    * This event seems to fire whenever an element is set up too, which can even be when the Payment Element is invisible
    * and the donor is using donation funds.
+   *
+   * `state.value.type` is an undocumented Payment Element event type; don't use it as a Payment Intent `type` verbatim.
    */
   async onStripeCardChange(
-    state: StripeElementChangeEvent & { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } },
+    state: StripeElementChangeEvent & {
+      complete: boolean;
+      value?: { type: PaymentMethodType | 'apple_pay' | 'google_pay'; payment_method?: PaymentMethod };
+    },
   ) {
     // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
     // end up validating presence of invisible fields.
@@ -958,10 +963,21 @@ export class DonationStartFormComponent
     }
 
     if (state.value?.type) {
-      const newType: 'card' | 'customer_balance' | 'pay_by_bank' = state.value?.type as
-        | 'card'
-        | 'customer_balance'
-        | 'pay_by_bank';
+      let newType: PaymentMethodType;
+
+      switch (state.value?.type) {
+        case 'card':
+        case 'apple_pay':
+        case 'google_pay':
+          newType = 'card';
+          break;
+        case 'pay_by_bank':
+          newType = 'pay_by_bank';
+          break;
+        case 'customer_balance':
+          newType = 'customer_balance';
+      }
+
       this.selectedPaymentMethodType = newType;
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;
@@ -2473,7 +2489,7 @@ export class DonationStartFormComponent
     }
   }
 
-  private getPaymentMethodType(): 'customer_balance' | 'card' | 'pay_by_bank' {
+  private getPaymentMethodType(): PaymentMethodType {
     return this.creditPenceToUse > 0 ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
   }
 

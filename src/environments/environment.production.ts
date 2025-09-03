@@ -12,6 +12,7 @@ export const environment: Environment = {
   experienceUriPrefix: 'https://community.biggive.org',
   blogUriPrefix: 'https://biggive.org',
   sharedCookieDomain: '.biggive.org',
+  matchbotApiOrigin: 'https://matchbot-production.thebiggive.org.uk',
   matchbotApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
