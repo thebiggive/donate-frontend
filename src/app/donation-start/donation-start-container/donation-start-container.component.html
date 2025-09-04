@@ -19,7 +19,7 @@
   <div class="c-form-container">
     <div class="b-primary-column">
       <app-donation-start-login
-        [personId]="this.donor?.id"
+        [personId]="this.donor && this.donor.id"
         [email]="this.loggedInEmailAddress || ''"
         [loadAuthedPersonInfo]="loadAuthedPersonInfo"
         [creditPenceToUse]="(this.donationStartForm && this.donationStartForm.creditPenceToUse) || 0"
@@ -68,10 +68,10 @@
           <div style="outline: 1px solid black; padding: 1em">
             <strong>Debug info</strong>
             <br />
-            Customer: Email: {{ donor?.email_address }} <br />
-            ID: {{ donor?.id }} <br />
-            Stripe ID {{ donor?.stripe_customer_id }} <br /><br />
-            Donation {{ donation?.donationAmount }} <br />PSP customer ID: {{ donation?.pspCustomerId }} <br />
+            Customer: Email: {{ donor && donor.email_address }} <br />
+            ID: {{ donor && donor.id }} <br />
+            Stripe ID {{ donor && donor.stripe_customer_id }} <br /><br />
+            Donation {{ donation && donation.donationAmount }} <br />PSP customer ID: {{ donation && donation.pspCustomerId }} <br />
 
             <a href (click)="hideDebugInfo($event)">(dismiss)</a>
           </div>

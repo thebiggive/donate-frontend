@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor() {
     const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
-    this.isNewRegistration = !!state?.newAccountRegistration;
+    this.isNewRegistration = !!(state && state.newAccountRegistration);
   }
 
   ngOnDestroy() {
@@ -141,20 +141,20 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   login(): void {
     if (!this.loginForm.valid) {
-      const emailErrors = this.loginForm.controls?.emailAddress?.errors;
-      const passwordErrors = this.loginForm.controls?.password?.errors;
+      const emailErrors = this.loginForm.(controls && controls.emailAddress && controls.emailAddress.errors);
+      const passwordErrors = this.loginForm.(controls && controls.password && controls.password.errors);
 
       switch (true) {
-        case emailErrors?.required && passwordErrors?.required:
+        case (emailErrors && emailErrors.required) && (passwordErrors && passwordErrors.required):
           this.loginError = 'Email address and password are required';
           break;
-        case emailErrors?.required:
+        case (emailErrors && emailErrors.required):
           this.loginError = 'Email address is required';
           break;
-        case passwordErrors?.required:
+        case (passwordErrors && passwordErrors.required):
           this.loginError = 'Password is required';
           break;
-        case !!emailErrors?.pattern:
+        case !!(emailErrors && emailErrors.pattern):
           this.loginError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
           break;
         default:
@@ -194,13 +194,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   resetPasswordClicked(): void {
     this.passwordResetError = undefined;
     if (!this.resetPasswordForm.valid) {
-      const emailErrors = this.resetPasswordForm.controls?.emailAddress?.errors;
+      const emailErrors = this.resetPasswordForm.(controls && controls.emailAddress && controls.emailAddress.errors);
 
       switch (true) {
-        case emailErrors?.required:
+        case (emailErrors && emailErrors.required):
           this.passwordResetError = 'Email address is required';
           break;
-        case !!emailErrors?.pattern:
+        case !!(emailErrors && emailErrors.pattern):
           this.passwordResetError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
           break;
         default:

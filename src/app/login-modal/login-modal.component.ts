@@ -83,8 +83,8 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
         this.loggingIn = false;
       },
       async (error: BackendError) => {
-        this.friendlyCaptchaWidget?.reset();
-        await this.friendlyCaptchaWidget?.start();
+        this.(friendlyCaptchaWidget && friendlyCaptchaWidget.reset)();
+        await this.(friendlyCaptchaWidget && friendlyCaptchaWidget.start)();
         this.loginError = errorDescription(error);
         this.loggingIn = false;
       },

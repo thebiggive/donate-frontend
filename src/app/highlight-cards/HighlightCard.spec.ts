@@ -22,7 +22,7 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.background.image.href).toBe(
       'https://example.com/assets/images/wmg-purple-texture.jpg',
     );
-    expect(highlightCardForHomepage.icon?.color).toBe('brand-wgmf-purple');
+    expect(highlightCardForHomepage.(icon && icon.color)).toBe('brand-wgmf-purple');
   });
 
   it('should use appropriate colour for emergency campaign', () => {
@@ -47,7 +47,7 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.background.image.href).toBe(
       'https://example.com/assets/images/emergency-card.webp',
     );
-    expect(highlightCardForHomepage.icon?.color).toBe('brand-emf-yellow');
+    expect(highlightCardForHomepage.(icon && icon.color)).toBe('brand-emf-yellow');
   });
 
   it('should use blue primary colour by default', () => {
@@ -69,7 +69,7 @@ describe('highlightCard', () => {
     );
 
     expect(highlightCardForHomepage.background.image.href).toBe('https://example.com/assets/images/blue-texture.jpg');
-    expect(highlightCardForHomepage.icon?.color).toBe('primary');
+    expect(highlightCardForHomepage.(icon && icon.color)).toBe('primary');
   });
 
   function cardLinkingTo(href: string): SfApiHighlightCard {
@@ -145,6 +145,6 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.background.image.href).toBe(
       'https://example.com/assets/images/join-mailing-list.webp',
     );
-    expect(highlightCardForHomepage.icon?.color).toBe('primary');
+    expect(highlightCardForHomepage.(icon && icon.color)).toBe('primary');
   });
 });

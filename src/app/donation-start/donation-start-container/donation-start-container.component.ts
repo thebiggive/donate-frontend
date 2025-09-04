@@ -95,7 +95,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   }
 
   updateReservationExpiryTime(): void {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+    if (!this.(donation && donation.createdTime) || !this.donation.matchReservedAmount) {
       this.reservationExpiryDate = undefined;
       return;
     }
@@ -135,7 +135,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   };
 
   get loggedInWithPassword(): boolean {
-    return !!this.donor?.has_password || false;
+    return !!this.(donor && donor.has_password) || false;
   }
 
   setDonation = (donation?: Donation) => {

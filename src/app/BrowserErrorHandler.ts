@@ -24,7 +24,7 @@ export class BrowserErrorHandler implements ErrorHandler {
       this.matomoTracker.trackEvent(
         'donate_error',
         'app',
-        error.name + ': ' + error.message + ', ' + +(error?.stack?.substring(0, 200) || 'no stack trace'),
+        error.name + ': ' + error.message + ', ' + +((error && error.stack && error.stack.substring)(0, 200) || 'no stack trace'),
       );
     }
   }

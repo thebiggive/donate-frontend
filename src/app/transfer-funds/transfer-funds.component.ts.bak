@@ -171,25 +171,22 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.marketingGroup = this.creditForm.get('marketing') as FormGroup;
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
-    const giftAidControl = this.giftAidGroup.get('giftAid');
-    if (giftAidControl) {
-      giftAidControl.valueChanges.subscribe((giftAidChecked) => {
-        if (giftAidChecked) {
-          this.isOptedIntoGiftAid = true;
-          this.giftAidGroup.controls['homePostcode']!.setValidators(
-            this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
-          );
-          this.giftAidGroup.controls['homeAddress']!.setValidators([Validators.required, Validators.maxLength(255)]);
-        } else {
-          this.isOptedIntoGiftAid = false;
-          this.giftAidGroup.controls['homePostcode']!.setValidators([]);
-          this.giftAidGroup.controls['homeAddress']!.setValidators([]);
-        }
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe((giftAidChecked) => {
+      if (giftAidChecked) {
+        this.isOptedIntoGiftAid = true;
+        this.giftAidGroup.controls['homePostcode']!.setValidators(
+          this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
+        );
+        this.giftAidGroup.controls['homeAddress']!.setValidators([Validators.required, Validators.maxLength(255)]);
+      } else {
+        this.isOptedIntoGiftAid = false;
+        this.giftAidGroup.controls['homePostcode']!.setValidators([]);
+        this.giftAidGroup.controls['homeAddress']!.setValidators([]);
+      }
 
-        this.giftAidGroup.controls['homePostcode']!.updateValueAndValidity();
-        this.giftAidGroup.controls['homeAddress']!.updateValueAndValidity();
-      });
-    }
+      this.giftAidGroup.controls['homePostcode']!.updateValueAndValidity();
+      this.giftAidGroup.controls['homeAddress']!.updateValueAndValidity();
+    });
 
     // get the tips campaign data on page load
     this.campaignService.getCharityCampaignById(environment.creditTipsCampaign).subscribe((campaign) => {
@@ -202,11 +199,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return;
     }
 
-    const homeAddressControl = this.giftAidGroup.get('homeAddress');
-    let observable = EMPTY;
-    
-    if (homeAddressControl) {
-      observable = homeAddressControl.valueChanges.pipe(
+    const observable =
+      this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
         startWith(''),
         // https://stackoverflow.com/a/51470735/2803757
         debounceTime(400),
@@ -223,8 +217,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           this.loadingAddressSuggestions = true;
           return this.addressService.getSuggestions(initialAddress);
         }),
-      );
-    }
+      ) || EMPTY;
 
     observable.subscribe((suggestions) => {
       this.loadingAddressSuggestions = false;
@@ -274,7 +267,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
       this.identityService
-        .getFundingInstructions(idAndJWT.id, idAndJWT.jwt)
+        .getFundingInstructions((idAndJWT && idAndJWT.id), idAndJWT.jwt)
         .subscribe((response: FundingInstruction) => {
           this.isLoading = false;
           this.isPurchaseComplete = true;
@@ -292,23 +285,13 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   onTipSelectorChanged(e: MatSelectChange) {
-    const amountsControl = this.creditForm.get('amounts');
-    if (!amountsControl) {
-      return;
-    }
-    
-    const customTipAmountControl = amountsControl.get('customTipAmount');
-    if (!customTipAmountControl) {
-      return;
-    }
-    
     if (e.value === 'Other') {
-      customTipAmountControl.addValidators(Validators.required);
+      this.creditForm.get('amounts')?.get('customTipAmount')?.addValidators(Validators.required);
     } else {
-      customTipAmountControl.removeValidators(Validators.required);
+      this.creditForm.get('amounts')?.get('customTipAmount')?.removeValidators(Validators.required);
     }
 
-    customTipAmountControl.updateValueAndValidity();
+    this.creditForm.get('amounts')?.get('customTipAmount')?.updateValueAndValidity();
   }
 
   giftAidAmount(): number {
@@ -333,11 +316,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   get totalToTransfer(): number {
-    const field = this.creditAmountField;
-    if (!field) {
-      return 0;
-    }
-    return parseFloat(field.value) + this.calculatedTipAmount();
+    return parseFloat(this.(creditAmountField && creditAmountField.value)) + this.calculatedTipAmount();
   }
 
   /**
@@ -404,15 +383,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
    * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
    */
   get pendingTipBalance(): number {
-    if (!this.donor) {
-      return 0;
-    }
-    
-    if (!this.donor.pending_tip_balance) {
-      return 0;
-    }
-    
-    return this.donor.pending_tip_balance['gbp'] || 0;
+    return this.(donor && donor.pending_tip_balance)?.['gbp'] || 0;
   }
 
   get donorHasPendingTipBalance(): boolean {
@@ -420,15 +391,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   get recentlyConfirmedTipsTotal(): number {
-    if (!this.donor) {
-      return 0;
-    }
-    
-    if (!this.donor.recently_confirmed_tips_total) {
-      return 0;
-    }
-    
-    return this.donor.recently_confirmed_tips_total['gbp'] || 0;
+    return this.(donor && donor.recently_confirmed_tips_total)?.['gbp'] || 0;
   }
 
   get donorHasRecentlyTipped(): boolean {

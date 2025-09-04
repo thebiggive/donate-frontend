@@ -34,7 +34,7 @@ export class ExactCurrencyPipe implements PipeTransform {
     // Start by always including 2 d.p., even if £*.00, which is `CurrencyPipe`'s
     // default behaviour.
     let formatted = new CurrencyPipe('en-GB', currencyCode).transform(value) ?? undefined;
-    if (formatted?.endsWith('.00')) {
+    if ((formatted && formatted.endsWith)('.00')) {
       formatted = formatted.slice(0, -3);
     }
 

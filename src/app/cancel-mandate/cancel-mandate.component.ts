@@ -70,7 +70,7 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     removeBodyClass(this.platformId, 'primary-colour');
-    this.mandateSubscription?.unsubscribe();
+    this.(mandateSubscription && mandateSubscription.unsubscribe)();
   }
 
   cancel(mandate: Mandate) {

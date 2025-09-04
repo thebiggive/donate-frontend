@@ -160,7 +160,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
    * what their balance is. Compare exactly to false to see if they have a zero balance.
    */
   protected get hasDonationFunds() {
-    const cashBalance = this.person?.cash_balance;
+    const cashBalance = this.(person && person.cash_balance);
 
     if (cashBalance === undefined) {
       return undefined;
@@ -176,11 +176,11 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   }
 
   protected get showNoFundsRemainingMessage(): boolean {
-    return this.donation?.pspMethodType === 'customer_balance' && this.hasDonationFunds === false;
+    return this.(donation && donation.pspMethodType) === 'customer_balance' && this.hasDonationFunds === false;
   }
 
   protected get cashBalanceInPounds(): number {
-    return (this.person?.cash_balance?.gbp || 0) / 100;
+    return (this.(person && person.cash_balance && person.cash_balance.gbp) || 0) / 100;
   }
 
   login() {
@@ -192,8 +192,8 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     }
 
     const credentials: Credentials = {
-      email_address: this.donation?.emailAddress as string,
-      raw_password: this.person?.raw_password as string,
+      email_address: this.(donation && donation.emailAddress) as string,
+      raw_password: this.(person && person.raw_password) as string,
       captcha_code: this.friendlyCaptchaSolution,
     };
 

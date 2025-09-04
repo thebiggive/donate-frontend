@@ -45,14 +45,14 @@ export function errorDescription(error: BackendError | unknown): string {
   }
 
   // @ts-expect-error ' Property error does not exist on type object'
-  const errorDetail = error?.error.error;
+  const errorDetail = error && error.error ? error.error.error : undefined;
 
   return (
-    errorDetail.description ||
-    errorDetail.publicMessage ||
-    errorDetail.message ||
+    (errorDetail && errorDetail.description) ||
+    (errorDetail && errorDetail.publicMessage) ||
+    (errorDetail && errorDetail.message) ||
     // @ts-expect-error 'Property message does not exist on type object'
-    error?.message ||
+    (error && error.message) ||
     'Sorry, something went wrong'
   );
 }

@@ -19,7 +19,7 @@
 
   @if (metaCampaign && !!metaCampaign.bannerLayout) {
     <biggive-heading-banner
-      [logo]="fund?.logoUri ? { url: fund?.logoUri!, alt: fund?.name } : undefined"
+      [logo]="fund && fund.logoUri ? { url: fund && fund.logoUri!, alt: fund && fund.name } : undefined"
       [mainTitle]="title"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
       [mainImageUrl]="metaCampaign.bannerUri"
@@ -37,8 +37,8 @@
     </biggive-heading-banner>
   } @else if (metaCampaign) {
     <biggive-hero-image
-      [logo]="fund?.logoUri"
-      [logoAltText]="fund?.name"
+      [logo]="fund && fund.logoUri"
+      [logoAltText]="fund && fund.name"
       [mainTitle]="title"
       [mainImage]="metaCampaign.bannerUri | optimisedImage: 2000 | async"
       [mainImageShape]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'rectangle' : 'triangle'"

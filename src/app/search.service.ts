@@ -134,7 +134,7 @@ export class SearchService {
   getQueryParams(defaultSort = ''): { [key: string]: string } {
     const defaults: { [key: string]: string } = SearchService.selectedDefaults(defaultSort);
     const queryParams: { [key: string]: string } = {};
-    const length = this.selected.term?.length || 0;
+    const length = this.selected.(term && term.length) || 0;
 
     for (const key in this.selected) {
       // Non-default selections should go to the page's query params. The "global default" sort

@@ -44,9 +44,9 @@ export class CookiePreferenceService {
 
     this.cookiePreferences$ = new BehaviorSubject(cookiePreferences);
     if (
-      cookiePreferences?.agreedToAll ||
-      cookiePreferences?.agreedToCookieTypes.analyticsAndTesting ||
-      cookiePreferences?.agreedToCookieTypes.thirdParty
+      (cookiePreferences && cookiePreferences.agreedToAll) ||
+      (cookiePreferences && cookiePreferences.agreedToCookieTypes).analyticsAndTesting ||
+      (cookiePreferences && cookiePreferences.agreedToCookieTypes).thirdParty
     ) {
       this.optInToAnalyticsAndTesting$ = new BehaviorSubject(cookiePreferences);
     } else {

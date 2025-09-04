@@ -226,7 +226,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       .createCustomerSessionForRegularGiving({ campaign: this.campaign })
       .then((session) => {
         this.stripeCustomerSession = session;
-        if (!this.stripeElements && this.stepper.selected && this.stepper.selected.label === this.labelYourPaymentInformation) {
+        if (!this.stripeElements && this.stepper.(selected && selected.label) === this.labelYourPaymentInformation) {
           this.prepareStripeElements();
         }
       })
@@ -567,7 +567,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    if (this.giftAid && this.homePostcode && this.homePostcode.trim() && !(this.billingPostCode && this.billingPostCode.trim())) {
+    if (this.giftAid && this.(homePostcode && homePostcode.trim)() && !this.(billingPostCode && billingPostCode.trim)()) {
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
@@ -629,7 +629,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toast.showError(this.amountErrorMessage!);
       }
 
-      if (this.mandateForm.controls.aged18OrOver.errors && this.mandateForm.controls.aged18OrOver.errors.required) {
+      if (this.mandateForm.controls.aged18OrOver.(errors && errors.required)) {
         errorFound = true;
         this.ageErrorMessage = 'Please tick the box to confirm if you are at least 18 years old to proceed.';
         this.toast.showError(this.ageErrorMessage);
@@ -717,7 +717,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
     }
 
-    if (this.giftAid && !this.homeOutsideUK && this.homePostcode && !this.homePostcode.match(postcodeRegExp)) {
+    if (this.giftAid && !this.homeOutsideUK && !this.(homePostcode && homePostcode.match)(postcodeRegExp)) {
       errors.push('Please enter a UK postcode');
     }
 

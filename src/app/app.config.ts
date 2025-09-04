@@ -44,7 +44,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()), // For route resolvers etc.
     provideMatomo(
       {
-        siteId: environment.matomoSiteId?.toString() || '',
+        siteId: (environment.matomoSiteId && environment.matomoSiteId.toString()) || '',
         trackerUrl: 'https://biggive.matomo.cloud',
         mode: 'auto',
         requireConsent: 'cookie',

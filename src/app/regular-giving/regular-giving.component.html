@@ -34,7 +34,7 @@
       size="medium"
       url="/my-account/regular-giving/{{ preExistingActiveMandate[0].id }}"
     />
-  } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
+  } @else if (campaignOpenOnLoad && preExistingActiveMandate && preExistingActiveMandate.length === 0) {
     <div class="c-form-container">
       <biggive-page-section>
         <form

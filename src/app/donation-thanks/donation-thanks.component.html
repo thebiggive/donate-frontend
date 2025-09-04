@@ -111,8 +111,8 @@
               to {{ donation.charityName }}!
             </p>
             <br />
-            @if (campaign?.thankYouMessage) {
-              <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
+            @if (campaign && campaign.thankYouMessage) {
+              <p id="charity-thank-you">{{ campaign && campaign.thankYouMessage }}</p>
             }
           </div>
           @if (donationIsLarge) {
@@ -215,7 +215,7 @@
                 wide="true"
               ></biggive-social-icon>
             </div>
-            <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
+            <a [routerLink]="'/campaign/' + campaign && campaign.id">Back to campaign page</a>
           </div>
         </div>
       }

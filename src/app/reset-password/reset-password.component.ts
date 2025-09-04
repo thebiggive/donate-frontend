@@ -75,7 +75,7 @@ export class ResetPasswordComponent implements OnInit {
       error: (error) => {
         this.savingNewPassword = false;
         this.saveSuccessful = false;
-        this.errorMessageHtml = error.error?.error?.description;
+        this.errorMessageHtml = error.(error && error.error && error.error.description);
       },
     });
   };

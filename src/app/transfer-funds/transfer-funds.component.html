@@ -6,7 +6,7 @@
       <div class="existing-balance-info">
         <p>
           Existing available balance:
-          <strong>{{ (donor?.cash_balance?.["gbp"] || 0) / 100 | exactCurrency: "GBP" }}</strong>
+          <strong>{{ (donor && donor.cash_balance?.["gbp"] || 0) / 100 | exactCurrency: "GBP" }}</strong>
         </p>
         <p>
           Ready to donate to charities? <a routerLink="/explore">Explore campaigns</a> &ndash; your Funds will be used
@@ -32,9 +32,9 @@
               <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required />
             </mat-form-field>
             @if (
-              creditAmountField?.errors &&
-              creditAmountField?.invalid &&
-              (creditAmountField?.dirty || creditAmountField?.touched)
+              creditAmountField && creditAmountField.errors &&
+              creditAmountField && creditAmountField.invalid &&
+              (creditAmountField && creditAmountField.dirty || creditAmountField && creditAmountField.touched)
             ) {
               <p class="error">
                 Please enter a whole number of pounds between {{ minimumCreditAmount | exactCurrency: currency }} and
@@ -90,9 +90,9 @@
                       <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount" />
                     </mat-form-field>
                     @if (
-                      customTipAmountField?.errors &&
-                      customTipAmountField?.invalid &&
-                      (customTipAmountField?.dirty || customTipAmountField?.touched)
+                      customTipAmountField && customTipAmountField.errors &&
+                      customTipAmountField && customTipAmountField.invalid &&
+                      (customTipAmountField && customTipAmountField.dirty || customTipAmountField && customTipAmountField.touched)
                     ) {
                       <p class="error">
                         Donation Funds tips can range from {{ 0 | exactCurrency: currency }} and
@@ -107,12 +107,12 @@
                 amount entered is out of range, or invalid, or if the user clicks on 'Other' for the tip amount but has not yet
                 specified how much the custom tip will be (i.e. blank custom tip), or has specified an invalid custom tip amount. -->
                 @if (
-                  creditAmountField?.value &&
-                  !creditAmountField?.errors &&
-                  !creditAmountField?.invalid &&
-                  !(customTip() && !customTipAmountField?.value) &&
-                  !customTipAmountField?.errors &&
-                  !customTipAmountField?.invalid
+                  creditAmountField && creditAmountField.value &&
+                  !creditAmountField && creditAmountField.errors &&
+                  !creditAmountField && creditAmountField.invalid &&
+                  !(customTip() && !customTipAmountField && customTipAmountField.value) &&
+                  !customTipAmountField && customTipAmountField.errors &&
+                  !customTipAmountField && customTipAmountField.invalid
                 ) {
                   <p>
                     <strong>{{ calculatedTipAmount() | exactCurrency: currency }}</strong> donation (tip) to support Big

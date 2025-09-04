@@ -163,7 +163,7 @@
 
       <div class="c-tabs">
         <mat-tab-group class="c-tab-group" animationDuration="0ms" [color]="'primary'">
-          @if (campaign.problem?.trim() || campaign.solution?.trim()) {
+          @if (campaign.problem && campaign.problem.trim() || campaign.solution && campaign.solution.trim()) {
             <mat-tab label="Campaign overview">
               <div class="c-details">
                 <biggive-heading
@@ -301,7 +301,7 @@
             </mat-tab>
           }
 
-          @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim()) {
+          @if (campaign.impactReporting && campaign.impactReporting.trim() || campaign.impactSummary && campaign.impactSummary.trim()) {
             <mat-tab label="Impact &amp; reporting">
               <div class="c-impact">
                 <biggive-heading

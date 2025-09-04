@@ -137,7 +137,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
    * We only check for GBP balances for now, as we only support UK bank transfers rn
    */
   protected get hasDonationFunds() {
-    return this.person.cash_balance?.gbp;
+    return this.person.(cash_balance && cash_balance.gbp);
   }
 
   private jwtAsString() {

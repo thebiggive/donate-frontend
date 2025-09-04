@@ -299,7 +299,7 @@ export class DonationStartFormComponent
     this.tipControlStyle = 'dropdown';
 
     if (!environment.production) {
-      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
+      this.manuallySelectedABTestVariant = (queryParams && queryParams.selectABTestVariant);
     }
 
     if (this.manuallySelectedABTestVariant == 'B') {
@@ -453,7 +453,7 @@ export class DonationStartFormComponent
     }
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
-      this.tipValue = sanitiseCurrency(tipAmount?.trim());
+      this.tipValue = sanitiseCurrency((tipAmount && tipAmount.trim)());
 
       if (this.tipValue && this.tipValue > 0 && this.giftAidCheckedForZeroTip) {
         // The gifit aid wording for a zero tip doesn't cover GA for the tip, so we reset the form control now and
@@ -611,14 +611,14 @@ export class DonationStartFormComponent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
         if (
           (clickEvent.target as HTMLElement).innerText.includes('Your details') &&
-          this.stepper.selected?.label === 'Gift Aid'
+          this.stepper.(selected && selected.label) === 'Gift Aid'
         ) {
           this.triedToLeaveGiftAid = true;
         }
 
         if (
           (clickEvent.target as HTMLElement).innerText.includes('Confirm') &&
-          this.stepper.selected?.label === 'Your details'
+          this.stepper.(selected && selected.label) === 'Your details'
         ) {
           this.triedToLeaveMarketing = true;
         }
@@ -698,7 +698,7 @@ export class DonationStartFormComponent
         this.matomoTracker.trackEvent(
           'donate',
           'cancel_auto',
-          `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
+          `Donation cancelled because amount was updated ${this.(donation && donation.donationId)} to campaign ${this.campaignId}`,
         );
 
         if (this.donation) {
@@ -940,9 +940,9 @@ export class DonationStartFormComponent
       this.stripeResponseErrorCode = undefined;
     }
 
-    const isCard = state.value?.type === 'card';
-    const selectedSavedPaymentMethod = state.value?.payment_method;
-    this.showCardReuseMessage = isCard && !selectedSavedPaymentMethod && !this.donor?.has_password;
+    const isCard = state.(value && value.type) === 'card';
+    const selectedSavedPaymentMethod = state.(value && value.payment_method);
+    this.showCardReuseMessage = isCard && !selectedSavedPaymentMethod && !this.(donor && donor.has_password);
 
     this.isSavedPaymentMethodSelected = !!selectedSavedPaymentMethod;
     if (selectedSavedPaymentMethod) {
@@ -962,10 +962,10 @@ export class DonationStartFormComponent
       return;
     }
 
-    if (state.value?.type) {
+    if (state.(value && value.type)) {
       let newType: PaymentMethodType;
 
-      switch (state.value?.type) {
+      switch (state.(value && value.type)) {
         case 'card':
         case 'apple_pay':
         case 'google_pay':
@@ -1022,7 +1022,7 @@ export class DonationStartFormComponent
       this.matomoTracker.trackEvent(
         'donate_error',
         'stripe_pay_missing_secret',
-        `Donation ID: ${this.donation?.donationId}`,
+        `Donation ID: ${this.(donation && donation.donationId)}`,
       );
       return;
     }
@@ -1040,7 +1040,7 @@ export class DonationStartFormComponent
         },
         error: (response: HttpErrorResponse) => {
           // I think this is the path to a detailed message in MatchBot `ActionError`s.
-          const errorMsg = response.error?.error?.description;
+          const errorMsg = response.(error && error.error && error.error.description);
 
           this.matomoTracker.trackEvent(
             'donate_error',
@@ -1083,15 +1083,15 @@ export class DonationStartFormComponent
         this.matomoTracker.trackEvent(
           'donate_error',
           'stripe_confirm_failed',
-          (httpError as HttpErrorResponse).error?.error?.code,
+          (httpError as HttpErrorResponse).(error && error.error && error.error.code),
         );
 
-        this.handleStripeError((httpError as HttpErrorResponse).error?.error, 'confirm');
+        this.handleStripeError((httpError as HttpErrorResponse).(error && error.error), 'confirm');
 
         return;
       }
 
-      if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
+      if ((result && result.paymentIntent) && result.paymentIntent.status === 'requires_action') {
         if (!result.paymentIntent.client_secret) {
           throw new Error('payment intent requires action but client secret missing');
         }
@@ -1114,7 +1114,7 @@ export class DonationStartFormComponent
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
-      result = { error: confirmationTokenResult?.error };
+      result = { error: (confirmationTokenResult && confirmationTokenResult.error) };
     }
 
     if (!result || result.error) {
@@ -1180,7 +1180,7 @@ export class DonationStartFormComponent
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return sanitiseCurrency(this.amountsGroup.value.donationAmount?.trim());
+    return sanitiseCurrency(this.amountsGroup.value.(donationAmount && donationAmount.trim)());
   }
 
   /**
@@ -1286,7 +1286,7 @@ export class DonationStartFormComponent
     // click, probably because that method needs a refreshed DOM to detect if custom
     // error elements are still present. So the safest fix for now is to skip it
     // when we know we have only just hidden the error in this call.
-    if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
+    if (this.donationCreateError && this.stepper.(selected && selected.label) === this.yourDonationStepLabel) {
       if (this.donation) {
         this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
         this.matomoTracker.trackEvent(
@@ -1362,23 +1362,23 @@ export class DonationStartFormComponent
     const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
     const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
 
-    const homeAddressErrors = this.giftAidGroup?.controls?.homeAddress?.errors;
-    if (homeAddressErrors?.required) {
+    const homeAddressErrors = this.(giftAidGroup && giftAidGroup.controls)?.(homeAddress && homeAddress.errors);
+    if ((homeAddressErrors && homeAddressErrors.required)) {
       errorMessages.push('Please enter your home address');
     }
 
-    if (homeAddressErrors?.maxlength) {
+    if ((homeAddressErrors && homeAddressErrors.maxlength)) {
       errorMessages.push(
         `Please enter your address in ${homeAddressErrors.maxlength.requiredLength} characters or less`,
       );
     }
 
-    const homePostcodeErrors = this.giftAidGroup?.controls?.homePostcode?.errors;
-    if (homePostcodeErrors?.required) {
+    const homePostcodeErrors = this.(giftAidGroup && giftAidGroup.controls)?.(homePostcode && homePostcode.errors);
+    if ((homePostcodeErrors && homePostcodeErrors.required)) {
       errorMessages.push('Please enter your home postcode');
     }
 
-    if (homePostcodeErrors?.pattern) {
+    if ((homePostcodeErrors && homePostcodeErrors.pattern)) {
       errorMessages.push('Please enter a UK postcode');
     }
 
@@ -1430,18 +1430,18 @@ export class DonationStartFormComponent
    * we should show both at once if necassary. But one at a time may do for this weekend.
    */
   public displayableAmountsStepErrors = () => {
-    const donationAmountErrors = this.donationAmountField?.errors;
-    const tipErrors = this.tipAmountField?.errors;
+    const donationAmountErrors = this.(donationAmountField && donationAmountField.errors);
+    const tipErrors = this.(tipAmountField && tipAmountField.errors);
 
     if (!donationAmountErrors && !tipErrors) {
       return '';
     }
 
-    if (donationAmountErrors?.min) {
+    if ((donationAmountErrors && donationAmountErrors.min)) {
       return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
     }
 
-    if (donationAmountErrors?.max) {
+    if ((donationAmountErrors && donationAmountErrors.max)) {
       return (
         `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.` +
         (this.creditPenceToUse === 0
@@ -1451,20 +1451,20 @@ export class DonationStartFormComponent
       );
     }
 
-    if (donationAmountErrors?.pattern) {
+    if ((donationAmountErrors && donationAmountErrors.pattern)) {
       return `Please enter a whole number of ${this.currencySymbol} without commas.`;
     }
 
-    if (donationAmountErrors?.required) {
+    if ((donationAmountErrors && donationAmountErrors.required)) {
       return 'Please enter how much you would like to donate.';
     }
 
     // todo - refactor tip messages below to remove duplication.
-    if (tipErrors?.pattern) {
+    if ((tipErrors && tipErrors.pattern)) {
       return 'Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000.';
     }
 
-    if (tipErrors?.required) {
+    if ((tipErrors && tipErrors.required)) {
       return 'Please enter how much you would like to donate to Big Give.';
     }
 
@@ -1590,8 +1590,8 @@ export class DonationStartFormComponent
   private updateFormWithBillingDetails(paymentMethod: PaymentMethod) {
     const billingDetails = paymentMethod.billing_details;
     this.paymentGroup.patchValue({
-      billingCountry: billingDetails.address?.country,
-      billingPostcode: billingDetails.address?.postal_code,
+      billingCountry: billingDetails.(address && address.country),
+      billingPostcode: billingDetails.(address && address.postal_code),
     });
 
     this.stripePaymentMethodReady = true;
@@ -1604,7 +1604,7 @@ export class DonationStartFormComponent
     this.submitting = false;
     this.stripeError = getStripeFriendlyError(error, context);
     this.toast.showError(this.stripeError);
-    this.stripeResponseErrorCode = error?.code;
+    this.stripeResponseErrorCode = (error && error.code);
 
     this.jumpToStep('Payment details');
     this.goToFirstVisibleError();
@@ -1720,7 +1720,7 @@ export class DonationStartFormComponent
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      countryCode: this.paymentGroup?.value.billingCountry || 'GB',
+      countryCode: this.(paymentGroup && paymentGroup.value).billingCountry || 'GB',
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.donationAmount,
       donationMatched: this.campaign.isMatched,
@@ -1729,15 +1729,15 @@ export class DonationStartFormComponent
       pspMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
+      tipAmount: sanitiseCurrency(this.amountsGroup.value.(tipAmount && tipAmount.trim)()),
     };
 
-    if (this.donor?.id) {
+    if (this.(donor && donor.id)) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
     // Person already set up on page load.
-    if (this.donor?.id) {
+    if (this.(donor && donor.id)) {
       this.createDonation(donation);
     } else {
       const person = {
@@ -1759,7 +1759,7 @@ export class DonationStartFormComponent
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
-          this.friendlyCaptchaWidget?.reset();
+          this.(friendlyCaptchaWidget && friendlyCaptchaWidget.reset)();
           this.showDonationCreateError();
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         },
@@ -1795,7 +1795,7 @@ export class DonationStartFormComponent
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT()).subscribe({
+    this.donationService.create(donation, this.(donor && donor.id), this.identityService.getJWT()).subscribe({
       next: this.newDonationSuccess.bind(this),
       error: this.newDonationError.bind(this),
     });
@@ -2159,7 +2159,7 @@ export class DonationStartFormComponent
     // Initial and post-auth validation of Gift Aid should depend upon the previous value
     // of the opt-in and 'outside UK' checkboxes. If there's no value yet, initial validators
     // should use `false`.
-    this.setGiftAidValidatorsForChoice(this.giftAidGroup.value?.giftAid ?? false);
+    this.setGiftAidValidatorsForChoice(this.giftAidGroup.(value && value.giftAid) ?? false);
 
     this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe((homeOutsideUK) => {
       this.setGiftAidValidatorsForChoice(this.giftAidGroup.value.giftAid, homeOutsideUK);
@@ -2360,7 +2360,7 @@ export class DonationStartFormComponent
         // see DON-909.
         this.amountsGroup.get('tipAmount')?.setValue(patchForValue.tipAmount);
 
-        if (this.stepper.selected?.label === this.yourDonationStepLabel) {
+        if (this.stepper.(selected && selected.label) === this.yourDonationStepLabel) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
         }
 
@@ -2392,10 +2392,10 @@ export class DonationStartFormComponent
               billingCountry: this.defaultCountryCode,
             });
           }
-          if (this.donor?.id) {
+          if (this.(donor && donor.id)) {
             const jwt = this.identityService.getJWT() as string;
-            this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
-              if (!this.donor?.id) {
+            this.identityService.get(this.(donor && donor.id), jwt).subscribe((person: Person) => {
+              if (!this.(donor && donor.id)) {
                 throw new Error('Person identifier went away');
               }
               this.loadPerson(person, jwt);

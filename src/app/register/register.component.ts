@@ -133,8 +133,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorHtml = this.error = undefined;
 
     if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
-      const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
-      const passwordErrors = this.registrationForm.controls?.password?.errors;
+      const emailErrors = this.registrationForm.(controls && controls.emailAddress && controls.emailAddress.errors);
+      const passwordErrors = this.registrationForm.(controls && controls.password && controls.password.errors);
 
       switch (true) {
         case emailErrors?.['required'] && passwordErrors?.['required']:
@@ -190,8 +190,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: async (error) => {
           this.extractErrorMessage(error);
-          this.friendlyCaptchaWidget?.reset();
-          await this.friendlyCaptchaWidget?.start();
+          this.(friendlyCaptchaWidget && friendlyCaptchaWidget.reset)();
+          await this.(friendlyCaptchaWidget && friendlyCaptchaWidget.start)();
           this.processing = false;
         },
       });
@@ -203,7 +203,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
+    const emailErrors = this.registrationForm.(controls && controls.emailAddress && controls.emailAddress.errors);
     if (emailErrors) {
       // only concerned with email address errors as we are not using other parts of the form for this action.
       if (emailErrors?.['required']) {
@@ -226,8 +226,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch (error: any) {
       this.extractErrorMessage(error);
     } finally {
-      this.friendlyCaptchaWidget?.reset();
-      await this.friendlyCaptchaWidget?.start();
+      this.(friendlyCaptchaWidget && friendlyCaptchaWidget.reset)();
+      await this.(friendlyCaptchaWidget && friendlyCaptchaWidget.start)();
       this.processing = false;
     }
   }
@@ -279,7 +279,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get readyToTakeAccountDetails(): boolean {
-    return !!this.verificationCodeSupplied || !!this.emailVerificationToken?.valid;
+    return !!this.verificationCodeSupplied || !!this.(emailVerificationToken && emailVerificationToken.valid);
   }
 
   async registerPostDonation() {
@@ -288,7 +288,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     const password = this.registerPostDonationForm.value.password;
 
     const passwordErrors = this.registerPostDonationForm.controls.password.errors;
-    if (passwordErrors?.required) {
+    if ((passwordErrors && passwordErrors.required)) {
       this.error = 'Password is required';
       this.processing = false;
       return;

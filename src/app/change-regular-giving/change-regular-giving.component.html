@@ -19,19 +19,19 @@
             <div class="cardBrand">
               {{
                 (
-                  paymentMethods.regularGivingPaymentMethod?.card?.brand ||
-                  paymentMethods.regularGivingPaymentMethod?.type
+                  paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card?.brand ||
+                  paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.type
                 )?.toUpperCase()
               }}
             </div>
-            @if (paymentMethods.regularGivingPaymentMethod?.card !== undefined) {
-              <div>Card Ending: {{ paymentMethods.regularGivingPaymentMethod?.card?.last4 }}</div>
+            @if (paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card !== undefined) {
+              <div>Card Ending: {{ paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card && paymentMethods.regularGivingPaymentMethod.card.last4 }}</div>
             }
-            @if (paymentMethods.regularGivingPaymentMethod?.card) {
+            @if (paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card) {
               <div class="cardExpiry">
                 Expiry Date:
-                {{ paymentMethods.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }} /{{
-                  paymentMethods.regularGivingPaymentMethod?.card?.exp_year
+                {{ paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card && paymentMethods.regularGivingPaymentMethod.card.exp_month?.toString()?.padStart(2, "0") }} /{{
+                  paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card?.exp_year
                 }}
               </div>
             }
@@ -67,7 +67,7 @@
                 id="billingPostcode"
                 matInput
                 formControlName="billingPostcode"
-                [value]="this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.postal_code || ''"
+                [value]="this.paymentMethods.regularGivingPaymentMethod && this.paymentMethods.regularGivingPaymentMethod.billing_details && this.paymentMethods.regularGivingPaymentMethod.billing_details.address?.postal_code || ''"
                 autocapitalize="characters"
                 autocomplete="postal-code"
               />

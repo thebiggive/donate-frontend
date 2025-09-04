@@ -29,9 +29,9 @@
           </biggive-text-input>
         </div>
         @if (
-          donationAmountField?.invalid &&
-          donationAmountField?.errors &&
-          (donationAmountField?.dirty || donationAmountField?.touched)
+          donationAmountField && donationAmountField.invalid &&
+          donationAmountField && donationAmountField.errors &&
+          (donationAmountField && donationAmountField.dirty || donationAmountField && donationAmountField.touched)
         ) {
           <div class="error" aria-live="polite">
             {{ displayableAmountsStepErrors() }}
@@ -105,9 +105,9 @@
                   </biggive-text-input>
                 </div>
                 @if (
-                  tipAmountField?.invalid &&
-                  tipAmountField?.errors &&
-                  (tipAmountField?.dirty || tipAmountField?.touched)
+                  tipAmountField && tipAmountField.invalid &&
+                  tipAmountField && tipAmountField.errors &&
+                  (tipAmountField && tipAmountField.dirty || tipAmountField && tipAmountField.touched)
                 ) {
                   <div class="error" aria-live="polite">
                     Please enter how much you would like to donate to Big Give as a number of
@@ -118,9 +118,9 @@
                 <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
                 @if (!customTip() && donationAmount && donationAmount > 0) {
                   <mat-hint>
-                    @if (tipAmountField?.valid && zeroTipTextABTestVariant === "B" && tipValue === 0) {
+                    @if (tipAmountField && tipAmountField.valid && zeroTipTextABTestVariant === "B" && tipValue === 0) {
                       Even £1 makes a big difference to Big Give
-                    } @else if (tipAmountField?.valid) {
+                    } @else if (tipAmountField && tipAmountField.valid) {
                       <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
                     }
                   </mat-hint>
@@ -285,7 +285,7 @@
                     ></mat-spinner>
                   }
                 </mat-hint>
-                @if (giftAidGroup.get("homeAddress")?.errors?.maxlength) {
+                @if (giftAidGroup.get("homeAddress")?.errors && .errors.maxlength) {
                   <div class="error">Maximum 255 characters exceeded</div>
                 }
               </div>
@@ -337,7 +337,7 @@
               <label slot="label" for="firstName">First Name *</label>
               <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
             </biggive-text-input>
-            @if (paymentGroup.get("firstName")?.errors?.maxlength) {
+            @if (paymentGroup.get("firstName")?.errors && .errors.maxlength) {
               <div class="error">Maximum 40 characters exceeded</div>
             }
           </div>
@@ -352,7 +352,7 @@
             @if (!giftAidGroup.value.giftAid) {
               <mat-hint>For smooth payment and identifying you if you have questions.</mat-hint>
             }
-            @if (paymentGroup.get("lastName")?.errors?.maxlength) {
+            @if (paymentGroup.get("lastName")?.errors && .errors.maxlength) {
               <div class="error">Maximum 80 characters exceeded</div>
             }
           </div>

@@ -118,7 +118,7 @@ export class PaymentReadinessTracker {
   }
 
   onStripeCardChange(state: { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } }) {
-    this.paymentElementIsComplete = state.complete || state.value?.type === 'pay_by_bank';
+    this.paymentElementIsComplete = state.complete || state.(value && value.type) === 'pay_by_bank';
   }
 
   donationFundsPrepared(fundPenceToUse: number) {

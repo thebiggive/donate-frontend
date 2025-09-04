@@ -126,6 +126,6 @@ export class AddressService {
       return suggestion;
     }
 
-    return suggestion?.address || '';
+    return (suggestion && suggestion.address) || '';
   }
 }

@@ -68,7 +68,7 @@ export class ChangeRegularGivingComponent implements OnInit {
   async ngOnInit() {
     await this.stripeService.init().catch(console.error);
     this.selectedCountryCode =
-      (this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.country as countryISO2) || undefined;
+      (this.paymentMethods.(regularGivingPaymentMethod && regularGivingPaymentMethod.billing_details)?.(address && address.country) as countryISO2) || undefined;
 
     const clientSecret = this.setupIntent.client_secret;
     if (!clientSecret) {
@@ -77,7 +77,7 @@ export class ChangeRegularGivingComponent implements OnInit {
 
     [this.stripeElements, this.stripePaymentElement] =
       this.stripeService.stripeElementsForRegularGivingPaymentMethod(clientSecret);
-    this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
+    this.stripePaymentElement.mount(this.(cardInfo && cardInfo.nativeElement));
   }
 
   protected setSelectedCountry(country: countryISO2) {
@@ -125,25 +125,25 @@ export class ChangeRegularGivingComponent implements OnInit {
       });
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
-      this.errorMessage = error?.message || 'Unexpected error';
+      this.errorMessage = (error && error.message) || 'Unexpected error';
       this.toaster.showError(this.errorMessage!);
       console.error(error);
       return;
     }
 
-    if (result.setupIntent?.next_action) {
+    if (result.(setupIntent && setupIntent.next_action)) {
       result = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
     }
 
     // `result` is either from the original attempt or from the next action, if applicable
-    if (result.setupIntent?.status !== 'succeeded') {
-      const errorMessage = 'Payment method setup failed: ' + result?.error?.message;
+    if (result.(setupIntent && setupIntent.status) !== 'succeeded') {
+      const errorMessage = 'Payment method setup failed: ' + (result && result.error && result.error.message);
       this.errorMessage = errorMessage;
       this.toaster.showError(errorMessage);
       return;
     }
 
-    const newPaymentMethodId = result.setupIntent?.payment_method;
+    const newPaymentMethodId = result.(setupIntent && setupIntent.payment_method);
     if (typeof newPaymentMethodId !== 'string') {
       throw new Error('expected payment method id to be string');
     }

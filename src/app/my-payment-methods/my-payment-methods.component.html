@@ -21,7 +21,7 @@
       <div>
         @if (hasDonationFunds) {
           <p>
-            Available balance: <strong>{{ (person.cash_balance?.gbp || 0) / 100 | exactCurrency: "GBP" }}</strong>
+            Available balance: <strong>{{ (person.cash_balance && person.cash_balance.gbp || 0) / 100 | exactCurrency: "GBP" }}</strong>
           </p>
         } @else {
           <p>No donation funds</p>
@@ -46,7 +46,7 @@
           @for (method of paymentMethods!.adHocMethods; track method.id) {
             <tr>
               <td class="cardBrand">
-                <div class="cardBrand">{{ (method.card?.brand || method.type).toUpperCase() }}</div>
+                <div class="cardBrand">{{ (method.card && method.card.brand || method.type).toUpperCase() }}</div>
                 @if (method.card !== undefined) {
                   <div>Card Ending: {{ method.card.last4 }}</div>
                 }
@@ -81,7 +81,7 @@
       @if (paymentMethods !== undefined && paymentMethods.adHocMethods.length === 0) {
         <div>No saved cards</div>
       }
-      @if (paymentMethods?.regularGivingPaymentMethod) {
+      @if (paymentMethods && paymentMethods.regularGivingPaymentMethod) {
         <h3>Regular Giving payment method</h3>
         <p>
           This payment method will be used to automatically collect donations in relation to your
@@ -94,29 +94,29 @@
               <div class="cardBrand">
                 {{
                   (
-                    paymentMethods?.regularGivingPaymentMethod?.card?.brand ||
-                    paymentMethods?.regularGivingPaymentMethod?.type
+                    paymentMethods && paymentMethods.regularGivingPaymentMethod?.card && .card.brand ||
+                    paymentMethods && paymentMethods.regularGivingPaymentMethod?.type
                   )?.toUpperCase()
                 }}
               </div>
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
-                <div>Card Ending: {{ paymentMethods?.regularGivingPaymentMethod?.card?.last4 }}</div>
+              @if (paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card !== undefined) {
+                <div>Card Ending: {{ paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card?.last4 }}</div>
               }
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              @if (paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card !== undefined) {
                 <div class="cardExpiry">
                   Expiry Date:
-                  {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{
-                    paymentMethods?.regularGivingPaymentMethod?.card?.exp_year
+                  {{ paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card?.exp_month && .exp_month.toString()?.padStart(2, "0") }}/{{
+                    paymentMethods && paymentMethods.regularGivingPaymentMethod?.card && .card.exp_year
                   }}
                 </div>
               }
             </td>
             <td class="cardExpiry">
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              @if (paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card !== undefined) {
                 <div>
                   Expiry Date:
-                  {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{
-                    paymentMethods?.regularGivingPaymentMethod?.card?.exp_year
+                  {{ paymentMethods && paymentMethods.regularGivingPaymentMethod && paymentMethods.regularGivingPaymentMethod.card?.exp_month && .exp_month.toString()?.padStart(2, "0") }}/{{
+                    paymentMethods && paymentMethods.regularGivingPaymentMethod?.card && .card.exp_year
                   }}
                 </div>
               }

@@ -172,10 +172,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       clearTimeout(this.tickerUpdateTimer);
     }
 
-    this.routeParamSubscription?.unsubscribe();
-    this.searchServiceSubscription?.unsubscribe();
-    this.queryParamsSubscription?.unsubscribe();
-    this.routeChangeListener?.unsubscribe();
+    this.(routeParamSubscription && routeParamSubscription.unsubscribe)();
+    this.(searchServiceSubscription && searchServiceSubscription.unsubscribe)();
+    this.(queryParamsSubscription && queryParamsSubscription.unsubscribe)();
+    this.(routeChangeListener && routeChangeListener.unsubscribe)();
   }
 
   protected get title() {
@@ -184,7 +184,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     if (!this.fund) {
-      return this.metaCampaign?.title;
+      return this.(metaCampaign && metaCampaign.title);
     }
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
@@ -297,7 +297,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
         // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
         // whenever the search filters change substantively.
-        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+        setTimeout(() => (positionMarker && positionMarker.scrollIntoView)({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
   }
@@ -386,7 +386,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   getPercentageRaised(childCampaign: CampaignSummary) {
     // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
     // childCampaign.parentUsesSharedFunds set when appropriate.
-    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
+    if (childCampaign.parentUsesSharedFunds || this.(metaCampaign && metaCampaign.usesSharedFunds)) {
       // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
       return null;
     }

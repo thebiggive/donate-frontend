@@ -47,8 +47,8 @@ export class UpdateCardModalComponent implements OnInit {
 
   setPaymentMethod(card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
     this.card = card;
-    this.countryCode = billingDetails.address?.country || undefined;
-    this.postalCode = billingDetails.address?.postal_code || undefined;
+    this.countryCode = billingDetails.(address && address.country) || undefined;
+    this.postalCode = billingDetails.(address && address.postal_code) || undefined;
 
     this.formattedCardExpiry = card.exp_month.toString().padStart(2, '0') + '/' + (card.exp_year % 100).toString();
   }

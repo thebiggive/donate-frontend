@@ -381,8 +381,8 @@ export class DonationService {
     return this.http.post<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>(
       `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
       {
-        stripeConfirmationTokenId: confirmationToken?.id,
-        stripeConfirmationTokenFutureUsage: confirmationToken?.setup_future_usage,
+        stripeConfirmationTokenId: (confirmationToken && confirmationToken.id),
+        stripeConfirmationTokenFutureUsage: (confirmationToken && confirmationToken.setup_future_usage),
       },
       this.getAuthHttpOptions(donation),
     );
@@ -440,7 +440,7 @@ export class DonationService {
     return firstValueFrom(
       this.http.post(
         `${environment.matchbotApiPrefix}/people/${person.id}/create-customer-session`,
-        { campaignId: campaign?.id },
+        { campaignId: (campaign && campaign.id) },
         getPersonAuthHttpOptions(jwt),
       ) as Observable<StripeCustomerSession>,
     );

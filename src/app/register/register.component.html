@@ -42,7 +42,7 @@
           (codeEnteredEvent)="verificationCodeEntered($event)"
         >
         </app-verify-email>
-      } @else if (this.emailVerificationToken?.valid) {
+      } @else if (this.emailVerificationToken && this.emailVerificationToken.valid) {
         <p>
           For a smoother giving experience create a Big Give account. Your information will be saved securely, making
           future donations quicker and easier.
@@ -61,11 +61,11 @@
           <div class="savedDetails">
             <div class="label">Email Address</div>
             <div class="value">
-              <strong>{{ this.emailVerificationToken?.email_address }}</strong>
+              <strong>{{ this.emailVerificationToken && this.emailVerificationToken.email_address }}</strong>
             </div>
             <div class="label">Name</div>
             <div class="value">
-              {{ this.emailVerificationToken?.first_name }} {{ this.emailVerificationToken?.last_name }}
+              {{ this.emailVerificationToken && this.emailVerificationToken.first_name }} {{ this.emailVerificationToken && this.emailVerificationToken.last_name }}
             </div>
           </div>
 

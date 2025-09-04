@@ -12,12 +12,6 @@
     <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
     <script src="/assets/custom-libs/modernizr.js"></script>
     <!-- Just webp support detection -->
-    <script>
-      let a = {};
-      a?.a?.a;
-      // One of the feature introduced in ES2020 that we rely on - the site will not be usable without it.
-      var browserSupportsOptionalChaining = true;
-    </script>
   </head>
   <body>
     <app-root id="app"></app-root>
@@ -38,9 +32,23 @@
       </div>
     </div>
     <script>
+      function isDynamicImportSupported()
+      {
+        var supported = false;
+        try
+        {
+          new Function("try { import('data:text/javascript;base64,Cg==').catch(function() {}); } catch (e) { }")();
+
+          supported = true;
+        }
+        catch (e) { }
+
+        return supported;
+      }
+
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      console.log("browserSupportsOptionalChaining:", window.browserSupportsOptionalChaining);
-      if (ie || !window.browserSupportsOptionalChaining) {
+      console.log("browserSupportsOptionalChaining:", window.isDynamicImportSupported);
+      if (ie || !isDynamicImportSupported()) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
