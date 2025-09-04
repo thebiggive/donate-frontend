@@ -52,7 +52,6 @@ jobs:
       env:
         type: string
     steps:
-      - run: npm run supportedBrowsers
       - aws-ecr/build_and_push_image:
           auth:
             - aws-cli/setup:

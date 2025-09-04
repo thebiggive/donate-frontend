@@ -24,6 +24,8 @@ COPY . .
 # This controls e.g. which environment's API we target.
 ARG BUILD_ENV
 
+RUN npm run supportedBrowsers
+
 # Build client bundle and prepare for Server-Side Rendering
 RUN npm run build:${BUILD_ENV}
 
