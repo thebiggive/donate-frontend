@@ -29,6 +29,7 @@ import { ChangeRegularGivingComponent } from './change-regular-giving/change-reg
 import { setupIntentResolver } from './setupIntent.resolver';
 import { EmailVerificationTokenResolver } from './email-verification-token.resolver';
 import { bigGiveName } from '../environments/common';
+import { MailingListComponent } from './mailing-list/mailing-list.component';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -335,6 +336,12 @@ export const routes: (Route & {
     pathMatch: 'full',
     component: LoginComponent,
     canActivate: [redirectIfAlreadyLoggedIn],
+  },
+  {
+    path: 'mailing-list',
+    title: 'Join our mailing list',
+    pathMatch: 'full',
+    component: MailingListComponent,
   },
   {
     // The cookie preference center is a modal popup, not a full page. We need something behind it

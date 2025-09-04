@@ -1,0 +1,77 @@
+@use '../../assets/scss/variables';
+
+:host {
+  display: block;
+}
+
+main {
+  margin-top: 2rem;
+}
+
+.heading-wrapper {
+  margin-bottom: 1rem;
+}
+
+.campaign-interests {
+  margin: 1.5rem 0;
+
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  label {
+    cursor: pointer;
+  }
+}
+
+.button-container {
+  margin: 1rem 0;
+}
+
+.terms-text {
+  font-size: 0.9rem;
+  color: variables.$colour-grey;
+  margin-top: 1rem;
+
+  a {
+    color: variables.$colour-primary;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.thank-you-message {
+  text-align: center;
+  padding: 2rem 0;
+
+  p {
+    margin-bottom: 2rem;
+  }
+}
+
+.error {
+  color: variables.$colour-primary-contrast;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
