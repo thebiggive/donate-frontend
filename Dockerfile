@@ -26,10 +26,10 @@ ARG BUILD_ENV
 
 RUN npm run supportedBrowsers
 
-RUN sed -i "s/GIT_COMMIT_ID/$(git rev-parse --short HEAD)/" src/index.html
-
 # Build client bundle and prepare for Server-Side Rendering
 RUN npm run build:${BUILD_ENV}
+
+RUN sed -i "s/GIT_COMMIT_ID/$(git rev-parse --short HEAD)/" src/index.html
 
 EXPOSE 4000
 
