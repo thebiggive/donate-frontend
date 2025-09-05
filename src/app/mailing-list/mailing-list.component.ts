@@ -36,14 +36,6 @@ export class MailingListComponent implements OnInit, OnDestroy {
   submitted = false;
   showThankYouMessage = false;
 
-  // Campaign interest checkboxes
-  campaigns = [
-    { id: 'christmas', name: 'Christmas Challenge', checked: false },
-    { id: 'green', name: 'Green Match Fund', checked: false },
-    { id: 'arts', name: 'Arts for Impact', checked: false },
-    { id: 'women', name: 'Women and Girls Match Fund', checked: false }
-  ];
-
   constructor() {
     this.mailingListForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -61,13 +53,6 @@ export class MailingListComponent implements OnInit, OnDestroy {
     }
 
   /**
-   * Toggle campaign selection
-   */
-  toggleCampaign(index: number): void {
-    this.campaigns[index].checked = !this.campaigns[index].checked;
-  }
-
-  /**
    * Submit the form
    */
   onSubmit(): void {
@@ -81,7 +66,6 @@ export class MailingListComponent implements OnInit, OnDestroy {
     // In a real implementation, this would call an API
     console.log('Form submitted', {
       ...this.mailingListForm.value,
-      campaigns: this.campaigns.filter(c => c.checked).map(c => c.name)
     });
 
     // Show thank you message

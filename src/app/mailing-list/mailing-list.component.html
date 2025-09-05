@@ -49,23 +49,6 @@
             }
           </biggive-text-input>
 
-          <div class="campaign-interests">
-            <p><strong>What Campaigns are you interested in?</strong></p>
-            <div class="checkbox-group">
-              @for (campaign of campaigns; track campaign.id; let i = $index) {
-                <div class="checkbox-item">
-                  <input
-                    type="checkbox"
-                    [id]="campaign.id"
-                    [checked]="campaign.checked"
-                    (change)="toggleCampaign(i)"
-                  />
-                  <label [for]="campaign.id">{{ campaign.name }}</label>
-                </div>
-              }
-            </div>
-          </div>
-
           <div class="button-container">
             <biggive-button
               id="subscribe-button"
