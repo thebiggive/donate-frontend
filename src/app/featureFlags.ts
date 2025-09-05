@@ -6,13 +6,13 @@ type flags = { mailingListSignup: boolean };
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
-      return {mailingListSignup: true};
+      return { mailingListSignup: true };
     case 'regression':
-      return {mailingListSignup: true};
+      return { mailingListSignup: true };
     case 'staging':
-      return {mailingListSignup: true};
+      return { mailingListSignup: true };
     case 'production':
-      return {mailingListSignup: false};
+      return { mailingListSignup: false };
   }
 };
 
