@@ -1,0 +1,97 @@
+<div id="banner"></div>
+@if (pageInitialised) {
+  <main>
+    <div>
+      <biggive-page-section>
+        @if (!showThankYouMessage) {
+          <div class="heading-wrapper">
+            <biggive-heading
+              space-above="0"
+              space-below="6"
+              html-element="h1"
+              size="1"
+              align="center"
+              text="Join our mailing list"
+            ></biggive-heading>
+          </div>
+
+          <p>
+            Interested in hearing when the next opportunity to donate is? Sign up now to receive campaign updates, match
+            funding reminders and the latest news, straight to your inbox.
+          </p>
+
+          <form [formGroup]="mailingListForm" (keydown.enter)="onSubmit()">
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="firstName">First Name *</label>
+              <input slot="input" matInput type="text" id="firstName" formControlName="firstName" />
+              @if (submitted && mailingListForm.controls["firstName"].errors) {
+                <p class="error">This field is required.</p>
+              }
+            </biggive-text-input>
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="emailAddress">Email Address *</label>
+              <input
+                slot="input"
+                matInput
+                type="email"
+                id="emailAddress"
+                formControlName="emailAddress"
+                autocapitalize="off"
+              />
+              @if (submitted && mailingListForm.controls["emailAddress"].errors) {
+                <p class="error">This field is required.</p>
+              }
+            </biggive-text-input>
+
+            <div class="button-container">
+              <biggive-button
+                id="subscribe-button"
+                space-above="5"
+                spaceBelow="4"
+                colour-scheme="primary"
+                label="Subscribe"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                (click)="onSubmit()"
+              ></biggive-button>
+            </div>
+
+            <p class="terms-text">
+              We won't pass your details on to anyone else. By clicking the sign up button you agree to our
+              <a href="https://biggive.org/terms-and-conditions/" target="_blank">Terms and Conditions</a> and
+              <a href="https://biggive.org/privacy/" target="_blank">Privacy Policy</a>.
+            </p>
+          </form>
+        } @else {
+          <div class="thank-you-message">
+            <biggive-heading
+              space-above="0"
+              space-below="6"
+              html-element="h1"
+              size="1"
+              align="center"
+              text="Thank you for subscribing!"
+            ></biggive-heading>
+
+            <p>You have signed up to receive our campaign updates, match funding reminders and the latest news.</p>
+
+            <div class="button-container">
+              <biggive-button
+                space-above="5"
+                spaceBelow="0"
+                colour-scheme="primary"
+                label="Return to Home"
+                full-width="false"
+                size="medium"
+                rounded="false"
+                url="/"
+              ></biggive-button>
+            </div>
+          </div>
+        }
+      </biggive-page-section>
+    </div>
+  </main>
+}
