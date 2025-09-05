@@ -1,7 +1,5 @@
 # Big Give Donate Frontend
 
-_Draft_
-
 We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
 donors' security.
 
