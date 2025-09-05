@@ -1,18 +1,18 @@
 import { environment } from '../environments/environment';
 import { EnvironmentID } from '../environments/environment.interface';
 
-type flags = object;
+type flags = { mailingListSignup: boolean };
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
-      return {};
+      return {mailingListSignup: true};
     case 'regression':
-      return {};
+      return {mailingListSignup: true};
     case 'staging':
-      return {};
+      return {mailingListSignup: true};
     case 'production':
-      return {};
+      return {mailingListSignup: false};
   }
 };
 

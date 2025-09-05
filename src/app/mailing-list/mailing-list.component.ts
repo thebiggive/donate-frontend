@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
@@ -40,9 +40,6 @@ export class MailingListComponent implements OnInit, OnDestroy {
     removeBodyClass(this.platformId, 'primary-colour');
   }
 
-  /**
-   * Submit the form
-   */
   onSubmit(): void {
     this.submitted = true;
 
