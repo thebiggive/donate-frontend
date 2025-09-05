@@ -32,7 +32,7 @@ export class MailingListComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private platformId = inject(PLATFORM_ID);
 
-  mailingListForm: FormGroup;
+  mailingListForm;
   submitted = false;
   showThankYouMessage = false;
 
@@ -60,12 +60,14 @@ export class MailingListComponent implements OnInit, OnDestroy {
 
     // Stop here if form is invalid
     if (this.mailingListForm.invalid) {
+      console.log(this.mailingListForm);
       return;
     }
 
     // In a real implementation, this would call an API
     console.log('Form submitted', {
-      ...this.mailingListForm.value,
+      firstName: this.mailingListForm.value.firstName,
+      emailAddress: this.mailingListForm.value.emailAddress,
     });
 
     // Show thank you message
