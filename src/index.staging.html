@@ -14,18 +14,34 @@
     <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
     <script src="/assets/custom-libs/modernizr.js"></script>
     <!-- Just webp support detection -->
+    <script>
+      let a = {};
+      a?.a?.a;
+      // One of the feature introduced in ES2020 that we rely on - the site will not be usable without it.
+      var browserSupportsOptionalChaining = true;
+    </script>
   </head>
   <body>
     <app-root id="app"></app-root>
-    <p style="display: none" id="unsupported-message">
-      <a href="https://browsehappy.com/">Please upgrade your browser to continue.</a>
-    </p>
+    <div style="display: none; margin-left: 1em; margin-right: 1em" id="unsupported-message">
+      <h1 style="text-align: center">Big Give</h1>
+      <p>
+        Sorry, our donations site is not compatible with your web browser or device.
+        <a href="https://browsehappy.com/">Please upgrade your browser to continue.</a>
+      </p>
+      <hr />
+      <div class="footer">
+        © 2007 – 2025 The Big Give Trust (1136547) | Company number 07273065 | Dragon Court, 27-29 Macklin Street,
+        London WC2B 5LX, United Kingdom
+      </div>
+    </div>
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      if (ie) {
+      if (ie || !window.browserSupportsOptionalChaining) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
     </script>
   </body>
+  <!-- donate-fronted commit ID GIT_COMMIT_ID -->
 </html>
