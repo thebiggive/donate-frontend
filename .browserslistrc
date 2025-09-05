@@ -9,6 +9,7 @@
 # But Chrome 107 is the earliest version available to test on on testing bot that the site works on, and
 # probably very few people are running much earlier versions. Possibly Chrome 106 as thats the last version available on
 # Android 6.
+# We also need to have at least Chrome 80 as that introduced optional chaining from ES2020.
 Chrome >= 106 # released 2022-09-27
 ChromeAndroid >= 107 # 2022-09-27
 

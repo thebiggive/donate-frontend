@@ -5,6 +5,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+import browserCompat from "eslint-plugin-compat";
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
@@ -14,6 +15,13 @@ const compat = new FlatCompat({
 export default [
   {
     ignores: ["projects/**/*", "src/assets/custom-libs/modernizr.d.ts"],
+  },
+  {
+    files: ["src/**/*.ts", "src/**/*.js"],
+    ...browserCompat.configs["flat/recommended"],
+    settings: {
+      lintAllEsApis: true,
+    },
   },
   ...compat
     .extends(
