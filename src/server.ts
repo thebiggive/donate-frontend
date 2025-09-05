@@ -65,7 +65,8 @@ app.use(
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
-          `'sha256-dnnEJuo8OaEvaT7pSSJwaDILUYzBskencbUOdqW8WUg='`, // "Unsupported browser" inline script.
+          `'sha256-ldtQnqimsKcRUds7F3IzgqxwY6gMsUrQ93UJovC7kUQ='`, // optional chaining support check
+          `'sha256-cpOTznxFB+e6XZRM96rUK77BHQnjwwRhEn29eizS4I0='`, // "Unsupported browser" inline script.
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
