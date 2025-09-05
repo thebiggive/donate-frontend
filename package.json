@@ -21,7 +21,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts",
-    "prettier": "npx prettier . --write --list-different",
+    "prettier": "prettier . --write --list-different",
+    "babel": "babel dist/donate-frontend/browser --out-dir dist/donate-frontend/browser-es5 --extensions \".js\"",
     "serve:ssr": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
@@ -69,6 +70,8 @@
     "@angular/cli": "^20.0.3",
     "@angular/compiler-cli": "^20.0.3",
     "@angular/language-service": "^20.0.3",
+    "@babel/cli": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
     "@babel/runtime": "7.27.6",
     "@cypress/schematic": "^2.5.1",
     "@eslint/eslintrc": "^3.3.1",
