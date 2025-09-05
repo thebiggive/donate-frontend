@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
@@ -7,6 +7,7 @@ import {
   BiggivePageSection,
   BiggiveTextInput
 } from '@biggive/components-angular';
+import {addBodyClass, removeBodyClass} from '../bodyStyle';
 
 /**
  * Mailing list signup component
@@ -25,8 +26,11 @@ import {
     BiggiveTextInput
   ]
 })
-export class MailingListComponent {
+export class MailingListComponent implements OnInit, OnDestroy {
+  /** Used to prevent displaying the page before all parts are ready **/
+  public pageInitialised = false;
   private formBuilder = inject(FormBuilder);
+  private platformId = inject(PLATFORM_ID);
 
   mailingListForm: FormGroup;
   submitted = false;
@@ -46,6 +50,15 @@ export class MailingListComponent {
       emailAddress: ['', [Validators.required, Validators.email]]
     });
   }
+
+  ngOnInit(): void {
+    addBodyClass(this.platformId, 'primary-colour');
+    this.pageInitialised = true;
+    }
+
+    ngOnDestroy() {
+      removeBodyClass(this.platformId, 'primary-colour');
+    }
 
   /**
    * Toggle campaign selection
