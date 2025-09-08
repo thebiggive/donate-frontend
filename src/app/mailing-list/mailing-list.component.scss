@@ -1,0 +1,65 @@
+@use "../../assets/scss/variables";
+
+// This isn't really an authentication related page
+// but include this is the easiest way to get the
+// text inputs looking good. May consider renaming auth-common.
+
+@use "../../assets/scss/auth-common";
+
+@use "../../abstract";
+
+#banner {
+  background-image: url(../../assets/images/grey-header.jpg);
+}
+
+div.actions {
+  margin-bottom: 1em;
+}
+
+@include abstract.friendly-captcha();
+
+:host {
+  display: block;
+}
+
+main {
+  margin-top: 2rem;
+}
+
+.heading-wrapper {
+  margin-bottom: 1rem;
+}
+
+.button-container {
+  margin: 1rem 0;
+}
+
+.terms-text {
+  font-size: 0.9rem;
+  color: variables.$colour-grey;
+  margin-top: 1rem;
+
+  a {
+    color: variables.$colour-primary;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.thank-you-message {
+  text-align: center;
+  padding: 2rem 0;
+
+  p {
+    margin-bottom: 2rem;
+  }
+}
+
+.error {
+  color: variables.$colour-primary-contrast;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
