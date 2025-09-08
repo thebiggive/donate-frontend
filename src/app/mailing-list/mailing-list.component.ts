@@ -3,6 +3,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
+import {Toast} from '../toast.service';
 
 /**
  * Mailing list signup component
@@ -23,11 +24,12 @@ export class MailingListComponent implements OnInit, OnDestroy {
   mailingListForm;
   submitted = false;
   showThankYouMessage = false;
+  private toast = inject(Toast);
 
   constructor() {
     this.mailingListForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      emailAddress: ['', [Validators.required, Validators.email]],
+      firstName: ['', Validators.required, Validators.maxLength(35)],
+      emailAddress: ['', [Validators.required, Validators.email, Validators.maxLength(60)]],
     });
   }
 
@@ -43,9 +45,21 @@ export class MailingListComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     this.submitted = true;
 
-    // Stop here if form is invalid
     if (this.mailingListForm.invalid) {
-      console.log(this.mailingListForm);
+      const nameErrors = this.mailingListForm.controls.firstName?.errors;
+      const emailErrors = this.mailingListForm.controls.emailAddress?.errors;
+
+      const errors: string[] = [];
+      if (nameErrors) {
+        errors.push("Please enter your first name.");
+      }
+
+      if (emailErrors) {
+        errors.push("Please enter a valid email address.");
+      }
+
+      this.toast.showError(errors.join(" "))
+
       return;
     }
 
