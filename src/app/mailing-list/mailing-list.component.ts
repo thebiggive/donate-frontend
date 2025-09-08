@@ -3,7 +3,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
-import {Toast} from '../toast.service';
+import { Toast } from '../toast.service';
 
 /**
  * Mailing list signup component
@@ -29,7 +29,12 @@ export class MailingListComponent implements OnInit, OnDestroy {
   constructor() {
     this.mailingListForm = this.formBuilder.group({
       firstName: ['', Validators.required, Validators.maxLength(35)],
+      lastName: ['', Validators.required, Validators.maxLength(35)],
       emailAddress: ['', [Validators.required, Validators.email, Validators.maxLength(60)]],
+      donorInterest: [false],
+      charityInterest: [false],
+      organisationName: ['', Validators.required, Validators.maxLength(35)],
+      jobTitle: ['', Validators.required, Validators.maxLength(35)],
     });
   }
 
@@ -51,14 +56,14 @@ export class MailingListComponent implements OnInit, OnDestroy {
 
       const errors: string[] = [];
       if (nameErrors) {
-        errors.push("Please enter your first name.");
+        errors.push('Please enter your first name.');
       }
 
       if (emailErrors) {
-        errors.push("Please enter a valid email address.");
+        errors.push('Please enter a valid email address.');
       }
 
-      this.toast.showError(errors.join(" "))
+      this.toast.showError(errors.join(' '));
 
       return;
     }

@@ -16,15 +16,39 @@
           </div>
 
           <p>
-            Interested in hearing when the next opportunity to donate is? Sign up now to receive campaign updates, match
-            funding reminders and the latest news, straight to your inbox.
+            Interested in hearing when the next opportunity to donate is, or want to receive monthly updates on key
+            dates for match funding applications, campaign reminders and what’s new on Big Give?
+          </p>
+          <p>
+            Sign up now to receive campaign updates, match funding reminders and the latest news, straight to your
+            inbox.
           </p>
 
           <form [formGroup]="mailingListForm" (keydown.enter)="onSubmit()">
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="firstName">First Name *</label>
-              <input slot="input" matInput type="text" id="firstName" formControlName="firstName" />
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="firstName"
+                [formControl]="mailingListForm.controls.firstName"
+              />
               @if (submitted && mailingListForm.controls["firstName"].errors) {
+                <p class="error">This field is required.</p>
+              }
+            </biggive-text-input>
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="lastName">Last Name *</label>
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="lastName"
+                [formControl]="mailingListForm.controls.lastName"
+              />
+              @if (submitted && mailingListForm.controls["lastName"].errors) {
                 <p class="error">This field is required.</p>
               }
             </biggive-text-input>
@@ -36,7 +60,7 @@
                 matInput
                 type="email"
                 id="emailAddress"
-                formControlName="emailAddress"
+                [formControl]="mailingListForm.controls.emailAddress"
                 autocapitalize="off"
                 email
               />
@@ -44,6 +68,46 @@
                 <p class="error">This field is required.</p>
               }
             </biggive-text-input>
+
+            <input id="donor-interest" type="checkbox" [formControl]="mailingListForm.controls.donorInterest" />
+            <label for="donor-interest">I am interested in opportunities to donate</label>
+            <hr />
+
+            <input id="donor-interest" type="checkbox" [formControl]="mailingListForm.controls.charityInterest" />
+            <label for="donor-interest"
+              >I am interested in opportunities to work with Big Give, e.g. as a representative of a charity, consultant
+              or freelancer</label
+            >
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="organisationName">Your charity or organisation</label>
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="lastName"
+                [formControl]="mailingListForm.controls.organisationName"
+              />
+              @if (submitted && mailingListForm.controls["organisationName"].errors) {
+                <p class="error">This field is required.</p>
+              }
+            </biggive-text-input>
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="jobTitle">Job Title *</label>
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="lastName"
+                [formControl]="mailingListForm.controls.jobTitle"
+              />
+              @if (submitted && mailingListForm.controls["jobTitle"].errors) {
+                <p class="error">This field is required.</p>
+              }
+            </biggive-text-input>
+
+            <hr />
 
             <div class="button-container">
               <biggive-button
