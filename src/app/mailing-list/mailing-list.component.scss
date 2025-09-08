@@ -8,6 +8,8 @@
 
 @use "../../abstract";
 
+@include abstract.friendly-captcha();
+
 #banner {
   background-image: url(../../assets/images/grey-header.jpg);
 }

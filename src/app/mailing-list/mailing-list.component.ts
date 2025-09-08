@@ -1,9 +1,11 @@
-import { Component, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
 import { Toast } from '../toast.service';
+import { environment } from '../../environments/environment';
+import { WidgetInstance } from 'friendly-challenge';
 
 /**
  * Mailing list signup component
@@ -21,6 +23,12 @@ export class MailingListComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private platformId = inject(PLATFORM_ID);
   mailingList = input.required<'donor' | 'charity'>();
+  friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  private friendlyCaptchaSolution: string | undefined;
+  private friendlyCaptchaWidget!: WidgetInstance;
+
+  @ViewChild('frccaptcha', { static: false })
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
 
   mailingListForm;
   submitted = false;
@@ -46,6 +54,25 @@ export class MailingListComponent implements OnInit, OnDestroy {
     }
   }
 
+  async ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    if (environment.environmentId === 'regression') {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      return;
+    }
+
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.friendlyCaptchaSolution = solution;
+      },
+      errorCallback: () => {},
+    });
+    await this.friendlyCaptchaWidget.start();
+  }
+
   ngOnDestroy() {
     removeBodyClass(this.platformId, 'primary-colour');
   }
@@ -58,6 +85,11 @@ export class MailingListComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.friendlyCaptchaSolution) {
+      this.toast.showError('Please complete the Captcha check');
+      return;
+    }
+
     // In a real implementation, this would call an API
     alert(`Actual signup still to implement:
     mailinglist: ${this.mailingList()},
@@ -66,6 +98,7 @@ export class MailingListComponent implements OnInit, OnDestroy {
     emailAddress: ${this.mailingListForm.controls.emailAddress.value},
     jobTitle: ${this.mailingListForm.controls.jobTitle.value},
     organisationName: ${this.mailingListForm.controls.organisationName.value},
+    captchaSolution: ${this.friendlyCaptchaSolution}
     `);
 
     this.showThankYouMessage = true;
