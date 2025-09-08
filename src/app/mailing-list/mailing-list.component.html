@@ -4,25 +4,48 @@
     <div>
       <biggive-page-section>
         @if (!showThankYouMessage) {
-          <div class="heading-wrapper">
-            <biggive-heading
-              space-above="0"
-              space-below="6"
-              html-element="h1"
-              size="1"
-              align="center"
-              text="Join our mailing list"
-            ></biggive-heading>
-          </div>
+          @switch (mailingList()) {
+            @case ("donor") {
+              <div class="heading-wrapper">
+                <biggive-heading
+                  space-above="0"
+                  space-below="6"
+                  html-element="h1"
+                  size="1"
+                  align="center"
+                  text="Join our donor mailing list"
+                ></biggive-heading>
+              </div>
+              <p>
+                Interested in hearing when the next opportunity to donate is? Sign up now to receive campaign updates,
+                match funding reminders and the latest news, straight to your inbox.
+              </p>
+            }
+            @case ("charity") {
+              <div class="heading-wrapper">
+                <biggive-heading
+                  space-above="0"
+                  space-below="6"
+                  html-element="h1"
+                  size="1"
+                  align="center"
+                  text="Join our charity mailing list"
+                ></biggive-heading>
+              </div>
 
-          <p>
-            Interested in hearing when the next opportunity to donate is, or want to receive monthly updates on key
-            dates for match funding applications, campaign reminders and what’s new on Big Give?
-          </p>
-          <p>
-            Sign up now to receive campaign updates, match funding reminders and the latest news, straight to your
-            inbox.
-          </p>
+              <p>
+                <strong
+                  >For charities, consultants and freelancers interested in keeping up to date with funding
+                  opportunities</strong
+                >
+              </p>
+
+              <p>
+                Sign up now to receive monthly updates on key dates for match funding applications, campaign reminders
+                and what’s new on Big Give.
+              </p>
+            }
+          }
 
           <form [formGroup]="mailingListForm" (keydown.enter)="onSubmit()">
             <biggive-text-input spaceBelow="4">
@@ -34,10 +57,10 @@
                 id="firstName"
                 [formControl]="mailingListForm.controls.firstName"
               />
-              @if (submitted && mailingListForm.controls["firstName"].errors) {
-                <p class="error">This field is required.</p>
-              }
             </biggive-text-input>
+            @if (submitted && mailingListForm.controls["firstName"].errors) {
+              <p class="error">This field is required.</p>
+            }
 
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="lastName">Last Name *</label>
@@ -48,10 +71,10 @@
                 id="lastName"
                 [formControl]="mailingListForm.controls.lastName"
               />
-              @if (submitted && mailingListForm.controls["lastName"].errors) {
-                <p class="error">This field is required.</p>
-              }
             </biggive-text-input>
+            @if (submitted && mailingListForm.controls["lastName"].errors) {
+              <p class="error">This field is required.</p>
+            }
 
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="emailAddress">Email Address *</label>
@@ -64,50 +87,37 @@
                 autocapitalize="off"
                 email
               />
-              @if (submitted && mailingListForm.controls["emailAddress"].errors) {
-                <p class="error">This field is required.</p>
-              }
             </biggive-text-input>
+            @if (submitted && mailingListForm.controls["emailAddress"].errors) {
+              <p class="error">This field is required.</p>
+            }
 
-            <input id="donor-interest" type="checkbox" [formControl]="mailingListForm.controls.donorInterest" />
-            <label for="donor-interest">I am interested in opportunities to donate</label>
-            <hr />
-
-            <input id="donor-interest" type="checkbox" [formControl]="mailingListForm.controls.charityInterest" />
-            <label for="donor-interest"
-              >I am interested in opportunities to work with Big Give, e.g. as a representative of a charity, consultant
-              or freelancer</label
-            >
-
-            <biggive-text-input spaceBelow="4">
-              <label slot="label" for="organisationName">Your charity or organisation</label>
-              <input
-                slot="input"
-                matInput
-                type="text"
-                id="lastName"
-                [formControl]="mailingListForm.controls.organisationName"
-              />
-              @if (submitted && mailingListForm.controls["organisationName"].errors) {
-                <p class="error">This field is required.</p>
-              }
-            </biggive-text-input>
-
-            <biggive-text-input spaceBelow="4">
-              <label slot="label" for="jobTitle">Job Title *</label>
-              <input
-                slot="input"
-                matInput
-                type="text"
-                id="lastName"
-                [formControl]="mailingListForm.controls.jobTitle"
-              />
+            @if (mailingList() === "charity") {
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="jobTitle">Job Title *</label>
+                <input
+                  slot="input"
+                  matInput
+                  type="text"
+                  id="lastName"
+                  [formControl]="mailingListForm.controls.jobTitle"
+                />
+              </biggive-text-input>
               @if (submitted && mailingListForm.controls["jobTitle"].errors) {
                 <p class="error">This field is required.</p>
               }
-            </biggive-text-input>
 
-            <hr />
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="organisationName">Your charity or organisation (if applicable)</label>
+                <input
+                  slot="input"
+                  matInput
+                  type="text"
+                  id="lastName"
+                  [formControl]="mailingListForm.controls.organisationName"
+                />
+              </biggive-text-input>
+            }
 
             <div class="button-container">
               <biggive-button

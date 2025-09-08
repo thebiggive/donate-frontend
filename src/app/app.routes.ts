@@ -339,11 +339,24 @@ export const routes: (Route & {
     canActivate: [redirectIfAlreadyLoggedIn],
   },
   {
-    path: 'mailing-list',
-    title: 'Join our mailing list',
+    path: 'donor-mailing-list',
+    title: 'Join our donor mailing list',
     pathMatch: 'full',
     component: MailingListComponent,
     canActivate: [() => flags.mailingListSignup],
+    data: {
+      mailingList: 'donor',
+    },
+  },
+  {
+    path: 'charity-mailing-list',
+    title: 'Join our charity mailing list',
+    pathMatch: 'full',
+    component: MailingListComponent,
+    canActivate: [() => flags.mailingListSignup],
+    data: {
+      mailingList: 'charity',
+    },
   },
   {
     // The cookie preference center is a modal popup, not a full page. We need something behind it
