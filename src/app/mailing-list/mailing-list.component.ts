@@ -124,6 +124,7 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     } catch (_error) {
       this.toast.showError('Sorry, there was an error trying to add your details to the mailing list.');
+      return;
     }
 
     this.showThankYouMessage = true;
