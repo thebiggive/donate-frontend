@@ -340,7 +340,7 @@ export const routes: (Route & {
   },
   {
     path: 'donor-mailing-list',
-    title: 'Join our donor mailing list',
+    title: 'Join our mailing list',
     pathMatch: 'full',
     component: MailingListComponent,
     canActivate: [() => flags.mailingListSignup],
