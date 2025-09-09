@@ -1,4 +1,14 @@
-import { Component, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
@@ -6,6 +16,8 @@ import { addBodyClass, removeBodyClass } from '../bodyStyle';
 import { Toast } from '../toast.service';
 import { environment } from '../../environments/environment';
 import { WidgetInstance } from 'friendly-challenge';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Mailing list signup component
@@ -17,7 +29,7 @@ import { WidgetInstance } from 'friendly-challenge';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput],
 })
-export class MailingListComponent implements OnInit, OnDestroy {
+export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
   private formBuilder = inject(FormBuilder);
@@ -26,6 +38,7 @@ export class MailingListComponent implements OnInit, OnDestroy {
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   private friendlyCaptchaSolution: string | undefined;
   private friendlyCaptchaWidget!: WidgetInstance;
+  private http = inject(HttpClient);
 
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha!: ElementRef<HTMLElement>;
@@ -77,7 +90,7 @@ export class MailingListComponent implements OnInit, OnDestroy {
     removeBodyClass(this.platformId, 'primary-colour');
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     this.submitted = true;
 
     if (this.mailingListForm.invalid) {
@@ -90,16 +103,28 @@ export class MailingListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // In a real implementation, this would call an API
-    alert(`Actual signup still to implement:
-    mailinglist: ${this.mailingList()},
-    firstName: ${this.mailingListForm.controls.firstName.value},
-    lastName: ${this.mailingListForm.controls.lastName.value},
-    emailAddress: ${this.mailingListForm.controls.emailAddress.value},
-    jobTitle: ${this.mailingListForm.controls.jobTitle.value},
-    organisationName: ${this.mailingListForm.controls.organisationName.value},
-    captchaSolution: ${this.friendlyCaptchaSolution}
-    `);
+    try {
+      await firstValueFrom(
+        this.http.post(
+          environment.matchbotApiPrefix + '/mailing-list-signup',
+          {
+            mailinglist: this.mailingList(),
+            firstName: this.mailingListForm.controls.firstName.value,
+            lastName: this.mailingListForm.controls.lastName.value,
+            emailAddress: this.mailingListForm.controls.emailAddress.value,
+            jobTitle: this.mailingListForm.controls.jobTitle.value,
+            organisationName: this.mailingListForm.controls.organisationName.value,
+          },
+          {
+            headers: {
+              'x-captcha-code': this.friendlyCaptchaSolution,
+            },
+          },
+        ),
+      );
+    } catch (_error) {
+      this.toast.showError('Sorry, there was an error trying to add your details to the mailing list.');
+    }
 
     this.showThankYouMessage = true;
   }
