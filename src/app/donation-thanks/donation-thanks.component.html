@@ -14,10 +14,11 @@
 
   @if (payByBankPossibleError && donation && beenLoadingForALittleWhile) {
     <p aria-live="assertive">
-      <!-- Cancelled (and probably also failed?) Pay By Bank flows seem in practice to set `redirect_status` and so donors
-       should be taken off the page without seeing this. But because it's undocumented we keep this as belt and braces for
-       any situation where the donation is still Pending and the donor selected Pay By Bank. -->
-      Payment is not yet complete. <a routerLink="/donate/{{ donation.projectId }}">Try again?</a>
+      <!-- Cancelled (and probably also failed?) Pay By Bank flows seem in practice to set `redirect_status` if they happened on one
+      device and so donors should be taken off the page without seeing this. But multi-device Pay By Bank failures (via QR code) don't
+      do this; both for that case and because it's undocumented, we keep this as belt and braces for any situation where the donation
+      is still Pending and the donor selected Pay By Bank. -->
+      It looks like we've not been able to complete the payment. Would you like to  <a routerLink="/donate/{{ donation.projectId }}">try again</a>?
     </p>
   }
 
