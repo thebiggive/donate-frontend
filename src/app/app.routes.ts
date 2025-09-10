@@ -29,6 +29,8 @@ import { ChangeRegularGivingComponent } from './change-regular-giving/change-reg
 import { setupIntentResolver } from './setupIntent.resolver';
 import { EmailVerificationTokenResolver } from './email-verification-token.resolver';
 import { bigGiveName } from '../environments/common';
+import { MailingListComponent } from './mailing-list/mailing-list.component';
+import { flags } from './featureFlags';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -335,6 +337,26 @@ export const routes: (Route & {
     pathMatch: 'full',
     component: LoginComponent,
     canActivate: [redirectIfAlreadyLoggedIn],
+  },
+  {
+    path: 'donor-mailing-list',
+    title: 'Join our mailing list',
+    pathMatch: 'full',
+    component: MailingListComponent,
+    canActivate: [() => flags.mailingListSignup],
+    data: {
+      mailingList: 'donor',
+    },
+  },
+  {
+    path: 'charity-mailing-list',
+    title: 'Join our charity mailing list',
+    pathMatch: 'full',
+    component: MailingListComponent,
+    canActivate: [() => flags.mailingListSignup],
+    data: {
+      mailingList: 'charity',
+    },
   },
   {
     // The cookie preference center is a modal popup, not a full page. We need something behind it

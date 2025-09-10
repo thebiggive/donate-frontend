@@ -5,13 +5,17 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
-Chrome >= 107
-ChromeAndroid >= 107
-Edge >= 107
-Firefox >= 104
-FirefoxAndroid >= 104
+# Chrome 64 seems fine with vite, 63 crashes it.
+# But Chrome 107 is the earliest version available to test on on testing bot that the site works on, and
+# probably very few people are running much earlier versions. Possibly Chrome 106 as thats the last version available on
+# Android 6.
+Chrome >= 106 # released 2022-09-27
+ChromeAndroid >= 107 # 2022-09-27
 
-# First working version of Safari starting from MacOS High Sierra, Windows 7 and on Linux
-Safari > 14
+Edge >= 107 # released 2022-10-27
+Firefox >= 104 # released 2022-10-23
+FirefoxAndroid >= 104 # released 2022-10-23
+
+Safari >= 14 # released 2020-09-16
 # Support for mobile IOS users
-iOS >= 15.0
+iOS >= 14.0 # released 2020-09-16
