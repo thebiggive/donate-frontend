@@ -353,7 +353,9 @@ export const routes: (Route & {
     title: 'Join our charity mailing list',
     pathMatch: 'full',
     component: MailingListComponent,
-    canActivate: [() => flags.mailingListSignup],
+    // @todo - decide if we want to provide a charity mailing list, and either edit next line accordingly or
+    // delete this route and remove the support for charity mailing list from the component.
+    canActivate: [() => false],
     data: {
       mailingList: 'charity',
     },
