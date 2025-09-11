@@ -79,6 +79,11 @@ jobs:
           to: "s3://tbg-<< parameters.env >>-donate-static/d"
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
+      - aws-s3/sync: # Sync transpiled ES5 static JS for older browsers to S3 (1 year)
+          from: /usr/src/app/dist/donate-frontend/browser-es5
+          to: "s3://tbg-<< parameters.env >>-donate-static/d-es5"
+          arguments: '--acl public-read --cache-control "max-age=31536000"'
+
       - aws-s3/sync: # Sync dist/donate-frontend/browser/assets to S3 with 1 day lifetime
           from: /usr/src/app/dist/donate-frontend/browser/assets
           to: "s3://tbg-<< parameters.env >>-donate-static/assets"
