@@ -263,6 +263,8 @@ export class StripeService {
       clientSecret: clientSecret,
     });
 
+    // The possible bank incompatibility warning is for anybody "stuck", so `handleNextAction()` resolving, including with failure, is
+    // enough reason to prevent it showing.
     window.clearTimeout(timer);
 
     return result;
