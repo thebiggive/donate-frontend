@@ -24,10 +24,12 @@ const indexHtml = join(serverDistFolder, 'index.server.html');
 
 function isLegacyBrowser(userAgent: string): boolean {
   // Chrome < 80, Safari < 13, Edge < 80, IE, etc.
-  return /Chrome\/([5-7][0-9])/.test(userAgent) ||
+  return (
+    /Chrome\/([5-7][0-9])/.test(userAgent) ||
     /MSIE|Trident/.test(userAgent) ||
     /Safari\/(12|11|10|9|8|7|6|5|4|3|2|1)\./.test(userAgent) ||
-    /Edge\/(1[0-7]|[0-9])\./.test(userAgent);
+    /Edge\/(1[0-7]|[0-9])\./.test(userAgent)
+  );
 }
 
 enableProdMode();
@@ -161,9 +163,7 @@ app.get('**', (req, res, next) => {
 
   // Choose modern or ES5 bundle
   const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;
-  const indexHtmlPath = useLegacy
-    ? join(serverDistFolder, '../browser-es5/index.html')
-    : indexHtml;
+  const indexHtmlPath = useLegacy ? join(serverDistFolder, '../browser-es5/index.html') : indexHtml;
 
   // If SSR index doesn't exist in legacy, fallback to static
   if (useLegacy && !existsSync(indexHtmlPath)) {
