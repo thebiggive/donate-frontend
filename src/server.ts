@@ -4,6 +4,7 @@ import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import compression from 'compression';
 import { createHash } from 'crypto';
 import express, { Request, Response } from 'express';
+import { existsSync } from 'fs';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { dirname, join, resolve } from 'node:path';
@@ -20,6 +21,14 @@ const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
+
+function isLegacyBrowser(userAgent: string): boolean {
+  // Chrome < 80, Safari < 13, Edge < 80, IE, etc.
+  return /Chrome\/([5-7][0-9])/.test(userAgent) ||
+    /MSIE|Trident/.test(userAgent) ||
+    /Safari\/(12|11|10|9|8|7|6|5|4|3|2|1)\./.test(userAgent) ||
+    /Edge\/(1[0-7]|[0-9])\./.test(userAgent);
+}
 
 enableProdMode();
 const app = express();
@@ -128,6 +137,14 @@ app.use(
 );
 
 app.use(
+  '/d-es5',
+  express.static(resolve(serverDistFolder, '../browser-es5'), {
+    immutable: true, // Everything in here should be named with an immutable hash.
+    maxAge: '1 year',
+  }),
+);
+
+app.use(
   '/assets',
   express.static(`${browserDistFolder}/assets`, {
     maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
@@ -139,6 +156,19 @@ app.use(
  */
 app.get('**', (req, res, next) => {
   const { protocol, originalUrl, headers } = req;
+  const ua = headers['user-agent'] || '';
+  const useLegacy = isLegacyBrowser(ua);
+
+  // Choose modern or ES5 bundle
+  const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;
+  const indexHtmlPath = useLegacy
+    ? join(serverDistFolder, '../browser-es5/index.html')
+    : indexHtml;
+
+  // If SSR index doesn't exist in legacy, fallback to static
+  if (useLegacy && !existsSync(indexHtmlPath)) {
+    return res.sendFile(join(serverDistFolder, '../browser-es5/index.html'));
+  }
 
   // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
   // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
@@ -146,10 +176,10 @@ app.get('**', (req, res, next) => {
   commonEngine
     .render({
       bootstrap,
-      documentFilePath: indexHtml,
+      documentFilePath: indexHtmlPath,
       inlineCriticalCss: false,
       url: `${protocol}://${headers.host}${originalUrl}`,
-      publicPath: browserDistFolder,
+      publicPath: bundleFolder,
       providers: [
         // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
         // base reported by CloudFront when talking to the origin.
