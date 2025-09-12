@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   protected isNewRegistration: boolean = false;
 
   constructor() {
-    const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
+    const state: LoginNavigationState = <LoginNavigationState>this.router.currentNavigation()?.extras.state;
     this.isNewRegistration = !!state?.newAccountRegistration;
   }
 
