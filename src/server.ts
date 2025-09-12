@@ -4,7 +4,6 @@ import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import compression from 'compression';
 import { createHash } from 'crypto';
 import express, { Request, Response } from 'express';
-import { existsSync } from 'fs';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { dirname, join, resolve } from 'node:path';
@@ -163,12 +162,13 @@ app.get('**', (req, res, next) => {
 
   // Choose modern or ES5 bundle
   const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;
-  const indexHtmlPath = useLegacy ? join(serverDistFolder, '../browser-es5/index.html') : indexHtml;
 
-  // If SSR index doesn't exist in legacy, fallback to static
-  if (useLegacy && !existsSync(indexHtmlPath)) {
-    return res.sendFile(join(serverDistFolder, '../browser-es5/index.html'));
-  }
+  // For SSR, we always use the server-generated index.html from the server dist folder
+  // The ES5 bundle will have its own static index.html, but SSR uses the server version
+  const indexHtmlPath = indexHtml; // Always use the SSR-capable index
+
+  // For legacy browsers, if this is a static request (non-SSR), serve from ES5 bundle
+  // But for SSR, we use the server index and point to ES5 assets via bundleFolder
 
   // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
   // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
