@@ -4,7 +4,6 @@ import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import compression from 'compression';
 import { createHash } from 'crypto';
 import express, { Request, Response } from 'express';
-import { existsSync } from 'fs';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { dirname, join, resolve } from 'node:path';
