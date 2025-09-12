@@ -1,0 +1,182 @@
+<div id="banner"></div>
+@if (pageInitialised) {
+  <main>
+    <div>
+      <biggive-page-section>
+        @if (!showThankYouMessage) {
+          @switch (mailingList()) {
+            @case ("donor") {
+              <div class="heading-wrapper">
+                <biggive-heading
+                  space-above="0"
+                  space-below="6"
+                  html-element="h1"
+                  size="1"
+                  align="center"
+                  text="Join our mailing list"
+                ></biggive-heading>
+              </div>
+              <p>
+                Interested in hearing when the next opportunity to donate is? Sign up now to receive campaign updates,
+                match funding reminders and the latest news, straight to your inbox.
+              </p>
+            }
+            @case ("charity") {
+              <div class="heading-wrapper">
+                <biggive-heading
+                  space-above="0"
+                  space-below="6"
+                  html-element="h1"
+                  size="1"
+                  align="center"
+                  text="Join our charity mailing list"
+                ></biggive-heading>
+              </div>
+
+              <p>
+                <strong
+                  >For charities, consultants and freelancers interested in keeping up to date with funding
+                  opportunities</strong
+                >
+              </p>
+
+              <p>
+                Sign up now to receive monthly updates on key dates for match funding applications, campaign reminders
+                and what’s new on Big Give.
+              </p>
+            }
+          }
+
+          <form [formGroup]="mailingListForm" (keydown.enter)="onSubmit()">
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="firstName">First Name *</label>
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="firstName"
+                [formControl]="mailingListForm.controls.firstName"
+              />
+            </biggive-text-input>
+            @if (submitted && mailingListForm.controls["firstName"].errors) {
+              <p class="error">This field is required.</p>
+            }
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="lastName">Last Name *</label>
+              <input
+                slot="input"
+                matInput
+                type="text"
+                id="lastName"
+                [formControl]="mailingListForm.controls.lastName"
+              />
+            </biggive-text-input>
+            @if (submitted && mailingListForm.controls["lastName"].errors) {
+              <p class="error">This field is required.</p>
+            }
+
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="emailAddress">Email Address *</label>
+              <input
+                slot="input"
+                matInput
+                type="email"
+                id="emailAddress"
+                [formControl]="mailingListForm.controls.emailAddress"
+                autocapitalize="off"
+                email
+              />
+            </biggive-text-input>
+            @if (submitted && mailingListForm.controls["emailAddress"].errors) {
+              <p class="error">This field is required.</p>
+            }
+
+            @if (mailingList() === "charity") {
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="jobTitle">Job Title *</label>
+                <input
+                  slot="input"
+                  matInput
+                  type="text"
+                  id="lastName"
+                  [formControl]="mailingListForm.controls.jobTitle"
+                />
+              </biggive-text-input>
+              @if (submitted && mailingListForm.controls["jobTitle"].errors) {
+                <p class="error">This field is required.</p>
+              }
+
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="organisationName">Your charity or organisation (if applicable)</label>
+                <input
+                  slot="input"
+                  matInput
+                  type="text"
+                  id="lastName"
+                  [formControl]="mailingListForm.controls.organisationName"
+                />
+              </biggive-text-input>
+            }
+
+            <div
+              class="frc-captcha"
+              [attr.data-sitekey]="friendlyCaptchaSiteKey"
+              data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+              #frccaptcha
+            ></div>
+
+            <div class="button-container">
+              <biggive-button
+                id="subscribe-button"
+                space-above="5"
+                spaceBelow="4"
+                colour-scheme="primary"
+                label="Subscribe"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                (click)="onSubmit()"
+              ></biggive-button>
+            </div>
+
+            <p class="terms-text">
+              We won't pass your details on to anyone else. By clicking the sign up button you agree to our
+              <a href="https://biggive.org/terms-and-conditions/" target="_blank">Terms and Conditions</a> and
+              <a href="https://biggive.org/privacy/" target="_blank">Privacy Policy</a>.
+            </p>
+          </form>
+        } @else {
+          <div class="thank-you-message">
+            <biggive-heading
+              space-above="0"
+              space-below="6"
+              html-element="h1"
+              size="1"
+              align="center"
+              text="Thank you for subscribing!"
+            ></biggive-heading>
+
+            <p>
+              You’re now part of our community. We’ll keep you updated with campaign news, inspiring stories, and ways
+              you can make double the difference through Big Give.
+            </p>
+
+            <div class="button-container">
+              <biggive-button
+                space-above="5"
+                spaceBelow="0"
+                colour-scheme="primary"
+                label="Return to Home"
+                full-width="false"
+                size="medium"
+                rounded="false"
+                url="/"
+              ></biggive-button>
+            </div>
+          </div>
+        }
+      </biggive-page-section>
+    </div>
+  </main>
+}
