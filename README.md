@@ -126,7 +126,7 @@ To test re-building the image (use FontAwesome token marked "Pro Package Token" 
     docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
 If you want to test _running_ the staging image but locally, then for CORS to work you must (before building)
-update `environment.staging.ts` to set `donateUriPrefix` to 'http://localhost:4000'.
+update [`environment.staging.ts`](./src/environments/environment.staging.ts) to set `donateUriPrefix` to 'http://localhost:4000'.
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
 
