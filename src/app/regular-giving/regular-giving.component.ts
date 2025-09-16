@@ -346,11 +346,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       throw new Error('Stripe Confirmation token is missing');
     }
 
-    /**
-     * @todo-regular-giving consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
-     *       generate it.*/
-    const dayOfMonth = Math.min(new Date().getDate(), 28);
-
     this.submitErrorMessage = undefined;
 
     let home: StartMandateParams['home'];
@@ -374,7 +369,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.regularGivingService
       .startMandate({
         amountInPence: this.getDonationAmountPence(),
-        dayOfMonth,
         campaignId: this.campaign.id,
         currency: currency,
         giftAid: !!this.giftAid,
