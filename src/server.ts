@@ -191,7 +191,13 @@ app.get('**', (req, res, next) => {
         { provide: REQUEST, useValue: req },
       ],
     })
-    .then((html) => res.send(html))
+    .then((html) => {
+      // For legacy browsers, rewrite paths to point to ES5 bundle
+      if (useLegacy) {
+        html = html.replace(/src="\/d\//g, 'src="/d-es5/').replace(/href="\/d\//g, 'href="/d-es5/');
+      }
+      res.send(html);
+    })
     .catch((err) => next(err));
 });
 
