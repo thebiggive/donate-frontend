@@ -22,7 +22,7 @@
     "cypress:run": "cypress run",
     "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts",
     "prettier": "prettier . --write --list-different",
-    "babel": "cp -r dist/donate-frontend/browser dist/donate-frontend/browser-es5 && babel dist/donate-frontend/browser-es5 --out-dir dist/donate-frontend/browser-es5 --extensions \".js\"",
+    "babel": "node scripts/create-legacy-build.js",
     "serve:ssr": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
@@ -96,6 +96,8 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.6.0",
+    "posthtml": "^0.16.6",
+    "posthtml-cli": "^0.10.0",
     "prettier": "3.5.3",
     "puppeteer": "22.15.*",
     "ts-loader": "^8.1.0",
