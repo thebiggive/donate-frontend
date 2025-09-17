@@ -47,7 +47,7 @@ This will:
 To verify the ES5 build process:
 
 ```bash
-node scripts/test-es5-build.js
+scripts/test-es5-build.js
 ```
 
 This will run the build process and check that:
