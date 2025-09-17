@@ -37,6 +37,7 @@ npm run babel
 ```
 
 This will:
+
 1. Create the ES5 build in `dist/donate-frontend/browser-es5`
 2. Bundle and transpile all JavaScript files
 3. Update HTML files to reference the ES5 assets
@@ -50,6 +51,7 @@ node scripts/test-es5-build.js
 ```
 
 This will run the build process and check that:
+
 - The ES5 build directory is created
 - JavaScript files are bundled (no `require()` statements)
 - HTML files are updated to use `/d-es5/` paths
@@ -72,6 +74,7 @@ function isLegacyBrowser(userAgent: string): boolean {
 ```
 
 For legacy browsers, the server:
+
 1. Serves static files from `/d-es5/` instead of `/d/`
 2. Rewrites HTML to reference ES5 assets
 

@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
-const process = require('process');
+const process = require("process");
 
 process.chdir(__dirname + "/..");
 
@@ -36,7 +36,7 @@ function copyNonJsFiles(sourceDir, targetDir) {
       // Create directory and recursively copy contents
       fs.mkdirSync(targetPath, { recursive: true });
       copyNonJsFiles(sourcePath, targetPath);
-    } else if (!item.endsWith('.js')) {
+    } else if (!item.endsWith(".js")) {
       // Copy non-JS files
       fs.copyFileSync(sourcePath, targetPath);
     }
@@ -47,7 +47,7 @@ copyNonJsFiles(BROWSER_DIR, BROWSER_ES5_DIR);
 
 // Step 4: Bundle and transpile JS files with webpack (now includes Babel)
 console.log("Bundling and transpiling JavaScript files with webpack...");
-execSync("npx webpack --config webpack.es5.config.js", { stdio: 'inherit' });
+execSync("npx webpack --config webpack.es5.config.js", { stdio: "inherit" });
 
 // Step 5: Update HTML files to reference the transpiled JS files
 console.log("Updating HTML file script references...");
