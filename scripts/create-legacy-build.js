@@ -23,17 +23,33 @@ fs.mkdirSync(BROWSER_ES5_DIR, { recursive: true });
 
 // Step 3: Copy non-JS assets from browser to browser-es5
 console.log("Copying non-JS assets to browser-es5...");
-execSync(`find "${BROWSER_DIR}" -type f -not -name "*.js" -exec cp --parents {} "${BROWSER_ES5_DIR}" \\;`);
 
-// Step 4: Bundle JS files with webpack
-console.log("Bundling JavaScript files with webpack...");
+function copyNonJsFiles(sourceDir, targetDir) {
+  const items = fs.readdirSync(sourceDir);
+
+  for (const item of items) {
+    const sourcePath = path.join(sourceDir, item);
+    const targetPath = path.join(targetDir, item);
+    const stat = fs.statSync(sourcePath);
+
+    if (stat.isDirectory()) {
+      // Create directory and recursively copy contents
+      fs.mkdirSync(targetPath, { recursive: true });
+      copyNonJsFiles(sourcePath, targetPath);
+    } else if (!item.endsWith('.js')) {
+      // Copy non-JS files
+      fs.copyFileSync(sourcePath, targetPath);
+    }
+  }
+}
+
+copyNonJsFiles(BROWSER_DIR, BROWSER_ES5_DIR);
+
+// Step 4: Bundle and transpile JS files with webpack (now includes Babel)
+console.log("Bundling and transpiling JavaScript files with webpack...");
 execSync("npx webpack --config webpack.es5.config.js", { stdio: 'inherit' });
 
-// Step 5: Transpile the bundled JS files with Babel
-console.log("Transpiling bundled JavaScript files with babel...");
-execSync(`npx babel "${BROWSER_ES5_DIR}" --out-dir "${BROWSER_ES5_DIR}" --extensions ".js" --verbose`);
-
-// Step 3: Update HTML files to reference the transpiled JS files
+// Step 5: Update HTML files to reference the transpiled JS files
 console.log("Updating HTML file script references...");
 
 function updateHtmlFile(filePath) {

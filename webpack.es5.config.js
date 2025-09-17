@@ -41,6 +41,9 @@ entryFiles.forEach(file => {
 module.exports = {
   mode: 'production',
   entry: entries,
+  experiments: {
+    outputModule: false, // Ensure we don't output ES modules
+  },
   output: {
     path: path.resolve(__dirname, BROWSER_ES5_DIR),
     filename: '[name].js',
@@ -52,19 +55,31 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        // We'll use Babel CLI separately in the script instead of babel-loader
-        use: []
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  chrome: '73'
+                },
+                useBuiltIns: false, // Disable automatic polyfill injection to avoid require() statements
+                modules: false, // Keep modules as ES6, let webpack handle bundling
+                forceAllTransforms: true // Force all transforms for maximum compatibility
+              }]
+            ]
+          }
+        }
       }
     ]
   },
   optimization: {
     // Minimize the output for production
     minimize: true,
-    // Ensure proper code splitting
-    splitChunks: {
-      chunks: 'all',
-      name: false
-    }
+    // Don't split chunks to keep it simple for legacy browsers
+    splitChunks: false,
+    // Disable scope hoisting for better ES5 compatibility
+    concatenateModules: false
   },
   // Ensure proper source maps for debugging
   devtool: 'source-map',

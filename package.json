@@ -72,6 +72,8 @@
     "@angular/compiler-cli": "^20.3.0",
     "@angular/language-service": "^20.3.0",
     "@babel/cli": "^7.28.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@babel/plugin-transform-runtime": "^7.28.3",
     "@babel/preset-env": "^7.28.3",
     "@babel/runtime": "7.27.6",
     "@cypress/schematic": "^2.5.1",
