@@ -37,7 +37,7 @@
     </div>
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      if (ie || !window.browserSupportsOptionalChaining && ! window.location.search.includes('no-compat-check') ) {
+      if (ie || (!window.browserSupportsOptionalChaining && !window.location.search.includes("no-compat-check"))) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
