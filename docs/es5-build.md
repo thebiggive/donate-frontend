@@ -33,7 +33,7 @@ The ES5 build process uses a combination of Webpack and Babel to:
 Run the following command to create the ES5 build:
 
 ```bash
-npm run babel
+npm run create-legacy-build
 ```
 
 This will:
