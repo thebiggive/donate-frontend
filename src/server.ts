@@ -157,9 +157,12 @@ app.use(
  * Handle all other requests by rendering the Angular application.
  */
 app.get('**', (req, res, next) => {
-  const { protocol, originalUrl, headers } = req;
+  const { protocol, originalUrl, headers, query } = req;
   const ua = headers['user-agent'] || '';
-  const useLegacy = isLegacyBrowser(ua);
+
+  // Use legacy bundle if explicitly requested via query param or if User-Agent indicates legacy browser
+  const legacyRequested = query.legacy === '1';
+  const useLegacy = legacyRequested || isLegacyBrowser(ua);
 
   // Choose modern or ES5 bundle
   const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;

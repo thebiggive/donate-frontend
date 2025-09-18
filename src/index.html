@@ -15,8 +15,37 @@
     <script>
       let a = {};
       a?.a?.a;
-      // One of the feature introduced in ES2020 that we rely on - the site will not be usable without it.
+      // One of the features introduced in ES2020 that we rely on - the site will not be usable without it.
       var browserSupportsOptionalChaining = true;
+    </script>
+    <script>
+      // Feature detection for Chrome 71+ (globalThis support)
+      var browserSupportsGlobalThis = typeof globalThis !== "undefined";
+    </script>
+    <script>
+      // Bundle optimization: redirect to legacy version if needed
+      (function () {
+        var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
+        var needsLegacy = ie || !window.browserSupportsOptionalChaining;
+        var hasLegacyParam = window.location.search.includes("legacy=1");
+        var hasNoCompatCheck = window.location.search.includes("no-compat-check");
+
+        // If browser needs legacy bundle but isn't using it (and no override), redirect
+        if (needsLegacy && !hasLegacyParam && !hasNoCompatCheck) {
+          var url = new URL(window.location);
+          url.searchParams.set("legacy", "1");
+          window.location.replace(url.toString());
+          return;
+        }
+
+        // If browser doesn't need legacy bundle but is using it, redirect to modern
+        if (!needsLegacy && hasLegacyParam && !hasNoCompatCheck) {
+          var url = new URL(window.location);
+          url.searchParams.delete("legacy");
+          window.location.replace(url.toString());
+          return;
+        }
+      })();
     </script>
   </head>
   <body>
@@ -35,7 +64,9 @@
     </div>
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      if (ie || (!window.browserSupportsOptionalChaining && !window.location.search.includes("no-compat-check"))) {
+      // Only hide app for truly ancient browsers (Chrome < 71, IE, very old Safari)
+      // globalThis was introduced in Chrome 71, Firefox 65, Safari 12.1
+      if (ie || (!window.browserSupportsGlobalThis && !window.location.search.includes("no-compat-check"))) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
