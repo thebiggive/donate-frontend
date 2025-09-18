@@ -622,7 +622,7 @@ export class DonationStartFormComponent
         // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
         if (
-          (clickEvent.target as HTMLElement).innerText.includes('Your details') &&
+          (clickEvent.target as HTMLElement).innerText.includes('Payment details') &&
           this.stepper.selected?.label === 'Gift Aid'
         ) {
           this.triedToLeaveGiftAid = true;
@@ -630,13 +630,12 @@ export class DonationStartFormComponent
 
         if (
           (clickEvent.target as HTMLElement).innerText.includes('Confirm') &&
-          this.stepper.selected?.label === 'Your details'
+          this.stepper.selected?.label === 'Receive updates'
         ) {
           this.triedToLeaveMarketing = true;
         }
 
         if (
-          this.psp === 'stripe' &&
           (clickEvent.target as HTMLElement).innerText.includes('Receive updates') &&
           !this.stripePaymentMethodReady
         ) {
@@ -1245,30 +1244,6 @@ export class DonationStartFormComponent
       "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
         ' us if this message persists.',
     );
-  }
-
-  captchaIdentityReturn(captchaResponse: string | null) {
-    if (captchaResponse === null) {
-      // Ensure no other callback tries to use the old captcha code, and will re-execute
-      // the catcha to get a new one as needed instead.
-
-      // Blank returns happen e.g. on prompt and on expiry. So even when we know a puzzle was just
-      // opened we can't safely show an incomplete puzzle error based on this callback.
-      this.idCaptchaCode = undefined;
-      return;
-    }
-
-    if (this.stepChangeBlockedByCaptcha) {
-      this.stepper.next();
-      this.stepChangeBlockedByCaptcha = false;
-    }
-
-    this.markYourDonationStepComplete();
-
-    this.idCaptchaCode = captchaResponse;
-    if (!this.donation && this.donationAmount > 0) {
-      this.createDonationAndMaybePerson();
-    }
   }
 
   customTip(): boolean {
