@@ -39,7 +39,6 @@ import {
 import { firstValueFrom } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
-import { CardIconsService } from '../../card-icons.service';
 import { campaignHiddenMessage } from '../../../environments/common';
 import { countryOptions } from '../../countries';
 import { Donation, maximumDonationAmount, OVERSEAS, PaymentMethodType } from '../../donation.model';
@@ -115,7 +114,6 @@ declare let _paq: {
 export class DonationStartFormComponent
   implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
 {
-  cardIconsService = inject(CardIconsService);
   private cd = inject(ChangeDetectorRef);
   private conversionTrackingService = inject(ConversionTrackingService);
   dialog = inject(MatDialog);
@@ -602,10 +600,8 @@ export class DonationStartFormComponent
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent) => {
-        if (this.stepper.selectedIndex > 0) {
-          this.validateAmountsCreateDonorDonationIfPossible(); // Handles amount error if needed, like Continue button does.
-          return;
-        }
+        // Amounts validation is now handled automatically by the next() method
+        // when leaving the amounts step, so no need for separate validation here
 
         // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
@@ -658,6 +654,11 @@ export class DonationStartFormComponent
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+    if (event.selectedIndex > 0 && !this.donor) {
+      // Handles step changes e.g. via heading click which would not be caught by `next()` processing.
+      await this.validateAmountsCreateDonorDonationIfPossible();
+    }
+
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
@@ -1273,12 +1274,12 @@ export class DonationStartFormComponent
     this.tipPercentageChanged = true;
   }
 
-  interceptSubmitAndProceedInstead(event: Event) {
+  async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
-    this.next();
+    await this.next();
   }
 
-  next() {
+  async next() {
     // If the initial donation *create* has failed, we want to try again each time,
     // not just re-surface the existing error. The step change event is what
     // leads to the DonationService.create() [POST] call. Note that just setting the
@@ -1299,6 +1300,16 @@ export class DonationStartFormComponent
       this.stepper.next();
       return;
     }
+
+    // If we're leaving the amounts step, we need to validate and set up donation/Stripe
+    // This ensures Enter key navigation behaves the same as Continue button clicks
+    if (this.stepper.selected?.label === this.yourDonationStepLabel) {
+      const success = await this.validateAmountsCreateDonorDonationIfPossible();
+      if (!success) {
+        return; // Don't proceed if validation failed
+      }
+    }
+
     this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
@@ -1316,18 +1327,10 @@ export class DonationStartFormComponent
   }
 
   /**
-   * Validates the `amounts` group, then calls the general step change fn `next()`. Used by both
-   * the first Continue button and by the step header click handler, which I think helped guard
-   * against a scenario where one might get 'stuck' without seeing the amount error that explains why.
+   * Validates the amounts step, shows any errors, and if valid creates the donation and person if needed.
+   * Callers must refuse to leave step 1 until this is passing because Stripe will be unusable if we haven't
+   * done this initial work.
    */
-  async progressToNonAmountsStep() {
-    const success = await this.validateAmountsCreateDonorDonationIfPossible();
-
-    if (success) {
-      this.next();
-    }
-  }
-
   private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
@@ -1357,7 +1360,7 @@ export class DonationStartFormComponent
     return true;
   }
 
-  progressFromStepGiftAid(): void {
+  async progressFromStepGiftAid(): Promise<void> {
     this.triedToLeaveGiftAid = true;
     const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
     const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
@@ -1387,10 +1390,10 @@ export class DonationStartFormComponent
       return;
     }
 
-    this.next();
+    await this.next();
   }
 
-  progressFromStepReceiveUpdates(): void {
+  async progressFromStepReceiveUpdates(): Promise<void> {
     this.triedToLeaveMarketing = true;
     const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean);
     if (errorMessages.length > 0) {
@@ -1398,7 +1401,7 @@ export class DonationStartFormComponent
       return;
     }
 
-    this.next();
+    await this.next();
   }
 
   public errorMessagesForMarketingStep = () => {
@@ -2475,7 +2478,7 @@ export class DonationStartFormComponent
     }
   }
 
-  continueFromPaymentStep() {
+  async continueFromPaymentStep() {
     if (!this.readyToProgressFromPaymentStep) {
       this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
       this.toast.showError(this.paymentStepErrors);
@@ -2485,7 +2488,7 @@ export class DonationStartFormComponent
       // show up again in case the next attempt has the same problem.
       this.paymentStepErrors = '';
       this.stripeError = undefined;
-      this.next();
+      await this.next();
     }
   }
 
