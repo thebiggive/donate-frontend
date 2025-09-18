@@ -321,7 +321,7 @@ export class DonationStartFormComponent
     console.warn('DonationStartFormComponent.ngOnInit - donor state:', {
       donorExists: !!this.donor,
       donorId: this.donor?.id,
-      browserUserAgent: navigator.userAgent,
+      browserUserAgent: navigator.userAgent
     });
 
     if (isPlatformBrowser(this.platformId)) {
@@ -486,7 +486,7 @@ export class DonationStartFormComponent
     console.warn('DonationStartFormComponent.ngAfterViewInit - donor state:', {
       donorExists: !!this.donor,
       donorId: this.donor?.id,
-      stripeMounted: !!this.stripePaymentElement,
+      stripeMounted: !!this.stripePaymentElement
     });
 
     if (!isPlatformBrowser(this.platformId)) {
@@ -652,7 +652,7 @@ export class DonationStartFormComponent
   reset = () => {
     console.warn('DonationStartFormComponent.reset - resetting donor state:', {
       donorBeforeReset: !!this.donor,
-      donorIdBeforeReset: this.donor?.id,
+      donorIdBeforeReset: this.donor?.id
     });
     this.donor = undefined;
     this.creditPenceToUse = 0;
@@ -679,7 +679,7 @@ export class DonationStartFormComponent
       donorExists: !!this.donor,
       donorId: this.donor?.id,
       idCaptchaCode: this.idCaptchaCode,
-      paymentStepIndex: this.paymentStepIndex,
+      paymentStepIndex: this.paymentStepIndex
     });
 
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
@@ -794,7 +794,7 @@ export class DonationStartFormComponent
       console.warn('DonationStartFormComponent.stepChanged - proceeding to post-payment step:', {
         donorExists: !!this.donor,
         donorId: this.donor?.id,
-        donationExists: !!this.donation,
+        donationExists: !!this.donation
       });
       this.updateNewPersonInBackend(this.donation);
     }
@@ -822,14 +822,14 @@ export class DonationStartFormComponent
 
     console.warn('DonationStartFormComponent.identityCreateOrUpdate - starting identity process:', {
       donorExists: !!this.donor,
-      donorId: this.donor?.id,
+      donorId: this.donor?.id
     });
 
     this.identityService.update(person).subscribe({
       next: (person) => {
         console.warn('DonationStartFormComponent.identityCreateOrUpdate - identity service success:', {
           updatedPersonId: person?.id,
-          previousDonorId: this.donor?.id,
+          previousDonorId: this.donor?.id
         });
         this.donor = person;
       },
@@ -837,7 +837,7 @@ export class DonationStartFormComponent
         console.warn('DonationStartFormComponent.identityCreateOrUpdate - identity service error:', {
           error: error.message,
           status: error.status,
-          donorBeforeError: !!this.donor,
+          donorBeforeError: !!this.donor
         });
         // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
         // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
