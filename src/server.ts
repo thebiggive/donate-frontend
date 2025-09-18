@@ -85,7 +85,7 @@ app.use(
           'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
-          `'wasm-unsafe-eval'`,
+          `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
           `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
           'https://*.js.stripe.com',
           'https://js.stripe.com',
