@@ -1739,22 +1739,43 @@ export class DonationStartFormComponent
   }
 
   private createDonationAndMaybePerson(): void {
+    console.warn('DonationStartFormComponent.createDonationAndMaybePerson - entry point:', {
+      donorExists: !!this.donor,
+      donorId: this.donor?.id,
+      idCaptchaCode: this.idCaptchaCode,
+      creatingDonation: this.creatingDonation,
+      campaignExists: !!this.campaign,
+      campaignCharityId: this.campaign?.charity?.id,
+      psp: this.psp,
+    });
+
     clearTimeout(this.donationRetryTimeout);
     if (this.creatingDonation) {
+      console.warn('DonationStartFormComponent.createDonationAndMaybePerson - EARLY EXIT: already creating donation');
       // Ensure only 1 trigger is doing this at a time.
       return;
     }
 
     if (!this.donor && !this.idCaptchaCode) {
+      console.warn(
+        'DonationStartFormComponent.createDonationAndMaybePerson - EARLY EXIT: no donor and no captcha code',
+      );
       this.markYourDonationStepIncomplete();
       return;
     }
 
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+      console.warn('DonationStartFormComponent.createDonationAndMaybePerson - EARLY EXIT: missing campaign data:', {
+        campaignExists: !!this.campaign,
+        charityIdExists: !!this.campaign?.charity?.id,
+        pspExists: !!this.psp,
+      });
       this.donationCreateError = true;
       this.showDonationCreateError();
       return;
     }
+
+    console.warn('DonationStartFormComponent.createDonationAndMaybePerson - proceeding with donation creation');
 
     this.creatingDonation = true;
     this.donationCreateError = false;
