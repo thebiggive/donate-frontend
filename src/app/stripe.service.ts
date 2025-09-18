@@ -130,7 +130,7 @@ export class StripeService {
     } catch (err) {
       // Assuming this precludes setting `didInit` for now. If we can detect non-critical issues with performance
       // tracking code in older browsers, then we might decide otherwise later.
-      console.log('loadStripe hit an error: ', err);
+      console.error('loadStripe hit an error: ', err);
     }
   }
 
