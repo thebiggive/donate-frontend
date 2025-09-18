@@ -318,12 +318,6 @@ export class DonationStartFormComponent
   }
 
   ngOnInit() {
-    console.warn('DonationStartFormComponent.ngOnInit - donor state:', {
-      donorExists: !!this.donor,
-      donorId: this.donor?.id,
-      browserUserAgent: navigator.userAgent
-    });
-
     if (isPlatformBrowser(this.platformId)) {
       /**
        * For some reason awaiting this promise makes tests fail with
@@ -483,12 +477,6 @@ export class DonationStartFormComponent
   }
 
   async ngAfterViewInit() {
-    console.warn('DonationStartFormComponent.ngAfterViewInit - donor state:', {
-      donorExists: !!this.donor,
-      donorId: this.donor?.id,
-      stripeMounted: !!this.stripePaymentElement
-    });
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -650,10 +638,6 @@ export class DonationStartFormComponent
   }
 
   reset = () => {
-    console.warn('DonationStartFormComponent.reset - resetting donor state:', {
-      donorBeforeReset: !!this.donor,
-      donorIdBeforeReset: this.donor?.id
-    });
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
@@ -674,16 +658,7 @@ export class DonationStartFormComponent
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    console.warn('DonationStartFormComponent.stepChanged - checking donor state:', {
-      selectedIndex: event.selectedIndex,
-      donorExists: !!this.donor,
-      donorId: this.donor?.id,
-      idCaptchaCode: this.idCaptchaCode,
-      paymentStepIndex: this.paymentStepIndex
-    });
-
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
-      console.warn('DonationStartFormComponent.stepChanged - blocking step change due to missing donor');
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
         this.toast.showError(
@@ -791,11 +766,6 @@ export class DonationStartFormComponent
     }
 
     if (event.selectedIndex > this.paymentStepIndex && this.donor && this.donation) {
-      console.warn('DonationStartFormComponent.stepChanged - proceeding to post-payment step:', {
-        donorExists: !!this.donor,
-        donorId: this.donor?.id,
-        donationExists: !!this.donation
-      });
       this.updateNewPersonInBackend(this.donation);
     }
   }
@@ -820,25 +790,11 @@ export class DonationStartFormComponent
     const person = this.buildPersonFromDonation(donation);
     person.id = idAndJWT.id;
 
-    console.warn('DonationStartFormComponent.identityCreateOrUpdate - starting identity process:', {
-      donorExists: !!this.donor,
-      donorId: this.donor?.id
-    });
-
     this.identityService.update(person).subscribe({
       next: (person) => {
-        console.warn('DonationStartFormComponent.identityCreateOrUpdate - identity service success:', {
-          updatedPersonId: person?.id,
-          previousDonorId: this.donor?.id
-        });
         this.donor = person;
       },
       error: (error: HttpErrorResponse) => {
-        console.warn('DonationStartFormComponent.identityCreateOrUpdate - identity service error:', {
-          error: error.message,
-          status: error.status,
-          donorBeforeError: !!this.donor
-        });
         // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
         // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
         this.matomoTracker.trackEvent(
