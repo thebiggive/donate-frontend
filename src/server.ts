@@ -14,6 +14,7 @@ import { COUNTRY_CODE } from './app/country-code.token';
 import { GetSiteControlService } from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import { environment } from './environments/environment';
+import { supportedBrowsers } from './supportedBrowsers';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
@@ -22,15 +23,9 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
 function isLegacyBrowser(userAgent: string): boolean {
-  // Browsers that support globalThis but need ES5 bundle (Tier 2: Legacy-Compatible)
-  // Chrome 71-105, Safari 12.1-13.x, Firefox 65-103, Edge 79-106
-  return (
-    /Chrome\/([7][1-9]|[8-9][0-9]|10[0-5])/.test(userAgent) ||
-    /MSIE|Trident/.test(userAgent) ||
-    /Safari\/(12\.[1-9]|13\.[0-9])\./.test(userAgent) ||
-    /Firefox\/(6[5-9]|[7-9][0-9]|10[0-3])/.test(userAgent) ||
-    /Edge\/(79|[8-9][0-9]|10[0-6])\./.test(userAgent)
-  );
+  // Use the same browserslist-generated logic as client-side code
+  // Modern browsers (Tier 1) get modern bundle, all others get ES5 bundle
+  return !supportedBrowsers.test(userAgent);
 }
 
 enableProdMode();
