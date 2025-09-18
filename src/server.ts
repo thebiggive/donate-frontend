@@ -22,12 +22,14 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
 function isLegacyBrowser(userAgent: string): boolean {
-  // Chrome < 80, Safari < 13, Edge < 80, IE, etc.
+  // Browsers that support globalThis but need ES5 bundle (Tier 2: Legacy-Compatible)
+  // Chrome 71-105, Safari 12.1-13.x, Firefox 65-103, Edge 79-106
   return (
-    /Chrome\/([5-7][0-9])/.test(userAgent) ||
+    /Chrome\/([7][1-9]|[8-9][0-9]|10[0-5])/.test(userAgent) ||
     /MSIE|Trident/.test(userAgent) ||
-    /Safari\/(12|11|10|9|8|7|6|5|4|3|2|1)\./.test(userAgent) ||
-    /Edge\/(1[0-7]|[0-9])\./.test(userAgent)
+    /Safari\/(12\.[1-9]|13\.[0-9])\./.test(userAgent) ||
+    /Firefox\/(6[5-9]|[7-9][0-9]|10[0-3])/.test(userAgent) ||
+    /Edge\/(79|[8-9][0-9]|10[0-6])\./.test(userAgent)
   );
 }
 
