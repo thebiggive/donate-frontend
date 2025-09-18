@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import {
   ConfirmationTokenResult,
   CustomFontSource,
-  loadStripe,
   SetupIntentResult,
   Stripe,
   StripeElements,
@@ -10,6 +9,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
 
 import { environment } from '../environments/environment';
 import { environment as stagingEnvironment } from '../environments/environment.staging';
@@ -124,9 +124,14 @@ export class StripeService {
     // the library's objects, which allows for better IDE hinting and more
     // checks that we are handling Stripe objects as intended.
     // See https://github.com/stripe/stripe-js
-    this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
-
-    this.didInit = true;
+    try {
+      this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
+      this.didInit = true;
+    } catch (err) {
+      // Assuming this precludes setting `didInit` for now. If we can detect non-critical issues with performance
+      // tracking code in older browsers, then we might decide otherwise later.
+      console.log('loadStripe hit an error: ', err);
+    }
   }
 
   public stripeElementsForDonation(
