@@ -229,6 +229,9 @@ export class StripeService {
 
   public static createStripeElement(stripeElements: StripeElements) {
     return stripeElements.create('payment', {
+      // Stripe note that in this context you can use Apple & Google Pay, as well as payment methods that are distinct
+      // in their API. https://docs.stripe.com/payments/customize-payment-methods#sort-payment-methods
+      paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'pay_by_bank'],
       wallets: {
         applePay: 'auto',
         googlePay: 'auto',
