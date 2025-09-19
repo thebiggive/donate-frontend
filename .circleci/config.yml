@@ -58,7 +58,7 @@ jobs:
                 aws_access_key_id: AWS_ACCESS_KEY_ID
                 aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
-          extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
+          extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
           repo: "${AWS_ECR_REPO_NAME}"
           region: "us-east-1"
           tag: "<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}"
@@ -68,7 +68,7 @@ jobs:
       env:
         type: string
     docker:
-      - image: "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+      - image: "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
     steps:
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
