@@ -199,10 +199,24 @@
 
               @if (campaign.additionalImageUris.length > 0) {
                 <div class="c-additional">
-                  <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
-                  <!-- eslint-disable @angular-eslint/template/alt-text -->
                   @for (image of campaign.additionalImageUris; track $index) {
-                    <img [src]="image.uri | optimisedImage: 850 | async" class="c-additional__images" />
+                    <!--- at least for now, using typeof so we treat empty alt as distinct from missing alt. Ideally
+                          empty alt will mean someone has decided the image does not want alt-text, while missing alt
+                          means they haven't made that decision, probably because the image was uploaded at a time when
+                          we did not accept alt-text. Whether we'll actually build the data structure to allow
+                          distinguishing these cases remains to be decided.
+                          -->
+                    @if (typeof image.alt_text === "string") {
+                      <img
+                        [src]="image.uri | optimisedImage: 850 | async"
+                        class="c-additional__images"
+                        [alt]="image.alt_text"
+                      />
+                    } @else {
+                      <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
+                      <!-- eslint-disable @angular-eslint/template/alt-text -->
+                      <img [src]="image.uri | optimisedImage: 850 | async" class="c-additional__images" />
+                    }
                   }
                   <!-- eslint-enable @angular-eslint/template/alt-text -->
                 </div>
