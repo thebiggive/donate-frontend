@@ -10,7 +10,7 @@
 # Tier 2 browsers (Chrome 71-105, etc.) get the ES5 build with polyfills.
 
 Chrome >= 106 # released 2022-09-27
-ChromeAndroid >= 107 # 2022-09-27
+ChromeAndroid >= 106 # 2022-09-28
 
 Edge >= 107 # released 2022-10-27
 Firefox >= 104 # released 2022-10-23
