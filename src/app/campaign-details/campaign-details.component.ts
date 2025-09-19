@@ -154,10 +154,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
 
+    const bannerUri = campaign.banner?.uri || campaign.bannerUri;
     if (this.isEarlyPreview()) {
-      this.pageMeta.setCommon('PREVIEW: ' + campaign.title, summaryStart, campaign.bannerUri, true);
+      this.pageMeta.setCommon('PREVIEW: ' + campaign.title, summaryStart, bannerUri, true);
     } else {
-      this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
+      this.pageMeta.setCommon(campaign.title, summaryStart, bannerUri);
     }
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.

@@ -135,10 +135,13 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit() {
     if (this.isPlatformBrowser) {
-      // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
-      const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
-      if (!browserIsSupported) {
-        this.browserSupportedMessage = `Your current browser: ${capitalize(detect()?.name)} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
+      // Show warning for users getting ES5 bundle (Tier 2: Legacy-Compatible browsers)
+      // These browsers work but may have visual imperfections like Chrome 74
+      const isUsingLegacyBundle = window.location.search.includes('legacy=1');
+      const browserIsModern = supportedBrowsers.test(navigator.userAgent);
+
+      if (isUsingLegacyBundle || !browserIsModern) {
+        this.browserSupportedMessage = `This browser, ${capitalize(detect()?.name)} ${detect()?.version}, is older than Big Give fully supports, so some things may not work perfectly. If you have trouble, please try another browser.`;
       }
 
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {

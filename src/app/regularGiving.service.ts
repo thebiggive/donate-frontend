@@ -14,7 +14,6 @@ import { Campaign } from './campaign.model';
 export type StartMandateParams = {
   amountInPence: number;
   currency: 'GBP';
-  dayOfMonth: number;
   campaignId: string;
   giftAid: boolean;
 
