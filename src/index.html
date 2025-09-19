@@ -13,7 +13,6 @@
     <script src="/assets/custom-libs/modernizr.js"></script>
     <!-- Just webp support detection -->
     <script>
-      // Feature detection for Chrome 71+ (globalThis support)
       var browserSupportsGlobalThis = typeof globalThis !== "undefined";
     </script>
     <script>
@@ -58,8 +57,7 @@
     </div>
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      // Only hide app for truly ancient browsers (Chrome < 71, IE, very old Safari)
-      // globalThis was introduced in Chrome 71, Firefox 65, Safari 12.1
+      // Only hide app for browsers likely to break even with ES5 bundle
       if (ie || (!window.browserSupportsGlobalThis && !window.location.search.includes("no-compat-check"))) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
