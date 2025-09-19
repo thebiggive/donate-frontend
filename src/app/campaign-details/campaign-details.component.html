@@ -200,7 +200,7 @@
               @if (campaign.additionalImageUris.length > 0) {
                 <div class="c-additional">
                   @for (image of campaign.additionalImageUris; track $index) {
-                    <!--- at east for now, using typeof so we treat empty alt as distinct from missing alt. Ideally
+                    <!--- at least for now, using typeof so we treat empty alt as distinct from missing alt. Ideally
                           empty alt will mean someone has decided the image does not want alt-text, while missing alt
                           means they haven't made that decision, probably because the image was uploaded at a time when
                           we did not accept alt-text. Whether we'll actually build the data structure to allow
