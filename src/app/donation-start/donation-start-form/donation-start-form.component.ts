@@ -654,11 +654,6 @@ export class DonationStartFormComponent
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    if (event.selectedIndex > 0 && !this.donor) {
-      // Handles step changes e.g. via heading click which would not be caught by `next()` processing.
-      await this.validateAmountsCreateDonorDonationIfPossible();
-    }
-
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
@@ -1204,30 +1199,6 @@ export class DonationStartFormComponent
     );
   }
 
-  captchaIdentityReturn(captchaResponse: string | null) {
-    if (captchaResponse === null) {
-      // Ensure no other callback tries to use the old captcha code, and will re-execute
-      // the catcha to get a new one as needed instead.
-
-      // Blank returns happen e.g. on prompt and on expiry. So even when we know a puzzle was just
-      // opened we can't safely show an incomplete puzzle error based on this callback.
-      this.idCaptchaCode = undefined;
-      return;
-    }
-
-    if (this.stepChangeBlockedByCaptcha) {
-      this.stepper.next();
-      this.stepChangeBlockedByCaptcha = false;
-    }
-
-    this.markYourDonationStepComplete();
-
-    this.idCaptchaCode = captchaResponse;
-    if (!this.donation && this.donationAmount > 0) {
-      this.createDonationAndMaybePerson();
-    }
-  }
-
   customTip(): boolean {
     return this.amountsGroup.value.tipPercentage === 'Other';
   }
@@ -1301,15 +1272,6 @@ export class DonationStartFormComponent
       return;
     }
 
-    // If we're leaving the amounts step, we need to validate and set up donation/Stripe
-    // This ensures Enter key navigation behaves the same as Continue button clicks
-    if (this.stepper.selected?.label === this.yourDonationStepLabel) {
-      const success = await this.validateAmountsCreateDonorDonationIfPossible();
-      if (!success) {
-        return; // Don't proceed if validation failed
-      }
-    }
-
     this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
@@ -1331,7 +1293,7 @@ export class DonationStartFormComponent
    * Callers must refuse to leave step 1 until this is passing because Stripe will be unusable if we haven't
    * done this initial work.
    */
-  private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
+  async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
       this.toast.showError(
