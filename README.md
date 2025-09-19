@@ -97,14 +97,14 @@ fund allocation. For data in Salesforce to be eventually consistent, it must als
 We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
 donors' security.
 
-Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support
-release cycles.
+Supported "tier 1" browsers are all modern mobile & desktop browsers if kept up to date, including extended support release cycles.
 
-Specifically, we intended to support the browser versions referenced in [`.browserslistrc`](./.browserslistrc) which is used in the
-Angular build - but work is in progress to expand testing on older versions, check whether there are any additional versions we can
-and should support or versions we include in the list here where the site is not currently usable.
+We also recognise that older devices can't always easily be kept "evergreen" and make a best effort to support browsers going back
+at least a couple of additional years beyond this. "Tier 2" browsers receive a legacy bundle which will be a bit slower; it should usually
+work, with the caveat of some visual imperfections being likely. There should be a coral warning banner above the main app in tier 2
+browsers.
 
-For more detail see the [Browser Support](./docs/browser-support.md) document.
+For more technical detail and how to update the modern versions list, see the [Browser Support](./docs/browser-support.md) document.
 
 ## Docker configuration
 

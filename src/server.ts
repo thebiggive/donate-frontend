@@ -14,6 +14,7 @@ import { COUNTRY_CODE } from './app/country-code.token';
 import { GetSiteControlService } from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import { environment } from './environments/environment';
+import { supportedBrowsers } from './supportedBrowsers';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
@@ -22,13 +23,9 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
 function isLegacyBrowser(userAgent: string): boolean {
-  // Chrome < 80, Safari < 13, Edge < 80, IE, etc.
-  return (
-    /Chrome\/([5-7][0-9])/.test(userAgent) ||
-    /MSIE|Trident/.test(userAgent) ||
-    /Safari\/(12|11|10|9|8|7|6|5|4|3|2|1)\./.test(userAgent) ||
-    /Edge\/(1[0-7]|[0-9])\./.test(userAgent)
-  );
+  // Use the same browserslist-generated logic as client-side code
+  // Modern browsers (Tier 1) get modern bundle, all others get ES5 bundle
+  return !supportedBrowsers.test(userAgent);
 }
 
 enableProdMode();
@@ -75,9 +72,10 @@ app.use(
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
-          `'sha256-ldtQnqimsKcRUds7F3IzgqxwY6gMsUrQ93UJovC7kUQ='`, // optional chaining support check
-          `'sha256-cpOTznxFB+e6XZRM96rUK77BHQnjwwRhEn29eizS4I0='`, // "Unsupported browser" inline script.
-          `'sha256-jvZCy3AOTLkDmn8WgkoillpzgJ__b5TnTFnYZVKMX20='`, // one of the above's new/ maybe temporary hash, not sure which yet.
+          // See index.html for the following 3.
+          'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo=', // globalThis support check
+          'sha256-vRAKiX6kRCo4yTPGneJM2hFNyqbfnwubxNRmj6JUSS4=', // Modern / legacy bundle choice
+          'sha256-vnXVoBuq4KQ/XoebiR4pqNdOjZuTenzWy/flCILBxNo=', // Fully unsupported check / message visibility toggle
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
@@ -157,9 +155,12 @@ app.use(
  * Handle all other requests by rendering the Angular application.
  */
 app.get('**', (req, res, next) => {
-  const { protocol, originalUrl, headers } = req;
+  const { protocol, originalUrl, headers, query } = req;
   const ua = headers['user-agent'] || '';
-  const useLegacy = isLegacyBrowser(ua);
+
+  // Use legacy bundle if explicitly requested via query param or if User-Agent indicates legacy browser
+  const legacyRequested = query.legacy === '1';
+  const useLegacy = legacyRequested || isLegacyBrowser(ua);
 
   // Choose modern or ES5 bundle
   const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;

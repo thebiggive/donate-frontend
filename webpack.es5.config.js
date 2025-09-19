@@ -63,7 +63,7 @@ module.exports = {
                 "@babel/preset-env",
                 {
                   targets: {
-                    chrome: "73",
+                    chrome: "71",
                   },
                   useBuiltIns: false, // Disable automatic polyfill injection to avoid require() statements
                   modules: false, // Keep modules as ES6, let webpack handle bundling

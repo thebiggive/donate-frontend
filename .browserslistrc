@@ -5,13 +5,12 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
-# Chrome 64 seems fine with vite, 63 crashes it.
-# But Chrome 107 is the earliest version available to test on on testing bot that the site works on, and
-# probably very few people are running much earlier versions. Possibly Chrome 106 as thats the last version available on
-# Android 6.
-# We also need to have at least Chrome 80 as that introduced optional chaining from ES2020.
+# Tier 1: Modern browsers (get modern bundle, no warnings)
+# This guides Angular's build optimization for the modern bundle.
+# Tier 2 browsers (Chrome 71-105, etc.) get the ES5 build with polyfills.
+
 Chrome >= 106 # released 2022-09-27
-ChromeAndroid >= 107 # 2022-09-27
+ChromeAndroid >= 106 # 2022-09-28
 
 Edge >= 107 # released 2022-10-27
 Firefox >= 104 # released 2022-10-23
