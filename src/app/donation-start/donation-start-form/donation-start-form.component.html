@@ -6,6 +6,7 @@
         [stepControl]="amountsGroup"
         [label]="yourDonationStepLabel"
         class="c-your-donation"
+        (interacted)="validateAmountsCreateDonorDonationIfPossible()"
       >
         @if (campaign.matchFundsRemaining > 0) {
           <p class="donation_highlight">Match funds are currently available!</p>
@@ -191,7 +192,12 @@
         </div>
       </mat-step>
       @if (campaign.currencyCode === "GBP") {
-        <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup" label="Gift Aid">
+        <mat-step
+          formGroupName="giftAid"
+          [stepControl]="giftAidGroup"
+          label="Gift Aid"
+          (interacted)="progressFromStepGiftAid()"
+        >
           <p class="b-mt-40 b-bold b-rt-0">
             <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
             <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
@@ -302,19 +308,16 @@
             </div>
           }
           <div style="text-align: center">
-            <button
-              type="button"
-              class="continue"
-              mat-raised-button
-              color="primary"
-              (click)="progressFromStepGiftAid()"
-            >
-              Continue
-            </button>
+            <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
           </div>
         </mat-step>
       }
-      <mat-step formGroupName="payment" [stepControl]="paymentGroup" label="Payment details">
+      <mat-step
+        formGroupName="payment"
+        [stepControl]="paymentGroup"
+        label="Payment details"
+        (interacted)="continueFromPaymentStep()"
+      >
         <p class="b-grey b-rt-sm" style="padding-top: 20px">
           <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 12.7rem" />
           <br />
@@ -442,12 +445,15 @@
           </p>
         }
         <div style="text-align: center">
-          <button type="button" class="continue" mat-raised-button color="primary" (click)="continueFromPaymentStep()">
-            Continue
-          </button>
+          <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
-      <mat-step formGroupName="marketing" [stepControl]="marketingGroup" label="Receive updates">
+      <mat-step
+        formGroupName="marketing"
+        [stepControl]="marketingGroup"
+        label="Receive updates"
+        (interacted)="progressFromStepReceiveUpdates()"
+      >
         <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">
           Would you be happy to receive email updates from
           <span class="colour-primary">{{ campaign.charity.name }}</span
@@ -559,15 +565,7 @@
           </div>
         }
         <div style="text-align: center">
-          <button
-            type="button"
-            class="continue"
-            mat-raised-button
-            color="primary"
-            (click)="progressFromStepReceiveUpdates()"
-          >
-            Continue
-          </button>
+          <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
       <mat-step [label]="confirmStepLabel" class="c-make-your-donation">
