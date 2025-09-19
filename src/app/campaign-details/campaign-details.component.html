@@ -36,15 +36,28 @@
 
   <div class="c-details-container">
     <div class="b-primary-column">
-      <biggive-branded-image
-        space-below="4"
-        [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
-        [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-        [slug]="campaign.isMatched ? 'Match Funded' : null"
-        [charityName]="campaign.charity.name"
-        [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
-      >
-      </biggive-branded-image>
+      @if (campaign.banner) {
+        <!-- todo - edit component to accept alt-text and also pass that here -->
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="campaign.banner.uri | optimisedImage: 2000 | async"
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+        >
+        </biggive-branded-image>
+      } @else {
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+        >
+        </biggive-branded-image>
+      }
 
       <biggive-heading
         space-above="0"

@@ -1690,10 +1690,11 @@ export class DonationStartFormComponent
     this.setConditionalValidators();
     this.setChampionOptInValidity();
 
+    const bannerUri = this.campaign.banner?.uri || this.campaign.bannerUri;
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
-      this.campaign.bannerUri,
+      bannerUri,
     );
   }
 
