@@ -29,7 +29,7 @@ export type Campaign = {
   endDate: string;
   matchFundsTotal: number;
   aims: string[];
-  additionalImageUris: Array<{ uri: string; order: number }>;
+  additionalImageUris: Array<{ uri: string; order: number; alt_text?: string | undefined }>;
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];
