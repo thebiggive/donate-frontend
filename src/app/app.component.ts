@@ -141,7 +141,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       const browserIsModern = supportedBrowsers.test(navigator.userAgent);
 
       if (isUsingLegacyBundle || !browserIsModern) {
-        this.browserSupportedMessage = `Your current browser: ${capitalize(detect()?.name)} ${detect()?.version} is older than Big Give can fully support, so some things may not work perfectly. If you have trouble, please try another browser.`;
+        this.browserSupportedMessage = `This browser, ${capitalize(detect()?.name)} ${detect()?.version}, is older than Big Give fully supports, so some things may not work perfectly. If you have trouble, please try another browser.`;
       }
 
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
