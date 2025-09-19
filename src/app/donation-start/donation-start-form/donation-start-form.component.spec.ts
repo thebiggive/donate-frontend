@@ -41,7 +41,7 @@ describe('DonationStartForm', () => {
           order: 100,
         },
       ],
-      bannerUri: 'https://example.com/some-banner.png',
+      banner: { uri: 'https://example.com/some-banner.png', alt_text: 'This is some alt-text' },
       beneficiaries: ['Other'],
       budgetDetails: [
         {

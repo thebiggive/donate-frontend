@@ -213,7 +213,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.pageMeta.setCommon(
       `Regular Giving for ${this.campaign.charity.name}`,
       `Regular Giving for ${this.campaign.charity.name}`,
-      this.campaign.bannerUri,
+      this.campaign.banner?.uri || this.campaign.bannerUri,
     );
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
