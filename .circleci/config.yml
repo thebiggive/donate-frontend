@@ -60,7 +60,7 @@ jobs:
           # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
           extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
           repo: "${AWS_ECR_REPO_NAME}"
-          region: "${AWS_REGION}"
+          region: "us-east-1"
           tag: "<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}"
 
   copy-ecr-static-to-s3:
