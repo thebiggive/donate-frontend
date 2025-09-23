@@ -2,7 +2,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
@@ -111,9 +110,7 @@ declare let _paq: {
     ExactCurrencyPipe,
   ],
 })
-export class DonationStartFormComponent
-  implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
-{
+export class DonationStartFormComponent implements AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   private cd = inject(ChangeDetectorRef);
   private conversionTrackingService = inject(ConversionTrackingService);
   dialog = inject(MatDialog);
@@ -229,7 +226,6 @@ export class DonationStartFormComponent
   private defaultCountryCode: string;
   public selectedCountryCode: string;
   private previousDonation?: Donation;
-  private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
   tipPercentage = 15;
@@ -579,60 +575,6 @@ export class DonationStartFormComponent
     });
   }
 
-  ngAfterContentChecked() {
-    // Because the Stepper header elements are built by Angular from the `mat-step` elements,
-    // there is no nice 'Angular way' to listen for click events on them, which we need to do
-    // to clearly surface errors by scrolling to them when donors click Step headings to navigate
-    // rather than Next buttons. So to handle this appropriately we need to listen for clicks
-    // via the native elements.
-
-    // We set this up here as a one-shot thing but in a lifecycle hook because `campaign` is not
-    // guaranteed set on initial load, and the view is also not guaranteed to update with a
-    // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
-
-    const stepper: HTMLElement = this.elRef.nativeElement.querySelector('#stepper');
-
-    // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
-    if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
-    for (const stepperHeader of stepperHeaders) {
-      stepperHeader.addEventListener('click', (clickEvent) => {
-        // Amounts validation is now handled automatically by the next() method
-        // when leaving the amounts step, so no need for separate validation here
-
-        // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
-        // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
-        if (
-          (clickEvent.target as HTMLElement).innerText.includes('Your details') &&
-          this.stepper.selected?.label === 'Gift Aid'
-        ) {
-          this.triedToLeaveGiftAid = true;
-        }
-
-        if (
-          (clickEvent.target as HTMLElement).innerText.includes('Confirm') &&
-          this.stepper.selected?.label === 'Your details'
-        ) {
-          this.triedToLeaveMarketing = true;
-        }
-
-        if (
-          this.psp === 'stripe' &&
-          (clickEvent.target as HTMLElement).innerText.includes('Receive updates') &&
-          !this.stripePaymentMethodReady
-        ) {
-          this.jumpToStep('Payment details');
-        }
-
-        this.goToFirstVisibleError();
-      });
-    }
-    this.stepHeaderEventsSet = true;
-  }
-
   reset = () => {
     this.donor = undefined;
     this.creditPenceToUse = 0;
@@ -654,11 +596,6 @@ export class DonationStartFormComponent
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    if (event.selectedIndex > 0 && !this.donor) {
-      // Handles step changes e.g. via heading click which would not be caught by `next()` processing.
-      await this.validateAmountsCreateDonorDonationIfPossible();
-    }
-
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
@@ -987,6 +924,9 @@ export class DonationStartFormComponent
     }
   }
 
+  /**
+   * Completes data safety checks and if all is well calls {@link payWithStripe()}.
+   */
   async submit() {
     // Can't proceed if donation or campaign data issue. Prior check fn has already reported the issue.
     if (this.donationUpdateError) {
@@ -1204,30 +1144,6 @@ export class DonationStartFormComponent
     );
   }
 
-  captchaIdentityReturn(captchaResponse: string | null) {
-    if (captchaResponse === null) {
-      // Ensure no other callback tries to use the old captcha code, and will re-execute
-      // the catcha to get a new one as needed instead.
-
-      // Blank returns happen e.g. on prompt and on expiry. So even when we know a puzzle was just
-      // opened we can't safely show an incomplete puzzle error based on this callback.
-      this.idCaptchaCode = undefined;
-      return;
-    }
-
-    if (this.stepChangeBlockedByCaptcha) {
-      this.stepper.next();
-      this.stepChangeBlockedByCaptcha = false;
-    }
-
-    this.markYourDonationStepComplete();
-
-    this.idCaptchaCode = captchaResponse;
-    if (!this.donation && this.donationAmount > 0) {
-      this.createDonationAndMaybePerson();
-    }
-  }
-
   customTip(): boolean {
     return this.amountsGroup.value.tipPercentage === 'Other';
   }
@@ -1267,53 +1183,43 @@ export class DonationStartFormComponent
     }
   }
 
-  /**
-   * Percentage selection changed by donor, as opposed to programatically.
-   */
-  tipPercentageChange() {
-    this.tipPercentageChanged = true;
-  }
-
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
     await this.next();
   }
 
   async next() {
-    // If the initial donation *create* has failed, we want to try again each time,
-    // not just re-surface the existing error. The step change event is what
-    // leads to the DonationService.create() [POST] call. Note that just setting the
-    // bool and letting `goToFirstVisibleError()` proceed doesn't work on the first
-    // click, probably because that method needs a refreshed DOM to detect if custom
-    // error elements are still present. So the safest fix for now is to skip it
-    // when we know we have only just hidden the error in this call.
-    if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
-      if (this.donation) {
-        this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
-        this.matomoTracker.trackEvent(
-          'donate',
-          'create_retry',
-          `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
-        );
-      }
-      this.donationCreateError = false;
-      this.stepper.next();
-      return;
-    }
+    let mayAdvance = true;
 
-    // If we're leaving the amounts step, we need to validate and set up donation/Stripe
-    // This ensures Enter key navigation behaves the same as Continue button clicks
-    if (this.stepper.selected?.label === this.yourDonationStepLabel) {
-      const success = await this.validateAmountsCreateDonorDonationIfPossible();
-      if (!success) {
-        return; // Don't proceed if validation failed
-      }
+    switch (this.stepper.selected?.label) {
+      case this.yourDonationStepLabel:
+        mayAdvance = await this.validateAmountsCreateDonorDonationIfPossible();
+        break;
+
+      case 'Gift Aid':
+        mayAdvance = this.progressFromStepGiftAid();
+        break;
+
+      case 'Payment details':
+        mayAdvance = this.validatePaymentStep();
+        break;
+
+      case 'Receive updates':
+        mayAdvance = this.validateStepReceiveUpdates();
+        break;
+
+      case this.confirmStepLabel:
+        await this.submit();
+        return;
+
+      default:
+        console.error('Unknown step label', this.stepper.selected?.label);
+        return;
     }
 
     this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
-
     if (promptingForCaptcha) {
       this.stepChangeBlockedByCaptcha = true;
       return;
@@ -1321,7 +1227,7 @@ export class DonationStartFormComponent
 
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
-    if (!this.goToFirstVisibleError()) {
+    if (!this.goToFirstVisibleError() && mayAdvance) {
       this.stepper.next();
     }
   }
@@ -1357,10 +1263,34 @@ export class DonationStartFormComponent
       this.createDonationAndMaybePerson();
     }
 
+    // If the initial donation *create* has failed, we want to try again each time,
+    // not just re-surface the existing error. The step change event is what
+    // leads to the DonationService.create() [POST] call. Note that just setting the
+    // bool and letting `goToFirstVisibleError()` proceed doesn't work on the first
+    // click, probably because that method needs a refreshed DOM to detect if custom
+    // error elements are still present. So the safest fix for now is to skip it
+    // when we know we have only just hidden the error in this call.
+    if (this.donationCreateError) {
+      if (this.donation) {
+        this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
+        this.matomoTracker.trackEvent(
+          'donate',
+          'create_retry',
+          `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
+        );
+      }
+      this.donationCreateError = false;
+
+      return true; // Leave caller to call Stepper's next() which tries the API create again.
+    }
+
     return true;
   }
 
-  async progressFromStepGiftAid(): Promise<void> {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private progressFromStepGiftAid(): boolean {
     this.triedToLeaveGiftAid = true;
     const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
     const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
@@ -1387,21 +1317,24 @@ export class DonationStartFormComponent
 
     if (errorMessages.length > 0) {
       this.toast.showError(errorMessages.join('. '));
-      return;
+      return false;
     }
 
-    await this.next();
+    return true;
   }
 
-  async progressFromStepReceiveUpdates(): Promise<void> {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private validateStepReceiveUpdates(): boolean {
     this.triedToLeaveMarketing = true;
     const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean);
     if (errorMessages.length > 0) {
       this.toast.showError(errorMessages.join(' '));
-      return;
+      return false;
     }
 
-    await this.next();
+    return true;
   }
 
   public errorMessagesForMarketingStep = () => {
@@ -1528,15 +1461,6 @@ export class DonationStartFormComponent
     }
 
     step.completed = false;
-  }
-
-  private markYourDonationStepComplete() {
-    const step = this.stepper.steps.get(0);
-    if (!step) {
-      throw new Error('Step 0 not found');
-    }
-
-    step.completed = true;
   }
 
   private destroyStripeElements() {
@@ -2479,18 +2403,25 @@ export class DonationStartFormComponent
     }
   }
 
-  async continueFromPaymentStep() {
-    if (!this.readyToProgressFromPaymentStep) {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private validatePaymentStep(): boolean {
+    // I'm not entirely clear whether we still need to also check this class's stripePaymentMethodReady,
+    // but keeping both checks for now while migrating away from stepper header click listeners.
+    if (!this.stripePaymentMethodReady || !this.readyToProgressFromPaymentStep) {
       this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
       this.toast.showError(this.paymentStepErrors);
-      return;
-    } else {
-      // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
-      // show up again in case the next attempt has the same problem.
-      this.paymentStepErrors = '';
-      this.stripeError = undefined;
-      await this.next();
+
+      return false;
     }
+
+    // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
+    // show up again in case the next attempt has the same problem.
+    this.paymentStepErrors = '';
+    this.stripeError = undefined;
+
+    return true;
   }
 
   private getPaymentMethodType(): PaymentMethodType {

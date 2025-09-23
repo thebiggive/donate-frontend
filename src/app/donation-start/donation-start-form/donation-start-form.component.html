@@ -302,15 +302,7 @@
             </div>
           }
           <div style="text-align: center">
-            <button
-              type="button"
-              class="continue"
-              mat-raised-button
-              color="primary"
-              (click)="progressFromStepGiftAid()"
-            >
-              Continue
-            </button>
+            <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
           </div>
         </mat-step>
       }
@@ -442,9 +434,7 @@
           </p>
         }
         <div style="text-align: center">
-          <button type="button" class="continue" mat-raised-button color="primary" (click)="continueFromPaymentStep()">
-            Continue
-          </button>
+          <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
       <mat-step formGroupName="marketing" [stepControl]="marketingGroup" label="Receive updates">
@@ -559,15 +549,7 @@
           </div>
         }
         <div style="text-align: center">
-          <button
-            type="button"
-            class="continue"
-            mat-raised-button
-            color="primary"
-            (click)="progressFromStepReceiveUpdates()"
-          >
-            Continue
-          </button>
+          <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
       <mat-step [label]="confirmStepLabel" class="c-make-your-donation">
