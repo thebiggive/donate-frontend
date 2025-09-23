@@ -2,7 +2,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
@@ -111,9 +110,7 @@ declare let _paq: {
     ExactCurrencyPipe,
   ],
 })
-export class DonationStartFormComponent
-  implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit
-{
+export class DonationStartFormComponent implements AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   private cd = inject(ChangeDetectorRef);
   private conversionTrackingService = inject(ConversionTrackingService);
   dialog = inject(MatDialog);
@@ -229,7 +226,6 @@ export class DonationStartFormComponent
   private defaultCountryCode: string;
   public selectedCountryCode: string;
   private previousDonation?: Donation;
-  private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
   tipPercentage = 15;
@@ -577,60 +573,6 @@ export class DonationStartFormComponent
         this.addressSuggestions = suggestions;
       },
     });
-  }
-
-  ngAfterContentChecked() {
-    // Because the Stepper header elements are built by Angular from the `mat-step` elements,
-    // there is no nice 'Angular way' to listen for click events on them, which we need to do
-    // to clearly surface errors by scrolling to them when donors click Step headings to navigate
-    // rather than Next buttons. So to handle this appropriately we need to listen for clicks
-    // via the native elements.
-
-    // We set this up here as a one-shot thing but in a lifecycle hook because `campaign` is not
-    // guaranteed set on initial load, and the view is also not guaranteed to update with a
-    // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
-
-    const stepper: HTMLElement = this.elRef.nativeElement.querySelector('#stepper');
-
-    // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
-    if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
-    for (const stepperHeader of stepperHeaders) {
-      stepperHeader.addEventListener('click', (clickEvent) => {
-        // Amounts validation is now handled automatically by the next() method
-        // when leaving the amounts step, so no need for separate validation here
-
-        // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
-        // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
-        if (
-          (clickEvent.target as HTMLElement).innerText.includes('Your details') &&
-          this.stepper.selected?.label === 'Gift Aid'
-        ) {
-          this.triedToLeaveGiftAid = true;
-        }
-
-        if (
-          (clickEvent.target as HTMLElement).innerText.includes('Confirm') &&
-          this.stepper.selected?.label === 'Your details'
-        ) {
-          this.triedToLeaveMarketing = true;
-        }
-
-        if (
-          this.psp === 'stripe' &&
-          (clickEvent.target as HTMLElement).innerText.includes('Receive updates') &&
-          !this.stripePaymentMethodReady
-        ) {
-          this.jumpToStep('Payment details');
-        }
-
-        this.goToFirstVisibleError();
-      });
-    }
-    this.stepHeaderEventsSet = true;
   }
 
   reset = () => {
@@ -2465,7 +2407,9 @@ export class DonationStartFormComponent
    * @returns Whether step has valid inputs.
    */
   private validatePaymentStep(): boolean {
-    if (!this.readyToProgressFromPaymentStep) {
+    // I'm not entirely clear whether we still need to also check this class's stripePaymentMethodReady,
+    // but keeping both checks for now while migrating away from stepper header click listeners.
+    if (!this.stripePaymentMethodReady || !this.readyToProgressFromPaymentStep) {
       this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
       this.toast.showError(this.paymentStepErrors);
 
