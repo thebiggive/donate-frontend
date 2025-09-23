@@ -4,7 +4,7 @@
       <mat-step
         formGroupName="amounts"
         [stepControl]="amountsGroup"
-        [label]="yourDonationStepLabel"
+        [label]="stepLabels.yourDonation"
         class="c-your-donation"
       >
         @if (campaign.matchFundsRemaining > 0) {
@@ -191,7 +191,7 @@
         </div>
       </mat-step>
       @if (campaign.currencyCode === "GBP") {
-        <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup" label="Gift Aid">
+        <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup" [label]="stepLabels.giftAid">
           <p class="b-mt-40 b-bold b-rt-0">
             <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
             <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
@@ -306,7 +306,7 @@
           </div>
         </mat-step>
       }
-      <mat-step formGroupName="payment" [stepControl]="paymentGroup" label="Payment details">
+      <mat-step formGroupName="payment" [stepControl]="paymentGroup" [label]="stepLabels.paymentDetails">
         <p class="b-grey b-rt-sm" style="padding-top: 20px">
           <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 12.7rem" />
           <br />
@@ -437,7 +437,7 @@
           <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
-      <mat-step formGroupName="marketing" [stepControl]="marketingGroup" label="Receive updates">
+      <mat-step formGroupName="marketing" [stepControl]="marketingGroup" [label]="stepLabels.receiveUpdates">
         <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">
           Would you be happy to receive email updates from
           <span class="colour-primary">{{ campaign.charity.name }}</span
@@ -552,7 +552,7 @@
           <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
-      <mat-step [label]="confirmStepLabel" class="c-make-your-donation">
+      <mat-step [label]="stepLabels.confirm" class="c-make-your-donation">
         <p class="b-rt-0 b-m-0 b-mt-40">
           By clicking on the <span class="b-bold">Donate now</span> button, you agree to Big Give's Terms and Conditions
           and Privacy Statement. <br />
