@@ -982,6 +982,9 @@ export class DonationStartFormComponent
     }
   }
 
+  /**
+   * Completes data safety checks and if all is well calls {@link payWithStripe()}.
+   */
   async submit() {
     // Can't proceed if donation or campaign data issue. Prior check fn has already reported the issue.
     if (this.donationUpdateError) {
@@ -1238,44 +1241,43 @@ export class DonationStartFormComponent
     }
   }
 
-  /**
-   * Percentage selection changed by donor, as opposed to programatically.
-   */
-  tipPercentageChange() {
-    this.tipPercentageChanged = true;
-  }
-
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
     await this.next();
   }
 
   async next() {
-    // If the initial donation *create* has failed, we want to try again each time,
-    // not just re-surface the existing error. The step change event is what
-    // leads to the DonationService.create() [POST] call. Note that just setting the
-    // bool and letting `goToFirstVisibleError()` proceed doesn't work on the first
-    // click, probably because that method needs a refreshed DOM to detect if custom
-    // error elements are still present. So the safest fix for now is to skip it
-    // when we know we have only just hidden the error in this call.
-    if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
-      if (this.donation) {
-        this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
-        this.matomoTracker.trackEvent(
-          'donate',
-          'create_retry',
-          `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
-        );
-      }
-      this.donationCreateError = false;
-      this.stepper.next();
-      return;
+    let mayAdvance = true;
+
+    switch (this.stepper.selected?.label) {
+      case this.yourDonationStepLabel:
+        mayAdvance = await this.validateAmountsCreateDonorDonationIfPossible();
+        break;
+
+      case 'Gift Aid':
+        mayAdvance = this.progressFromStepGiftAid();
+        break;
+
+      case 'Payment details':
+        mayAdvance = this.validatePaymentStep();
+        break;
+
+      case 'Receive updates':
+        mayAdvance = this.validateStepReceiveUpdates();
+        break;
+
+      case this.confirmStepLabel:
+        await this.submit();
+        return;
+
+      default:
+        console.error('Unknown step label', this.stepper.selected?.label);
+        return;
     }
 
     this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
-
     if (promptingForCaptcha) {
       this.stepChangeBlockedByCaptcha = true;
       return;
@@ -1283,7 +1285,7 @@ export class DonationStartFormComponent
 
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
-    if (!this.goToFirstVisibleError()) {
+    if (!this.goToFirstVisibleError() && mayAdvance) {
       this.stepper.next();
     }
   }
@@ -1293,7 +1295,7 @@ export class DonationStartFormComponent
    * Callers must refuse to leave step 1 until this is passing because Stripe will be unusable if we haven't
    * done this initial work.
    */
-  async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
+  private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
       this.toast.showError(
@@ -1319,10 +1321,34 @@ export class DonationStartFormComponent
       this.createDonationAndMaybePerson();
     }
 
+    // If the initial donation *create* has failed, we want to try again each time,
+    // not just re-surface the existing error. The step change event is what
+    // leads to the DonationService.create() [POST] call. Note that just setting the
+    // bool and letting `goToFirstVisibleError()` proceed doesn't work on the first
+    // click, probably because that method needs a refreshed DOM to detect if custom
+    // error elements are still present. So the safest fix for now is to skip it
+    // when we know we have only just hidden the error in this call.
+    if (this.donationCreateError) {
+      if (this.donation) {
+        this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: true });
+        this.matomoTracker.trackEvent(
+          'donate',
+          'create_retry',
+          `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
+        );
+      }
+      this.donationCreateError = false;
+
+      return true; // Leave caller to call Stepper's next() which tries the API create again.
+    }
+
     return true;
   }
 
-  async progressFromStepGiftAid(): Promise<void> {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private progressFromStepGiftAid(): boolean {
     this.triedToLeaveGiftAid = true;
     const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
     const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
@@ -1349,21 +1375,24 @@ export class DonationStartFormComponent
 
     if (errorMessages.length > 0) {
       this.toast.showError(errorMessages.join('. '));
-      return;
+      return false;
     }
 
-    await this.next();
+    return true;
   }
 
-  async progressFromStepReceiveUpdates(): Promise<void> {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private validateStepReceiveUpdates(): boolean {
     this.triedToLeaveMarketing = true;
     const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean);
     if (errorMessages.length > 0) {
       this.toast.showError(errorMessages.join(' '));
-      return;
+      return false;
     }
 
-    await this.next();
+    return true;
   }
 
   public errorMessagesForMarketingStep = () => {
@@ -1490,15 +1519,6 @@ export class DonationStartFormComponent
     }
 
     step.completed = false;
-  }
-
-  private markYourDonationStepComplete() {
-    const step = this.stepper.steps.get(0);
-    if (!step) {
-      throw new Error('Step 0 not found');
-    }
-
-    step.completed = true;
   }
 
   private destroyStripeElements() {
@@ -2441,18 +2461,23 @@ export class DonationStartFormComponent
     }
   }
 
-  async continueFromPaymentStep() {
+  /**
+   * @returns Whether step has valid inputs.
+   */
+  private validatePaymentStep(): boolean {
     if (!this.readyToProgressFromPaymentStep) {
       this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
       this.toast.showError(this.paymentStepErrors);
-      return;
-    } else {
-      // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
-      // show up again in case the next attempt has the same problem.
-      this.paymentStepErrors = '';
-      this.stripeError = undefined;
-      await this.next();
+
+      return false;
     }
+
+    // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
+    // show up again in case the next attempt has the same problem.
+    this.paymentStepErrors = '';
+    this.stripeError = undefined;
+
+    return true;
   }
 
   private getPaymentMethodType(): PaymentMethodType {
