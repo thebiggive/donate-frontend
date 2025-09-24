@@ -1253,8 +1253,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * done this initial work.
    */
   private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
-    console.log('called validateAmountsCreateDonorDonationIfPossible');
-
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
       this.toast.showError(
