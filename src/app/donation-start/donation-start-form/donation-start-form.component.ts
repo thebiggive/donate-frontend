@@ -82,6 +82,20 @@ declare let _paq: {
   push: (args: Array<string | object>) => void;
 };
 
+/**
+ * Labels as shown on the heading of each step. Also used to identify the step within the
+ * logic of stepping through the form, hence defined here rather than directly in the template.
+ */
+const stepLabels = {
+  yourDonation: 'Your donation',
+  giftAid: 'Gift Aid',
+  paymentDetails: 'Payment details',
+  receiveUpdates: 'Receive updates',
+  confirm: 'Confirm',
+} as const;
+
+type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
+
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
@@ -241,8 +255,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   panelOpenState = false;
   showCustomTipInput = false;
 
-  confirmStepLabel = 'Confirm' as const;
-  yourDonationStepLabel = 'Your donation' as const;
+  protected readonly stepLabels = stepLabels;
 
   displayCustomTipInput = () => {
     this.amountsGroup.get('tipAmount')?.setValue('');
@@ -609,7 +622,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         );
         // Immediate step jumps seem to be disallowed
         setTimeout(() => {
-          this.jumpToStep(this.yourDonationStepLabel);
+          this.jumpToStep(stepLabels.yourDonation);
           this.promptForCaptcha();
         }, 200);
       } else {
@@ -671,7 +684,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
       // until the latest is persisted. Previously we did this after submit button press but
       // Apple Pay is highly sensitive about the wait time after the click event which caused
       // its panel to open; so we must do the work early instead.
-      if (event.selectedStep.label === this.confirmStepLabel) {
+      if (event.selectedStep.label === stepLabels.confirm) {
         this.runFinalPreSubmitUpdate();
       }
     }
@@ -679,11 +692,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     // Create a donation if coming from first step and not offering to resume
     // an existing donation and not just patching tip amount on `donation`
     // having already gone forward then back in the form.
-    if (event.previouslySelectedStep.label === this.yourDonationStepLabel) {
+    if (event.previouslySelectedStep.label === stepLabels.yourDonation) {
       if (
         !this.donation && // No change or only tip amount changed, if we got here.
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
-        event.selectedStep.label !== this.yourDonationStepLabel // Resets fire a 0 -> 0 index event.
+        event.selectedStep.label !== this.stepLabels.yourDonation // Resets fire a 0 -> 0 index event.
       ) {
         // Typically an Identity captcha call has already been set off and its callback will create the donation.
         // But if we get here without a donation and with a code ready, we should create the donation now.
@@ -1194,32 +1207,29 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   async next() {
-    let mayAdvance = true;
-
-    switch (this.stepper.selected?.label) {
-      case this.yourDonationStepLabel:
+    let mayAdvance: boolean;
+    switch (this.stepper.selected?.label as StepLabel) {
+      case stepLabels.yourDonation:
         mayAdvance = await this.validateAmountsCreateDonorDonationIfPossible();
         break;
 
-      case 'Gift Aid':
+      case stepLabels.giftAid:
         mayAdvance = this.progressFromStepGiftAid();
         break;
 
-      case 'Payment details':
+      case stepLabels.paymentDetails:
         mayAdvance = this.validatePaymentStep();
         break;
 
-      case 'Receive updates':
+      case stepLabels.receiveUpdates:
         mayAdvance = this.validateStepReceiveUpdates();
         break;
 
-      case this.confirmStepLabel:
+      case stepLabels.confirm:
         await this.submit();
         return;
 
-      default:
-        console.error('Unknown step label', this.stepper.selected?.label);
-        return;
+      // no default so TS will check we haven't missed any cases here.
     }
 
     this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
@@ -1969,7 +1979,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.donationChangeCallBack(undefined);
 
     if (jumpToStart) {
-      this.jumpToStep(this.yourDonationStepLabel);
+      this.jumpToStep(stepLabels.yourDonation);
     }
   }
 
@@ -2295,7 +2305,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         // see DON-909.
         this.amountsGroup.get('tipAmount')?.setValue(patchForValue.tipAmount);
 
-        if (this.stepper.selected?.label === this.yourDonationStepLabel) {
+        if (this.stepper.selected?.label === stepLabels.yourDonation) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
         }
 
