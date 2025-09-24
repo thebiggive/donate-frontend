@@ -11,7 +11,6 @@ export type Campaign = {
   hidden: boolean;
   ready: boolean;
   summary: string;
-  bannerUri: string;
   amountRaised: number;
   /**
    * Total value of remaining match funds that may be used for this campaign in currency major units.
@@ -29,7 +28,7 @@ export type Campaign = {
   endDate: string;
   matchFundsTotal: number;
   aims: string[];
-  additionalImageUris: Array<{ uri: string; order: number }>;
+  additionalImageUris: Array<{ uri: string; order: number; alt_text?: string | undefined }>;
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];
@@ -82,4 +81,15 @@ export type Campaign = {
   | {
       parentUsesSharedFunds: false;
     }
-);
+) &
+  (
+    | {
+        /** this is to be phased out, matchbot will start sending banner instead of bannerUri */
+        bannerUri: string;
+        banner?: undefined;
+      }
+    | {
+        banner: { uri: string; alt_text: string | undefined };
+        bannerUri?: undefined;
+      }
+  );

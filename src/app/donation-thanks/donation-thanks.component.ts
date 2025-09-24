@@ -224,7 +224,11 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     this.donation = donation;
     this.campaignService.getCharityCampaignById(donation.projectId).subscribe((campaign) => {
       this.campaign = campaign;
-      this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.bannerUri);
+      this.pageMeta.setCommon(
+        `Thank you for donating to the "${campaign.title}" campaign`,
+        ``,
+        campaign.banner?.uri || campaign.bannerUri,
+      );
       this.setSocialShares(campaign);
     });
 

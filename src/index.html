@@ -13,10 +13,32 @@
     <script src="/assets/custom-libs/modernizr.js"></script>
     <!-- Just webp support detection -->
     <script>
-      let a = {};
-      a?.a?.a;
-      // One of the feature introduced in ES2020 that we rely on - the site will not be usable without it.
-      var browserSupportsOptionalChaining = true;
+      var browserSupportsGlobalThis = typeof globalThis !== "undefined";
+    </script>
+    <script>
+      // Bundle optimization: redirect to legacy version if needed
+      (function () {
+        var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
+        var needsLegacy = ie || !window.browserSupportsGlobalThis;
+        var hasLegacyParam = window.location.search.includes("legacy=1");
+        var hasNoCompatCheck = window.location.search.includes("no-compat-check");
+
+        // If browser needs legacy bundle but isn't using it (and no override), redirect
+        if (needsLegacy && !hasLegacyParam && !hasNoCompatCheck) {
+          var url = new URL(window.location);
+          url.searchParams.set("legacy", "1");
+          window.location.replace(url.toString());
+          return;
+        }
+
+        // If browser doesn't need legacy bundle but is using it, redirect to modern
+        if (!needsLegacy && hasLegacyParam && !hasNoCompatCheck) {
+          var url = new URL(window.location);
+          url.searchParams.delete("legacy");
+          window.location.replace(url.toString());
+          return;
+        }
+      })();
     </script>
   </head>
   <body>
@@ -29,17 +51,18 @@
       </p>
       <hr />
       <div class="footer">
-        © 2007 – 2025 The Big Give Trust (1136547) | Company number 07273065 | Dragon Court, 27-29 Macklin Street,
-        London WC2B 5LX, United Kingdom
+        © The Big Give Trust (1136547) | Company number 07273065 | Dragon Court, 27-29 Macklin Street, London WC2B 5LX,
+        United Kingdom
       </div>
     </div>
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-      if (ie || !window.browserSupportsOptionalChaining) {
+      // Only hide app for browsers likely to break even with ES5 bundle
+      if (ie || (!window.browserSupportsGlobalThis && !window.location.search.includes("no-compat-check"))) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
     </script>
   </body>
-  <!-- donate-fronted commit ID GIT_COMMIT_ID -->
+  <!-- donate-frontend commit ID GIT_COMMIT_ID -->
 </html>

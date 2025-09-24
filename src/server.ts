@@ -14,12 +14,19 @@ import { COUNTRY_CODE } from './app/country-code.token';
 import { GetSiteControlService } from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import { environment } from './environments/environment';
+import { supportedBrowsers } from './supportedBrowsers';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
+
+function isLegacyBrowser(userAgent: string): boolean {
+  // Use the same browserslist-generated logic as client-side code
+  // Modern browsers (Tier 1) get modern bundle, all others get ES5 bundle
+  return !supportedBrowsers.test(userAgent);
+}
 
 enableProdMode();
 const app = express();
@@ -65,8 +72,10 @@ app.use(
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
-          `'sha256-ldtQnqimsKcRUds7F3IzgqxwY6gMsUrQ93UJovC7kUQ='`, // optional chaining support check
-          `'sha256-cpOTznxFB+e6XZRM96rUK77BHQnjwwRhEn29eizS4I0='`, // "Unsupported browser" inline script.
+          // See index.html for the following 3.
+          `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
+          `'sha256-vRAKiX6kRCo4yTPGneJM2hFNyqbfnwubxNRmj6JUSS4='`, // Modern / legacy bundle choice
+          `'sha256-vnXVoBuq4KQ/XoebiR4pqNdOjZuTenzWy/flCILBxNo='`, // Fully unsupported check / message visibility toggle
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
@@ -74,7 +83,7 @@ app.use(
           'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
-          `'wasm-unsafe-eval'`,
+          `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
           `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
           'https://*.js.stripe.com',
           'https://js.stripe.com',
@@ -128,6 +137,14 @@ app.use(
 );
 
 app.use(
+  '/d-es5',
+  express.static(resolve(serverDistFolder, '../browser-es5'), {
+    immutable: true, // Everything in here should be named with an immutable hash.
+    maxAge: '1 year',
+  }),
+);
+
+app.use(
   '/assets',
   express.static(`${browserDistFolder}/assets`, {
     maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
@@ -138,7 +155,22 @@ app.use(
  * Handle all other requests by rendering the Angular application.
  */
 app.get('**', (req, res, next) => {
-  const { protocol, originalUrl, headers } = req;
+  const { protocol, originalUrl, headers, query } = req;
+  const ua = headers['user-agent'] || '';
+
+  // Use legacy bundle if explicitly requested via query param or if User-Agent indicates legacy browser
+  const legacyRequested = query.legacy === '1';
+  const useLegacy = legacyRequested || isLegacyBrowser(ua);
+
+  // Choose modern or ES5 bundle
+  const bundleFolder = useLegacy ? resolve(serverDistFolder, '../browser-es5') : browserDistFolder;
+
+  // For SSR, we always use the server-generated index.html from the server dist folder
+  // The ES5 bundle will have its own static index.html, but SSR uses the server version
+  const indexHtmlPath = indexHtml; // Always use the SSR-capable index
+
+  // For legacy browsers, if this is a static request (non-SSR), serve from ES5 bundle
+  // But for SSR, we use the server index and point to ES5 assets via bundleFolder
 
   // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
   // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
@@ -146,10 +178,10 @@ app.get('**', (req, res, next) => {
   commonEngine
     .render({
       bootstrap,
-      documentFilePath: indexHtml,
+      documentFilePath: indexHtmlPath,
       inlineCriticalCss: false,
       url: `${protocol}://${headers.host}${originalUrl}`,
-      publicPath: browserDistFolder,
+      publicPath: bundleFolder,
       providers: [
         // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
         // base reported by CloudFront when talking to the origin.
@@ -161,7 +193,13 @@ app.get('**', (req, res, next) => {
         { provide: REQUEST, useValue: req },
       ],
     })
-    .then((html) => res.send(html))
+    .then((html) => {
+      // For legacy browsers, rewrite paths to point to ES5 bundle
+      if (useLegacy) {
+        html = html.replace(/src="\/d\//g, 'src="/d-es5/').replace(/href="\/d\//g, 'href="/d-es5/');
+      }
+      res.send(html);
+    })
     .catch((err) => next(err));
 });
 
