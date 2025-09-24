@@ -596,6 +596,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+    if (event.selectedIndex > 0 && !this.donor) {
+      // Handles step changes e.g. via heading click which would not be caught by `next()` processing.
+      await this.validateAmountsCreateDonorDonationIfPossible();
+    }
+
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
@@ -1238,6 +1243,8 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * done this initial work.
    */
   private async validateAmountsCreateDonorDonationIfPossible(): Promise<boolean> {
+    console.log('called validateAmountsCreateDonorDonationIfPossible');
+
     const control = this.donationForm.controls['amounts'];
     if (!control!.valid) {
       this.toast.showError(
