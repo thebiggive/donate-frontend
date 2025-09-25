@@ -4,6 +4,10 @@
 
 @include abstract.binary-options();
 
+::ng-deep .mdc-slider .mdc-slider__value-indicator {
+  transform: none !important;
+}
+
 .mat-stepper-horizontal,
 .mat-stepper-vertical {
   background: none;
