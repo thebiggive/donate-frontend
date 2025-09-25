@@ -248,6 +248,11 @@ input {
   }
 }
 
+.tip-slider {
+  margin-top: 2rem; // Just enough space to fit the 'thumb' label without looking cramped.
+  width: 100%;
+}
+
 .donation-input.donation-input-main {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
