@@ -1,5 +1,5 @@
 @if (campaignOpenOnLoad) {
-  <form class="c-donate-form" (keydown.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
+  <form class="c-donate-form" (keyup.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
       <mat-step
         formGroupName="amounts"
@@ -53,8 +53,9 @@
                 @if (tipControlStyle === "slider" && !showCustomTipInput) {
                   <div class="donation-input donation-input-main">
                     <biggive-text-input>
-                      <label slot="label" id="tipSliderLabel">Tip percentage</label>
+                      <label slot="label" id="tipSliderLabel" for="tipSlider">Tip percentage</label>
                       <mat-slider
+                        id="tipSlider"
                         slot="input"
                         min="1"
                         max="30"
@@ -139,11 +140,29 @@
                     }
                   </mat-hint>
 
-                  @if (tipControlStyle === 'slider' && !showCustomTipInput) {
-                    <p><a (click)="displayCustomTipInput()">Custom amount</a></p>
+                  @if (tipControlStyle === "slider" && !showCustomTipInput) {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="displayCustomTipInput($event)"
+                        (keyup.space)="displayCustomTipInput($event)"
+                        (keyup.enter)="displayCustomTipInput($event)"
+                        >Custom amount</a
+                      >
+                    </p>
                   }
-                  @if (tipControlStyle === 'slider' && showCustomTipInput) {
-                    <p><a (click)="hideCustomTipInput()">Select from slider</a></p>
+                  @if (tipControlStyle === "slider" && showCustomTipInput) {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="hideCustomTipInput($event)"
+                        (keyup.space)="hideCustomTipInput($event)"
+                        (keyup.enter)="hideCustomTipInput($event)"
+                        >Select from slider</a
+                      >
+                    </p>
                   }
                 }
                 @if (customTip() && donationAmount && donationAmount > 0) {

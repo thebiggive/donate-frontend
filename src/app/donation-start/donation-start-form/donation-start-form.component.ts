@@ -264,7 +264,9 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     return `${value}%`;
   }
 
-  displayCustomTipInput = () => {
+  displayCustomTipInput = (event?: Event) => {
+    event?.preventDefault();
+    event?.stopPropagation(); // Make sure it can't advance the stepper unexpectedly.
     this.amountsGroup.get('tipAmount')?.setValue('');
 
     // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then leaves it invalid.
@@ -272,7 +274,9 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.showCustomTipInput = true;
   };
 
-  hideCustomTipInput = () => {
+  hideCustomTipInput = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation(); // Make sure it can't advance the stepper unexpectedly before a new % is chosen.
     this.showCustomTipInput = false;
     if (this.tipControlStyle === 'slider') {
       this.amountsGroup.get('tipPercentage')?.setValue(this.tipPercentage);
@@ -2031,7 +2035,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
     if (tipPercentage === 'Other') {
       this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
-      this.displayCustomTipInput();
+      this.displayCustomTipInput(undefined);
       return;
     }
     this.showCustomTipInput = false;
