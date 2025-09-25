@@ -272,17 +272,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.showCustomTipInput = true;
   };
 
-  displayPercentageTipInput = () => {
-    const tipValue = Math.max(
-      (this.minimumTipPercentage * this.donationAmount) / 100,
-      Math.min((this.maximumTipPercentage * this.donationAmount) / 100, this.tipValue || 0),
-    );
-
-    const tipValueRounded = tipValue.toFixed(2);
-    this.tipValue = Number(tipValueRounded);
-
-    this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
+  hideCustomTipInput = () => {
     this.showCustomTipInput = false;
+    if (this.tipControlStyle === 'slider') {
+      this.amountsGroup.get('tipPercentage')?.setValue(this.tipPercentage);
+    }
   };
 
   private stripeElements: StripeElements | undefined;

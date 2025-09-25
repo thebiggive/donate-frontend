@@ -83,6 +83,7 @@
                     </biggive-form-field-select>
                   </div>
                 }
+
                 @if (showCustomTipInput) {
                   <div style="text-align: left">
                     <h3>A small tip makes a big difference. You will help us:</h3>
@@ -138,8 +139,11 @@
                     }
                   </mat-hint>
 
-                  @if (tipControlStyle === "slider") {
+                  @if (tipControlStyle === 'slider' && !showCustomTipInput) {
                     <p><a (click)="displayCustomTipInput()">Custom amount</a></p>
+                  }
+                  @if (tipControlStyle === 'slider' && showCustomTipInput) {
+                    <p><a (click)="hideCustomTipInput()">Select from slider</a></p>
                   }
                 }
                 @if (customTip() && donationAmount && donationAmount > 0) {
