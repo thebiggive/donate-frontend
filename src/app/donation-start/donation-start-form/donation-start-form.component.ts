@@ -253,8 +253,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
-  public tipControlStyle: 'dropdown' | 'slider';
-
   panelOpenState = false;
   showCustomTipInput = false;
 
@@ -315,8 +313,10 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     if (this.manuallySelectedABTestVariant == 'B') {
       this.tipInputABTestVariant = 'B';
     }
+  }
 
-    this.tipControlStyle = this.tipInputABTestVariant === 'A' ? 'dropdown' : 'slider';
+  get tipControlStyle(): 'dropdown' | 'slider' {
+    return this.tipInputABTestVariant === 'A' ? 'dropdown' : 'slider';
   }
 
   ngOnDestroy() {
