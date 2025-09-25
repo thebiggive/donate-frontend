@@ -4,6 +4,7 @@
 
 @include abstract.binary-options();
 
+// Keep slider thumb label visible regardless of focus. https://stackoverflow.com/a/75678906/2803757
 ::ng-deep .mdc-slider .mdc-slider__value-indicator {
   transform: none !important;
 }
