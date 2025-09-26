@@ -1,5 +1,5 @@
 @if (campaignOpenOnLoad) {
-  <form class="c-donate-form" (keydown.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
+  <form class="c-donate-form" (keyup.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
       <mat-step
         formGroupName="amounts"
@@ -50,6 +50,27 @@
             }
             @if (creditPenceToUse === 0) {
               <div style="text-align: center">
+                @if (tipControlStyle === "slider" && !showCustomTipInput) {
+                  <div class="donation-input donation-input-main">
+                    <biggive-text-input>
+                      <label slot="label" id="tipSliderLabel" for="tipSlider">Tip percentage</label>
+                      <mat-slider
+                        id="tipSlider"
+                        slot="input"
+                        [min]="minimumTipPercentage"
+                        [max]="maximumTipPercentage"
+                        step="1"
+                        discrete
+                        [displayWith]="formatSliderLabel"
+                        class="tip-slider"
+                        aria-labelledby="tipSliderLabel"
+                      >
+                        <input matSliderThumb [value]="tipPercentage" (valueChange)="setTipPercentage($event)" />
+                      </mat-slider>
+                    </biggive-text-input>
+                  </div>
+                }
+
                 @if (tipControlStyle === "dropdown") {
                   <div class="donation-input donation-input-main">
                     <biggive-form-field-select
@@ -63,6 +84,7 @@
                     </biggive-form-field-select>
                   </div>
                 }
+
                 @if (showCustomTipInput) {
                   <div style="text-align: left">
                     <h3>A small tip makes a big difference. You will help us:</h3>
@@ -84,9 +106,7 @@
                         match funding from Big Give.
                       </li>
                     </ul>
-                    @if (this.zeroTipTextABTestVariant === "A") {
-                      Even £1.50 makes a big difference. Thank you!
-                    }
+                    Even £1.50 makes a big difference. Thank you!
                   </div>
                 }
                 <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
@@ -113,15 +133,37 @@
                     {{ maximumDonationAmount | exactCurrency: campaign.currencyCode }}.
                   </div>
                 }
-                <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
                 @if (!customTip() && donationAmount && donationAmount > 0) {
                   <mat-hint>
-                    @if (tipAmountField?.valid && zeroTipTextABTestVariant === "B" && tipValue === 0) {
-                      Even £1 makes a big difference to Big Give
-                    } @else if (tipAmountField?.valid) {
+                    @if (tipAmountField?.valid) {
                       <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
                     }
                   </mat-hint>
+
+                  @if (tipControlStyle === "slider" && !showCustomTipInput) {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="displayCustomTipInput($event)"
+                        (keyup.space)="displayCustomTipInput($event)"
+                        (keyup.enter)="displayCustomTipInput($event)"
+                        >Custom amount</a
+                      >
+                    </p>
+                  }
+                  @if (tipControlStyle === "slider" && showCustomTipInput) {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="hideCustomTipInput($event)"
+                        (keyup.space)="hideCustomTipInput($event)"
+                        (keyup.enter)="hideCustomTipInput($event)"
+                        >Choose as percentage</a
+                      >
+                    </p>
+                  }
                 }
                 @if (customTip() && donationAmount && donationAmount > 0) {
                   <mat-hint>

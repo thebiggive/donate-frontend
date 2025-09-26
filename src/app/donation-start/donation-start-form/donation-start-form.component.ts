@@ -75,6 +75,7 @@ import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/ex
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
 
@@ -115,6 +116,8 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatButton,
     MatRadioGroup,
     MatRadioButton,
+    MatSlider,
+    MatSliderThumb,
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
@@ -193,11 +196,27 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * of custom tip, including zero.
    */
   minimumTipPercentage = 1 as const;
+
+  /**
+   * Must stay in ascending donation amount order for defaults logic to work.
+   */
+  readonly tipPercentageDefaults = [
+    { minDonation: 0, tipPercentage: 15 },
+    { minDonation: 100, tipPercentage: 12 },
+    { minDonation: 300, tipPercentage: 10 },
+    { minDonation: 1_000, tipPercentage: 8 },
+  ];
+  readonly tipPercentageDefaultsByPercent = [...this.tipPercentageDefaults].sort(
+    (a, b) => a.tipPercentage - b.tipPercentage,
+  );
+  readonly tipPercentageFixedOneDecimalValues = this.tipPercentageDefaults.map((d) => d.tipPercentage.toFixed(1));
+  readonly percentagesWithLabelsLowestFirst = this.tipPercentageDefaultsByPercent.map((d) => ({
+    value: d.tipPercentage.toString(),
+    label: `${d.tipPercentage}%`,
+  }));
+
   readonly suggestedTipPercentages = [
-    { value: '7.5', label: '7.5%' },
-    { value: '10', label: '10%' },
-    { value: '12.5', label: '12.5%' },
-    { value: '15', label: '15%' },
+    ...this.percentagesWithLabelsLowestFirst,
     { value: 'Other', label: 'Other' },
   ] as const;
 
@@ -242,7 +261,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private previousDonation?: Donation;
   private tipPercentageChanged = false;
 
-  tipPercentage = 15;
+  tipPercentage = this.tipPercentageDefaults[0].tipPercentage;
   tipValue: number | undefined;
 
   private idCaptchaCode?: string;
@@ -250,14 +269,18 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
-  public tipControlStyle: 'dropdown';
-
   panelOpenState = false;
   showCustomTipInput = false;
 
   protected readonly stepLabels = stepLabels;
 
-  displayCustomTipInput = () => {
+  formatSliderLabel(value: number): string {
+    return `${value}%`;
+  }
+
+  displayCustomTipInput = (event?: Event) => {
+    event?.preventDefault();
+    event?.stopPropagation(); // Make sure it can't advance the stepper unexpectedly.
     this.amountsGroup.get('tipAmount')?.setValue('');
 
     // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then leaves it invalid.
@@ -265,17 +288,13 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.showCustomTipInput = true;
   };
 
-  displayPercentageTipInput = () => {
-    const tipValue = Math.max(
-      (this.minimumTipPercentage * this.donationAmount) / 100,
-      Math.min((this.maximumTipPercentage * this.donationAmount) / 100, this.tipValue || 0),
-    );
-
-    const tipValueRounded = tipValue.toFixed(2);
-    this.tipValue = Number(tipValueRounded);
-
-    this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
+  hideCustomTipInput = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation(); // Make sure it can't advance the stepper unexpectedly before a new % is chosen.
     this.showCustomTipInput = false;
+    if (this.tipControlStyle === 'slider') {
+      this.amountsGroup.get('tipPercentage')?.setValue(this.tipPercentage);
+    }
   };
 
   private stripeElements: StripeElements | undefined;
@@ -289,7 +308,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
-  protected zeroTipTextABTestVariant: 'A' | 'B' = 'A';
+  protected tipInputABTestVariant: 'A' | 'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
@@ -303,15 +322,17 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
     const queryParams = route.snapshot.queryParams;
 
-    this.tipControlStyle = 'dropdown';
-
     if (!environment.production) {
       this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
     }
 
     if (this.manuallySelectedABTestVariant == 'B') {
-      this.zeroTipTextABTestVariant = 'B';
+      this.tipInputABTestVariant = 'B';
     }
+  }
+
+  get tipControlStyle(): 'dropdown' | 'slider' {
+    return this.tipInputABTestVariant === 'A' ? 'dropdown' : 'slider';
   }
 
   ngOnDestroy() {
@@ -355,7 +376,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
                 activate: (_event: unknown) => {
                   // No change from the original form.
                   console.log('Original test variant active!');
-                  this.zeroTipTextABTestVariant = 'A';
+                  this.tipInputABTestVariant = 'A';
                 },
               },
               {
@@ -364,8 +385,8 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
                   if (this.manuallySelectedABTestVariant) {
                     return;
                   }
-                  this.zeroTipTextABTestVariant = 'B';
-                  console.log('Copy B test variant active!');
+                  this.tipInputABTestVariant = 'B';
+                  console.log('B test variant active!');
                 },
               },
             ],
@@ -2030,7 +2051,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
     if (tipPercentage === 'Other') {
       this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
-      this.displayCustomTipInput();
+      this.displayCustomTipInput(undefined);
       return;
     }
     this.showCustomTipInput = false;
@@ -2081,12 +2102,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
       if (!this.tipPercentageChanged) {
         let newDefault = this.tipPercentage;
-        if (donationAmount >= 1000) {
-          newDefault = 7.5;
-        } else if (donationAmount >= 300) {
-          newDefault = 10;
-        } else if (donationAmount >= 100) {
-          newDefault = 12.5;
+
+        for (const preset of this.tipPercentageDefaults) {
+          if (donationAmount >= preset.minDonation) {
+            newDefault = preset.tipPercentage;
+          }
         }
 
         updatedValues.tipPercentage = newDefault;
@@ -2286,7 +2306,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         const tipPercentageFixed = ((100 * donation.tipAmount) / donation.donationAmount).toFixed(1);
         let tipPercentage;
 
-        if (['7.5', '10.0', '12.5', '15.0'].includes(tipPercentageFixed)) {
+        if (this.tipPercentageFixedOneDecimalValues.includes(tipPercentageFixed)) {
           tipPercentage = Number(tipPercentageFixed);
         } else {
           tipPercentage = 'Other';
@@ -2458,5 +2478,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
   showCaptcha() {
     this.shouldShowCaptcha = true;
+  }
+
+  setTipPercentage(newPercentage: number) {
+    this.tipPercentageChanged = true;
+    this.updateTipAmountFromSelectedPercentage(newPercentage.toString());
+    this.amountsGroup?.get('tipPercentage')?.setValue(newPercentage);
   }
 }
