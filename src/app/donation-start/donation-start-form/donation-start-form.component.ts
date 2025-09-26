@@ -196,11 +196,27 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * of custom tip, including zero.
    */
   minimumTipPercentage = 1 as const;
+
+  /**
+   * Must stay in ascending donation amount order for defaults logic to work.
+   */
+  readonly tipPercentageDefaults = [
+    { minDonation: 0, tipPercentage: 15 },
+    { minDonation: 100, tipPercentage: 12 },
+    { minDonation: 300, tipPercentage: 10 },
+    { minDonation: 1_000, tipPercentage: 8 },
+  ];
+  readonly tipPercentageDefaultsByPercent = [...this.tipPercentageDefaults].sort(
+    (a, b) => a.tipPercentage - b.tipPercentage,
+  );
+  readonly tipPercentageFixedOneDecimalValues = this.tipPercentageDefaults.map((d) => d.tipPercentage.toFixed(1));
+  readonly percentagesWithLabelsLowestFirst = this.tipPercentageDefaultsByPercent.map((d) => ({
+    value: d.tipPercentage.toString(),
+    label: `${d.tipPercentage}%`,
+  }));
+
   readonly suggestedTipPercentages = [
-    { value: '8', label: '8%' },
-    { value: '10', label: '10%' },
-    { value: '12', label: '12%' },
-    { value: '15', label: '15%' },
+    ...this.percentagesWithLabelsLowestFirst,
     { value: 'Other', label: 'Other' },
   ] as const;
 
@@ -245,7 +261,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private previousDonation?: Donation;
   private tipPercentageChanged = false;
 
-  tipPercentage = 15;
+  tipPercentage = this.tipPercentageDefaults[0].tipPercentage;
   tipValue: number | undefined;
 
   private idCaptchaCode?: string;
@@ -370,7 +386,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
                     return;
                   }
                   this.tipInputABTestVariant = 'B';
-                  console.log('Copy B test variant active!');
+                  console.log('B test variant active!');
                 },
               },
             ],
@@ -2086,12 +2102,11 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
       if (!this.tipPercentageChanged) {
         let newDefault = this.tipPercentage;
-        if (donationAmount >= 1000) {
-          newDefault = 8;
-        } else if (donationAmount >= 300) {
-          newDefault = 10;
-        } else if (donationAmount >= 100) {
-          newDefault = 12;
+
+        for (const preset of this.tipPercentageDefaults) {
+          if (donationAmount >= preset.minDonation) {
+            newDefault = preset.tipPercentage;
+          }
         }
 
         updatedValues.tipPercentage = newDefault;
@@ -2291,7 +2306,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         const tipPercentageFixed = ((100 * donation.tipAmount) / donation.donationAmount).toFixed(1);
         let tipPercentage;
 
-        if (['8.0', '10.0', '12.0', '15.0'].includes(tipPercentageFixed)) {
+        if (this.tipPercentageFixedOneDecimalValues.includes(tipPercentageFixed)) {
           tipPercentage = Number(tipPercentageFixed);
         } else {
           tipPercentage = 'Other';
