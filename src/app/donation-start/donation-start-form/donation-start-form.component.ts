@@ -205,7 +205,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     { minDonation: 100, tipPercentage: 12 },
     { minDonation: 300, tipPercentage: 10 },
     { minDonation: 1_000, tipPercentage: 8 },
-  ];
+  ] as const;
   readonly tipPercentageDefaultsByPercent = [...this.tipPercentageDefaults].sort(
     (a, b) => a.tipPercentage - b.tipPercentage,
   );
@@ -261,7 +261,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private previousDonation?: Donation;
   private tipPercentageChanged = false;
 
-  tipPercentage = this.tipPercentageDefaults[0].tipPercentage;
+  tipPercentage: number = this.tipPercentageDefaults[0].tipPercentage;
   tipValue: number | undefined;
 
   private idCaptchaCode?: string;
