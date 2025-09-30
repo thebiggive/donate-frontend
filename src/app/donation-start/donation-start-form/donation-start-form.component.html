@@ -52,22 +52,18 @@
               <div style="text-align: center">
                 @if (tipControlStyle === "slider" && !showCustomTipInput) {
                   <div class="donation-input donation-input-main">
-                    <biggive-text-input>
-                      <label slot="label" id="tipSliderLabel" for="tipSlider">Tip percentage</label>
-                      <mat-slider
-                        id="tipSlider"
-                        slot="input"
-                        [min]="minimumTipPercentage"
-                        [max]="maximumTipPercentage"
-                        step="1"
-                        discrete
-                        [displayWith]="formatSliderLabel"
-                        class="tip-slider"
-                        aria-labelledby="tipSliderLabel"
-                      >
-                        <input matSliderThumb [value]="tipPercentage" (valueChange)="setTipPercentage($event)" />
-                      </mat-slider>
-                    </biggive-text-input>
+                    <mat-slider
+                      id="tipSlider"
+                      [min]="minimumTipPercentage"
+                      [max]="maximumTipPercentage"
+                      step="1"
+                      discrete
+                      [displayWith]="formatSliderLabel"
+                      class="tip-slider"
+                      aria-label="Tip percentage"
+                    >
+                      <input matSliderThumb [value]="tipPercentage" (valueChange)="setTipPercentage($event)" />
+                    </mat-slider>
                   </div>
                 }
 

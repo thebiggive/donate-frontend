@@ -46,3 +46,14 @@ mat-spinner {
     }
   }
 }
+
+// See also donation-start-form.component.scss override to keep slider thumb always visible.
+:root {
+  @include mat.slider-overrides(
+    (
+      focus-handle-color: abstract.$colour-secondary,
+      value-indicator-border-radius: 4px,
+      // Square-ish % indicator can have same corner size as BG buttons
+    )
+  );
+}
