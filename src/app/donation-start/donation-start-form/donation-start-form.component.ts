@@ -964,7 +964,12 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
           newType = 'customer_balance';
       }
 
+      if (newType !== this.selectedPaymentMethodType) {
+        this.matomoTracker.trackEvent('donate', 'payment_method_type_set', `Selected ${newType}`);
+      }
+
       this.selectedPaymentMethodType = newType;
+
       if (newType !== this.donation.pspMethodType) {
         this.donation.pspMethodType = newType;
         this.donationService.updateLocalDonation(this.donation);
