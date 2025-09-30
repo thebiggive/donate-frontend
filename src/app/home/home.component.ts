@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RESPONSE } from '../../express.tokens';
 import { Response } from 'express';
@@ -43,6 +43,9 @@ export class HomeComponent implements OnInit {
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
   private response = inject<Response>(RESPONSE, { optional: true });
+
+  @ViewChild('charity_carousel')
+  charityCarousel!: ElementRef;
 
   stats!: {
     totalRaisedFormatted: string;

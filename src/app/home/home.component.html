@@ -67,8 +67,9 @@
         autoplay="false"
         loop="true"
         centered-slides="false"
-        navigation-next-el="#carousel-button-next"
-        navigation-prev-el="#carousel-button-prev"
+        pagination-enabled="false"
+        id="charity_carousel"
+        #charity_carousel
       >
         <swiper-slide
           ><img
@@ -106,10 +107,23 @@
         /></swiper-slide>
       </swiper-container>
       <div class="charity-carousel-navigation">
-        <div role="button" id="carousel-button-prev" class="button next">
+        <div
+          (click)="charityCarousel.nativeElement.swiper.slideNext()"
+          role="button"
+          id="carousel-button-prev"
+          aria-controls="charity_carousel"
+          class="button next"
+        >
           <img width="35px" src="/assets/images/arrow-prev-with-circle.svg" alt="Previous" />
         </div>
-        <div role="button" id="carousel-button-next" class="button prev" title="Next">
+        <div
+          (click)="charityCarousel.nativeElement.swiper.slidePrev()"
+          role="button"
+          id="carousel-button-next"
+          aria-controls="charity_carousel"
+          class="button prev"
+          title="Next"
+        >
           <img width="35px" src="/assets/images/arrow-next-with-circle.svg" title="Next" alt="Next" />
         </div>
       </div>
