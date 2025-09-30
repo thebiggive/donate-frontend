@@ -108,6 +108,7 @@
       </swiper-container>
       <div class="charity-carousel-navigation">
         <div
+          tabindex="0"
           (click)="charityCarousel.nativeElement.swiper.slideNext()"
           role="button"
           id="carousel-button-prev"
@@ -117,6 +118,7 @@
           <img width="35px" src="/assets/images/arrow-prev-with-circle.svg" alt="Previous" />
         </div>
         <div
+          tabindex="0"
           (click)="charityCarousel.nativeElement.swiper.slidePrev()"
           role="button"
           id="carousel-button-next"
