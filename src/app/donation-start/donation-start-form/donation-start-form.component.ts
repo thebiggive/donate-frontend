@@ -281,7 +281,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * should always come after the last slider label update including when e.g. using keyboard escape, so this
    * should be safe.
    */
-  formatSliderLabel = (value: number): string => {
+  updateTipPercentAndFormatSliderLabel = (value: number): string => {
     this.setTipPercentage(value);
 
     return `${value}%`;
