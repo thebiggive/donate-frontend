@@ -274,9 +274,18 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
   protected readonly stepLabels = stepLabels;
 
-  formatSliderLabel(value: number): string {
+  /**
+   * Because MatSliderThumb doesn't have any events to react to changes until the end of a drag, we've given
+   * this the side effect of updating the form's tip amount value in absolute currency, because that was the
+   * simplest way to give a live preview of the tip amount while dragging. The final thumb `valueChange()` event
+   * should always come after the last slider label update including when e.g. using keyboard escape, so this
+   * should be safe.
+   */
+  formatSliderLabel = (value: number): string => {
+    this.setTipPercentage(value);
+
     return `${value}%`;
-  }
+  };
 
   displayCustomTipInput = (event?: Event) => {
     event?.preventDefault();
