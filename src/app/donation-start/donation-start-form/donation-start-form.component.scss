@@ -4,6 +4,12 @@
 
 @include abstract.binary-options();
 
+// Keep slider thumb label visible regardless of focus. https://stackoverflow.com/a/75678906/2803757
+// See also _overwrite-mat.scss for standard slider style overrides.
+::ng-deep .mdc-slider .mdc-slider__value-indicator {
+  transform: none !important;
+}
+
 .mat-stepper-horizontal,
 .mat-stepper-vertical {
   background: none;
@@ -246,6 +252,11 @@ input {
       padding-left: 1.5rem;
     }
   }
+}
+
+.tip-slider {
+  margin-top: 2rem; // Just enough space to fit the 'thumb' label without looking cramped.
+  width: 100%;
 }
 
 .donation-input.donation-input-main {

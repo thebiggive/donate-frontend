@@ -90,5 +90,6 @@ $donate-theme: mat.m2-define-light-theme(
 @include mat.progress-spinner-theme($donate-theme);
 @include mat.radio-theme($donate-theme);
 @include mat.select-theme($donate-theme);
+@include mat.slider-theme($donate-theme);
 @include mat.stepper-theme($donate-theme);
 @include mat.tabs-theme($donate-theme);
