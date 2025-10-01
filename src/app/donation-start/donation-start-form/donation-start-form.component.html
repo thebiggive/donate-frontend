@@ -60,9 +60,16 @@
                       discrete
                       [displayWith]="updateTipPercentAndFormatSliderLabel"
                       class="tip-slider"
+                      [class.slider-being-dragged]="isTipSliderBeingDragged"
                       aria-label="Tip percentage"
                     >
-                      <input matSliderThumb [value]="tipPercentage" (valueChange)="setTipPercentage($event)" />
+                      <input
+                        matSliderThumb
+                        [value]="tipPercentage"
+                        (dragStart)="startTipSliderDrag()"
+                        (dragEnd)="endTipSliderDrag()"
+                        (valueChange)="setTipPercentage($event)"
+                      />
                     </mat-slider>
                   </div>
                 }
