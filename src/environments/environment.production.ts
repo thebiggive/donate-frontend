@@ -22,7 +22,7 @@ export const environment: Environment = {
   matomoAbTest: {
     name: 'tip_slider_2025_oct',
     variantName: 'B',
-    startDate: '2025/09/30 23:00:00 UTC',
+    startDate: '2025/10/03 11:00:00 UTC',
     endDate: '2025/10/15 11:30:00 UTC',
   },
   minimumCreditAmount: 500,
