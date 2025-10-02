@@ -26,11 +26,10 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
-  // Todo create test in Matomo
   matomoAbTest: {
     name: 'tip_slider_2025',
     variantName: 'B',
-    startDate: '2025/10/03 11:00:00 UTC',
+    startDate: '2025/10/02 11:00:00 UTC',
     endDate: undefined,
   },
   minimumCreditAmount: 500,
