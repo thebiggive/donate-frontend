@@ -18,11 +18,10 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
-  // Todo create test in Matomo
   matomoAbTest: {
-    name: 'tip_slider_2025_oct',
+    name: 'tip_slider_2025_10',
     variantName: 'B',
-    startDate: '2025/10/03 11:00:00 UTC',
+    startDate: '2025/10/02 11:00:00 UTC',
     endDate: '2025/10/15 11:30:00 UTC',
   },
   minimumCreditAmount: 500,

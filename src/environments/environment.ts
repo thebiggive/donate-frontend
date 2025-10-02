@@ -24,7 +24,12 @@ export const environment: Environment = {
   identityApiPrefix: 'http://localhost:30050/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
-  matomoAbTest: undefined,
+  matomoAbTest: {
+    name: 'tip_slider_2025',
+    variantName: 'B',
+    startDate: '2025/10/02 11:00:00 UTC',
+    endDate: undefined,
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
