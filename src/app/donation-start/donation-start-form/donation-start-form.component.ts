@@ -391,6 +391,9 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
               {
                 name: 'original',
                 activate: (_event: unknown) => {
+                  if (this.manuallySelectedABTestVariant) {
+                    return;
+                  }
                   // No change from the original form.
                   console.log('Original test variant active!');
                   this.tipInputABTestVariant = 'A';
