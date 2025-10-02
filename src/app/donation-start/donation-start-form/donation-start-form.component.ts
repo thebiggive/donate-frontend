@@ -155,7 +155,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   @ViewChild('cardInfo') cardInfo!: ElementRef;
   @ViewChild('stepper') private stepper!: MatStepper;
 
-  alternateCopy = false; // Varies tip copy for A/B test.
+  protected isTipSliderBeingDragged = false;
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
@@ -344,6 +344,14 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     return this.tipInputABTestVariant === 'A' ? 'dropdown' : 'slider';
   }
 
+  startTipSliderDrag = () => {
+    this.isTipSliderBeingDragged = true;
+  };
+
+  endTipSliderDrag = () => {
+    this.isTipSliderBeingDragged = false;
+  };
+
   ngOnDestroy() {
     if (this.donation) {
       this.clearDonation(this.donation, { clearAllRecord: false, jumpToStart: false });
@@ -383,6 +391,9 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
               {
                 name: 'original',
                 activate: (_event: unknown) => {
+                  if (this.manuallySelectedABTestVariant) {
+                    return;
+                  }
                   // No change from the original form.
                   console.log('Original test variant active!');
                   this.tipInputABTestVariant = 'A';
