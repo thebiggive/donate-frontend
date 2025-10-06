@@ -12,7 +12,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'staging':
       return { mailingListSignup: true };
     case 'production':
-      return { mailingListSignup: false };
+      return { mailingListSignup: true };
   }
 };
 
