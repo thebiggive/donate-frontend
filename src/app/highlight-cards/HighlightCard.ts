@@ -55,7 +55,8 @@ const replaceURLOrigin = (
   const href = urlFromApi
     .replace('https://donate.biggive.org', donateUriPrefix)
     .replace('https://biggive.org', blogUriPrefix)
-    .replace('https://community.biggive.org', experienceUriPrefix);
+    .replace('https://community.biggive.org', experienceUriPrefix)
+    .replace('https://mailchi.mp/biggive/news', donateUriPrefix + '/donor-mailing-list'); // @todo - change this upstream in SF and delete this line
   return new URL(href);
 };
 
