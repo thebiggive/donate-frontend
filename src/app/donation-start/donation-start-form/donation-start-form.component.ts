@@ -78,6 +78,7 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { flags } from '../../featureFlags';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -144,6 +145,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private stripeService = inject(StripeService);
   private toast = inject(Toast);
   private liveAnnouncer = inject(LiveAnnouncer);
+  protected readonly flags = flags;
 
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
@@ -216,6 +218,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }));
 
   readonly suggestedTipPercentages = [
+    { value: '0', label: '0%' },
     ...this.percentagesWithLabelsLowestFirst,
     { value: 'Other', label: 'Other' },
   ] as const;
