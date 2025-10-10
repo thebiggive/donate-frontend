@@ -17,12 +17,6 @@ h1 {
   }
 }
 
-.banner-container {
-  // set min height so content below doens't move too much (or ideally at all) when the banner loads and/or the
-  // components library starts running.
-  min-height: 450px;
-}
-
 .b-back-button {
   @include abstract.make-back-button;
 }
