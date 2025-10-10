@@ -73,9 +73,9 @@ app.use(
           matomoUriBase,
           `'unsafe-eval'`,
           // See index.html for the following 3.
-          `'sha256-Sp+lXF+X6sKZ/H9YnLdnVXovCYeNnfniV+SHMBYf2mU='`, // Modern features support check
-          `'sha256-/cRkLzKAtkwfUU4EevBZNtMEPnuF8gEZ3qHGDYk3NIc='`, // Modern / legacy bundle choice
-          `'sha256-CElYsstTpGb2MQvYUOz3uJwYi0k2cMOL1BvLGk0uL4c='`, // Fully unsupported check / message visibility toggle
+          `'sha256-NanclUkVf3jIpUyF+6O5Clf6pCxLAfGZ+0O8WrzvgJs='`, // Modern features support check
+          `'sha256-AATpybkH8FlEUvMy/b/SUOrGXmnWMJ31DV1vckQRb+o='`, // Modern / legacy bundle choice
+          `'sha256-dbXPN52C5kMnX4pS2P9+XZSmIuL+pp25i1yJC/SdMPA='`, // Fully unsupported check / message visibility toggle
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
