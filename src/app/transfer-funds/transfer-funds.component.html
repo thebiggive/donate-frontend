@@ -74,6 +74,9 @@
                     required="true"
                     (selectionChange)="onTipSelectorChanged($event)"
                   >
+                    @if (flags.easierZeroTip) {
+                      <mat-option [value]="0">0%</mat-option>
+                    }
                     <mat-option [value]="2.5">2.5%</mat-option>
                     <mat-option [value]="5">5%</mat-option>
                     <mat-option [value]="7.5">7.5%</mat-option>
