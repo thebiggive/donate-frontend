@@ -13,14 +13,13 @@
     <!-- Just webp support detection -->
     <script src="/assets/custom-libs/modernizr.js"></script>
     <script>
-      var browserSupportsModernFeatures =
-        typeof globalThis !== "undefined" && typeof Intl.NumberFormat.prototype.formatToParts !== "undefined";
+      var browserSupportsGlobalThis = typeof globalThis !== "undefined";
     </script>
     <script>
       // Bundle optimization: redirect to legacy version if needed
       (function () {
         var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
-        var needsLegacy = ie || !window.browserSupportsModernFeatures;
+        var needsLegacy = ie || !window.browserSupportsGlobalThis;
         var hasLegacyParam = window.location.search.includes("legacy=1");
         var hasNoCompatCheck = window.location.search.includes("no-compat-check");
 
@@ -59,7 +58,7 @@
     <script>
       var ie = window.navigator.userAgent.indexOf("Trident/") > 0;
       // Only hide app for browsers likely to break even with ES5 bundle
-      if (ie || (!window.browserSupportsModernFeatures && !window.location.search.includes("no-compat-check"))) {
+      if (ie || (!window.browserSupportsGlobalThis && !window.location.search.includes("no-compat-check"))) {
         document.getElementById("app").style.display = "none";
         document.getElementById("unsupported-message").style.display = "block";
       }
