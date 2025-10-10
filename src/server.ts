@@ -74,8 +74,8 @@ app.use(
           `'unsafe-eval'`,
           // See index.html for the following 3.
           `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
-          `'sha256-vRAKiX6kRCo4yTPGneJM2hFNyqbfnwubxNRmj6JUSS4='`, // Modern / legacy bundle choice
-          `'sha256-vnXVoBuq4KQ/XoebiR4pqNdOjZuTenzWy/flCILBxNo='`, // Fully unsupported check / message visibility toggle
+          `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
+          `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
