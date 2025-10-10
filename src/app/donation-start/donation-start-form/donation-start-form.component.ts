@@ -197,7 +197,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
    * of custom tip, including zero.
    */
-  minimumTipPercentage = 1 as const;
+  minimumTipPercentage: 0 | 1 = flags.easierZeroTip ? 0 : (1 as const);
 
   /**
    * Must stay in ascending donation amount order for defaults logic to work.
