@@ -39,6 +39,7 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { flags } from '../featureFlags';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
@@ -82,6 +83,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   private platformId = inject(PLATFORM_ID);
   private addressService = inject(AddressService);
   private toast = inject(Toast);
+  readonly flags = flags;
 
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoading: boolean = false;
