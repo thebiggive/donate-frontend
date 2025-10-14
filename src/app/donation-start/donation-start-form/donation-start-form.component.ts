@@ -2438,7 +2438,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         data: {
           cancelCopy: 'Cancel and try later',
           proceedCopy: 'Retry now',
-          status: 'You may be offline',
+          status: 'You may be offline.',
           statusDetail:
             'If you still wish to proceed without match funds, please check your connection and continue when back online.',
           title: 'Network error',
