@@ -12,6 +12,7 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
 export class DonationStartMatchConfirmDialogComponent {
   data = inject<{
     cancelCopy: string;
+    proceedCopy: string;
     status: string; // Rendered as trusted HTML
     statusDetail: string; // Rendered as trusted HTML
     title: string;

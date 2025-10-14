@@ -460,13 +460,11 @@ export class DonationService {
     ).setupIntent;
   }
 
-  async removeMatchingExpectation(donation: Donation) {
-    await firstValueFrom(
-      this.http.post<void>(
-        `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}/remove-matching-expectation`,
-        donation,
-        this.getAuthHttpOptions(donation),
-      ),
+  removeMatchingExpectation(donation: Donation) {
+    return this.http.post<void>(
+      `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}/remove-matching-expectation`,
+      donation,
+      this.getAuthHttpOptions(donation),
     );
   }
 
