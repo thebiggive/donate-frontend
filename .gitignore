@@ -45,6 +45,7 @@ testem.log
 /cypress/screenshots
 
 src/supportedBrowsers.ts
+src/assets/supportedBrowsers.js
 
 # System Files
 .DS_Store
