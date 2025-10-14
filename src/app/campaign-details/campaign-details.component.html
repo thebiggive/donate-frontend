@@ -36,34 +36,32 @@
 
   <div class="c-details-container">
     <div class="b-primary-column">
-      <div class="banner-container">
-        @if (campaign.banner) {
-          <!-- 30.6 is approx. 352/1152 as %, the typical app campaign & standalone campaign banner ratio hardcoded in Salesforce -->
-          <biggive-branded-image
-            space-below="4"
-            [imageUrl]="campaign.banner.uri | optimisedImage: 2000 | async"
-            [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-            [imageAlt]="campaign.banner.alt_text"
-            [slug]="campaign.isMatched ? 'Match Funded' : null"
-            [charityName]="campaign.charity.name"
-            [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
-            [imageHeightPercent]="30.6"
-          >
-          </biggive-branded-image>
-        } @else {
-          <biggive-branded-image
-            space-below="4"
-            [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
-            [imageAlt]="null"
-            [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-            [slug]="campaign.isMatched ? 'Match Funded' : null"
-            [charityName]="campaign.charity.name"
-            [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
-            [imageHeightPercent]="30.6"
-          >
-          </biggive-branded-image>
-        }
-      </div>
+      @if (campaign.banner) {
+        <!-- 30.6 is approx. 352/1152 as %, the typical app campaign & standalone campaign banner ratio hardcoded in Salesforce -->
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="campaign.banner.uri | optimisedImage: 2000 | async"
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [imageAlt]="campaign.banner.alt_text"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+          [imageHeightPercent]="30.6"
+        >
+        </biggive-branded-image>
+      } @else {
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
+          [imageAlt]="null"
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+          [imageHeightPercent]="30.6"
+        >
+        </biggive-branded-image>
+      }
 
       <biggive-heading
         space-above="0"
