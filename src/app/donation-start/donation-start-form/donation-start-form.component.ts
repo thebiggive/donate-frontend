@@ -1897,7 +1897,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.scheduleMatchingExpiryWarning(this.donation);
   }
 
-  private offerExistingDonation(donation: Donation) {
+  private async offerExistingDonation(donation: Donation) {
     this.matomoTracker.trackEvent(
       'donate',
       'existing_donation_offered',
@@ -1925,7 +1925,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
       disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
-    reuseDialog.afterClosed().subscribe({ next: this.getDialogResponseFn(donation, matchExpired) });
+    reuseDialog.afterClosed().subscribe({ next: await this.getDialogResponseFn(donation, matchExpired) });
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {
@@ -1957,7 +1957,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
       return;
     }
 
-    this.expiryWarning = setTimeout(() => {
+    this.expiryWarning = setTimeout(async () => {
       if (!this.donation) {
         return;
       }
@@ -1973,7 +1973,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         disableClose: true, // No 'escape' key close; must choose one of the two options.
         role: 'alertdialog',
       });
-      continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation, true));
+      continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, true));
     }, msUntilExpiryTime);
   }
 
@@ -1995,8 +1995,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   /**
-   * Also resets captcha & relevant donation persistence state mgmt,
-   * and returns to step 1 so required input can be collected again.
+   * Also optionally resets relevant donation persistence state mgmt, and returns to step 1 so required input can be collected again.
    * We DON'T reset `this.donor`, so there should be no need for a new captcha code.
    *
    * @param clearAllRecord  Don't keep donation around for /thanks/... or reuse.
@@ -2290,20 +2289,34 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     return this.paymentReadinessTracker.readyToProgressFromPaymentStep;
   }
 
-  private promptToContinue(
+  private async promptToContinue(
     title: string,
     status: string,
     statusDetail: string,
     cancelCopy: string,
     donation: Donation,
     surplusDonationInfo?: string,
+    proceedCopy = 'Continue donation',
   ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
-      data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
+      data: { cancelCopy, proceedCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
-    continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation, false));
+    continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, false));
+  }
+
+  /**
+   * Called by {@see getDialogResponseFn} after agreement to continue; and only after explicitly telling MatchBot to remove
+   * matching expectations (successfully, while online) if applicable.
+   */
+  private applyGeneralDonationUpdates(donation: Donation) {
+    this.donation = donation;
+    this.donationChangeCallBack(donation);
+    // Normally the modal shouldn't change fundamentals that affect what needs validation, but ensure the form's in sync
+    // just in case.
+    this.setConditionalValidators();
+    this.scheduleMatchingExpiryWarning(this.donation);
   }
 
   /**
@@ -2317,17 +2330,24 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
    *     the donation fully; or
    * (c) after match funds expire.
    */
-  private getDialogResponseFn(donation: Donation, matchExpired: boolean) {
-    return (proceed: boolean) => {
+  private async getDialogResponseFn(donation: Donation, matchExpired: boolean) {
+    return async (proceed: boolean) => {
       if (proceed) {
-        // Required for all use cases.
-        this.donation = donation;
-        this.donationChangeCallBack(donation);
-        // Normally the modal shouldn't change fundamentals that affect what needs validation, but ensure the form's in sync
-        // just in case.
-        this.setConditionalValidators();
-
-        this.scheduleMatchingExpiryWarning(this.donation);
+        if (matchExpired) {
+          this.matomoTracker.trackEvent(
+            'donate',
+            'matching_expired_donor_continued',
+            `Donor continued after match expiry for donation ${donation.donationId} to campaign ${this.campaignId}`,
+          );
+          await this.handleMatchRemovalWithRetry(donation, () => this.applyGeneralDonationUpdates(donation));
+        } else {
+          this.matomoTracker.trackEvent(
+            'donate',
+            'general_donor_continued',
+            `Donor chose to continue for donation ${donation.donationId} to campaign ${this.campaignId}`,
+          );
+          this.applyGeneralDonationUpdates(donation);
+        }
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
@@ -2355,10 +2375,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
         }
 
-        if (matchExpired) {
-          this.donationService.removeMatchingExpectation(donation);
-        }
-
         return;
       }
 
@@ -2371,11 +2387,10 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
             `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`,
           );
 
-          // Also resets captcha.
           this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
 
-          // Go back to 1st step to encourage donor to try again
-          this.stepper.reset();
+          // TODO I think we should standardise our various partial resets better instead of just doing them in this case,
+          //  but no time for today's fix.
           this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
           this.tipPercentageChanged = false;
           if (this.paymentGroup) {
@@ -2394,6 +2409,10 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
           }
         },
         error: (response) => {
+          // The donor was trying to start over, so I think even when there's network trouble etc. it's better to clear
+          // the local copy to avoid later confusion.
+          this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+
           this.matomoTracker.trackEvent(
             'donate_error',
             'cancel_failed',
@@ -2402,6 +2421,41 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
         },
       });
     };
+  }
+
+  private async handleMatchRemovalWithRetry(donation: Donation, onSuccess: () => void, isRetry = false): Promise<void> {
+    try {
+      await firstValueFrom(this.donationService.removeMatchingExpectation(donation));
+      onSuccess();
+    } catch (error) {
+      this.matomoTracker.trackEvent(
+        'donate_error',
+        'match_removal_network_error',
+        `Failed to remove matching${isRetry ? ' (retry)' : ''}: ${error instanceof HttpErrorResponse ? error.status : 'unknown'}`,
+      );
+
+      const retryDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
+        data: {
+          cancelCopy: 'Cancel and try later',
+          proceedCopy: 'Retry now',
+          status: 'You may be offline',
+          statusDetail:
+            'If you still wish to proceed without match funds, please check your connection and continue when back online.',
+          title: 'Network error',
+        },
+        disableClose: true,
+        role: 'alertdialog',
+      });
+
+      const shouldRetry = await firstValueFrom(retryDialog.afterClosed());
+      if (shouldRetry) {
+        // Brief delay to give network time to recover
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await this.handleMatchRemovalWithRetry(donation, onSuccess, true);
+      } else {
+        this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+      }
+    }
   }
 
   private setChampionOptInValidity() {
