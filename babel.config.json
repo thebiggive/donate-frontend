@@ -5,7 +5,7 @@
       {
         "targets": {
           "chrome": "71",
-          "safari": "12.2"
+          "safari": "12.1"
         },
         "useBuiltIns": "usage",
         "corejs": 3
