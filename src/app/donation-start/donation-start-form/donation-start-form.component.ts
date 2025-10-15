@@ -1015,6 +1015,19 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     }
 
     this.submitting = true;
+
+    if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
+      const timeSinceCreation = Date.now() - new Date(this.donation?.createdTime).getTime();
+      const expiryMs = environment.reservationMinutes * 60000;
+
+      this.matomoTracker.trackEvent(
+        'donate_submit_attempt',
+        'with_match_reserved',
+        `Time since creation: ${timeSinceCreation}ms, expiry at: ${expiryMs}ms`,
+        this.donation?.matchReservedAmount,
+      );
+    }
+
     await this.payWithStripe();
   }
 
@@ -1088,14 +1101,28 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
       try {
         result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, { confirmationToken }));
       } catch (httpError) {
-        this.matomoTracker.trackEvent(
-          'donate_error',
-          'stripe_confirm_failed',
-          (httpError as HttpErrorResponse).error?.error?.code,
-        );
+        const error = httpError as HttpErrorResponse;
 
-        this.handleStripeError((httpError as HttpErrorResponse).error?.error, 'confirm');
+        // Check for the specific match funds error
+        if (
+          error.status === 400 &&
+          error.error?.error?.description?.includes('does not have expected match funds reserved')
+        ) {
+          this.matomoTracker.trackEvent(
+            'donate_error',
+            'payment_blocked_by_match_funds_mismatch',
+            `Donation ${this.donation.donationId}`,
+          );
 
+          // Show the matching expired dialog to get fresh confirmation
+          this.promptToContinueWithNoMatchingLeft(this.donation);
+          return; // Don't continue with payment after prompting
+        }
+
+        // Handle other errors as before
+        this.matomoTracker.trackEvent('donate_error', 'stripe_confirm_failed', error.error?.error?.code);
+
+        this.handleStripeError(error.error?.error, 'confirm');
         return;
       }
 
@@ -1959,12 +1986,21 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
     this.expiryWarning = setTimeout(async () => {
       if (!this.donation) {
+        this.matomoTracker.trackEvent(
+          'matching_expiry',
+          'timer_fired_no_donation',
+          'Timer fired but no donation object',
+        );
         return;
       }
 
+      this.matomoTracker.trackEvent('matching_expiry', 'timer_fired', `Donation ${this.donation.donationId}`);
+
       // The expiry's happened, so we should ignore the amount of funds returned by the API
       // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
-      // loaded from browser storage into a new load of this page.
+      // loaded from browser storage into a new load of this page. Donor confirming they're OK in
+      // response fn for the dialog will cause us to call the API to explicitly say no match funds
+      // are expected.
       this.donation.matchReservedAmount = 0;
 
       this.liveAnnouncer.announce('Match funding has expired');
@@ -2029,19 +2065,24 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     }
   }
 
+  /**
+   * Also calls the matching expectation clear endpoint when confirmed, to be safe / help with edge cases where MatchBot is out of sync.
+   */
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
     this.matomoTracker.trackEvent(
       'donate',
       'alerted_no_match_funds',
       `Asked donor whether to continue for campaign ${this.campaignId}`,
     );
-    this.promptToContinue(
+    void this.promptToContinue(
       'Great news - this charity has reached their target',
       'There are no match funds currently available for this charity.',
       'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
       'Cancel',
       donation,
       this.campaign.surplusDonationInfo,
+      'Continue unmatched',
+      true,
     );
   }
 
@@ -2059,6 +2100,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
       donation.matchReservedAmount,
       donation.currencyCode,
     );
+    // TODO ideally we would have a 'reduce expected matching' endpoint, but this might be rare enough that it's not worth it.
     this.promptToContinue(
       'Not all match funds are available',
       "There aren't enough match funds currently available to fully match your donation. " +
@@ -2297,13 +2339,14 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     donation: Donation,
     surplusDonationInfo?: string,
     proceedCopy = 'Continue donation',
+    setZeroMatching = false,
   ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, proceedCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true, // No 'escape' key close; must choose one of the two options.
       role: 'alertdialog',
     });
-    continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, false));
+    continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, setZeroMatching));
   }
 
   /**
