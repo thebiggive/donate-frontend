@@ -1015,6 +1015,19 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     }
 
     this.submitting = true;
+
+    if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
+      const timeSinceCreation = Date.now() - new Date(this.donation?.createdTime).getTime();
+      const expiryMs = environment.reservationMinutes * 60000;
+
+      this.matomoTracker.trackEvent(
+        'donate_submit_attempt',
+        'with_match_reserved',
+        `Time since creation: ${timeSinceCreation}ms, expiry at: ${expiryMs}ms`,
+        this.donation?.matchReservedAmount,
+      );
+    }
+
     await this.payWithStripe();
   }
 
@@ -1959,12 +1972,21 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
     this.expiryWarning = setTimeout(async () => {
       if (!this.donation) {
+        this.matomoTracker.trackEvent(
+          'matching_expiry',
+          'timer_fired_no_donation',
+          'Timer fired but no donation object',
+        );
         return;
       }
 
+      this.matomoTracker.trackEvent('matching_expiry', 'timer_fired', `Donation ${this.donation.donationId}`);
+
       // The expiry's happened, so we should ignore the amount of funds returned by the API
       // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
-      // loaded from browser storage into a new load of this page.
+      // loaded from browser storage into a new load of this page. Donor confirming they're OK in
+      // response fn for the dialog will cause us to call the API to explicitly say no match funds
+      // are expected.
       this.donation.matchReservedAmount = 0;
 
       this.liveAnnouncer.announce('Match funding has expired');
