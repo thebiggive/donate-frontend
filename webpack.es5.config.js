@@ -64,7 +64,7 @@ module.exports = {
                 {
                   targets: {
                     chrome: "71",
-                    safari: "12.2",
+                    safari: "12.1",
                   },
                   useBuiltIns: false, // Disable automatic polyfill injection to avoid require() statements
                   modules: false, // Keep modules as ES6, let webpack handle bundling
