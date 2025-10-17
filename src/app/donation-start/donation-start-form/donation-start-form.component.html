@@ -129,31 +129,32 @@
                       <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
                     }
                   </mat-hint>
-
-                  @if (showCustomTipInput) {
-                    <p>
-                      <a
-                        role="button"
-                        tabindex="0"
-                        (click)="hideCustomTipInput($event)"
-                        (keyup.space)="hideCustomTipInput($event)"
-                        (keyup.enter)="hideCustomTipInput($event)"
-                        >Choose as percentage</a
-                      >
-                    </p>
-                  } @else {
-                    <p>
-                      <a
-                        role="button"
-                        tabindex="0"
-                        (click)="displayCustomTipInput($event)"
-                        (keyup.space)="displayCustomTipInput($event)"
-                        (keyup.enter)="displayCustomTipInput($event)"
-                        >Custom amount</a
-                      >
-                    </p>
-                  }
                 }
+
+                @if (showCustomTipInput) {
+                  <p>
+                    <a
+                      role="button"
+                      tabindex="0"
+                      (click)="hideCustomTipInput($event)"
+                      (keyup.space)="hideCustomTipInput($event)"
+                      (keyup.enter)="hideCustomTipInput($event)"
+                      >Choose as percentage</a
+                    >
+                  </p>
+                } @else {
+                  <p>
+                    <a
+                      role="button"
+                      tabindex="0"
+                      (click)="displayCustomTipInput($event)"
+                      (keyup.space)="displayCustomTipInput($event)"
+                      (keyup.enter)="displayCustomTipInput($event)"
+                      >Custom amount</a
+                    >
+                  </p>
+                }
+
                 @if (showCustomTipInput && donationAmount && donationAmount > 0) {
                   <mat-hint>
                     {{
