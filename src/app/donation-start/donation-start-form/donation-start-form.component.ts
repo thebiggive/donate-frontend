@@ -217,12 +217,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     label: `${d.tipPercentage}%`,
   }));
 
-  readonly suggestedTipPercentages = [
-    { value: '0', label: '0%' },
-    ...this.percentagesWithLabelsLowestFirst,
-    { value: 'Other', label: 'Other' },
-  ] as const;
-
   noPsps = false;
   psp!: 'stripe';
   retrying = false;
@@ -298,15 +292,15 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then leaves it invalid.
     this.amountsGroup.get('tipAmount')?.markAsUntouched();
     this.showCustomTipInput = true;
+
+    this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
   };
 
   hideCustomTipInput = (event: Event) => {
     event.preventDefault();
     event.stopPropagation(); // Make sure it can't advance the stepper unexpectedly before a new % is chosen.
     this.showCustomTipInput = false;
-    if (this.tipControlStyle === 'slider') {
-      this.amountsGroup.get('tipPercentage')?.setValue(this.tipPercentage);
-    }
+    this.amountsGroup.get('tipPercentage')?.setValue(this.tipPercentage);
   };
 
   private stripeElements: StripeElements | undefined;
@@ -320,6 +314,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
+  // This doesn't do anything as of 17/10/25 but we expect to use it again in a couple of weeks.
   protected tipInputABTestVariant: 'A' | 'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
@@ -341,10 +336,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     if (this.manuallySelectedABTestVariant == 'B') {
       this.tipInputABTestVariant = 'B';
     }
-  }
-
-  get tipControlStyle(): 'dropdown' | 'slider' {
-    return this.tipInputABTestVariant === 'A' ? 'dropdown' : 'slider';
   }
 
   startTipSliderDrag = () => {
@@ -1238,10 +1229,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     );
   }
 
-  customTip(): boolean {
-    return this.amountsGroup.value.tipPercentage === 'Other';
-  }
-
   expectedMatchAmount(): number {
     if (!this.donation) {
       return 0;
@@ -2118,12 +2105,9 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
-    if (tipPercentage === 'Other') {
-      this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
-      this.displayCustomTipInput(undefined);
+    if (this.showCustomTipInput) {
       return;
     }
-    this.showCustomTipInput = false;
 
     const tipOrFeeAmount = this.getTipOrFeeAmount(Number(tipPercentage), this.donationAmount);
 
@@ -2136,7 +2120,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   };
 
   private setConditionalValidators(): void {
-    // Do not add a validator on `tipPercentage` because as a dropdown it always
+    // Do not add a validator on `tipPercentage` because as a slider it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
     //
