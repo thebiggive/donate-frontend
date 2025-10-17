@@ -256,7 +256,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private defaultCountryCode: string;
   public selectedCountryCode: string;
   private previousDonation?: Donation;
-  private tipPercentageChanged = false;
 
   tipPercentage: number = this.tipPercentageDefaults[0].tipPercentage;
   tipValue: number | undefined;
@@ -2153,7 +2152,7 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
       const donationAmount = sanitiseCurrency(donationAmountInput);
 
-      if (!this.tipPercentageChanged) {
+      if (!this.showCustomTipInput) {
         let newDefault = this.tipPercentage;
 
         for (const preset of this.tipPercentageDefaults) {
@@ -2419,7 +2418,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
           // TODO I think we should standardise our various partial resets better instead of just doing them in this case,
           //  but no time for today's fix.
           this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
-          this.tipPercentageChanged = false;
           if (this.paymentGroup) {
             this.paymentGroup.patchValue({
               billingCountry: this.defaultCountryCode,
@@ -2590,7 +2588,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   setTipPercentage(newPercentage: number) {
-    this.tipPercentageChanged = true;
     this.updateTipAmountFromSelectedPercentage(newPercentage.toString());
     this.amountsGroup?.get('tipPercentage')?.setValue(newPercentage);
   }
