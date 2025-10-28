@@ -54,7 +54,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules[\\/]core-js/, // Only exclude core-js as it uses ES modules
         use: {
           loader: "babel-loader",
           options: {
@@ -66,7 +66,8 @@ module.exports = {
                     chrome: "71",
                     safari: "12.1",
                   },
-                  useBuiltIns: false, // Disable automatic polyfill injection to avoid require() statements
+                  useBuiltIns: "usage",
+                  corejs: 3,
                   modules: false, // Keep modules as ES6, let webpack handle bundling
                   forceAllTransforms: true, // Force all transforms for maximum compatibility
                 },

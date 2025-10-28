@@ -1652,11 +1652,18 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   private getCurrencySymbol(currencyCode: string): string {
-    return (
-      Intl.NumberFormat('en-GB', { style: 'currency', currency: currencyCode })
-        .formatToParts()
-        .find((part) => part.type === 'currency')?.value || ''
-    );
+    // Switch with hard-coded symbols for now, due to core-js & ES5 tier 2 browsers both not supporting Intl fully.
+    // If this becomes cumbersome to maintain we could probably lean on Angular pipes instead.
+    switch (currencyCode) {
+      case 'GBP':
+        return '£';
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      default:
+        throw new Error(`Unsupported currency code for symbol lookup: ${currencyCode}`);
+    }
   }
 
   private setCampaignBasedVars() {
