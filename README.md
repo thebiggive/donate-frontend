@@ -106,6 +106,8 @@ browsers.
 
 For more technical detail and how to update the modern versions list, see the [Browser Support](./docs/browser-support.md) document.
 
+When developing with modern features in our own TypeScript, consider adding a [core-js polyfill](https://core-js.io/docs/) to [polyfills.ts](./src/polyfills.ts) if available. Note that core-js [doesn't support Intl](https://github.com/zloirock/core-js/blob/master/README.md#missing-polyfills) because of the size implications, so we aim to avoid Intl APIs for now.
+
 ## Docker configuration
 
 The `Dockerfile` in this repository and its `npm` scripts are used for Server-Side Rendering support and containerised deployments in AWS
