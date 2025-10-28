@@ -54,7 +54,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules[\\/]core-js/, // Only exclude core-js as it uses ES modules
         use: {
           loader: "babel-loader",
           options: {
