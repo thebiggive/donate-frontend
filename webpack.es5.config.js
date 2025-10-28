@@ -66,7 +66,7 @@ module.exports = {
                     chrome: "71",
                     safari: "12.1",
                   },
-                  useBuiltIns: 'usage',
+                  useBuiltIns: "usage",
                   corejs: 3,
                   modules: false, // Keep modules as ES6, let webpack handle bundling
                   forceAllTransforms: true, // Force all transforms for maximum compatibility
