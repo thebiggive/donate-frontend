@@ -74,7 +74,7 @@
                   </div>
                 }
 
-                @if (flags.easierZeroTip || showCustomTipInput) {
+                @if (donationAmount && (tipAmount() === 0 || showCustomTipInput)) {
                   <div style="text-align: left">
                     <h3>A small tip makes a big difference. You will help us:</h3>
                     <ul>
@@ -95,7 +95,6 @@
                         match funding from Big Give.
                       </li>
                     </ul>
-                    Even £1.50 makes a big difference. Thank you!
                   </div>
                 }
 
@@ -123,11 +122,16 @@
                     {{ maximumDonationAmount | exactCurrency: campaign.currencyCode }}.
                   </div>
                 }
-                @if (!showCustomTipInput && donationAmount && donationAmount > 0) {
+
+                @if (
+                  !showCustomTipInput &&
+                  donationAmount &&
+                  donationAmount > 0 &&
+                  tipAmountField?.valid &&
+                  tipAmount() > 0
+                ) {
                   <mat-hint>
-                    @if (tipAmountField?.valid) {
-                      <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
-                    }
+                    <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
                   </mat-hint>
                 }
 
@@ -153,6 +157,19 @@
                       >Custom amount</a
                     >
                   </p>
+
+                  @if (tipInputABTestVariant === "C") {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="zeroAndDisplayCustomTipInput($event)"
+                        (keyup.space)="zeroAndDisplayCustomTipInput($event)"
+                        (keyup.enter)="zeroAndDisplayCustomTipInput($event)"
+                        >I do not want to give a tip</a
+                      >
+                    </p>
+                  }
                 }
 
                 @if (showCustomTipInput && donationAmount && donationAmount > 0) {

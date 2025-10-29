@@ -187,7 +187,13 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
    * of custom tip, including zero.
    */
-  minimumTipPercentage: 0 | 1 = flags.easierZeroTip ? 0 : (1 as const);
+  get minimumTipPercentage() {
+    if (this.tipInputABTestVariant === 'B') {
+      return 0;
+    }
+
+    return 1;
+  }
 
   /**
    * Must stay in ascending donation amount order for defaults logic to work.
@@ -283,6 +289,14 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected');
   };
 
+  zeroAndDisplayCustomTipInput = (event: Event) => {
+    event?.preventDefault();
+    event?.stopPropagation(); // Make sure it can't advance the stepper unexpectedly.
+    this.tipAmountField?.setValue('0');
+    this.showCustomTipInput = true;
+    this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Zero-default Other Amount Selected');
+  };
+
   hideCustomTipInput = (event: Event) => {
     event.preventDefault();
     event.stopPropagation(); // Make sure it can't advance the stepper unexpectedly before a new % is chosen.
@@ -301,8 +315,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
-  // This doesn't do anything as of 17/10/25 but we expect to use it again in a couple of weeks.
-  protected tipInputABTestVariant: 'A' | 'B' = 'A';
+  protected tipInputABTestVariant: 'A' | 'B' | 'C' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
@@ -320,8 +333,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
     }
 
-    if (this.manuallySelectedABTestVariant == 'B') {
-      this.tipInputABTestVariant = 'B';
+    const requestedVariant = this.manuallySelectedABTestVariant || '';
+    if (requestedVariant === 'B' || requestedVariant === 'C') {
+      this.tipInputABTestVariant = requestedVariant;
     }
   }
 
@@ -382,6 +396,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
               },
               {
                 name: environment.matomoAbTest.variantName,
+                percentage: 15,
                 activate: (_event: unknown) => {
                   if (this.manuallySelectedABTestVariant) {
                     return;
@@ -390,6 +405,21 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
                   console.log('B test variant active!');
                 },
               },
+              ...(environment.matomoAbTest.additionalVariantName
+                ? [
+                    {
+                      name: environment.matomoAbTest.additionalVariantName,
+                      percentage: 15,
+                      activate: (_event: unknown) => {
+                        if (this.manuallySelectedABTestVariant) {
+                          return;
+                        }
+                        this.tipInputABTestVariant = 'C';
+                        console.log('C test variant active!');
+                      },
+                    },
+                  ]
+                : []),
             ],
             trigger: () => {
               return true;
