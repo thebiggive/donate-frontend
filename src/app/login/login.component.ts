@@ -12,7 +12,6 @@ import { PageMetaService } from '../page-meta.service';
 import { environment } from '../../environments/environment';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { registerPath } from '../app.routes';
 import { WidgetInstance } from 'friendly-challenge';
 import { NavigationService } from '../navigation.service';
@@ -39,7 +38,6 @@ export type LoginNavigationState = {
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    MatAutocompleteModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: 'login.component.scss',

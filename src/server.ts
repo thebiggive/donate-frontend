@@ -58,7 +58,6 @@ app.use(
           new URL(environment.matchbotApiPrefix).host,
           new URL(environment.identityApiPrefix).host,
           matomoUriBase,
-          'api.getAddress.io',
           '*.getsitecontrol.com',
           'api.friendlycaptcha.com',
           'https://api.stripe.com',
@@ -77,7 +76,6 @@ app.use(
           `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
           `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
-          'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
           'www.gstatic.com',

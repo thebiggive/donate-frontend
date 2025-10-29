@@ -34,17 +34,11 @@ import {
 } from '@stripe/stripe-js';
 import { DonationService, StripeCustomerSession } from '../donation.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address.service';
+import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { environment } from '../../environments/environment';
-import {
-  MatAutocomplete,
-  MatAutocompleteSelectedEvent,
-  MatAutocompleteTrigger,
-  MatOption,
-} from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/autocomplete';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
@@ -86,8 +80,6 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MatRadioGroup,
     MatIconAnchor,
     RouterLink,
-    MatAutocomplete,
-    MatAutocompleteTrigger,
     MatCheckbox,
     MatOption,
     MoneyPipe,
@@ -105,7 +97,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private pageMeta = inject(PageMetaService);
   private stripeService = inject(StripeService);
   private donationService = inject(DonationService);
-  private addressService = inject(AddressService);
 
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
@@ -159,7 +150,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * Optional home address, used for Gift Aid purposes.
    */
   protected homeAddress: HomeAddress | undefined;
-  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   /**
    * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
@@ -231,17 +221,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       })
       .catch(console.error);
-
-    this.addressService.suggestAddresses({
-      homeAddressFormControl: this.mandateForm.get('homeAddress')!,
-      loadingAddressSuggestionCallback: () => {
-        this.loadingAddressSuggestions = true;
-      },
-      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
-        this.loadingAddressSuggestions = false;
-        this.addressSuggestions = suggestions;
-      },
-    });
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
 
@@ -452,9 +431,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       : { amountInPence: 0, currency: this.campaign.currencyCode };
   }
 
-  protected addressSuggestions: GiftAidAddressSuggestion[] = [];
-  protected loadingAddressSuggestions = false;
-
   protected giftAidErrorMessage: string | undefined = undefined;
 
   protected get homeOutsideUK(): boolean {
@@ -579,7 +555,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected get homeAddressFormValue(): string {
-    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress ?? undefined);
+    return this.mandateForm.value.homeAddress ?? '';
   }
 
   /**
@@ -722,13 +698,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     return errors.length > 0;
-  }
-
-  addressChosen(event: MatAutocompleteSelectedEvent) {
-    this.addressService.loadAddress(event, (address) => {
-      this.mandateForm.patchValue({ homePostcode: address.homePostcode });
-      this.homeAddress = address;
-    });
   }
 
   maximumMatchableDonationGivenCampaign(campaign: Campaign): Money {

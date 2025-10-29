@@ -1,31 +1,20 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatAutocompleteSelectedEvent,
-  MatOption,
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-} from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange, MatSelect } from '@angular/material/select';
 import { MatomoTracker } from 'ngx-matomo-client';
-import { EMPTY } from 'rxjs';
-import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
-import { DonorAccountService } from '../donor-account.service';
 import { Donation, maximumDonationAmountForFundedDonation, OVERSEAS } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { environment } from '../../environments/environment';
 import { FundingInstruction } from '../fundingInstruction.model';
-import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
-import { GiftAidAddress } from '../gift-aid-address.model';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
-import { AddressService } from '../address.service';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { Toast } from '../toast.service';
@@ -64,28 +53,23 @@ import { flags } from '../featureFlags';
     MatStepLabel,
     MatRadioGroup,
     MatRadioButton,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
     MatHint,
     MatProgressSpinner,
     MatCheckbox,
     ExactCurrencyPipe,
   ],
 })
-export class TransferFundsComponent implements AfterContentInit, OnInit {
+export class TransferFundsComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   dialog = inject(MatDialog);
   private campaignService = inject(CampaignService);
   private donationService = inject(DonationService);
-  private donorAccountService = inject(DonorAccountService);
   private identityService = inject(IdentityService);
   private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
-  private addressService = inject(AddressService);
   private toast = inject(Toast);
   readonly flags = flags;
 
-  addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoading: boolean = false;
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
@@ -97,7 +81,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   amountsGroup!: FormGroup;
   giftAidGroup!: FormGroup;
   marketingGroup!: FormGroup;
-  loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = maximumDonationAmountForFundedDonation;
@@ -146,7 +129,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       giftAid: this.formBuilder.group({
         giftAid: [null],
         homeAddress: [null],
-        homeBuildingNumber: [null],
         homeOutsideUK: [null],
         homePostcode: [null],
       }),
@@ -194,71 +176,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.campaignService.getCharityCampaignById(environment.creditTipsCampaign).subscribe((campaign) => {
       this.campaign = campaign;
     });
-  }
-
-  ngAfterContentInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    const observable =
-      this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
-        startWith(''),
-        // https://stackoverflow.com/a/51470735/2803757
-        debounceTime(400),
-        distinctUntilChanged(),
-        // switchMap *seems* like the best operator to swap out the Observable on the value change
-        // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
-        // hope this may also cancel previous outstanding lookup resolutions that are in flight?
-        // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-        switchMap((initialAddress: string | undefined) => {
-          if (!initialAddress) {
-            return EMPTY;
-          }
-
-          this.loadingAddressSuggestions = true;
-          return this.addressService.getSuggestions(initialAddress);
-        }),
-      ) || EMPTY;
-
-    observable.subscribe((suggestions) => {
-      this.loadingAddressSuggestions = false;
-      this.addressSuggestions = suggestions;
-    });
-  }
-
-  summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
-    // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
-    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
-    // approach of returning an object, then resolving from it, to work, is to explicitly check which
-    // type this field has got before re-summarising it.
-    if (typeof suggestion === 'string') {
-      return suggestion;
-    }
-
-    return suggestion?.address || '';
-  }
-
-  addressChosen(event: MatAutocompleteSelectedEvent) {
-    // Autocomplete's value.url should be an address we can /get.
-    this.addressService.get(event.option.value.url).subscribe(
-      (address: GiftAidAddress) => {
-        const addressParts = [address.line_1];
-        if (address.line_2) {
-          addressParts.push(address.line_2);
-        }
-        addressParts.push(address.town_or_city);
-
-        this.giftAidGroup.patchValue({
-          homeAddress: addressParts.join(', '),
-          homeBuildingNumber: address.building_number,
-          homePostcode: address.postcode,
-        });
-      },
-      (error) => {
-        console.log('Postcode resolve error', error);
-      },
-    );
   }
 
   createAccount(): void {
@@ -494,12 +411,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     if (this.giftAidGroup.value.giftAid) {
       donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? OVERSEAS : this.giftAidGroup.value.homePostcode;
       donation.homeAddress = this.giftAidGroup.value.homeAddress;
-      // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
-      donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
     } else {
       donation.homePostcode = undefined;
       donation.homeAddress = undefined;
-      donation.homeBuildingNumber = undefined;
     }
 
     if (this.donor.id) {

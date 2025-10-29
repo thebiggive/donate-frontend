@@ -2,7 +2,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -15,12 +14,7 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatAutocompleteSelectedEvent,
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -48,12 +42,11 @@ import { DonationStartMatchingExpiredDialogComponent } from '../donation-start-m
 import { DonationStartOfferReuseDialogComponent } from '../donation-start-offer-reuse-dialog.component';
 import { environment } from '../../../environments/environment';
 import { ExactCurrencyPipe } from '../../exact-currency.pipe';
-import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
 import { IdentityService } from '../../identity.service';
 import { ConversionTrackingService } from '../../conversionTracking.service';
 import { PageMetaService } from '../../page-meta.service';
 import { Person } from '../../person.model';
-import { AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp } from '../../address.service';
+import { billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp } from '../../address';
 import { getDelay } from '../../observable-retry';
 import { getStripeFriendlyError, StripeService } from '../../stripe.service';
 import { getCurrencyMaxValidator } from '../../validators/currency-max';
@@ -119,8 +112,6 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatRadioButton,
     MatSlider,
     MatSliderThumb,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
     MatOption,
     MatProgressSpinner,
     MatCheckbox,
@@ -128,7 +119,7 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     ExactCurrencyPipe,
   ],
 })
-export class DonationStartFormComponent implements AfterContentInit, OnDestroy, OnInit, AfterViewInit {
+export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewInit {
   private cd = inject(ChangeDetectorRef);
   private conversionTrackingService = inject(ConversionTrackingService);
   dialog = inject(MatDialog);
@@ -138,7 +129,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   private identityService = inject(IdentityService);
   private matomoTracker = inject(MatomoTracker);
   private pageMeta = inject(PageMetaService);
-  private addressService = inject(AddressService);
   private platformId = inject(PLATFORM_ID);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -220,12 +210,10 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   noPsps = false;
   psp!: 'stripe';
   retrying = false;
-  addressSuggestions: GiftAidAddressSuggestion[] = [];
   donationCreateError = false;
   donationUpdateError = false;
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
-  loadingAddressSuggestions = false;
   privacyUrl = 'https://biggive.org/privacy';
 
   /** Briefly true each time the final step's entered. Hides final Stripe-activating button. */
@@ -605,23 +593,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
     this.prepareStripeElements();
   }
 
-  ngAfterContentInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    this.addressService.suggestAddresses({
-      homeAddressFormControl: this.giftAidGroup.get('homeAddress')!,
-      loadingAddressSuggestionCallback: () => {
-        this.loadingAddressSuggestions = true;
-      },
-      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
-        this.loadingAddressSuggestions = false;
-        this.addressSuggestions = suggestions;
-      },
-    });
-  }
-
   reset = () => {
     this.donor = undefined;
     this.creditPenceToUse = 0;
@@ -637,10 +608,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
 
     location.reload();
   };
-
-  addressChosen(event: MatAutocompleteSelectedEvent) {
-    this.addressService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
-  }
 
   async stepChanged(event: StepperSelectionEvent) {
     if (event.selectedIndex > 0 && !this.donor) {
@@ -2578,7 +2545,6 @@ export class DonationStartFormComponent implements AfterContentInit, OnDestroy, 
   }
 
   protected showCardReuseMessage = false;
-  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   retryDonationCreate(): void {
     this.matomoTracker.trackEvent('donate', 'donate_create_retry_pressed', `Donation creation retried`);
