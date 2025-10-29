@@ -46,7 +46,7 @@ import { IdentityService } from '../../identity.service';
 import { ConversionTrackingService } from '../../conversionTracking.service';
 import { PageMetaService } from '../../page-meta.service';
 import { Person } from '../../person.model';
-import { billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp } from '../../address.service';
+import { billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp } from '../../address';
 import { getDelay } from '../../observable-retry';
 import { getStripeFriendlyError, StripeService } from '../../stripe.service';
 import { getCurrencyMaxValidator } from '../../validators/currency-max';

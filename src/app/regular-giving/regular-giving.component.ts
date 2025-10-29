@@ -34,7 +34,7 @@ import {
 } from '@stripe/stripe-js';
 import { DonationService, StripeCustomerSession } from '../donation.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address.service';
+import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { environment } from '../../environments/environment';
 import { MatOption } from '@angular/material/autocomplete';

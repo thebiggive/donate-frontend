@@ -1,4 +1,4 @@
-/** This "service" is now just a collection of consts and types, as we don't have a lookup for now. */
+/** Just a collection of consts and types, as we don't have a lookup for now. */
 
 /**
  * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
