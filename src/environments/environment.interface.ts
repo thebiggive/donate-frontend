@@ -46,8 +46,6 @@ export interface Environment {
   };
   minimumCreditAmount: number;
   maximumCreditAmount: number;
-  postcodeLookupKey: string;
-  postcodeLookupUri: string;
   psps: {
     stripe: {
       enabled: boolean; // currently this is true in all envs, but typing as boolean in case we want to change it at short notice.

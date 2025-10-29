@@ -11,7 +11,6 @@ import { IdentityService } from '../identity.service';
 import { environment } from '../../environments/environment';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { transferFundsPath } from '../app.routes';
 import { WidgetInstance } from 'friendly-challenge';
@@ -39,7 +38,6 @@ import { minPasswordLength } from '../../environments/common';
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    MatAutocompleteModule,
     VerifyEmailComponent,
     MatIcon,
   ],

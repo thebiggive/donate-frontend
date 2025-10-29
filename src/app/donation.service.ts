@@ -157,14 +157,6 @@ export class DonationService {
   }
 
   update(donation: Donation): Observable<Donation> {
-    if (donation.homeAddress && Object.prototype.hasOwnProperty.call(donation.homeAddress, 'address')) {
-      // should never happen given fix made now to AddressService.loadAddress but just in case:
-
-      console.error('Donation.homeAddress is object, should be string');
-      // @ts-expect-error 'Property address does not exist on type string'
-      donation.homeAddress = donation.homeAddress.address;
-    }
-
     return this.http.put<Donation>(
       `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,

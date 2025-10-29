@@ -35,12 +35,9 @@ export function updateDonationFromForm(
   if (donation.giftAid || donation.tipGiftAid) {
     donation.homePostcode = giftAidGroup.value.homeOutsideUK ? OVERSEAS : giftAidGroup.value.homePostcode;
     donation.homeAddress = giftAidGroup.value.homeAddress;
-    // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
-    donation.homeBuildingNumber = giftAidGroup.value.homeBuildingNumber || undefined;
   } else {
     donation.homePostcode = undefined;
     donation.homeAddress = undefined;
-    donation.homeBuildingNumber = undefined;
   }
   donationService.updateLocalDonation(donation);
 }

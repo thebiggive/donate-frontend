@@ -277,38 +277,17 @@
             <div id="giftAidAddressContainer">
               <div>
                 <biggive-text-input>
-                  <label slot="label" for="homeAddress">Enter your home address</label>
+                  <label slot="label" for="homeAddress">Home address line 1</label>
                   <input
                     formControlName="homeAddress"
                     id="homeAddress"
                     matInput
                     slot="input"
-                    autocomplete="off"
-                    [matAutocomplete]="autoAddress"
+                    autocomplete="address-line1"
                   />
                 </biggive-text-input>
-                <mat-autocomplete
-                  #autoAddress="matAutocomplete"
-                  [displayWith]="summariseAddressSuggestion"
-                  (optionSelected)="addressChosen($event)"
-                >
-                  @for (suggestion of addressSuggestions; track suggestion.address) {
-                    <mat-option [value]="suggestion">
-                      {{ suggestion.address }}
-                    </mat-option>
-                  }
-                </mat-autocomplete>
-                <mat-hint>
-                  This is for your Gift Aid declaration to HMRC
-                  @if (loadingAddressSuggestions) {
-                    <mat-spinner
-                      aria-label="Loading possible addresses"
-                      color="primary"
-                      diameter="15"
-                      class="address-loading-spinner"
-                    ></mat-spinner>
-                  }
-                </mat-hint>
+
+                <mat-hint> This is for your Gift Aid declaration to HMRC </mat-hint>
                 @if (giftAidGroup.get("homeAddress")?.errors?.maxlength) {
                   <div class="error">Maximum 255 characters exceeded</div>
                 }
@@ -316,7 +295,7 @@
               @if (!giftAidGroup.value.homeOutsideUK) {
                 <div>
                   <biggive-text-input>
-                    <label slot="label" for="homePostcode">Enter your home postcode</label>
+                    <label slot="label" for="homePostcode">Home postcode</label>
                     <input
                       autocomplete="postal-code"
                       formControlName="homePostcode"
@@ -445,7 +424,7 @@
                 matInput
                 (change)="onBillingPostCodeChanged($event)"
                 autocapitalize="characters"
-                autocomplete="postal-code"
+                autocomplete="billing postal-code"
               />
             </biggive-text-input>
           </div>
