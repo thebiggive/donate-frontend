@@ -40,7 +40,8 @@ export interface Environment {
   matomoNonZeroTipGoalId: number | null; // Only tracks GBP campaigns; sends tip as value in £.
   matomoAbTest?: {
     name: string;
-    variantName: string; // The one that's not 'original'.
+    variantName: string; // First one that's not 'original'.
+    additionalVariantName?: string; // e.g. for a 3rd variant test.
     startDate: MatomoDate;
     endDate?: MatomoDate; // Typically omit for dev/staging evaluation.
   };

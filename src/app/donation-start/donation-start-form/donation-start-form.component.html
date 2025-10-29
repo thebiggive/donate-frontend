@@ -74,7 +74,7 @@
                   </div>
                 }
 
-                @if (flags.easierZeroTip || showCustomTipInput) {
+                @if (tipInputABTestVariant === "B" || showCustomTipInput) {
                   <div style="text-align: left">
                     <h3>A small tip makes a big difference. You will help us:</h3>
                     <ul>
@@ -153,6 +153,19 @@
                       >Custom amount</a
                     >
                   </p>
+
+                  @if (tipInputABTestVariant === "C") {
+                    <p>
+                      <a
+                        role="button"
+                        tabindex="0"
+                        (click)="zeroAndDisplayCustomTipInput($event)"
+                        (keyup.space)="zeroAndDisplayCustomTipInput($event)"
+                        (keyup.enter)="zeroAndDisplayCustomTipInput($event)"
+                        >I do not want to give a tip</a
+                      >
+                    </p>
+                  }
                 }
 
                 @if (showCustomTipInput && donationAmount && donationAmount > 0) {
