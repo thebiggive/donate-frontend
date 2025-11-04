@@ -74,9 +74,6 @@
                     required="true"
                     (selectionChange)="onTipSelectorChanged($event)"
                   >
-                    @if (flags.easierZeroTip) {
-                      <mat-option [value]="0">0%</mat-option>
-                    }
                     <mat-option [value]="2.5">2.5%</mat-option>
                     <mat-option [value]="5">5%</mat-option>
                     <mat-option [value]="7.5">7.5%</mat-option>
@@ -182,44 +179,17 @@
               @if (isOptedIntoGiftAid) {
                 <div id="addressWrapper">
                   <mat-form-field>
-                    <mat-label for="homeAddress">Home address</mat-label>
-                    <input
-                      formControlName="homeAddress"
-                      id="homeAddress"
-                      matInput
-                      autocomplete="off"
-                      [matAutocomplete]="autoAddress"
-                    />
-                    <mat-autocomplete
-                      #autoAddress="matAutocomplete"
-                      [displayWith]="summariseAddressSuggestion"
-                      (optionSelected)="addressChosen($event)"
-                    >
-                      @for (suggestion of addressSuggestions; track suggestion.address) {
-                        <mat-option [value]="suggestion">
-                          {{ suggestion.address }}
-                        </mat-option>
-                      }
-                    </mat-autocomplete>
-                    <mat-hint>
-                      For your Gift Aid declaration to HMRC.
-                      @if (loadingAddressSuggestions) {
-                        <mat-spinner
-                          aria-label="Loading possible addresses"
-                          color="primary"
-                          diameter="15"
-                          class="address-loading-spinner"
-                        ></mat-spinner>
-                      }
-                    </mat-hint>
+                    <mat-label for="homeAddress">Home address line 1</mat-label>
+                    <input formControlName="homeAddress" id="homeAddress" matInput autocomplete="address-line1" />
+                    <mat-hint>For your Gift Aid declaration to HMRC.</mat-hint>
                   </mat-form-field>
                   @if (giftAidGroup.get("homeAddress")?.errors?.["maxlength"]) {
                     <div class="error">Maximum 255 characters exceeded</div>
                   }
                   @if (!giftAidGroup.value.homeOutsideUK) {
                     <mat-form-field>
-                      <mat-label for="homePostcode"> Home postcode </mat-label>
-                      <input formControlName="homePostcode" id="homePostcode" matInput />
+                      <mat-label for="homePostcode">Home postcode</mat-label>
+                      <input formControlName="homePostcode" id="homePostcode" matInput autocomplete="postal-code" />
                     </mat-form-field>
                   }
                   <div class="homeOutsideUK-wrapper">

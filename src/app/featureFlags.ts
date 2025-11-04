@@ -1,18 +1,20 @@
 import { environment } from '../environments/environment';
 import { EnvironmentID } from '../environments/environment.interface';
 
-type flags = { mailingListSignup: boolean; easierZeroTip: boolean };
+// Leaving for future flags.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+type flags = {};
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
-      return { mailingListSignup: true, easierZeroTip: true };
+      return {};
     case 'regression':
-      return { mailingListSignup: true, easierZeroTip: true };
+      return {};
     case 'staging':
-      return { mailingListSignup: true, easierZeroTip: false };
+      return {};
     case 'production':
-      return { mailingListSignup: true, easierZeroTip: false };
+      return {};
   }
 };
 

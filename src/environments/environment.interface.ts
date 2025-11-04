@@ -40,14 +40,13 @@ export interface Environment {
   matomoNonZeroTipGoalId: number | null; // Only tracks GBP campaigns; sends tip as value in £.
   matomoAbTest?: {
     name: string;
-    variantName: string; // The one that's not 'original'.
+    variantName: string; // First one that's not 'original'.
+    additionalVariantName?: string; // e.g. for a 3rd variant test.
     startDate: MatomoDate;
     endDate?: MatomoDate; // Typically omit for dev/staging evaluation.
   };
   minimumCreditAmount: number;
   maximumCreditAmount: number;
-  postcodeLookupKey: string;
-  postcodeLookupUri: string;
   psps: {
     stripe: {
       enabled: boolean; // currently this is true in all envs, but typing as boolean in case we want to change it at short notice.

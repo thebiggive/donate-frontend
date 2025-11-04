@@ -27,15 +27,14 @@ export const environment: Environment = {
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
   matomoAbTest: {
-    name: 'tip_slider_2025',
+    name: 'tip_slider_2025_ii',
     variantName: 'B',
-    startDate: '2025/10/02 11:00:00 UTC',
+    additionalVariantName: 'C',
+    startDate: '2025/10/29 07:00:00 UTC',
     endDate: undefined,
   },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
-  postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
-  postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   psps: {
     stripe: {
       enabled: true,
