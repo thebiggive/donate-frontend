@@ -39,7 +39,7 @@ export class StripeService {
       colorBackground: '#F6F6F6', // matches our $colour-background
       colorDanger: '#bb2222', // matches angular native and our snackbar
       accessibleColorOnColorPrimary: '#262626',
-      focusOutline: '1px solid #FF7272', // matches our $colour-tertiary-coral
+      focusOutline: '1px solid #2AF135', // matches our $colour-secondary-green
     },
     rules: {
       '.Block': {
