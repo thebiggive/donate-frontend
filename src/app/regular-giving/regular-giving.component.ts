@@ -130,6 +130,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   public readonly labelYourPaymentInformation = 'Your Payment Information';
 
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;
+  protected stripeElementLoading = false;
+
   private stripeCustomerSession: StripeCustomerSession | undefined;
   protected submitting: boolean = false;
 
@@ -477,8 +479,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      this.stripeElementLoading = true;
+
+      // https://docs.stripe.com/js/element/events/on_change
       // @ts-expect-error Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
+
+      // https://docs.stripe.com/js/element/events/on_ready
+      this.stripePaymentElement.on('ready', () => (this.stripeElementLoading = false));
     }
   }
 
