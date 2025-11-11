@@ -29,8 +29,8 @@ export class StripeService {
 
   private readonly fonts: CustomFontSource[];
 
-  private readonly secondaryColour = '#FF7272';
-  private readonly highlightColour = '#2AF135';
+  private readonly secondaryColour = '#FF7272'; // Match SCSS $colour-secondary & components counterprt
+  private readonly highlightColour = '#2AF135'; // Match SCSS $colour-highlight & components counterpart
 
   private readonly appearance = {
     theme: 'flat',
