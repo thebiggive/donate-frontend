@@ -305,6 +305,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   };
 
   private stripeElements: StripeElements | undefined;
+  protected stripeElementLoading = false;
   /** A method from the Payment Element, if one's been chosen **/
   private selectedPaymentMethodType: PaymentMethodType | null = null;
   private paymentReadinessTracker!: PaymentReadinessTracker;
@@ -1523,8 +1524,14 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      this.stripeElementLoading = true;
+
+      // https://docs.stripe.com/js/element/events/on_change
       // @ts-expect-error Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
+
+      // https://docs.stripe.com/js/element/events/on_ready
+      this.stripePaymentElement.on('ready', () => (this.stripeElementLoading = false));
     }
   }
 
