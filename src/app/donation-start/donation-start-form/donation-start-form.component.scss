@@ -37,11 +37,6 @@
   font-size: inherit;
 }
 
-div.mdc-form-field label {
-  outline: 3px solid green;
-  font-size: inherit;
-}
-
 :host ::ng-deep div.mat-step-label,
 div.mat-step-label-selected,
 div.mat-step-label.mat-step-label-selected {
@@ -177,17 +172,6 @@ input:disabled {
   margin: 0 auto;
 }
 
-.payment-method-options {
-  .mdc-form-field {
-    background: green;
-    margin-top: 0;
-  }
-
-  mat-checkbox {
-    margin-top: 0;
-  }
-}
-
 .mat-primary {
   margin-top: 1rem;
 }
@@ -298,11 +282,11 @@ input {
 // I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
 // https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
 mat-expansion-panel:has(:focus-visible) {
-  box-shadow: 0 8px 8px -7px abstract.$colour-secondary !important;
+  box-shadow: 0 8px 8px -7px abstract.$colour-highlight !important;
 }
 
 button:focus-visible {
-  outline: 1px solid abstract.$colour-secondary;
+  outline: 1px solid abstract.$colour-highlight;
 }
 
 #giftAidAddressContainer {

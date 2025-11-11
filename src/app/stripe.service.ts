@@ -29,6 +29,9 @@ export class StripeService {
 
   private readonly fonts: CustomFontSource[];
 
+  private readonly secondaryColour = '#FF7272';
+  private readonly highlightColour = '#2AF135';
+
   private readonly appearance = {
     theme: 'flat',
     variables: {
@@ -39,7 +42,7 @@ export class StripeService {
       colorBackground: '#F6F6F6', // matches our $colour-background
       colorDanger: '#bb2222', // matches angular native and our snackbar
       accessibleColorOnColorPrimary: '#262626',
-      focusOutline: '1px solid #2AF135', // matches our $colour-secondary-green
+      focusOutline: `1px solid ${this.highlightColour}`,
     },
     rules: {
       '.Block': {
@@ -64,11 +67,11 @@ export class StripeService {
       },
       '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
         backgroundColor: '#fff',
-        outline: '2px solid #FF7272',
+        outline: `2px solid ${this.highlightColour}`,
       },
       '.TabIcon--selected': {
-        fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
-        color: '#FF7272', // and in case Stripe introduces a text element here in future.
+        fill: this.secondaryColour, // icon is SVG so only fill has effect, but leaving in color too for good measure
+        color: this.secondaryColour, // and in case Stripe introduces a text element here in future.
       },
       '.CheckboxInput, .CheckboxInput--checked': {
         backgroundColor: 'inherit',
@@ -82,7 +85,7 @@ export class StripeService {
         outline: '1px solid #8A8A8A',
       },
       '.PickerItem--highlight': {
-        outline: '1px solid #FF7272',
+        outline: `1px solid ${this.highlightColour}`,
       },
       '.PickerItem--selected': {
         outline: 'none',
