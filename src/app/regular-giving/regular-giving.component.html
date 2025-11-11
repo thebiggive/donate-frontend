@@ -221,7 +221,12 @@
                   <biggive-text-input>
                     <span slot="label">Payment Method</span>
                     <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
-                    <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+                    <div slot="input">
+                      @if (stripeElementLoading) {
+                        <mat-spinner color="primary" diameter="30" aria-label="Loading payment form"> </mat-spinner>
+                      }
+                      <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+                    </div>
                   </biggive-text-input>
 
                   <p>
