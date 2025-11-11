@@ -51,7 +51,7 @@ mat-spinner {
 :root {
   @include mat.slider-overrides(
     (
-      focus-handle-color: abstract.$colour-secondary,
+      focus-handle-color: abstract.$colour-highlight,
       // Square-ish % indicator can have same corner size as BG buttons
       value-indicator-border-radius: 4px,
     )
