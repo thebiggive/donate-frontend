@@ -234,7 +234,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   stripePaymentMethodReady = false;
   stripeError?: string;
   submitting = false;
-  termsUrl = 'https://biggive.org/terms-and-conditions';
+  termsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
