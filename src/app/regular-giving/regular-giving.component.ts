@@ -118,7 +118,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected campaign!: Campaign;
   @ViewChild('stepper') private stepper!: MatStepper;
-  readonly termsUrl = 'https://biggive.org/terms-and-conditions';
+  readonly termsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
   readonly privacyUrl = 'https://biggive.org/privacy';
   protected donor?: Person;
   protected donorAccount!: DonorAccount;
