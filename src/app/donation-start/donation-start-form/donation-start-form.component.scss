@@ -13,8 +13,8 @@
 // Use coral (same as focus) to show we're currently dragging, including on mobile where there's
 // typically no focus state.
 ::ng-deep .tip-slider.slider-being-dragged .mdc-slider__thumb-knob {
-  background-color: abstract.$colour-secondary !important;
-  border-color: abstract.$colour-secondary !important;
+  background-color: abstract.$colour-highlight !important;
+  border-color: abstract.$colour-highlight !important;
 }
 
 .tip-slider {
