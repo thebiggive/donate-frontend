@@ -993,6 +993,27 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       return;
     }
 
+    // Check if matching has expired without the timer firing (e.g. iOS issue or page backgrounded)
+    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.createdTime) {
+      const expiryTime = environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime();
+      const now = Date.now();
+
+      if (now > expiryTime) {
+        this.matomoTracker.trackEvent(
+          'matching_expiry',
+          'detected_on_submit',
+          `Donation ${this.donation.donationId} expired without timer firing`,
+        );
+
+        // Clear the expired matching amount
+        this.donation.matchReservedAmount = 0;
+
+        // Prompt the donor about the expired matching
+        await this.promptToContinueAfterDetectedExpiry(this.donation);
+        return;
+      }
+    }
+
     this.submitting = true;
 
     if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
@@ -2098,6 +2119,76 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       donation,
       this.campaign.surplusDonationInfo,
     );
+  }
+
+  /**
+   * Prompt donor when matching expiry is detected on submit, rather than via timer.
+   * This can happen if the timer didn't fire (e.g., iOS issues, page backgrounded).
+   */
+  private async promptToContinueAfterDetectedExpiry(donation: Donation): Promise<void> {
+    this.matomoTracker.trackEvent(
+      'donate',
+      'alerted_match_expired_on_submit',
+      `Prompted donor about expired matching for campaign ${this.campaignId}`,
+    );
+
+    this.liveAnnouncer.announce('Match funding has expired');
+
+    const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
+      data: {
+        cancelCopy: 'Cancel',
+        proceedCopy: 'Continue unmatched',
+        status: 'Your reserved match funds have expired.',
+        statusDetail:
+          'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
+        title: 'Match funding has expired',
+        surplusDonationInfo: this.campaign.surplusDonationInfo,
+      },
+      disableClose: true,
+      role: 'alertdialog',
+    });
+
+    return new Promise<void>((resolve, reject) => {
+      continueDialog.afterClosed().subscribe(async (proceed: boolean) => {
+        if (proceed) {
+          this.matomoTracker.trackEvent(
+            'donate',
+            'matching_expired_on_submit_donor_continued',
+            `Donor continued after detected expiry for donation ${donation.donationId}`,
+          );
+
+          try {
+            // Remove matching expectation from the API
+            await this.handleMatchRemovalWithRetry(donation, () => {
+              // Update local donation state
+              this.donation = donation;
+              this.donationChangeCallBack(donation);
+            });
+
+            // Continue with the submission
+            this.submitting = true;
+            await this.payWithStripe();
+            resolve();
+          } catch (error) {
+            this.matomoTracker.trackEvent(
+              'donate_error',
+              'match_removal_failed_on_submit',
+              `Failed to remove matching for donation ${donation.donationId}: ${error}`,
+            );
+            this.toast.showError('Sorry, there was an error processing your donation. Please try again.');
+            reject(error);
+          }
+        } else {
+          // Donor cancelled - do nothing, they can try again or modify
+          this.matomoTracker.trackEvent(
+            'donate',
+            'matching_expired_on_submit_donor_cancelled',
+            `Donor cancelled after detected expiry for donation ${donation.donationId}`,
+          );
+          resolve();
+        }
+      });
+    });
   }
 
   private addUKValidators(): void {
