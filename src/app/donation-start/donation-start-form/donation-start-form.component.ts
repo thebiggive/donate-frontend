@@ -1972,33 +1972,54 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       return;
     }
 
-    this.expiryWarning = setTimeout(async () => {
-      if (!this.donation) {
-        this.matomoTracker.trackEvent(
-          'matching_expiry',
-          'timer_fired_no_donation',
-          'Timer fired but no donation object',
-        );
-        return;
-      }
-
-      this.matomoTracker.trackEvent('matching_expiry', 'timer_fired', `Donation ${this.donation.donationId}`);
-
-      // The expiry's happened, so we should ignore the amount of funds returned by the API
-      // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
-      // loaded from browser storage into a new load of this page. Donor confirming they're OK in
-      // response fn for the dialog will cause us to call the API to explicitly say no match funds
-      // are expected.
-      this.donation.matchReservedAmount = 0;
-
-      this.liveAnnouncer.announce('Match funding has expired');
-
-      const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
-        disableClose: true, // No 'escape' key close; must choose one of the two options.
-        role: 'alertdialog',
+    this.expiryWarning = setTimeout(() => {
+      this.handleMatchingExpiry(donation).catch((error) => {
+        console.error('Error in handleMatchingExpiry:', error);
+        this.matomoTracker.trackEvent('matching_expiry', 'error', `Error: ${error}`);
       });
-      continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, true));
     }, msUntilExpiryTime);
+  }
+
+  /**
+   * Handle matching expiry when the timer fires.
+   * @param donation The donation object passed when the timer was scheduled.
+   */
+  private async handleMatchingExpiry(donation: Donation): Promise<void> {
+    if (!this.donation) {
+      this.matomoTracker.trackEvent(
+        'matching_expiry',
+        'timer_fired_no_donation',
+        'Timer fired but no donation object',
+      );
+      return;
+    }
+
+    // Safety check: ensure the timer is still relevant for the current donation
+    if (donation.donationId && this.donation.donationId !== donation.donationId) {
+      this.matomoTracker.trackEvent(
+        'matching_expiry',
+        'timer_fired_wrong_donation',
+        `Timer for ${donation.donationId} fired but current donation is ${this.donation.donationId}`,
+      );
+      return;
+    }
+
+    this.matomoTracker.trackEvent('matching_expiry', 'timer_fired', `Donation ${donation.donationId}`);
+
+    // The expiry's happened, so we should ignore the amount of funds returned by the API
+    // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
+    // loaded from browser storage into a new load of this page. Donor confirming they're OK in
+    // response fn for the dialog will cause us to call the API to explicitly say no match funds
+    // are expected.
+    this.donation.matchReservedAmount = 0;
+
+    this.liveAnnouncer.announce('Match funding has expired');
+
+    const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
+      disableClose: true, // No 'escape' key close; must choose one of the two options.
+      role: 'alertdialog',
+    });
+    continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, true));
   }
 
   private cancelExpiryWarning() {
