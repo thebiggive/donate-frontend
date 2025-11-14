@@ -234,7 +234,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   stripePaymentMethodReady = false;
   stripeError?: string;
   submitting = false;
-  termsUrl = 'https://biggive.org/terms-and-conditions';
+  termsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
@@ -264,16 +264,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   protected readonly stepLabels = stepLabels;
 
-  /**
-   * Because MatSliderThumb doesn't have any events to react to changes until the end of a drag, we've given
-   * this the side effect of updating the form's tip amount value in absolute currency, because that was the
-   * simplest way to give a live preview of the tip amount while dragging. The final thumb `valueChange()` event
-   * should always come after the last slider label update including when e.g. using keyboard escape, so this
-   * should be safe.
-   */
-  updateTipPercentAndFormatSliderLabel = (value: number): string => {
-    this.setTipPercentage(value);
-
+  formatSliderLabel = (value: number): string => {
     return `${value}%`;
   };
 

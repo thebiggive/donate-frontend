@@ -58,7 +58,7 @@
                       [max]="maximumTipPercentage"
                       step="1"
                       discrete
-                      [displayWith]="updateTipPercentAndFormatSliderLabel"
+                      [displayWith]="formatSliderLabel"
                       class="tip-slider"
                       [class.slider-being-dragged]="isTipSliderBeingDragged"
                       aria-label="Tip percentage"
@@ -123,8 +123,10 @@
                   </div>
                 }
 
+                <!-- We could only reliably get new values from Material Slider at the end of a drag, so hide this during -->
                 @if (
                   !showCustomTipInput &&
+                  !isTipSliderBeingDragged &&
                   donationAmount &&
                   donationAmount > 0 &&
                   tipAmountField?.valid &&
