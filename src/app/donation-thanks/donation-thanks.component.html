@@ -116,6 +116,13 @@
             @if (campaign?.thankYouMessage) {
               <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
             }
+
+            @if (!loggedIn) {
+              <p>
+                For a smoother giving experience, follow the link in your donation confirmation email to create a Big
+                Give account. Your information will be saved securely, making future donations quicker and easier.
+              </p>
+            }
           </div>
           @if (donationIsLarge) {
             <biggive-page-section colourScheme="primary" primaryFullBleed="true">
