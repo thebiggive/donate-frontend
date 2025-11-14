@@ -1986,11 +1986,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    */
   private async handleMatchingExpiry(donation: Donation): Promise<void> {
     if (!this.donation) {
-      this.matomoTracker.trackEvent(
-        'matching_expiry',
-        'timer_fired_no_donation',
-        'Timer fired but no donation object',
-      );
+      this.matomoTracker.trackEvent('matching_expiry', 'timer_fired_no_donation', 'Timer fired but no donation object');
       return;
     }
 
