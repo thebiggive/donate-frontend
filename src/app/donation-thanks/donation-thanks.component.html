@@ -54,34 +54,11 @@
           <div class="header-box">
             <h2>Thank you!</h2>
             <p class="thank-you-text">Your generous donation has been made.</p>
-            <div aria-live="polite">
-              @if (registrationComplete) {
-                <div>
-                  <p id="registrationCompleteText">
-                    <strong
-                      >You are now registered
-                      @if (loggedIn) {
-                        <span> and logged in</span>
-                      }
-                      .</strong
-                    >
-                  </p>
-                  <p>You can now donate faster using your chosen email address and password.</p>
-                </div>
-              }
-            </div>
-            @if (registrationComplete && loggedIn) {
-              <div class="cta">
-                <div class="button-wrapper">
-                  <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'" />
-                </div>
-              </div>
-            }
-            @if (registerError) {
-              <p class="error" aria-live="assertive">
-                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                {{ registerErrorDescription }}
-                <span [innerHtml]="registerErrorDescriptionHtml"></span>
+
+            @if (!loggedIn) {
+              <p>
+                For a smoother giving experience, follow the link in your donation confirmation email to create a Big
+                Give account. Your information will be saved securely, making future donations quicker and easier.
               </p>
             }
             @if (showNoFundsRemainingMessage) {
