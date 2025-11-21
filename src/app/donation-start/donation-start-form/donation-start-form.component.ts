@@ -895,9 +895,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       value?: { type: PaymentMethodType | 'apple_pay' | 'google_pay'; payment_method?: PaymentMethod };
     },
   ) {
-    // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
-    // end up validating presence of invisible fields.
-    if (state.empty && this.creditPenceToUse > 0) {
+    // Ensure we don't turn on card-specific validators or try to change the donation's Payment Intent to an incompatible
+    // type (like from customer_balance to card) if donation funds are to be used instead. It's possible to have `state.empty`
+    // false even when a donor has credit because they might also have a saved card which the Stripe Payment Element will auto
+    // select.
+    if (this.creditPenceToUse > 0) {
       return;
     }
 
