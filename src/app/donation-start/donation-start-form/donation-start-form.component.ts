@@ -14,7 +14,6 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -112,7 +111,6 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatRadioButton,
     MatSlider,
     MatSliderThumb,
-    MatOption,
     MatProgressSpinner,
     MatCheckbox,
     PercentPipe,
@@ -146,6 +144,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   @ViewChild('cardInfo') cardInfo!: ElementRef;
   @ViewChild('stepper') private stepper!: MatStepper;
+  @ViewChild('donationAmountInput') private donationAmountInput?: ElementRef<HTMLInputElement>;
 
   protected isTipSliderBeingDragged = false;
 
@@ -332,6 +331,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   startTipSliderDrag = () => {
+    // Avoid re-focus / scroll back to donation amount on mobile when tip slide completes.
+    this.donationAmountInput?.nativeElement?.blur?.();
     this.isTipSliderBeingDragged = true;
   };
 
