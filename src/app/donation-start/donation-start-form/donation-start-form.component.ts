@@ -2013,6 +2013,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.donation.matchReservedAmount = 0;
 
       this.liveAnnouncer.announce('Match funding has expired');
+      if (!this.donationShouldBeUsableAfterMatchExpiry()) {
+        this.resetDueToUnusableDonation(this.donation);
+        return;
+      }
 
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true, // No 'escape' key close; must choose one of the two options.
@@ -2020,6 +2024,31 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       });
       continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, true));
     }, msUntilExpiryTime);
+  }
+
+  /**
+   * We think that a saved card selected in stripe becomes unusable when the stripe session secret
+   * (which we generated in matchbot to give FE permission to see the customer's saved cards) expires.
+   * A new card being entered for the first time should not have this issue. See ticket DON-1176 for
+   * details.
+   */
+  private donationShouldBeUsableAfterMatchExpiry(): boolean {
+    return !this.isSavedPaymentMethodSelected;
+  }
+
+  private resetDueToUnusableDonation(donation: Donation): void {
+    // Technically this is a best guess that it was about to expire. We'll release more robust handling ASAP after CC25.
+    this.toast.showError('Your donation session with Stripe expired. Please try again.');
+    this.donationService.cancel(donation).subscribe({
+      next: () => {
+        this.matomoTracker.trackEvent(
+          'donate',
+          'cancel',
+          `Expiry handler auto-cancelled saved card donation ${donation.donationId} to campaign ${this.campaignId}`,
+        );
+        this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+      },
+    });
   }
 
   private cancelExpiryWarning() {
@@ -2133,6 +2162,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     );
 
     this.liveAnnouncer.announce('Match funding has expired');
+    if (!this.donationShouldBeUsableAfterMatchExpiry()) {
+      this.resetDueToUnusableDonation(donation);
+      return;
+    }
 
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: {
