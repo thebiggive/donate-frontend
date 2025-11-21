@@ -2029,7 +2029,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   /**
    * We think that a saved card selected in stripe becomes unusable when the stripe session secret
    * (which we generated in matchbot to give FE permission to see the customer's saved cards) expires.
-   * A  new card being entered for the first time should not have this issue. See ticket DON-1176 for 
+   * A new card being entered for the first time should not have this issue. See ticket DON-1176 for
    * details.
    */
   private donationShouldBeUsableAfterMatchExpiry(): boolean {
