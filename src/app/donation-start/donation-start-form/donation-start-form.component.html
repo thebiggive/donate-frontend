@@ -25,7 +25,14 @@
             <label class="label-with-limited-space" slot="label" for="donationAmount">
               Donation to {{ campaign.charity.name }}
             </label>
-            <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
+            <input
+              #donationAmountInput
+              maxlength="10"
+              formControlName="donationAmount"
+              id="donationAmount"
+              matInput
+              slot="input"
+            />
           </biggive-text-input>
         </div>
         @if (
