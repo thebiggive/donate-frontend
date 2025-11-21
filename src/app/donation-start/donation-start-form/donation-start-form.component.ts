@@ -331,12 +331,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   startTipSliderDrag = () => {
-    // Avoid re-focus / scroll back to donation amount on mobile when tip slide completes.
-    this.donationAmountInput?.nativeElement?.blur?.();
     this.isTipSliderBeingDragged = true;
   };
 
   endTipSliderDrag = () => {
+    // Avoid re-focus / scroll back to donation amount on mobile.
+    this.donationAmountInput?.nativeElement?.blur?.();
     this.isTipSliderBeingDragged = false;
   };
 
