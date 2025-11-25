@@ -27,10 +27,6 @@ export class PaymentReadinessTracker {
    */
   private donorFunds: boolean = false;
 
-  /**
-   * Does the logged in donor have a saved card, even if they don't want to use it?
-   */
-  private hasASavedCard: boolean = false;
   constructor(
     /**
      * Payment group from the Material form. If Angular Material has a validation error then we're not going to be ready
@@ -56,11 +52,7 @@ export class PaymentReadinessTracker {
 
     let paymentErrors: string[] = [];
     if (!atLeastOneWayOfPayingIsReady) {
-      paymentErrors = [
-        this.hasASavedCard
-          ? 'Please complete your new payment method, or select a saved payment method.'
-          : 'Please complete your payment method.',
-      ];
+      paymentErrors = ['Please complete your payment method.'];
     }
 
     return [...this.humanReadableFormValidationErrors(), ...paymentErrors];

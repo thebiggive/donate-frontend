@@ -34,6 +34,6 @@ export const environment: Environment = {
         'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },
-  reservationMinutes: 30,
+  reservationMinutes: 25,
   showDebugInfo: false,
 };

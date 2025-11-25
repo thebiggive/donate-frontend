@@ -136,7 +136,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   };
 
   get loggedInWithPassword(): boolean {
-    return !!this.donor?.has_password || false;
+    return this.identityService.probablyHaveLoggedInPerson();
   }
 
   setDonation = (donation?: Donation) => {

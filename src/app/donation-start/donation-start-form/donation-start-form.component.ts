@@ -14,7 +14,6 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -112,7 +111,6 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatRadioButton,
     MatSlider,
     MatSliderThumb,
-    MatOption,
     MatProgressSpinner,
     MatCheckbox,
     PercentPipe,
@@ -146,6 +144,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   @ViewChild('cardInfo') cardInfo!: ElementRef;
   @ViewChild('stepper') private stepper!: MatStepper;
+  @ViewChild('donationAmountInput') private donationAmountInput?: ElementRef<HTMLInputElement>;
 
   protected isTipSliderBeingDragged = false;
 
@@ -336,6 +335,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   };
 
   endTipSliderDrag = () => {
+    // Avoid re-focus / scroll back to donation amount on mobile.
+    this.donationAmountInput?.nativeElement?.blur?.();
     this.isTipSliderBeingDragged = false;
   };
 
@@ -894,9 +895,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       value?: { type: PaymentMethodType | 'apple_pay' | 'google_pay'; payment_method?: PaymentMethod };
     },
   ) {
-    // Ensure we don't turn on card-specific validators if donation funds are to be used instead, otherwise we can
-    // end up validating presence of invisible fields.
-    if (state.empty && this.creditPenceToUse > 0) {
+    // Ensure we don't turn on card-specific validators or try to change the donation's Payment Intent to an incompatible
+    // type (like from customer_balance to card) if donation funds are to be used instead. It's possible to have `state.empty`
+    // false even when a donor has credit because they might also have a saved card which the Stripe Payment Element will auto
+    // select.
+    if (this.creditPenceToUse > 0) {
       return;
     }
 
@@ -991,6 +994,27 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         `Donation form invalid, maybe because of early Stripe enter submit`,
       );
       return;
+    }
+
+    // Check if matching has expired without the timer firing (e.g. iOS issue or page backgrounded)
+    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.createdTime) {
+      const expiryTime = environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime();
+      const now = Date.now();
+
+      if (now > expiryTime) {
+        this.matomoTracker.trackEvent(
+          'matching_expiry',
+          'detected_on_submit',
+          `Donation ${this.donation.donationId} expired without timer firing`,
+        );
+
+        // Clear the expired matching amount
+        this.donation.matchReservedAmount = 0;
+
+        // Prompt the donor about the expired matching
+        await this.promptToContinueAfterDetectedExpiry(this.donation);
+        return;
+      }
     }
 
     this.submitting = true;
@@ -1992,6 +2016,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.donation.matchReservedAmount = 0;
 
       this.liveAnnouncer.announce('Match funding has expired');
+      if (!this.donationShouldBeUsableAfterMatchExpiry()) {
+        this.resetDueToUnusableDonation(this.donation);
+        return;
+      }
 
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true, // No 'escape' key close; must choose one of the two options.
@@ -1999,6 +2027,31 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       });
       continueDialog.afterClosed().subscribe(await this.getDialogResponseFn(donation, true));
     }, msUntilExpiryTime);
+  }
+
+  /**
+   * We think that a saved card selected in stripe becomes unusable when the stripe session secret
+   * (which we generated in matchbot to give FE permission to see the customer's saved cards) expires.
+   * A new card being entered for the first time should not have this issue. See ticket DON-1176 for
+   * details.
+   */
+  private donationShouldBeUsableAfterMatchExpiry(): boolean {
+    return !this.isSavedPaymentMethodSelected;
+  }
+
+  private resetDueToUnusableDonation(donation: Donation): void {
+    // Technically this is a best guess that it was about to expire. We'll release more robust handling ASAP after CC25.
+    this.toast.showError('Your donation session with Stripe expired. Please try again.');
+    this.donationService.cancel(donation).subscribe({
+      next: () => {
+        this.matomoTracker.trackEvent(
+          'donate',
+          'cancel',
+          `Expiry handler auto-cancelled saved card donation ${donation.donationId} to campaign ${this.campaignId}`,
+        );
+        this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+      },
+    });
   }
 
   private cancelExpiryWarning() {
@@ -2098,6 +2151,80 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       donation,
       this.campaign.surplusDonationInfo,
     );
+  }
+
+  /**
+   * Prompt donor when matching expiry is detected on submit, rather than via timer.
+   * This can happen if the timer didn't fire (e.g., iOS issues, page backgrounded).
+   */
+  private async promptToContinueAfterDetectedExpiry(donation: Donation): Promise<void> {
+    this.matomoTracker.trackEvent(
+      'donate',
+      'alerted_match_expired_on_submit',
+      `Prompted donor about expired matching for campaign ${this.campaignId}`,
+    );
+
+    this.liveAnnouncer.announce('Match funding has expired');
+    if (!this.donationShouldBeUsableAfterMatchExpiry()) {
+      this.resetDueToUnusableDonation(donation);
+      return;
+    }
+
+    const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
+      data: {
+        cancelCopy: 'Cancel',
+        proceedCopy: 'Continue unmatched',
+        status: 'Your reserved match funds have expired.',
+        statusDetail:
+          'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
+        title: 'Match funding has expired',
+        surplusDonationInfo: this.campaign.surplusDonationInfo,
+      },
+      disableClose: true,
+      role: 'alertdialog',
+    });
+
+    return new Promise<void>((resolve, reject) => {
+      continueDialog.afterClosed().subscribe(async (proceed: boolean) => {
+        if (proceed) {
+          this.matomoTracker.trackEvent(
+            'donate',
+            'matching_expired_on_submit_donor_continued',
+            `Donor continued after detected expiry for donation ${donation.donationId}`,
+          );
+
+          try {
+            // Remove matching expectation from the API
+            await this.handleMatchRemovalWithRetry(donation, () => {
+              // Update local donation state
+              this.donation = donation;
+              this.donationChangeCallBack(donation);
+            });
+
+            // Continue with the submission
+            this.submitting = true;
+            await this.payWithStripe();
+            resolve();
+          } catch (error) {
+            this.matomoTracker.trackEvent(
+              'donate_error',
+              'match_removal_failed_on_submit',
+              `Failed to remove matching for donation ${donation.donationId}: ${error}`,
+            );
+            this.toast.showError('Sorry, there was an error processing your donation. Please try again.');
+            reject(error);
+          }
+        } else {
+          // Donor cancelled - do nothing, they can try again or modify
+          this.matomoTracker.trackEvent(
+            'donate',
+            'matching_expired_on_submit_donor_cancelled',
+            `Donor cancelled after detected expiry for donation ${donation.donationId}`,
+          );
+          resolve();
+        }
+      });
+    });
   }
 
   private addUKValidators(): void {
