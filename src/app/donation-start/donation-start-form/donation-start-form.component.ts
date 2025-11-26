@@ -2033,11 +2033,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // are expected.
     this.donation.matchReservedAmount = 0;
 
-      this.liveAnnouncer.announce('Match funding has expired');
-      if (!this.donationShouldBeUsableAfterMatchExpiry()) {
-        this.resetDueToUnusableDonation(this.donation);
-        return;
-      }
+    this.liveAnnouncer.announce('Match funding has expired');
+    if (!this.donationShouldBeUsableAfterMatchExpiry()) {
+      this.resetDueToUnusableDonation(this.donation);
+      return;
+    }
 
     const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
       disableClose: true, // No 'escape' key close; must choose one of the two options.
