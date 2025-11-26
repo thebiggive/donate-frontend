@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -65,10 +64,6 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   minPasswordLength!: number;
   noAccess = false;
   encodedPrefilledText?: string;
-  registerError?: string;
-  registerErrorDescription?: string = undefined;
-  registerErrorDescriptionHtml?: SafeHtml = undefined;
-  registrationComplete = false;
   timedOut = false;
   totalValue?: number;
   donationIsLarge: boolean = false;
