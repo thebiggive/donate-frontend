@@ -42,7 +42,7 @@ export const environment: Environment = {
         'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  reservationMinutes: 5,
+  reservationMinutes: 25,
   showDebugInfo: false,
 };
 

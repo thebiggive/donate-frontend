@@ -82,11 +82,5 @@ If you encounter issues with the ES5 build:
 
 ## Dependencies
 
-The ES5 build process relies on:
-
-- Webpack (^5.94.0)
-- Webpack CLI (^4.5.0)
-- Babel CLI (^7.28.3)
-- @babel/preset-env (^7.28.3)
-
-These are already included in the project's devDependencies.
+The ES5 build process relies on Webpack & its CLI, babel CLI and preset-env.
+See [package.json](../package.json) for versions.
