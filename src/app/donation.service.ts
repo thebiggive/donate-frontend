@@ -366,6 +366,9 @@ export class DonationService {
     );
   }
 
+  /**
+   * Actually confirms with any Payment Element method (card, including saved, or Pay By Bank).
+   */
   confirmCardPayment(
     donation: Donation,
     { confirmationToken }: { confirmationToken?: ConfirmationToken },
