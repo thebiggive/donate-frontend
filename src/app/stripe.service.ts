@@ -196,6 +196,27 @@ export class StripeService {
     return this.stripe.elements(elementOptions);
   }
 
+  public stripeSetupElements({
+                               clientSecret
+                        }: {
+    money: { currency: string; amount: number };
+    customerSessionClientSecret: string | undefined;
+    clientSecret: string
+  }) {
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
+    }
+
+    const elementOptions: StripeElementsOptionsMode = {
+      fonts: this.fonts,
+      appearance: this.appearance,
+      clientSecret: clientSecret,
+      paymentMethodCreation: 'manual',
+    };
+
+    return this.stripe.elements(elementOptions);
+  }
+
   updateAmount(elements: StripeElements, donation: Donation) {
     elements.update({ amount: this.amountIncTipInMinorUnit(donation) });
   }
