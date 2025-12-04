@@ -84,9 +84,14 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateCard(methodId: string, card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
+  async updateCard(methodId: string, card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
+    const {setupIntent_id} = await this.donationService.getPaymentUpdateSetupIntent({methodId});
+
     const updateCardDialog = this.dialog.open(UpdateCardModalComponent);
+    updateCardDialog.componentInstance.setSetupIntent(setupIntent_id);
     updateCardDialog.componentInstance.setPaymentMethod(card, billingDetails);
+
+
     updateCardDialog.afterClosed().subscribe((data: unknown) => {
       if (data === 'null') {
         return;

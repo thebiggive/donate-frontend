@@ -1,5 +1,13 @@
 @if (card) {
 <app-popup-standalone>
+
+  <div slot="input">
+    @if (stripeElementLoading) {
+      <mat-spinner color="primary" diameter="30" aria-label="Loading payment form"> </mat-spinner>
+    }
+    <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+  </div>
+
   <!--
     *ngIf="card" above shouldn't be needed - we don't load the modal at all without a card, but it makes the `it('should create'`
     test pass. Would be good to remove.

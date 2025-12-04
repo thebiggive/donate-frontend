@@ -476,4 +476,14 @@ export class DonationService {
         throw new Error('Unexpected payment method type: ' + pspMethodType);
     }
   }
+
+  async getPaymentUpdateSetupIntent({methodId}: { methodId: string }) {
+    const { jwt, person } = await this.getLoggedInUser();
+
+    return firstValueFrom(this.http.post<{setupIntent_id: string}>(
+      `${environment.matchbotApiPrefix}/people/${person.id}/create-payment-update-setup-intent`,
+      {payment_method_id: methodId},
+      getPersonAuthHttpOptions(jwt),
+    ));
+  }
 }
