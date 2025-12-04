@@ -389,7 +389,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
               },
               {
                 name: environment.matomoAbTest.variantName,
-                percentage: 15,
                 activate: (_event: unknown) => {
                   if (this.manuallySelectedABTestVariant) {
                     return;
@@ -398,11 +397,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
                   console.log('B test variant active!');
                 },
               },
+              // TODO finish removing support after CC25
               ...(environment.matomoAbTest.additionalVariantName
                 ? [
                     {
                       name: environment.matomoAbTest.additionalVariantName,
-                      percentage: 15,
+                      percentage: 0,
                       activate: (_event: unknown) => {
                         if (this.manuallySelectedABTestVariant) {
                           return;
