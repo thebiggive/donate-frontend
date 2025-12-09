@@ -17,6 +17,16 @@ h1 {
   }
 }
 
+.banner-container {
+  // set min height so content below doens't move too much (or ideally at all) when the banner loads and/or the
+  // components library starts running. 30.6% as mentioned on the html is the ratio of image height to width.
+  min-height: 30.6cqw;
+  // on wider screens 31% of the container width is too much height, so we switch to 450px.
+  @media #{abstract.$breakpoint-md} {
+    min-height: 450px;
+  }
+}
+
 .b-back-button {
   @include abstract.make-back-button;
 }
