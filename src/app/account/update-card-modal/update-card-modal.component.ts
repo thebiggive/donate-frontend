@@ -6,10 +6,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { PaymentMethod } from '@stripe/stripe-js';
-import { COUNTRIES } from '../countries';
+import { COUNTRIES } from '../../countries';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.component';
+import { PopupStandaloneComponent } from '../../popup-standalone/popup-standalone.component';
 
 @Component({
   selector: 'app-update-card-modal',

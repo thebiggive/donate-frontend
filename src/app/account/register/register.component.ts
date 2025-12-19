@@ -7,23 +7,23 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IdentityService } from '../identity.service';
-import { environment } from '../../environments/environment';
-import { EMAIL_REGEXP } from '../validators/patterns';
+import { IdentityService } from '../../identity.service';
+import { environment } from '../../../environments/environment';
+import { EMAIL_REGEXP } from '../../validators/patterns';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { transferFundsPath } from '../app.routes';
+import { transferFundsPath } from '../../app.routes';
 import { WidgetInstance } from 'friendly-challenge';
-import { flags } from '../featureFlags';
-import type { LoginNavigationState } from '../login/login.component';
-import { PageMetaService } from '../page-meta.service';
-import { NavigationService } from '../navigation.service';
-import { BackendError, errorDescription, errorDetails } from '../backendError';
-import { addBodyClass, removeBodyClass } from '../bodyStyle';
-import { VerifyEmailComponent } from '../verify-email/verify-email.component';
-import { EmailVerificationToken } from '../email-verification-token.resolver';
+import { flags } from '../../featureFlags';
+import type { LoginNavigationState } from '../../login/login.component';
+import { PageMetaService } from '../../page-meta.service';
+import { NavigationService } from '../../navigation.service';
+import { BackendError, errorDescription, errorDetails } from '../../backendError';
+import { addBodyClass, removeBodyClass } from '../../bodyStyle';
+import { VerifyEmailComponent } from '../../verify-email/verify-email.component';
+import { EmailVerificationToken } from '../../email-verification-token.resolver';
 import { MatIcon } from '@angular/material/icon';
-import { minPasswordLength } from '../../environments/common';
+import { minPasswordLength } from '../../../environments/common';
 
 @Component({
   selector: 'app-register',

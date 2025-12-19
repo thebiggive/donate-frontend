@@ -1,21 +1,44 @@
-@use "../../abstract";
-@use "../../assets/scss/auth-common";
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
 
 #banner {
-  background-image: url(../../assets/images/banner-my-account.jpg);
+  background-image: url(../../../assets/images/banner-my-account.jpg);
 }
+
+.heading-wrapper {
+  margin: auto;
+  width: fit-content;
+}
+
+h1 {
+  color: abstract.$colour-secondary;
+}
+
+a:link,
+a:visited,
+a:hover {
+  color: white;
+}
+
 main > div {
   color: white;
   background-color: abstract.$colour-primary;
-
-  a:link,
-  a:visited,
-  a:hover {
-    color: white;
-  }
 }
 
-table.paymentMethods {
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 17px;
+}
+
+.account-actions biggive-button {
+  flex: 0 0 auto;
+}
+
+table#personal-details,
+table#paymentMethods {
   width: 100%;
   td {
     padding-bottom: 15px;

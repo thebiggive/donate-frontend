@@ -1,0 +1,26 @@
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../../assets/images/banner-my-account.jpg);
+}
+
+.heading-wrapper {
+  margin: auto;
+  width: fit-content;
+}
+
+h1 {
+  color: abstract.$colour-secondary;
+}
+
+a:link,
+a:visited,
+a:hover {
+  color: white;
+}
+
+main > div {
+  color: white;
+  background-color: abstract.$colour-primary;
+}

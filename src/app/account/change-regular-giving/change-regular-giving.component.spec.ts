@@ -5,7 +5,7 @@ import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
-import { TBG_DONATE_STORAGE } from '../donation.service';
+import { TBG_DONATE_STORAGE } from '../../donation.service';
 import { ChangeRegularGivingComponent } from './change-regular-giving.component';
 
 describe('ChangeRegularGivingComponent', () => {
