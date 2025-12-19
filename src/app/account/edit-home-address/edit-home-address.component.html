@@ -1,0 +1,36 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          space-above="0"
+          space-below="1"
+          colour="tertiary"
+          html-element="h1"
+          size="1"
+          align="center"
+          text="Your Account"
+        ></biggive-heading>
+      </div>
+      <h2>Set Home Address</h2>
+      <p>
+        Todo - add copy about how address data is used, replace below with form to edit address and country info. All
+        before removing the `enableEditHomeAddress` feature flag to enable this in production. On form submission
+        redirect to "my account" page.
+      </p>
+      @if (person) {
+        <table id="personal-details">
+          <tr>
+            <td>Address</td>
+            <td>
+              {{ person.home_address_line_1 }}
+              <br />
+              {{ person.home_postcode }}
+            </td>
+          </tr>
+        </table>
+      }
+    </biggive-page-section>
+  </div>
+</main>

@@ -7,8 +7,8 @@ import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
-import { TBG_DONATE_STORAGE } from '../donation.service';
-import { IdentityService } from '../identity.service';
+import { TBG_DONATE_STORAGE } from '../../donation.service';
+import { IdentityService } from '../../identity.service';
 import { MyAccountComponent } from './my-account.component';
 
 describe('MyAccountComponent', () => {
