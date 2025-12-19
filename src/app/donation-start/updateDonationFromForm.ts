@@ -1,7 +1,8 @@
 import { FormGroup } from '@angular/forms';
 import { DonationService } from '../donation.service';
-import { Donation, OVERSEAS } from '../donation.model';
+import { Donation } from '../donation.model';
 import { sanitiseCurrency } from './sanitiseCurrency';
+import { OVERSEAS } from '../person.model';
 
 export function updateDonationFromForm(
   tipValue: number | undefined,
