@@ -21,6 +21,13 @@ a:hover {
 }
 
 main > div {
-  color: white;
-  background-color: abstract.$colour-primary;
+  color: abstract.$colour-primary;
+  background-color: abstract.$colour-background;
+  outline: 2px solid abstract.$colour-primary;
+}
+
+.homeOutsideUK-wrapper {
+  @media #{abstract.$breakpoint-md} {
+    margin-top: inherit;
+  }
 }
