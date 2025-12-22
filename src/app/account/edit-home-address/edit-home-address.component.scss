@@ -27,10 +27,6 @@ main > div {
 }
 
 .homeOutsideUK-wrapper {
-  //outline: 2px solid pink;
-  //text-align: right;
-  //margin-top: 3rem;
-
   @media #{abstract.$breakpoint-md} {
     margin-top: inherit;
   }
