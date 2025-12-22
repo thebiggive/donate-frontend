@@ -21,12 +21,24 @@
       @if (person) {
         <biggive-text-input spaceBelow="0">
           <label slot="label" for="homeAddressLine1">Home address line 1 *</label>
-          <input slot="input" id="homeAddressLine1" type="text" autocomplete="home address-line1" [formControl]="form.controls.home_address_line_1" />
+          <input
+            slot="input"
+            id="homeAddressLine1"
+            type="text"
+            autocomplete="home address-line1"
+            [formControl]="form.controls.home_address_line_1"
+          />
         </biggive-text-input>
 
         <biggive-text-input spaceBelow="0">
           <label slot="label" for="postcode">Postcode *</label>
-          <input slot="input" id="postcode" type="text" autocomplete="home postal-code" [formControl]="form.controls.postcode" />
+          <input
+            slot="input"
+            id="postcode"
+            type="text"
+            autocomplete="home postal-code"
+            [formControl]="form.controls.postcode"
+          />
         </biggive-text-input>
 
         <div style="height: 1em"></div>
