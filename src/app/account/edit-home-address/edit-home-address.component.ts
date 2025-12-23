@@ -81,7 +81,7 @@ export class EditHomeAddress implements OnInit {
     this.person.home_postcode = this.form.controls.postcode.value || undefined;
     this.person.home_country_code = this.countryCode ?? undefined;
 
-    await firstValueFrom(this.identityService.update(this.person));
+    await firstValueFrom(this.identityService.updateAddress(this.person));
 
     await this.router.navigate(['/my-account/']);
   }

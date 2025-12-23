@@ -36,6 +36,10 @@
                 {{ person.home_address_line_1 }}
                 <br />
                 {{ person.home_postcode }}
+                @if (person.home_country_code && codeeToCountryName(person.home_country_code)) {
+                  <br />
+                  {{ codeToCountryName(person.home_country_code) }}
+                }
               </td>
             </tr>
           } @else if (flags.enableEditHomeAddress) {
