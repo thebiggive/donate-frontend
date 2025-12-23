@@ -326,6 +326,19 @@ export class IdentityService {
       return false;
     }
   }
+
+  async deleteAccount(person: Person, { password }: { password: string }): Promise<void> {
+    await firstValueFrom(
+      this.http
+        .delete<Person>(`${environment.identityApiPrefix}${this.peoplePath}/${person.id}`, {
+          body: { password },
+          ...this.getAuthHttpOptions(person),
+        })
+        .pipe(retry(2), delay(2_000)),
+    );
+
+    this.logout();
+  }
 }
 
 export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {

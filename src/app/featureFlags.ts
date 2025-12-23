@@ -1,18 +1,18 @@
 import { environment } from '../environments/environment';
 import { EnvironmentID } from '../environments/environment.interface';
 
-type flags = { enableEditHomeAddress: boolean };
+type flags = { enableEditHomeAddress: boolean; enableDeleteAccount: boolean };
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
-      return { enableEditHomeAddress: true };
+      return { enableEditHomeAddress: true, enableDeleteAccount: true };
     case 'regression':
-      return { enableEditHomeAddress: true };
+      return { enableEditHomeAddress: true, enableDeleteAccount: false };
     case 'staging':
-      return { enableEditHomeAddress: false };
+      return { enableEditHomeAddress: false, enableDeleteAccount: false };
     case 'production':
-      return { enableEditHomeAddress: false };
+      return { enableEditHomeAddress: false, enableDeleteAccount: false };
   }
 };
 

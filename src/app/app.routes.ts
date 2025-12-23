@@ -32,6 +32,7 @@ import { bigGiveName } from '../environments/common';
 import { MailingListComponent } from './mailing-list/mailing-list.component';
 import { EditHomeAddress } from './account/edit-home-address/edit-home-address.component';
 import { flags } from './featureFlags';
+import { DeleteAccount } from './account/delete-account/delete-account';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -296,6 +297,17 @@ export const routes: (Route & {
     },
     component: EditHomeAddress,
     canActivate: [requireLogin, () => flags.enableEditHomeAddress],
+  },
+  {
+    path: 'my-account/delete-account',
+    title: 'Delete account',
+    pathMatch: 'full',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+    },
+    component: DeleteAccount,
+    canActivate: [requireLogin, () => flags.enableDeleteAccount],
   },
   {
     path: ':campaignSlug/:fundSlug',
