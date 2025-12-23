@@ -14,46 +14,57 @@
         ></biggive-heading>
       </div>
       <h2>Delete donor account</h2>
-      <p>
-        Use the form below if you wish to delete your Big Give donor account. We will erase your data other than where
-        we have a business or legal need to retain it for our records - e.g. records of any donations you may have made.
-      </p>
-      <p>
-        Any regular giving mandate you have set up through Big Give will cease, and any unused donation funds will be
-        returned to the original bank account they were transferred from.
-      </p>
-      @if (person) {
-        <biggive-text-input spaceBelow="0">
-          <label slot="label" for="password">Confirm password *</label>
-          <input
-            slot="input"
-            id="password"
-            type="password"
-            autocomplete="password"
-            [formControl]="form.controls.password"
+      @if (deleted) {
+        <p>Your account has been deleted, and you are now logged out.</p>
+      } @else {
+        <p>
+          Use the form below if you wish to delete your Big Give donor account. We will erase your data other than where
+          we have a business or legal need to retain it for our records - e.g. records of any donations you may have
+          made.
+        </p>
+        <p>
+          Any regular giving mandate you have set up through Big Give will cease, and any unused donation funds will be
+          returned to the original bank account they were transferred from.
+        </p>
+        @if (person) {
+          <biggive-text-input spaceBelow="0">
+            <label slot="label" for="password">Confirm password *</label>
+            <input
+              slot="input"
+              id="password"
+              type="password"
+              autocomplete="password"
+              [formControl]="form.controls.password"
+            />
+          </biggive-text-input>
+
+          <div style="height: 2em"></div>
+
+          Please type the account name "{{ person.first_name }} {{ person.last_name }}" to confirm:
+
+          <biggive-text-input spaceBelow="0">
+            <label slot="label" for="postcode">Account Name</label>
+            <input
+              slot="input"
+              id="postcode"
+              type="text"
+              autocomplete="off"
+              [formControl]="form.controls.accountName"
+            />
+          </biggive-text-input>
+
+          <div style="height: 2em"></div>
+
+          <biggive-button
+            space-above="5"
+            spaceBelow="0"
+            [label]="'Delete account for ' + person.email_address"
+            full-width="true"
+            size="medium"
+            rounded="false"
+            (click)="deleteAccount()"
           />
-        </biggive-text-input>
-
-        <div style="height: 2em"></div>
-
-        Please type the account name "{{ person.first_name }} {{ person.last_name }}" to confirm:
-
-        <biggive-text-input spaceBelow="0">
-          <label slot="label" for="postcode">Account Name</label>
-          <input slot="input" id="postcode" type="text" autocomplete="off" [formControl]="form.controls.accountName" />
-        </biggive-text-input>
-
-        <div style="height: 2em"></div>
-
-        <biggive-button
-          space-above="5"
-          spaceBelow="0"
-          [label]="'Delete account for ' + person.email_address"
-          full-width="true"
-          size="medium"
-          rounded="false"
-          (click)="deleteAccount()"
-        />
+        }
       }
     </biggive-page-section>
   </div>
