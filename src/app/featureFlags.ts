@@ -8,9 +8,9 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'development':
       return { enableEditHomeAddress: true, enableDeleteAccount: true };
     case 'regression':
-      return { enableEditHomeAddress: true, enableDeleteAccount: false };
+      return { enableEditHomeAddress: true, enableDeleteAccount: true };
     case 'staging':
-      return { enableEditHomeAddress: false, enableDeleteAccount: false };
+      return { enableEditHomeAddress: true, enableDeleteAccount: true };
     case 'production':
       return { enableEditHomeAddress: false, enableDeleteAccount: false };
   }
