@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { BiggivePageSection, BiggiveHeading } from '@biggive/components-angular';
 import { HighlightCardsComponent } from '../../highlight-cards/highlight-cards.component';
 import { flags } from '../../featureFlags';
-import { codeeToCountryName } from '../../countries';
+import { codeToCountryName } from '../../countries';
 
 @Component({
   selector: 'app-my-account',
@@ -28,7 +28,7 @@ export class MyAccountComponent implements OnInit {
   public person!: Person;
   protected readonly actions: HighlightCard[];
   protected flags = flags;
-  protected codeToCountryName = codeeToCountryName;
+  protected codeToCountryName = codeToCountryName;
 
   constructor() {
     const identityService = this.identityService;
@@ -91,5 +91,4 @@ export class MyAccountComponent implements OnInit {
     });
   }
 
-  protected readonly codeeToCountryName = codeeToCountryName;
 }

@@ -1031,5 +1031,5 @@ export const countryOptions: { label: string; value: string }[] = COUNTRIES.map(
 
 export type countryISO2 = (typeof COUNTRIES)[number]['iso2'];
 
-export const codeeToCountryName = (iso2Code: string) =>
+export const codeToCountryName = (iso2Code: string) =>
   COUNTRIES.find((country) => country.iso2.toLowerCase() === iso2Code.toLowerCase())?.country;
