@@ -1,8 +1,8 @@
-@use "../../abstract";
-@use "../../assets/scss/auth-common";
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
 
 #banner {
-  background-image: url(../../assets/images/banner-my-account.jpg);
+  background-image: url(../../../assets/images/banner-my-account.jpg);
 }
 main > div {
   color: white;

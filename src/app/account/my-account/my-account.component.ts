@@ -1,21 +1,23 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { PageMetaService } from '../page-meta.service';
+import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
-import { IdentityService } from '../identity.service';
-import { Person } from '../person.model';
-import { Router } from '@angular/router';
+import { IdentityService } from '../../identity.service';
+import { Person } from '../../person.model';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { HighlightCard } from '../highlight-cards/HighlightCard';
-import { environment } from '../../environments/environment';
+import { HighlightCard } from '../../highlight-cards/HighlightCard';
+import { environment } from '../../../environments/environment';
 import { BiggivePageSection, BiggiveHeading } from '@biggive/components-angular';
-import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
+import { HighlightCardsComponent } from '../../highlight-cards/highlight-cards.component';
+import { flags } from '../../featureFlags';
+import { codeToCountryName } from '../../countries';
 
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
   styleUrl: './my-account.component.scss',
   providers: [DatePipe],
-  imports: [BiggivePageSection, BiggiveHeading, HighlightCardsComponent],
+  imports: [BiggivePageSection, BiggiveHeading, HighlightCardsComponent, RouterLink],
 })
 export class MyAccountComponent implements OnInit {
   private pageMeta = inject(PageMetaService);
@@ -25,6 +27,8 @@ export class MyAccountComponent implements OnInit {
 
   public person!: Person;
   protected readonly actions: HighlightCard[];
+  protected flags = flags;
+  protected codeToCountryName = codeToCountryName;
 
   constructor() {
     const identityService = this.identityService;

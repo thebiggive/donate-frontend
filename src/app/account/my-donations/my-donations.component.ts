@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { PageMetaService } from '../page-meta.service';
+import { PageMetaService } from '../../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { BiggiveContainerCard, BiggiveGrid, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
@@ -9,9 +9,9 @@ import {
   EnrichedDonation,
   isLargeDonation,
   withComputedProperties,
-} from '../donation.model';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
-import { myRegularGivingPath } from '../app.routes';
+} from '../../donation.model';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
+import { myRegularGivingPath } from '../../app.routes';
 
 @Component({
   selector: 'app-my-donations',

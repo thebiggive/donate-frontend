@@ -156,6 +156,20 @@ export class IdentityService {
       .pipe(retry(2), delay(2_000));
   }
 
+  updateAddress(person: Person): Observable<void> {
+    return this.http
+      .put<void>(
+        `${environment.identityApiPrefix}${this.peoplePath}/${person.id}/address`,
+        {
+          addressLine1: person.home_address_line_1,
+          postcode: person.home_postcode,
+          countryCode: person.home_country_code,
+        },
+        this.getAuthHttpOptions(person),
+      )
+      .pipe(retry(2), delay(2_000));
+  }
+
   logout() {
     this.cookieService.delete(this.cookieName);
     this.cookieService.delete(this.isLoggedInCookieName);
@@ -325,6 +339,19 @@ export class IdentityService {
     } catch (_e) {
       return false;
     }
+  }
+
+  async deleteAccount(person: Person, { password }: { password: string }): Promise<void> {
+    await firstValueFrom(
+      this.http
+        .delete<Person>(`${environment.identityApiPrefix}${this.peoplePath}/${person.id}`, {
+          body: { password },
+          ...this.getAuthHttpOptions(person),
+        })
+        .pipe(retry(2), delay(2_000)),
+    );
+
+    this.logout();
   }
 }
 

@@ -5,17 +5,17 @@ import { ActivatedRoute } from '@angular/router';
 import { UpdateCardModalComponent } from '../update-card-modal/update-card-modal.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Person } from '../person.model';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { Person } from '../../person.model';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { DonationService } from '../donation.service';
-import { IdentityService } from '../identity.service';
+import { DonationService } from '../../donation.service';
+import { IdentityService } from '../../identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { BackendError, errorDescription, errorDetails } from '../backendError';
-import { RegularGivingService } from '../regularGiving.service';
-import { Toast } from '../toast.service';
+import { BackendError, errorDescription, errorDetails } from '../../backendError';
+import { RegularGivingService } from '../../regularGiving.service';
+import { Toast } from '../../toast.service';
 
 @Component({
   selector: 'app-my-payment-methods',

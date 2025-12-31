@@ -26,11 +26,33 @@
           </tr>
           @if (person.home_address_line_1) {
             <tr>
-              <td>Address</td>
+              <td>
+                Address
+                @if (flags.enableEditHomeAddress) {
+                  (<a routerLink="/my-account/home-address">edit</a>)
+                }
+              </td>
               <td>
                 {{ person.home_address_line_1 }}
                 <br />
                 {{ person.home_postcode }}
+                @if (person.home_country_code && codeToCountryName(person.home_country_code)) {
+                  <br />
+                  {{ codeToCountryName(person.home_country_code) }}
+                }
+              </td>
+            </tr>
+          } @else if (flags.enableEditHomeAddress) {
+            <tr>
+              <td colspan="2">
+                <a routerLink="/my-account/home-address">set home address</a>
+              </td>
+            </tr>
+          }
+          @if (flags.enableDeleteAccount) {
+            <tr>
+              <td colspan="2">
+                <a routerLink="/my-account/delete-account">Delete account</a>
               </td>
             </tr>
           }

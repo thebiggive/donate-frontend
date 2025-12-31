@@ -1,0 +1,69 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          space-above="0"
+          space-below="1"
+          colour="tertiary"
+          html-element="h1"
+          size="1"
+          align="center"
+          text="Your Account"
+        ></biggive-heading>
+      </div>
+      <h2>Set Home Address</h2>
+      <p>
+        Big Give and charities use your home address for Gift Aid claims if your donation is Gift Aid eligible. You can
+        edit your home address below.
+      </p>
+      @if (person) {
+        <biggive-text-input spaceBelow="0">
+          <label slot="label" for="homeAddressLine1">Home address line 1 *</label>
+          <input
+            slot="input"
+            id="homeAddressLine1"
+            type="text"
+            autocomplete="home address-line1"
+            [formControl]="form.controls.home_address_line_1"
+          />
+        </biggive-text-input>
+
+        <biggive-text-input spaceBelow="0">
+          <label slot="label" for="postcode">Postcode *</label>
+          <input
+            slot="input"
+            id="postcode"
+            type="text"
+            autocomplete="home postal-code"
+            [formControl]="form.controls.postcode"
+          />
+        </biggive-text-input>
+
+        <div style="height: 1em"></div>
+
+        <biggive-form-field-select
+          [prompt]="'Country'"
+          [options]="countryOptionsObject"
+          [selectedValue]="countryCode"
+          [backgroundColour]="'grey'"
+          [selectionChanged]="setSelectedCountry"
+          [spaceBelow]="3"
+          [selectedOptionColour]="'inherit'"
+        ></biggive-form-field-select>
+
+        <biggive-button
+          space-above="5"
+          spaceBelow="0"
+          label="Save Address"
+          full-width="true"
+          disabled="!registrationForm.valid"
+          size="medium"
+          rounded="false"
+          (click)="saveChanges()"
+        />
+      }
+    </biggive-page-section>
+  </div>
+</main>

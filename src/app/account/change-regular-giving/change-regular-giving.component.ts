@@ -7,13 +7,13 @@ import {
   StripeElements,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { StripeService } from '../stripe.service';
-import { Toast } from '../toast.service';
-import { RegularGivingService } from '../regularGiving.service';
-import { countryISO2, countryOptions } from '../countries';
+import { StripeService } from '../../stripe.service';
+import { Toast } from '../../toast.service';
+import { RegularGivingService } from '../../regularGiving.service';
+import { countryISO2, countryOptions } from '../../countries';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { requiredNotBlankValidator } from '../validators/notBlank';
+import { requiredNotBlankValidator } from '../../validators/notBlank';
 import {
   BiggiveButton,
   BiggiveFormFieldSelect,

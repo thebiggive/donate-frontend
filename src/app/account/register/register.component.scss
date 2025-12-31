@@ -1,8 +1,8 @@
-@use "../../abstract";
-@use "../../assets/scss/auth-common";
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
 
 #banner {
-  background-image: url(../../assets/images/grey-header.jpg);
+  background-image: url(../../../assets/images/grey-header.jpg);
 }
 
 form {

@@ -1,0 +1,33 @@
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../../assets/images/banner-my-account.jpg);
+}
+
+.heading-wrapper {
+  margin: auto;
+  width: fit-content;
+}
+
+h1 {
+  color: abstract.$colour-secondary;
+}
+
+a:link,
+a:visited,
+a:hover {
+  color: white;
+}
+
+main > div {
+  color: abstract.$colour-primary;
+  background-color: abstract.$colour-background;
+  outline: 2px solid abstract.$colour-primary;
+}
+
+.homeOutsideUK-wrapper {
+  @media #{abstract.$breakpoint-md} {
+    margin-top: inherit;
+  }
+}

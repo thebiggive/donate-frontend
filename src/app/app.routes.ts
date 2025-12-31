@@ -6,11 +6,11 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CampaignStatsResolver } from './campaign-stats-resolver';
 import { HighlightCardsResolver } from './highlight-cards-resolver';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { MyDonationsComponent } from './my-donations/my-donations.component';
+import { RegisterComponent } from './account/register/register.component';
+import { MyDonationsComponent } from './account/my-donations/my-donations.component';
 import { RegularGivingComponent } from './regular-giving/regular-giving.component';
 import { MandateComponent } from './mandate/mandate.component';
-import { MyPaymentMethodsComponent } from './my-payment-methods/my-payment-methods.component';
+import { MyPaymentMethodsComponent } from './account/my-payment-methods/my-payment-methods.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MandateResolver } from './mandate.resolver';
 import { PaymentMethodsResolver } from './payment-methods.resolver';
@@ -21,15 +21,18 @@ import { inject, PLATFORM_ID, Type } from '@angular/core';
 import { IdentityService } from './identity.service';
 import { LoggedInPersonResolver } from './logged-in-person.resolver';
 import { DonorAccountResolver } from './donor-account.resolver';
-import { MyRegularGivingComponent } from './my-regular-giving/my-regular-giving.component';
+import { MyRegularGivingComponent } from './account/my-regular-giving/my-regular-giving.component';
 import { NavigationService } from './navigation.service';
 import { myMandatesResolver } from './my-mandates.resolver';
 import { CancelMandateComponent } from './cancel-mandate/cancel-mandate.component';
-import { ChangeRegularGivingComponent } from './change-regular-giving/change-regular-giving.component';
+import { ChangeRegularGivingComponent } from './account/change-regular-giving/change-regular-giving.component';
 import { setupIntentResolver } from './setupIntent.resolver';
 import { EmailVerificationTokenResolver } from './email-verification-token.resolver';
 import { bigGiveName } from '../environments/common';
 import { MailingListComponent } from './mailing-list/mailing-list.component';
+import { EditHomeAddress } from './account/edit-home-address/edit-home-address.component';
+import { flags } from './featureFlags';
+import { DeleteAccount } from './account/delete-account/delete-account';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -285,6 +288,28 @@ export const routes: (Route & {
     canActivate: [requireLogin],
   },
   {
+    path: 'my-account/home-address',
+    title: 'Your Home Address',
+    pathMatch: 'full',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+    },
+    component: EditHomeAddress,
+    canActivate: [requireLogin, () => flags.enableEditHomeAddress],
+  },
+  {
+    path: 'my-account/delete-account',
+    title: 'Delete account',
+    pathMatch: 'full',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+    },
+    component: DeleteAccount,
+    canActivate: [requireLogin, () => flags.enableDeleteAccount],
+  },
+  {
     path: ':campaignSlug/:fundSlug',
     title: undefined, // set from inside component
     pathMatch: 'full',
@@ -309,7 +334,7 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     canActivate: [requireLogin],
-    loadComponent: () => import('./my-account/my-account.component').then((c) => c.MyAccountComponent),
+    loadComponent: () => import('./account/my-account/my-account.component').then((c) => c.MyAccountComponent),
   },
   {
     path: registerPath,

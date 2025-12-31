@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { PageMetaService } from '../page-meta.service';
+import { PageMetaService } from '../../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import {
@@ -10,8 +10,8 @@ import {
   BiggivePageSection,
 } from '@biggive/components-angular';
 
-import { Mandate } from '../mandate.model';
-import { MoneyPipe } from '../money.pipe';
+import { Mandate } from '../../mandate.model';
+import { MoneyPipe } from '../../money.pipe';
 
 @Component({
   selector: 'app-my-mandates',
