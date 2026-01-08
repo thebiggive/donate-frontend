@@ -18,9 +18,12 @@
         <p>Your account has been deleted, and you are now logged out.</p>
       } @else {
         <p>
-          Use the form below if you wish to delete your Big Give donor account. We will erase your data other than where
-          we have a business or legal need to retain it for our records - e.g. records of any donations you may have
-          made.
+          Use the form below if you wish to delete your Big Give donor account. Deleting your donor account will erase
+          all data apart from data we need to retain for business or legal reasons. Please see section 7 of our Privacy
+          Statement for more information:
+          <a [href]="environment.blogUriPrefix + '/privacy/'" target="_blank"
+            >{{ environment.blogUriPrefix }}/privacy/</a
+          >
         </p>
         <p>
           Any regular giving mandate you have set up through Big Give will cease, and any unused donation funds will be
