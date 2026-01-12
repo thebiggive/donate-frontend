@@ -9,6 +9,7 @@ import { flags } from '../../featureFlags';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { minPasswordLength } from '../../../environments/common';
 import { Toast } from '../../toast.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   templateUrl: './delete-account.component.html',
@@ -21,6 +22,7 @@ export class DeleteAccount implements OnInit {
   private identityService = inject(IdentityService);
   private router = inject(Router);
   private toast = inject(Toast);
+  protected environment = environment;
 
   public person!: Person;
 
