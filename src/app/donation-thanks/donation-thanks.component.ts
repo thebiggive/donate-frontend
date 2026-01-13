@@ -63,7 +63,6 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   loggedIn = false;
   minPasswordLength!: number;
   noAccess = false;
-  encodedPrefilledText?: string;
   timedOut = false;
   totalValue?: number;
   donationIsLarge: boolean = false;
@@ -304,8 +303,5 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   private setSocialShares(campaign: Campaign) {
     const prefix = environment.donateUriPrefix;
     this.encodedShareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
-    this.encodedPrefilledText = encodeURIComponent(
-      'I just donated to this campaign, please support their good cause by making a donation.',
-    );
   }
 }
