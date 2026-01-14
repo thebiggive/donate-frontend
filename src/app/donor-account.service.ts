@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { IdentityService } from './identity.service';
@@ -34,6 +34,24 @@ export class DonorAccountService {
         return this.http.get(`${environment.matchbotApiPrefix}/people/${identityPerson.id}/donor-account`, {
           headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
         }) as Observable<DonorAccount>;
+      }),
+    );
+  }
+
+  async withdrawAllFunds() {
+    const jwt = this.identityService.getJWT();
+    if (!jwt) {
+      throw new Error("Missing JWT, can't withdraw funds");
+    }
+
+    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
+    if (!person) {
+      throw new Error('No logged in person, cannot withdraw funds');
+    }
+
+    await firstValueFrom(
+      this.http.post<void>(`${environment.matchbotApiPrefix}/people/${person.id}/donor-account/withdraw-funds`, {
+        headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
       }),
     );
   }

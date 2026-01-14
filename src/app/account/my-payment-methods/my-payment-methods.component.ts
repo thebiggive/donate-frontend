@@ -16,6 +16,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { BackendError, errorDescription, errorDetails } from '../../backendError';
 import { RegularGivingService } from '../../regularGiving.service';
 import { Toast } from '../../toast.service';
+import { flags } from '../../featureFlags';
 
 @Component({
   selector: 'app-my-payment-methods',
@@ -44,6 +45,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
 
   protected registerErrorDescription: string | undefined;
   protected registerSuccessMessage: string | undefined;
+  protected flags = flags;
 
   ngOnInit(): void {
     this.paymentMethods = this.route.snapshot.data.paymentMethods;

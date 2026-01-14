@@ -32,14 +32,29 @@
         } @else {
           <p>No donation funds</p>
         }
-        <biggive-button
-          space-above="5"
-          colour-scheme="white"
-          label="Transfer funds"
-          full-width="false"
-          size="medium"
-          url="/transfer-funds"
-        />
+        <div style="float: left; margin-right: 1em">
+          <biggive-button
+            space-above="5"
+            colour-scheme="white"
+            label="Transfer funds"
+            full-width="false"
+            size="medium"
+            url="/transfer-funds"
+          />
+        </div>
+
+        @if (hasDonationFunds && flags.enableWithdrawFunds) {
+          <div>
+            <biggive-button
+              space-above="5"
+              colour-scheme="white"
+              label="Withdraw funds"
+              full-width="false"
+              size="medium"
+              url="/my-account/withdraw-funds"
+            />
+          </div>
+        }
       </div>
       <h3>Saved Cards</h3>
       @if (paymentMethods === undefined) {
