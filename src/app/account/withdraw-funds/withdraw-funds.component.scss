@@ -15,56 +15,6 @@ main > div {
   }
 }
 
-table.paymentMethods {
-  width: 100%;
-  td {
-    padding-bottom: 15px;
-    vertical-align: bottom;
-    @media #{abstract.$breakpoint-lg} {
-      min-width: 150px;
-    }
-  }
-
-  td.cardUpdateButton {
-    text-align: right;
-  }
-
-  td.cardUpdateButton,
-  td.cardDeleteButton {
-    display: flex;
-    @media #{abstract.$breakpoint-xl} {
-      display: table-cell;
-    }
-  }
-
-  td.cardUpdateButton {
-    padding-bottom: 0;
-    @media #{abstract.$breakpoint-xl} {
-      padding-bottom: 15px;
-    }
-  }
-
-  td.cardExpiry {
-    display: none;
-    @media #{abstract.$breakpoint-lg} {
-      display: table-cell;
-    }
-  }
-
-  div.cardBrand {
-    font-weight: bold;
-  }
-  div.cardExpiry {
-    @media #{abstract.$breakpoint-lg} {
-      display: none;
-    }
-  }
-}
-
-table#paymentMethods td:last-child {
-  text-align: right;
-}
-
 .update-success {
   color: abstract.$colour-highlight;
 }

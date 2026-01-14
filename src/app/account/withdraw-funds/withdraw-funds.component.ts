@@ -1,18 +1,12 @@
 import { Component, PLATFORM_ID, inject, OnInit } from '@angular/core';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { flags } from '../../featureFlags';
 import { PageMetaService } from '../../page-meta.service';
-import { ExactCurrencyPipe } from '../../exact-currency.pipe';
-import { KeyValuePipe } from '@angular/common';
 import { DonorAccountService } from '../../donor-account.service';
 import { Toast } from '../../toast.service';
+import {ExactCurrencyPipe} from '../../exact-currency.pipe';
 
 @Component({
   selector: 'app-register',
@@ -20,14 +14,8 @@ import { Toast } from '../../toast.service';
     BiggiveButton,
     BiggiveHeading,
     BiggivePageSection,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule,
     ExactCurrencyPipe,
-    KeyValuePipe,
   ],
   templateUrl: './withdraw-funds.component.html',
   styleUrl: 'withdraw-funds.component.scss',

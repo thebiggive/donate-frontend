@@ -316,7 +316,6 @@ export const routes: (Route & {
     pathMatch: 'full',
     resolve: {
       person: LoggedInPersonResolver,
-      paymentMethods: PaymentMethodsResolver,
     },
     component: WithdrawFundsComponent,
     canActivate: [requireLogin, () => flags.enableWithdrawFunds],

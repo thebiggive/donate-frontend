@@ -22,28 +22,22 @@
           </div>
           @if (!processing) {
             <biggive-button
-              id="register-button"
               space-above="5"
               spaceBelow="4"
               colour-scheme="white"
               label="Withdraw funds"
               full-width="true"
-              disabled="!registrationForm.valid"
               size="medium"
-              rounded="false"
               (click)="withdrawFunds()"
             />
           }
           <biggive-button
-            id="register-button"
             space-above="5"
             spaceBelow="0"
             colour-scheme="white"
             label="Return to account page"
             full-width="true"
-            disabled="!registrationForm.valid"
             size="medium"
-            rounded="false"
             url="/my-account"
           />
         } @else {
