@@ -1,0 +1,55 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading colour="tertiary" size="1" align="center" text="Withdraw donation funds"></biggive-heading>
+      </div>
+      <div>
+        @if (hasDonationFunds) {
+          <p>
+            Available balance: <strong>{{ (person.cash_balance?.gbp || 0) / 100 | exactCurrency: "GBP" }}</strong>
+          </p>
+
+          <p>
+            Click below if you wish to return your full donation funds balance to the bank account(s) that they came
+            from.
+          </p>
+          <div aria-live="polite">
+            @if (processing) {
+              <mat-spinner color="accent" diameter="30" aria-label="Processing"></mat-spinner>
+            }
+          </div>
+          @if (!processing) {
+            <biggive-button
+              id="register-button"
+              space-above="5"
+              spaceBelow="4"
+              colour-scheme="white"
+              label="Withdraw funds"
+              full-width="true"
+              disabled="!registrationForm.valid"
+              size="medium"
+              rounded="false"
+              (click)="withdrawFunds()"
+            />
+          }
+          <biggive-button
+            id="register-button"
+            space-above="5"
+            spaceBelow="0"
+            colour-scheme="white"
+            label="Return to account page"
+            full-width="true"
+            disabled="!registrationForm.valid"
+            size="medium"
+            rounded="false"
+            url="/my-account"
+          />
+        } @else {
+          <p>You currently have no donation funds available on your account</p>
+        }
+      </div>
+    </biggive-page-section>
+  </div>
+</main>

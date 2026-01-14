@@ -33,6 +33,7 @@ import { MailingListComponent } from './mailing-list/mailing-list.component';
 import { EditHomeAddress } from './account/edit-home-address/edit-home-address.component';
 import { flags } from './featureFlags';
 import { DeleteAccount } from './account/delete-account/delete-account';
+import { WithdrawFundsComponent } from './account/withdraw-funds/withdraw-funds.component';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -308,6 +309,17 @@ export const routes: (Route & {
     },
     component: DeleteAccount,
     canActivate: [requireLogin, () => flags.enableDeleteAccount],
+  },
+  {
+    path: 'my-account/withdraw-funds',
+    title: 'Withdraw Funds',
+    pathMatch: 'full',
+    resolve: {
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
+    },
+    component: WithdrawFundsComponent,
+    canActivate: [requireLogin, () => flags.enableWithdrawFunds],
   },
   {
     path: ':campaignSlug/:fundSlug',
