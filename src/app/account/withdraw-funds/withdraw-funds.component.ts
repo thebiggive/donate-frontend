@@ -6,17 +6,11 @@ import { flags } from '../../featureFlags';
 import { PageMetaService } from '../../page-meta.service';
 import { DonorAccountService } from '../../donor-account.service';
 import { Toast } from '../../toast.service';
-import {ExactCurrencyPipe} from '../../exact-currency.pipe';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 
 @Component({
   selector: 'app-register',
-  imports: [
-    BiggiveButton,
-    BiggiveHeading,
-    BiggivePageSection,
-    MatProgressSpinnerModule,
-    ExactCurrencyPipe,
-  ],
+  imports: [BiggiveButton, BiggiveHeading, BiggivePageSection, MatProgressSpinnerModule, ExactCurrencyPipe],
   templateUrl: './withdraw-funds.component.html',
   styleUrl: 'withdraw-funds.component.scss',
 })

@@ -16,35 +16,35 @@
             from.
           </p>
 
-            <div style="float: left">
-              <biggive-button
-                space-above="5"
-                spaceBelow="0"
-                colour-scheme="white"
-                label="Return to account page"
-                full-width="false"
-                size="medium"
-                url="/my-account"
-              />
-            </div>
+          <div style="float: left">
+            <biggive-button
+              space-above="5"
+              spaceBelow="0"
+              colour-scheme="white"
+              label="Return to account page"
+              full-width="false"
+              size="medium"
+              url="/my-account"
+            />
+          </div>
           <div aria-live="polite" style="float: right">
             @if (processing) {
               <mat-spinner color="accent" diameter="30" aria-label="Processing"></mat-spinner>
             }
           </div>
-        @if (!processing) {
-          <div style="float: right">
-            <biggive-button
-              space-above="5"
-              spaceBelow="4"
-              colour-scheme="white"
-              label="Withdraw funds"
-              full-width="false"
-              size="medium"
-              (click)="withdrawFunds()"
-            />
-          </div>
-        }
+          @if (!processing) {
+            <div style="float: right">
+              <biggive-button
+                space-above="5"
+                spaceBelow="4"
+                colour-scheme="white"
+                label="Withdraw funds"
+                full-width="false"
+                size="medium"
+                (click)="withdrawFunds()"
+              />
+            </div>
+          }
         } @else {
           <p>You currently have no donation funds available on your account</p>
         }
