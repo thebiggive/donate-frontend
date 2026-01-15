@@ -6,7 +6,10 @@
         <biggive-heading colour="tertiary" size="1" align="center" text="Withdraw donation funds"></biggive-heading>
       </div>
       <div>
-        @if (hasDonationFunds) {
+        @if (actioned) {
+          Your withdrawal request has been processed. You should get an email from Stripe to confirm this, and the funds
+          should arrive in your bank account shortly.
+        } @else if (hasDonationFunds) {
           <p>
             Available balance: <strong>{{ (person.cash_balance?.gbp || 0) / 100 | exactCurrency: "GBP" }}</strong>
           </p>

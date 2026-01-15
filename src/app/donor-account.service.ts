@@ -50,7 +50,7 @@ export class DonorAccountService {
     }
 
     await firstValueFrom(
-      this.http.post<void>(`${environment.matchbotApiPrefix}/people/${person.id}/donor-account/withdraw-funds`, {
+      this.http.post<void>(`${environment.matchbotApiPrefix}/people/${person.id}/donor-account/withdraw-funds`, '', {
         headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
       }),
     );
