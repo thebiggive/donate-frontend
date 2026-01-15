@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
@@ -16,35 +16,36 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 })
 export class WithdrawFundsComponent implements OnInit {
   private readonly pageMeta = inject(PageMetaService);
-  private platformId = inject(PLATFORM_ID);
 
   protected processing = false;
   protected error?: string;
   private route = inject(ActivatedRoute);
   protected person = this.route.snapshot.data.person;
-  protected proccessing = false;
-
   protected readonly flags = flags;
-  protected hasDonationFunds = true;
   private donorAccountService = inject(DonorAccountService);
   private toaster = inject(Toast);
+  protected actioned = false;
 
   ngOnInit() {
     this.pageMeta.setCommon('Withdraw Funds', 'Register for a Big Give account', null);
+  }
+
+  get hasDonationFunds(): boolean {
+    return !!this.person.cash_balance?.gbp;
   }
 
   protected async withdrawFunds() {
     this.processing = true;
     try {
       await this.donorAccountService.withdrawAllFunds();
-      this.toaster.showSuccess(
-        'Your withdrawal request has been processed. You should have an email from Stripe to confirm this within the next hour',
-      );
       // @ts-expect-error - treating the error as BackendError instead of unknown.
     } catch (e: BackendError) {
-      this.toaster.showError('Failed to withdraw funds: ' + e.message);
+      this.toaster.showError(
+        'Failed to withdraw funds due to an unexpected error - please contact Big Give for any assistance',
+      );
       console.error(e);
     }
     this.processing = false;
+    this.actioned = true;
   }
 }
