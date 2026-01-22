@@ -1,0 +1,20 @@
+@use "../../../abstract";
+@use "../../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../../assets/images/banner-my-account.jpg);
+}
+main > div {
+  color: white;
+  background-color: abstract.$colour-primary;
+
+  a:link,
+  a:visited,
+  a:hover {
+    color: white;
+  }
+}
+
+.update-success {
+  color: abstract.$colour-highlight;
+}
