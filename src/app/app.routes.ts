@@ -308,7 +308,7 @@ export const routes: (Route & {
       paymentMethods: PaymentMethodsResolver,
     },
     component: DeleteAccount,
-    canActivate: [requireLogin, () => flags.enableDeleteAccount],
+    canActivate: [requireLogin],
   },
   {
     path: 'my-account/withdraw-funds',
