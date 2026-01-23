@@ -15,7 +15,7 @@ import { GetSiteControlService } from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import { environment } from './environments/environment';
 import { supportedBrowsers } from './supportedBrowsers';
-import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
+
 const donateHost = new URL(environment.donateUriPrefix).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -120,9 +120,9 @@ app.get('/robots.txt', (_req: Request, res: Response) => {
 });
 
 app.get('/.well-known/apple-developer-merchantid-domain-association', (_req: Request, res: Response) => {
-  res.setHeader('maxAge:', '7 days');
-  res.type('application/octet-stream');
-  res.send(SADMDADomainVerificationFile);
+  res.sendFile(`${browserDistFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
+    maxAge: '7 days',
+  });
 });
 
 // Serve static files requested via /d/ from dist/browser/d - when deployed, S3 serves these up to CloudFront.
