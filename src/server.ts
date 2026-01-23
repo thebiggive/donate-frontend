@@ -120,7 +120,7 @@ app.get('/robots.txt', (_req: Request, res: Response) => {
 });
 
 app.get('/.well-known/apple-developer-merchantid-domain-association', (_req: Request, res: Response) => {
-  res.setHeader('maxAge:', '7 days');
+  res.set('Cache-Control', 'public, max-age=604800'); // 7 days in seconds
   res.type('application/octet-stream');
   res.send(SADMDADomainVerificationFile);
 });
