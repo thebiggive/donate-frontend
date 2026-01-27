@@ -2133,9 +2133,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       `Asked donor whether to continue for campaign ${this.campaignId}`,
     );
     void this.promptToContinue(
-      'Great news - this charity has reached their target',
       'There are no match funds currently available for this charity.',
       'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
+      '',
       'Cancel',
       donation,
       this.campaign.surplusDonationInfo,
