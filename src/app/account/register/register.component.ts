@@ -1,6 +1,22 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggiveHeading,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,6 +56,7 @@ import { minPasswordLength } from '../../../environments/common';
     ReactiveFormsModule,
     VerifyEmailComponent,
     MatIcon,
+    BiggiveFormFieldSelect,
   ],
   templateUrl: './register.component.html',
   styleUrl: 'register.component.scss',
@@ -61,6 +78,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected processing = false;
   protected error?: string;
   registrationForm!: FormGroup;
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   protected registerPostDonationForm = new FormGroup({
     password: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
@@ -77,6 +95,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected verificationCodeSupplied?: string;
   protected emailVerificationToken?: EmailVerificationToken;
+  protected readonly enableOrgAccount = this.flags.enableOrgAccount;
+  protected accountType: 'individual' | 'organisation' = 'individual';
 
   constructor() {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
@@ -174,6 +194,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         email_address: emailAddress,
         first_name: firstName,
         last_name: lastName,
+        is_organisation: this.accountType === 'organisation',
         raw_password: this.registrationForm.value.password,
         secretNumber: this.verificationCodeSupplied,
       })
@@ -279,6 +300,17 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   get readyToTakeAccountDetails(): boolean {
     return !!this.verificationCodeSupplied || !!this.emailVerificationToken?.valid;
   }
+
+  setAccountType = (type: string): void => {
+    if (type !== 'organisation' && type !== 'individual') {
+      throw new Error('Invalid account type');
+    }
+
+    this.accountType = type;
+
+    // markForCheck seems to be needed since this is called from the BG component, outside the Angular zone.
+    this.changeDetectorRef.markForCheck();
+  };
 
   async registerPostDonation() {
     this.processing = true;
