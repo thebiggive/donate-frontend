@@ -302,7 +302,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setAccountType = (type: string): void => {
-    // alert(type);
     if (type !== 'organisation' && type !== 'individual') {
       throw new Error('Invalid account type');
     }
