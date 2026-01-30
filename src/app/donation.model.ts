@@ -121,6 +121,8 @@ export interface Donation {
 
   lastName?: string;
 
+  isOrganisationDonor?: boolean
+
   /**
    * Amount actually matched once donation is Collected or Paid.
    */

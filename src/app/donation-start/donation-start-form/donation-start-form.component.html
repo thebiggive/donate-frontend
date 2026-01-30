@@ -248,7 +248,7 @@
           }
         </div>
       </mat-step>
-      @if (campaign.currencyCode === "GBP") {
+      @if (campaign.currencyCode === "GBP" && ! donor?.is_organisation) {
         <mat-step formGroupName="giftAid" [stepControl]="giftAidGroup" [label]="stepLabels.giftAid">
           <p class="b-mt-40 b-bold b-rt-0">
             <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
@@ -353,6 +353,7 @@
           >
         </p>
         <div class="payment-details">
+          @if (! donor?.is_organisation) {
           <div>
             <biggive-text-input>
               <label slot="label" for="firstName">First Name *</label>
@@ -362,20 +363,32 @@
               <div class="error">Maximum 40 characters exceeded</div>
             }
           </div>
+          }
           <div>
-            <biggive-text-input>
-              <label slot="label" for="lastName">Last Name *</label>
-              <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput />
-            </biggive-text-input>
-            @if (giftAidGroup.value.giftAid) {
-              <mat-hint>This is for Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-            }
-            @if (!giftAidGroup.value.giftAid) {
-              <mat-hint>For smooth payment and identifying you if you have questions.</mat-hint>
-            }
-            @if (paymentGroup.get("lastName")?.errors?.maxlength) {
-              <div class="error">Maximum 80 characters exceeded</div>
-            }
+              @if (donor?.is_organisation) {
+                <biggive-text-input>
+                <label slot="label" for="lastName">Name</label>
+                  <!-- style on span below to override standard styling set by the biggve-text-input,
+                  as noame is not editable for donations from organsiations -->
+                  <span slot="input" style="color: black; font-size: 18px; font-weight: normal">{{ donor?.last_name }}</span>
+                </biggive-text-input>
+              } @else {
+                <biggive-text-input>
+                <label slot="label" for="lastName">Last Name *</label>
+                <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput [disabled]="!! donor?.is_organisation"/>
+                </biggive-text-input>
+                @if (giftAidGroup.value.giftAid) {
+                  <mat-hint>This is for Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+                }
+                @if (!giftAidGroup.value.giftAid) {
+                  <mat-hint>For smooth payment and identifying you if you have questions.</mat-hint>
+                }
+                @if (paymentGroup.get("lastName")?.errors?.maxlength) {
+                  <div class="error">Maximum 80 characters exceeded</div>
+                }
+              }
+
+
           </div>
           <div>
             <biggive-text-input>
