@@ -2370,11 +2370,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.updateAllValidities();
 
     if (this.donor?.is_organisation) {
-      alert('Its an org so removing validators');
-      // Organizations don't have either gift aid or the ability to use Gift Aid, so remove validators from those.
+      // Organisations don't have either gift aid or the ability to use Gift Aid, so remove validators from those.
       // No need to add them in the reverse case as they are there by default and the donor type cannot change back.
-      this.paymentGroup.get('firstName')?.setValidators([]);
-      this.giftAidGroup.get('giftAid')?.setValidators([]);
+      this.paymentGroup.get('firstName')?.removeValidators(Validators.required);
+      this.giftAidGroup.get('giftAid')?.removeValidators(Validators.required);
     }
   }
 
