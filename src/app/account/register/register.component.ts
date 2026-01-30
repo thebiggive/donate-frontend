@@ -1,6 +1,22 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
+import {
+  BiggiveButton,
+  BiggiveFormFieldSelect,
+  BiggiveHeading,
+  BiggivePageSection,
+  BiggiveTextInput,
+} from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,6 +56,7 @@ import { minPasswordLength } from '../../../environments/common';
     ReactiveFormsModule,
     VerifyEmailComponent,
     MatIcon,
+    BiggiveFormFieldSelect,
   ],
   templateUrl: './register.component.html',
   styleUrl: 'register.component.scss',
@@ -61,6 +78,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected processing = false;
   protected error?: string;
   registrationForm!: FormGroup;
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   protected registerPostDonationForm = new FormGroup({
     password: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
@@ -77,6 +95,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected verificationCodeSupplied?: string;
   protected emailVerificationToken?: EmailVerificationToken;
+  protected readonly enableOrgAccount = this.flags.enableOrgAccount;
+  protected accountType: 'individual' | 'organisation' = 'individual';
 
   constructor() {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
@@ -131,25 +151,45 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorHtml = this.error = undefined;
 
     if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
+      // Ensure the UI marks the fields as touched so any field-level UI (present or future) can react.
+      this.registrationForm.markAllAsTouched();
+
       const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
       const passwordErrors = this.registrationForm.controls?.password?.errors;
+      const firstNameErrors = this.registrationForm.controls?.firstName?.errors;
+      const lastNameErrors = this.registrationForm.controls?.lastName?.errors;
 
-      switch (true) {
-        case emailErrors?.['required'] && passwordErrors?.['required']:
-          this.error = 'Email address and password are required';
-          break;
-        case emailErrors?.['required']:
-          this.error = 'Email address is required';
-          break;
-        case passwordErrors?.['required']:
-          this.error = 'Password is required';
-          break;
-        case !!emailErrors?.['pattern']:
-          this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
-          break;
-        default:
-          this.error = 'Unknown Error - please try again or contact us if this error persists';
+      const missing: string[] = [];
+      if (emailErrors?.['required']) missing.push('Email address');
+      if (passwordErrors?.['required']) missing.push('Password');
+
+      if (this.accountType === 'individual') {
+        if (firstNameErrors?.['required']) missing.push('First name');
+        if (lastNameErrors?.['required']) missing.push('Last name');
+      } else {
+        if (lastNameErrors?.['required']) missing.push('Organisation name');
       }
+
+      if (missing.length) {
+        if (missing.length === 1) {
+          this.error = `${missing[0]} is required`;
+        } else if (missing.length === 2) {
+          this.error = `${missing[0]} and ${missing[1]} are required`;
+        } else {
+          const allButLast = missing.slice(0, -1).join(', ');
+          const last = missing[missing.length - 1];
+          this.error = `${allButLast}, and ${last} are required`;
+        }
+        return;
+      }
+
+      if (emailErrors?.['pattern']) {
+        this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
+        return;
+      }
+
+      console.error('Unhandled registration error:', this.registrationForm.errors);
+      this.error = 'Unknown Error - please try again or contact us if this error persists';
       return;
     }
 
@@ -174,6 +214,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         email_address: emailAddress,
         first_name: firstName,
         last_name: lastName,
+        is_organisation: this.accountType === 'organisation',
         raw_password: this.registrationForm.value.password,
         secretNumber: this.verificationCodeSupplied,
       })
@@ -279,6 +320,34 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   get readyToTakeAccountDetails(): boolean {
     return !!this.verificationCodeSupplied || !!this.emailVerificationToken?.valid;
   }
+
+  setAccountType = (type: string): void => {
+    if (type !== 'organisation' && type !== 'individual') {
+      throw new Error('Invalid account type');
+    }
+
+    this.accountType = type;
+
+    // Toggle validators depending on account type
+    const firstNameCtrl = this.registrationForm.get('firstName');
+    const lastNameCtrl = this.registrationForm.get('lastName');
+
+    if (firstNameCtrl && lastNameCtrl) {
+      if (this.accountType === 'organisation') {
+        // Organisation accounts: Organisation Name is stored in lastName and is always required (set at form init).
+        // First name is not applicable/optional so remove required.
+        firstNameCtrl.clearValidators();
+        firstNameCtrl.updateValueAndValidity({ emitEvent: false });
+      } else {
+        // Individual accounts: First name required; last name remains required from form init.
+        firstNameCtrl.setValidators([Validators.required]);
+        firstNameCtrl.updateValueAndValidity({ emitEvent: false });
+      }
+    }
+
+    // markForCheck seems to be needed since this is called from the BG component, outside the Angular zone.
+    this.changeDetectorRef.markForCheck();
+  };
 
   async registerPostDonation() {
     this.processing = true;

@@ -6,16 +6,16 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   ViewChild,
-  inject,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatStepper, MatStep } from '@angular/material/stepper';
+import { MatStep, MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { retry } from 'rxjs/operators';
@@ -60,13 +60,13 @@ import { Toast } from '../../toast.service';
 import { GIFT_AID_FACTOR } from '../../Money';
 import { noLongNumberValidator } from '../../validators/noLongNumberValidator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { BiggiveTextInput, BiggiveFormFieldSelect } from '@biggive/components-angular';
+import { BiggiveFormFieldSelect, BiggiveTextInput } from '@biggive/components-angular';
 import { MatInput } from '@angular/material/input';
 import { MatHint } from '@angular/material/form-field';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -703,6 +703,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         this.donationService,
         this.marketingGroup,
       );
+      this.donation.isOrganisationDonor = this.donor?.is_organisation;
 
       // And if we're about to submit, patch the donation in MatchBot and prevent submission
       // until the latest is persisted. Previously we did this after submit button press but
@@ -2133,9 +2134,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       `Asked donor whether to continue for campaign ${this.campaignId}`,
     );
     void this.promptToContinue(
-      'Great news - this charity has reached their target',
       'There are no match funds currently available for this charity.',
       'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
+      '',
       'Cancel',
       donation,
       this.campaign.surplusDonationInfo,
@@ -2265,6 +2266,13 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   };
 
   private setConditionalValidators(): void {
+    if (this.donor?.is_organisation) {
+      // Organisations don't have either gift aid or the ability to use Gift Aid, so remove validators from those.
+      // No need to add them in the reverse case as they are there by default and the donor type cannot change back.
+      this.paymentGroup.get('firstName')?.clearValidators();
+      this.giftAidGroup.get('giftAid')?.clearValidators();
+    }
+
     // Do not add a validator on `tipPercentage` because as a slider it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.

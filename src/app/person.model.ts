@@ -69,6 +69,7 @@ export interface Person {
    */
   created_time?: string;
   updated_time?: string;
+  is_organisation?: boolean;
 }
 
 /**

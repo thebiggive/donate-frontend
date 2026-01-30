@@ -208,7 +208,10 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   }
 
   private setDonation(donation: Donation) {
-    if (donation === undefined || !donation.firstName || !donation.lastName || !donation.emailAddress) {
+    // previously the below also included a check for donation.firstName, but that is expected to be falsy for
+    // donations for organisations. Took me some time to work out why the site was appearing to show that the
+    // donation couldn't be loaded.
+    if (donation === undefined || !donation.lastName || !donation.emailAddress) {
       this.matomoTracker.trackEvent('donate', 'thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;

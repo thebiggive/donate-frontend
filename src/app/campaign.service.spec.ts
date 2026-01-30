@@ -12,6 +12,7 @@ describe('CampaignService', () => {
       id: 'a051r00001EywjpAAB',
       aims: ['Aim 1'],
       amountRaised: 200.0,
+      additionalImages: [],
       additionalImageUris: [
         {
           uri: 'https://example.com/some-additional-image.png',

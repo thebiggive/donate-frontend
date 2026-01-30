@@ -3,6 +3,12 @@
 
 @include abstract.vary-campaign-info-layout();
 
+.error {
+  display: block;
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
+  margin: 1rem 0;
+}
+
 .b-back-button {
   @include abstract.make-back-button;
 }
