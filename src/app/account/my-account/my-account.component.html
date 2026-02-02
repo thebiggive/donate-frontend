@@ -14,11 +14,19 @@
         ></biggive-heading>
       </div>
       <h2>Your Details</h2>
+      @if (person.is_organisation) {
+        <p><strong>Organisation donor account</strong></p>
+      }
       @if (person) {
         <table id="personal-details">
           <tr>
-            <td>Name</td>
-            <td>{{ person.first_name }} {{ person.last_name }}</td>
+            @if (person.is_organisation) {
+              <td>Account Name</td>
+              <td>{{ person.last_name }}</td>
+            } @else {
+              <td>Name</td>
+              <td>{{ person.first_name }} {{ person.last_name }}</td>
+            }
           </tr>
           <tr>
             <td>Email</td>
