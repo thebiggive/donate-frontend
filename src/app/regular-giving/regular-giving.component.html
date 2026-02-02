@@ -34,6 +34,11 @@
       size="medium"
       url="/my-account/regular-giving/{{ preExistingActiveMandate[0].id }}"
     />
+  } @else if (donor?.is_organisation) {
+    <p>
+      Your account {{ donor?.last_name }} is an organisation. Regular giving is not currently supported for
+      organisational donors. If you wish to make a regular donation as an individual please log out of this account.
+    </p>
   } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
     <div class="c-form-container">
       <biggive-page-section>
