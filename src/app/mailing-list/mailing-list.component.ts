@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
 import { Toast } from '../toast.service';
@@ -27,7 +27,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './mailing-list.component.html',
   styleUrl: './mailing-list.component.scss',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput],
+  imports: [ReactiveFormsModule, BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput],
 })
 export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Used to prevent displaying the page before all parts are ready **/
