@@ -124,11 +124,12 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
    * smoother in-app Angular routing for internal links automatically, without complicating the
    * input to the buttons.
    */
-  @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: CustomEvent) {
-    const url = event.detail.url;
+  @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: Event) {
+    const customEvent = event as CustomEvent;
+    const url = customEvent.detail.url;
 
     if (url.startsWith(this.baseHref)) {
-      event.detail.event.preventDefault();
+      customEvent.detail.event.preventDefault();
       this.router.navigateByUrl(url.replace(this.baseHref, ''));
     } // Else fall back to normal link behaviour
   }
@@ -201,26 +202,27 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
-  onCookieBannerAcceptAllSelected(_event: CustomEvent) {
+  onCookieBannerAcceptAllSelected(_event: Event) {
     this.cookiePreferenceService.agreeToAll();
   }
 
   @HostListener('logoutClicked', ['$event'])
-  onLogoutClicked(_event: CustomEvent) {
+  onLogoutClicked(_event: Event) {
     this.identityService.logout();
     void this.router.navigate(['']);
   }
 
   @HostListener('preferenceModalClosed', ['$event'])
-  async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
+  async onCookieBannerPreferenceModalClosed(_event: Event) {
     if (this.showingDedicatedCookiePreferencesPage) {
       await this.router.navigateByUrl('/');
     }
   }
 
   @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
-  onCookieBannerSavePreferencesSelected(event: CustomEvent) {
-    this.cookiePreferenceService.storePreferences({ agreedToAll: false, agreedToCookieTypes: event.detail });
+  onCookieBannerSavePreferencesSelected(event: Event) {
+    const e = event as CustomEvent;
+    this.cookiePreferenceService.storePreferences({ agreedToAll: false, agreedToCookieTypes: e.detail });
   }
 
   private updatePersonInfo() {
