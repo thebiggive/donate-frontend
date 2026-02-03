@@ -325,13 +325,16 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
-  onDoSearchAndFilterUpdate(event: CustomEvent) {
-    this.searchService.doSearchAndFilterAndSort(event.detail, this.defaultSort);
+  onDoSearchAndFilterUpdate(event: Event) {
+    const customEvent = event as CustomEvent;
+
+    this.searchService.doSearchAndFilterAndSort(customEvent.detail, this.defaultSort);
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
-  async onDoCardGeneralClick(event: CustomEvent) {
-    await this.router.navigateByUrl(event.detail.url);
+  async onDoCardGeneralClick(event: Event) {
+    const customEvent = event as CustomEvent;
+    await this.router.navigateByUrl(customEvent.detail.url);
   }
 
   getRelevantDateAsStr(campaign: CampaignSummary) {
