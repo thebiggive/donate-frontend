@@ -8,6 +8,11 @@ if (environment.productionLike) {
   enableProdMode();
 }
 
-const bootstrap = (context: BootstrapContext) => bootstrapApplication(AppComponent, {...config, providers: [provideZoneChangeDetection(), ...config.providers]}, context);
+const bootstrap = (context: BootstrapContext) =>
+  bootstrapApplication(
+    AppComponent,
+    { ...config, providers: [provideZoneChangeDetection(), ...config.providers] },
+    context,
+  );
 
 export default bootstrap;
