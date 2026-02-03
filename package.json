@@ -87,7 +87,7 @@
     "@types/jasminewd2": "^2.0.8",
     "@types/morgan": "^1.9.2",
     "@types/node": "^20.13.1",
-    "angular-eslint": "20.1.0",
+    "angular-eslint": "21.2.0",
     "browser-sync": "^3.0.0",
     "cypress": "^13.2.0",
     "eslint": "^9.28.0",
