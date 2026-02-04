@@ -24,11 +24,18 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true,
     },
     files: ["./src/assets/custom-libs/modernizr.js"],
-    reporters: ["kjhtml"],
+    // Use a console-friendly reporter in CI
+    reporters: ["progress"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
+    // Keep timeouts robust for headless Chrome in CI
+    // Increase timeouts to avoid flaky disconnects in headless Chrome on CI
+    browserNoActivityTimeout: 120000,
+    captureTimeout: 120000,
+    browserDisconnectTimeout: 10000,
+    browserDisconnectTolerance: 2,
     browsers: ["Chrome"],
     // See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
     customLaunchers: {
