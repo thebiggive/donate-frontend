@@ -8,20 +8,24 @@ process.env.CHROME_BIN = puppeteer.executablePath();
 module.exports = function (config) {
   config.set({
     basePath: "",
-    frameworks: ["jasmine", "@angular-devkit/build-angular"],
+    frameworks: ["jasmine"],
     plugins: [
       require("karma-jasmine"),
       require("karma-chrome-launcher"),
       require("karma-jasmine-html-reporter"),
-      require("karma-coverage-istanbul-reporter"),
-      require("@angular/build/karma/plugins"),
+      require("karma-coverage"),
+      require("@angular/build/karma"),
     ],
     client: {
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: require("path").join(__dirname, "../coverage/donate-frontend"),
-      reports: ["html", "lcovonly", "text-summary"],
+      reporters: [
+        { type: "html" },
+        { type: "lcovonly" },
+        { type: "text-summary" },
+      ],
       fixWebpackSourcePaths: true,
     },
     files: ["./src/assets/custom-libs/modernizr.js"],
