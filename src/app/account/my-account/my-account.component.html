@@ -14,10 +14,10 @@
         ></biggive-heading>
       </div>
       <h2>Your Details</h2>
-      @if (person.is_organisation) {
-        <p><strong>Organisation donor account</strong></p>
-      }
       @if (person) {
+        @if (person.is_organisation) {
+          <p><strong>Organisation Donor Account</strong></p>
+        }
         <table id="personal-details">
           <tr>
             @if (person.is_organisation) {
@@ -50,7 +50,7 @@
                 }
               </td>
             </tr>
-          } @else if (flags.enableEditHomeAddress) {
+          } @else if (flags.enableEditHomeAddress && ! person.is_organisation) {
             <tr>
               <td colspan="2">
                 <a routerLink="/my-account/home-address">Set Home Address</a>
