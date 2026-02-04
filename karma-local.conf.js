@@ -17,11 +17,7 @@ module.exports = function (config) {
     },
     coverageReporter: {
       dir: require("path").join(__dirname, "./coverage/donate-frontend"),
-      reporters: [
-        { type: "html" },
-        { type: "lcovonly" },
-        { type: "text-summary" },
-      ],
+      reporters: [{ type: "html" }, { type: "lcovonly" }, { type: "text-summary" }],
       fixWebpackSourcePaths: true,
     },
     files: ["./src/assets/custom-libs/modernizr.js"],
