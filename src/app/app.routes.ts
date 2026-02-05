@@ -305,7 +305,6 @@ export const routes: (Route & {
     pathMatch: 'full',
     resolve: {
       person: LoggedInPersonResolver,
-      paymentMethods: PaymentMethodsResolver,
     },
     component: DeleteAccount,
     canActivate: [requireLogin],
