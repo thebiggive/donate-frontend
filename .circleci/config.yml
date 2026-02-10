@@ -157,6 +157,7 @@ workflows:
           family: "tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-regression-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=regression-${CIRCLE_SHA1}"
+          verify_revision_is_deployed: true
 
   deploy-staging:
     jobs:
@@ -190,6 +191,7 @@ workflows:
           family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-staging-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
+          verify_revision_is_deployed: true
       - deployment-notification:
           requires: ["Deploy Staging ECS with new image"]
           env: staging
@@ -230,6 +232,7 @@ workflows:
           family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-production-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
+          verify_revision_is_deployed: true
       - deployment-notification:
           requires: ["Deploy Production ECS with new image"]
           env: production
