@@ -25,7 +25,7 @@
     "supportedBrowsersJs": "(echo var supportedBrowsers = && browserslist-useragent-regexp --allowHigherVersions) > src/assets/supportedBrowsers.js",
     "prettier": "prettier . --write --list-different",
     "create-legacy-build": "node scripts/create-legacy-build.js",
-    "serve:ssr": "node dist/donate-frontend/server/server.mjs"
+    "serve:ssr-broken-to-check-we-get-alarm": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
     "@angular/animations": "^21.1.2",
