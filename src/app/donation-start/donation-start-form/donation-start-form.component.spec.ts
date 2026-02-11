@@ -35,6 +35,7 @@ describe('DonationStartForm', () => {
       id: campaignId,
       aims: ['Aim 1'],
       amountRaised: 200.0,
+      additionalImages: [],
       additionalImageUris: [
         {
           uri: 'https://example.com/some-additional-image.png',

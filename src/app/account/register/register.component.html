@@ -119,14 +119,40 @@
       } @else {
         <form [formGroup]="registrationForm" (keydown.enter)="register()">
           @if (readyToTakeAccountDetails) {
-            <biggive-text-input spaceBelow="4">
-              <label slot="label" for="firstName">First Name *</label>
-              <input slot="input" matInput type="text" id="firstName" formControlName="firstName" />
-            </biggive-text-input>
-            <biggive-text-input spaceBelow="4">
-              <label slot="label" for="lastName">Last Name *</label>
-              <input slot="input" matInput type="text" id="lastName" formControlName="lastName" />
-            </biggive-text-input>
+            @if (enableOrgAccount) {
+              <biggive-form-field-select
+                prompt="Please select your account type"
+                [options]="[
+                  { label: 'Individual', value: 'individual' },
+                  { label: 'Organisation', value: 'organisation' },
+                ]"
+                [selectedValue]="'individual'"
+                [backgroundColour]="'grey'"
+                [selectionChanged]="setAccountType"
+                [spaceBelow]="3"
+                [selectedOptionColour]="'inherit'"
+              ></biggive-form-field-select>
+            }
+
+            @if (accountType === "individual") {
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="firstName">First Name *</label>
+                <input slot="input" matInput type="text" id="firstName" formControlName="firstName" />
+              </biggive-text-input>
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="lastName">Last Name *</label>
+                <input slot="input" matInput type="text" id="lastName" formControlName="lastName" />
+              </biggive-text-input>
+            } @else if (accountType === "organisation") {
+              <p>
+                You are registering an account for an organsiation. Any donations made through this account will be in
+                the name of the organisation. They will not be eligible for Gift Aid.
+              </p>
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="lastName">Organisation Name *</label>
+                <input slot="input" matInput type="text" id="lastName" formControlName="lastName" />
+              </biggive-text-input>
+            }
           }
           @if (!verificationLinkSentToEmail) {
             <biggive-text-input spaceBelow="4">
@@ -141,7 +167,7 @@
               />
             </biggive-text-input>
           } @else {
-            <div>Email Address: {{ verificationLinkSentToEmail }}</div>
+            <div style="height: 3em">Email Address: {{ verificationLinkSentToEmail }}</div>
           }
 
           @if (readyToTakeAccountDetails) {

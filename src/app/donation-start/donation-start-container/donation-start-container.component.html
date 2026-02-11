@@ -81,7 +81,7 @@
           </div>
         }
         @if (campaign.errors && environment.environmentId !== "production") {
-          <strong style="color: red">Campaign Errors</strong>
+          <strong class="error">Campaign Errors</strong>
           <ol>
             @for (error of campaign.errors; track error) {
               <li>{{ error }}</li>

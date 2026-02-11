@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication, BootstrapContext } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { config } from './app/app.config.server';
@@ -8,6 +8,11 @@ if (environment.productionLike) {
   enableProdMode();
 }
 
-const bootstrap = (context: BootstrapContext) => bootstrapApplication(AppComponent, config, context);
+const bootstrap = (context: BootstrapContext) =>
+  bootstrapApplication(
+    AppComponent,
+    { ...config, providers: [provideZoneChangeDetection(), ...config.providers] },
+    context,
+  );
 
 export default bootstrap;
