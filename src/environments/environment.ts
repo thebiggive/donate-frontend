@@ -18,10 +18,15 @@ export const environment: Environment = {
   blogUriPrefix: 'http://localhost:30003',
   sharedCookieDomain: 'localhost',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
-  matchbotApiOrigin: 'http://localhost:30030',
-  matchbotApiPrefix: 'http://localhost:30030/v1',
+  matchbotApiOrigin: 'https://matchbot-staging.thebiggivetest.org.uk',
+  matchbotApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
-  identityApiPrefix: 'http://localhost:30050/v1',
+  identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
+  imageHosts: [
+    'images-regression.thebiggivetest.org.uk',
+    'images-staging.thebiggivetest.org.uk',
+    'images-production.thebiggive.org.uk',
+  ],
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
   matomoAbTest: {

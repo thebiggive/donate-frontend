@@ -46,7 +46,7 @@
         }
         @if (creditPenceToUse === 0) {
           <div>
-            <hr style="margin: 20px auto" />
+            <hr class="u-margin-auto-y-20" />
             <h2 class="b-rt-0 b-m-0 b-bold">Support Big Give</h2>
             @if (creditPenceToUse === 0) {
               <p>
@@ -56,7 +56,7 @@
               </p>
             }
             @if (creditPenceToUse === 0) {
-              <div style="text-align: center">
+              <div class="u-text-center">
                 @if (!showCustomTipInput) {
                   <div class="donation-input donation-input-main">
                     <mat-slider
@@ -82,7 +82,7 @@
                 }
 
                 @if (donationAmount && (tipAmount() === 0 || showCustomTipInput)) {
-                  <div style="text-align: left">
+                  <div class="u-text-left">
                     <h3>A small tip makes a big difference. You will help us:</h3>
                     <ul>
                       <li>
@@ -211,7 +211,7 @@
           </div>
         }
         <div aria-live="polite">
-          <div style="text-align: center">
+          <div class="u-text-center">
             @if (donationCreateError) {
               <p class="error">
                 Sorry, we can't register your donation right now. Please try again in a moment or
@@ -338,16 +338,16 @@
               </div>
             </div>
           }
-          <div style="text-align: center">
+          <div class="u-text-center">
             <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
           </div>
         </mat-step>
       }
       <mat-step formGroupName="payment" [stepControl]="paymentGroup" [label]="stepLabels.paymentDetails">
-        <p class="b-grey b-rt-sm" style="padding-top: 20px">
-          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 12.7rem" />
+        <p class="b-grey b-rt-sm u-padding-top-20">
+          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" class="u-width-stripe-logo" />
           <br />
-          <a href="https://stripe.com/docs/security/stripe" target="_blank" style="display: inline-block; width: 13rem"
+          <a href="https://stripe.com/docs/security/stripe" target="_blank" class="u-inline-block u-width-13rem"
             ><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn
             more about Stripe</a
           >
@@ -368,11 +368,9 @@
             @if (donor?.is_organisation) {
               <biggive-text-input>
                 <label slot="label" for="lastName">Name</label>
-                <!-- style on span below to override standard styling set by the biggve-text-input,
-                  as noame is not editable for donations from organsiations -->
-                <span slot="input" style="color: black; font-size: 18px; font-weight: normal">{{
-                  donor?.last_name
-                }}</span>
+                <!-- class on span below to override standard styling set by the biggive-text-input,
+                  as name is not editable for donations from organisations -->
+                <span slot="input" class="u-donation-amount-display">{{ donor?.last_name }}</span>
               </biggive-text-input>
             } @else {
               <biggive-text-input>
@@ -495,7 +493,7 @@
             {{ paymentStepErrors }}
           </p>
         }
-        <div style="text-align: center">
+        <div class="u-text-center">
           <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
@@ -610,7 +608,7 @@
             }
           </div>
         }
-        <div style="text-align: center">
+        <div class="u-text-center">
           <button type="button" class="continue" mat-raised-button color="primary" (click)="next()">Continue</button>
         </div>
       </mat-step>
@@ -640,9 +638,8 @@
           }
           @if (finalPreSubmitUpdateFailed) {
             <button
-              style="width: 40%"
+              class="continue u-width-40"
               type="button"
-              class="continue"
               mat-raised-button
               color="primary"
               (click)="retryFinalPreSubmitUpdate()"
