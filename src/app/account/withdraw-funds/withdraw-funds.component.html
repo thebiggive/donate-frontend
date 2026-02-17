@@ -19,7 +19,7 @@
             from.
           </p>
 
-          <div style="float: left">
+          <div class="u-float-left">
             <biggive-button
               space-above="5"
               spaceBelow="0"
@@ -30,13 +30,13 @@
               url="/my-account"
             />
           </div>
-          <div aria-live="polite" style="float: right">
+          <div aria-live="polite" class="u-float-right">
             @if (processing) {
               <mat-spinner color="accent" diameter="30" aria-label="Processing"></mat-spinner>
             }
           </div>
           @if (!processing) {
-            <div style="float: right">
+            <div class="u-float-right">
               <biggive-button
                 space-above="5"
                 spaceBelow="4"

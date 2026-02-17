@@ -167,7 +167,7 @@
               />
             </biggive-text-input>
           } @else {
-            <div style="height: 3em">Email Address: {{ verificationLinkSentToEmail }}</div>
+            <div class="u-height-3em">Email Address: {{ verificationLinkSentToEmail }}</div>
           }
 
           @if (readyToTakeAccountDetails) {
@@ -226,7 +226,7 @@
         </div>
       }
       @if (!emailVerificationToken) {
-        <hr style="margin: 20px auto" />
+        <hr class="u-margin-auto-y-20" />
         Already have an account? <a href="{{ loginLink }}">Login here</a>
       }
     </biggive-page-section>

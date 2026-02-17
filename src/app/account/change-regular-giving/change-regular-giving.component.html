@@ -48,7 +48,7 @@
         <form class="c-regular-giving-form" [formGroup]="paymentMethodForm">
           <h3>New Payment Method for Regular Giving</h3>
           <div class="sr-input sr-card-element" id="card-info" #cardInfo>Loading payment card form...</div>
-          <div style="margin-top: 2em">
+          <div class="u-margin-top-2em">
             <biggive-form-field-select
               [prompt]="'Billing country'"
               [options]="countryOptionsObject"
@@ -76,7 +76,7 @@
           <div id="error-message" aria-live="polite" class="error">
             <strong>{{ errorMessage }}</strong>
           </div>
-          <div style="height: 80px"></div>
+          <div class="u-height-80"></div>
           <biggive-button
             (click)="confirmSetup()"
             label="Confirm"

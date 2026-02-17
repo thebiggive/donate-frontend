@@ -22,6 +22,8 @@ export interface Environment {
   /** Prefix for pages served by this Angular application */
   donateUriPrefix: string;
 
+  imageHosts: string[];
+
   /** Prefix for pages served by WordPress */
   blogUriPrefix: string;
 

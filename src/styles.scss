@@ -65,3 +65,93 @@ div.mat-expansion-panel-body {
   background-color: abstract.$colour-primary-contrast;
   color: #bb2222; // matching angular native palette
 }
+
+// CSP-safe utility classes (replacing inline styles)
+.u-hidden {
+  display: none;
+}
+.u-text-center {
+  text-align: center;
+}
+.u-text-left {
+  text-align: left;
+}
+.u-margin-x-1em {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+.u-margin-auto-y-20 {
+  margin: 20px auto;
+}
+.u-margin-top-2em {
+  margin-top: 2em;
+}
+.u-margin-top-neg-6em {
+  margin-top: -6em;
+}
+.u-margin-right-1em {
+  margin-right: 1em;
+}
+.u-padding-top-20 {
+  padding-top: 20px;
+}
+.u-padding-section {
+  padding: 50px 0 40px 0;
+}
+.u-height-1em {
+  height: 1em;
+}
+.u-height-2em {
+  height: 2em;
+}
+.u-height-3em {
+  height: 3em;
+}
+.u-height-4em {
+  height: 4em;
+}
+.u-height-30 {
+  height: 30px;
+}
+.u-height-80 {
+  height: 80px;
+}
+.u-min-height-10em {
+  min-height: 10em;
+}
+.u-width-40 {
+  width: 40%;
+}
+.u-width-13rem {
+  width: 13rem;
+}
+.u-width-stripe-logo {
+  width: 12.7rem;
+}
+.u-position-absolute {
+  position: absolute;
+}
+.u-float-left {
+  float: left;
+}
+.u-float-right {
+  float: right;
+}
+.u-justify-space-between {
+  justify-content: space-between;
+}
+.u-inline-block {
+  display: inline-block;
+}
+.u-whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+.u-debug-outline {
+  outline: 1px solid black;
+  padding: 1em;
+}
+.u-donation-amount-display {
+  color: black;
+  font-size: 18px;
+  font-weight: normal;
+}

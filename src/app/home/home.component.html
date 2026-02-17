@@ -18,14 +18,14 @@
       teaserColour="#FFFFFF"
       height="tall"
     ></biggive-heading-banner>
-    <div style="height: 30px">
+    <div class="u-height-30">
       <!-- space since adding a margin to the following element is hard to feature-flag -->
     </div>
     <div class="b-container">
       <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
     </div>
     <biggive-page-section colour-scheme="primary" section-style-bottom="crop-right">
-      <div style="padding: 50px 0 40px 0">
+      <div class="u-padding-section">
         @if (stats) {
           <biggive-call-to-action
             default-text-colour="secondary"
@@ -41,7 +41,7 @@
       </div>
     </biggive-page-section>
     <biggive-page-section>
-      <div style="text-align: center">
+      <div class="u-text-center">
         <biggive-heading
           heading-colour="primary"
           html-element="h2"
@@ -142,7 +142,7 @@
       </div>
     </biggive-page-section>
     <biggive-page-section colour-scheme="primary" section-style-top="crop-left">
-      <div style="padding: 50px 0 40px 0">
+      <div class="u-padding-section">
         <biggive-video-feature
           default-text-colour="white"
           video-url="https://player.vimeo.com/video/860172535"
@@ -157,130 +157,6 @@
         </biggive-video-feature>
       </div>
     </biggive-page-section>
-    <!-- blogs section - hide for now -->
-    <!-- <biggive-page-section
-    >
-    <div style="padding: 50px 0 40px 0;">
-      <biggive-heading
-        heading-colour="primary"
-        html-element="h2"
-        size="3"
-        text="What's new on Big Give"
-        >
-      </biggive-heading>
-      <div class="flex-wrapper">
-        <biggive-button
-          space-below="0"
-          colour-scheme="black"
-          label="Blog Post"
-          url="#"
-          full-width="false"
-          size="small"
-          rounded="false"
-          >
-        </biggive-button>
-        <biggive-button
-          space-below="0"
-          colour-scheme="tertiary"
-          label="Report & Insights"
-          url="#"
-          full-width="false"
-          size="small"
-          rounded="false"
-          >
-        </biggive-button>
-        <biggive-button
-          space-below="0"
-          colour-scheme="tertiary"
-          label="Webinar"
-          url="#"
-          full-width="false"
-          size="small"
-          rounded="false"
-          >
-        </biggive-button>
-        <biggive-button
-          space-below="0"
-          colour-scheme="tertiary"
-          label="Case Studies"
-          url="#"
-          full-width="false"
-          size="small"
-          rounded="false"
-          >
-        </biggive-button>
-        <biggive-button
-          space-below="0"
-          colour-scheme="tertiary"
-          label="Press"
-          url="#"
-          full-width="false"
-          size="small"
-          rounded="false"
-          >
-        </biggive-button>
-      </div>
-      <biggive-grid
-        columnCount="4">
-        <biggive-article-card
-          space-below='4'
-          background-colour="white"
-          hover-background-colour="tertiary"
-          text-colour="black"
-          slug="• Blog Post   • Mental Health"
-          date="September 2022"
-          main-title="Sample main title"
-          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
-          image-label="By Beth DC"
-          button-url="/"
-          button-label="Read blog now"
-          >
-        </biggive-article-card>
-        <biggive-article-card
-          space-below='4'
-          background-colour="white"
-          hover-background-colour="tertiary"
-          text-colour="black"
-          slug="• Blog Post   • Mental Health"
-          date="September 2022"
-          main-title="Sample main title"
-          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
-          image-label="By Beth DC"
-          button-url="/"
-          button-label="Read blog now"
-          >
-        </biggive-article-card>
-        <biggive-article-card
-          space-below='4'
-          background-colour="white"
-          hover-background-colour="tertiary"
-          text-colour="black"
-          slug="• Blog Post   • Mental Health"
-          date="September 2022"
-          main-title="Sample main title"
-          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
-          image-label="By Beth DC"
-          button-url="/"
-          button-label="Read blog now"
-          >
-        </biggive-article-card>
-        <biggive-article-card
-          space-below='4'
-          background-colour="white"
-          hover-background-colour="tertiary"
-          text-colour="black"
-          slug="• Blog Post   • Mental Health"
-          date="September 2022"
-          main-title="Sample main title"
-          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
-          image-label="By Beth DC"
-          button-url="/"
-          button-label="Read blog now"
-          >
-        </biggive-article-card>
-      </biggive-grid>
-    </div>
-  </biggive-page-section> -->
     <biggive-page-section>
       <div class="container text-colour-primary space-above-6 space-below-6">
         <div class="sleeve">

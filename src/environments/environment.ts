@@ -22,6 +22,12 @@ export const environment: Environment = {
   matchbotApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'http://localhost:30050/v1',
+  imageHosts: [
+    'images-regression.thebiggivetest.org.uk',
+    'images-staging.thebiggivetest.org.uk',
+    'images-production.thebiggive.org.uk',
+    'picsum.photos',
+  ],
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
   matomoAbTest: {
