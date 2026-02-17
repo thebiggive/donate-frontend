@@ -1,8 +1,8 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { enableProdMode } from '@angular/core';
+import { CSP_NONCE, enableProdMode } from '@angular/core';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import compression from 'compression';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -34,6 +34,13 @@ const app = express();
 const commonEngine = new CommonEngine();
 
 app.use(compression());
+
+// Generate a unique CSP nonce for each request
+app.use((_req, res, next) => {
+  res.locals['cspNonce'] = randomBytes(16).toString('base64');
+  next();
+});
+
 // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
 // https://github.com/helmetjs/helmet#reference
 
@@ -48,54 +55,62 @@ const frameAndChildSrc = [
   'www.youtube-nocookie.com',
 ];
 
-app.use(
+/**
+ * Build CSP directives with nonce for style-src.
+ */
+function buildCspDirectives(nonce: string) {
+  return {
+    ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+    'connect-src': [
+      'wss://*.getsitecontrol.com', // GetSiteControl secure WebSocket connections.
+      new URL(environment.sfApiUriPrefix).host,
+      new URL(environment.matchbotApiPrefix).host,
+      new URL(environment.identityApiPrefix).host,
+      matomoUriBase,
+      'api.friendlycaptcha.com',
+      'https://api.stripe.com',
+    ],
+    'default-src': [`'none'`],
+    'font-src': [`'self'`, 'data:'],
+    'style-src': [`'self'`, 'data:', `'nonce-${nonce}'`],
+    'img-src': [
+      `'self'`,
+      'data:',
+      matomoUriBase,
+      'https://app.getsitecontrol.com',
+      'https://www.fundraisingregulator.org.uk',
+      ...imageHosts,
+    ],
+    'script-src': [
+      donateHost,
+      matomoUriBase,
+      // See index.html for the following 3.
+      `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
+      `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
+      `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
+      `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
+      '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
+      'js.stripe.com',
+      // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
+      'https://player.vimeo.com',
+      `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
+      `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
+      'https://*.js.stripe.com',
+      'https://js.stripe.com',
+    ],
+    'worker-src': [
+      'blob:', // friendly-captcha
+    ],
+    'frame-src': frameAndChildSrc,
+    'child-src': frameAndChildSrc,
+  };
+}
+
+app.use((req, res, next) => {
+  const nonce = res.locals['cspNonce'] as string;
   helmet({
     contentSecurityPolicy: {
-      directives: {
-        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        'connect-src': [
-          'wss://*.getsitecontrol.com', // GetSiteControl secure WebSocket connections.
-          new URL(environment.sfApiUriPrefix).host,
-          new URL(environment.matchbotApiPrefix).host,
-          new URL(environment.identityApiPrefix).host,
-          matomoUriBase,
-          'api.friendlycaptcha.com',
-          'https://api.stripe.com',
-        ],
-        'default-src': [`'none'`],
-        'font-src': [`'self'`, 'data:'],
-        'style-src': [`'self'`, 'data:', `'unsafe-inline'`],
-        'img-src': [
-          `'self'`,
-          'data:',
-          matomoUriBase,
-          'https://app.getsitecontrol.com',
-          'https://www.fundraisingregulator.org.uk',
-          ...imageHosts,
-        ],
-        'script-src': [
-          donateHost,
-          matomoUriBase,
-          // See index.html for the following 3.
-          `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
-          `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
-          `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
-          `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
-          '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
-          'js.stripe.com',
-          // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
-          'https://player.vimeo.com',
-          `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
-          `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
-          'https://*.js.stripe.com',
-          'https://js.stripe.com',
-        ],
-        'worker-src': [
-          'blob:', // friendly-captcha
-        ],
-        'frame-src': frameAndChildSrc,
-        'child-src': frameAndChildSrc,
-      },
+      directives: buildCspDirectives(nonce),
     },
     referrerPolicy: {
       // see https://helmetjs.github.io/#referrer-policy - helmet default is `no-referrer`.
@@ -104,8 +119,8 @@ app.use(
       // verification badge in our footer, and this matches what we have in WP.
       policy: 'strict-origin-when-cross-origin',
     },
-  }),
-);
+  })(req, res, next);
+});
 app.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
 /**
@@ -160,6 +175,9 @@ app.get('**', (req, res, next) => {
   const { protocol, originalUrl, headers, query } = req;
   const ua = headers['user-agent'] || '';
 
+  // Get nonce generated by helmet CSP middleware
+  const nonce = res.locals['cspNonce'] as string;
+
   // Use legacy bundle if explicitly requested via query param or if User-Agent indicates legacy browser
   const legacyRequested = query.legacy === '1';
   const useLegacy = legacyRequested || isLegacyBrowser(ua);
@@ -193,6 +211,8 @@ app.get('**', (req, res, next) => {
         { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
         { provide: RESPONSE, useValue: res },
         { provide: REQUEST, useValue: req },
+        // Angular will use this for inline styles, allowing us to keep the style CSP narrow.
+        { provide: CSP_NONCE, useValue: nonce },
       ],
     })
     .then((html) => {
@@ -200,6 +220,12 @@ app.get('**', (req, res, next) => {
       if (useLegacy) {
         html = html.replace(/src="\/d\//g, 'src="/d-es5/').replace(/href="\/d\//g, 'href="/d-es5/');
       }
+
+      // Add nonce to inline <style> tags rendered by SSR.
+      // Angular's CSP_NONCE token is primarily for client-side runtime style injection;
+      // SSR-rendered styles and third-party libraries (Angular Material, etc.) need this rewrite.
+      html = html.replace(/<style(?![^>]*nonce)/g, `<style nonce="${nonce}"`);
+
       res.send(html);
     })
     .catch((err) => next(err));
