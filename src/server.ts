@@ -64,8 +64,8 @@ app.use(
         ],
         'default-src': [`'none'`],
         'font-src': [`'self'`, 'data:'],
-        'style-src': [`'self'`, 'data:'],
-        'img-src': [`'self'`, 'data:', matomoUriBase, ...imageHosts],
+        'style-src': [`'self'`, 'data:', `'unsafe-inline'`],
+        'img-src': [`'self'`, 'data:', matomoUriBase, 'fundraisingregulator.org.uk', ...imageHosts],
         'script-src': [
           donateHost,
           matomoUriBase,
