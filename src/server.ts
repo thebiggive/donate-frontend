@@ -221,10 +221,9 @@ app.get('**', (req, res, next) => {
         html = html.replace(/src="\/d\//g, 'src="/d-es5/').replace(/href="\/d\//g, 'href="/d-es5/');
       }
 
-      // Add nonce to inline <style> tags rendered by SSR.
-      // Angular's CSP_NONCE token is primarily for client-side runtime style injection;
-      // SSR-rendered styles and third-party libraries (Angular Material, etc.) need this rewrite.
-      html = html.replace(/<style(?![^>]*nonce)/g, `<style nonce="${nonce}"`);
+      // Add ngCspNonce attribute to the app root element so Angular can use it for inline styles.
+      // See https://angular.dev/best-practices/security#content-security-policy
+      html = html.replace(/<app-root/g, `<app-root ngCspNonce="${nonce}"`);
 
       res.send(html);
     })
