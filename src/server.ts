@@ -17,6 +17,7 @@ import { environment } from './environments/environment';
 import { supportedBrowsers } from './supportedBrowsers';
 import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
 const donateHost = new URL(environment.donateUriPrefix).host;
+const imageHosts = environment.imageHosts;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -53,24 +54,21 @@ app.use(
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
-          'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
+          'wss://*.getsitecontrol.com', // GetSiteControl secure WebSocket connections.
           new URL(environment.sfApiUriPrefix).host,
           new URL(environment.matchbotApiPrefix).host,
           new URL(environment.identityApiPrefix).host,
           matomoUriBase,
-          '*.getsitecontrol.com',
           'api.friendlycaptcha.com',
           'https://api.stripe.com',
         ],
         'default-src': [`'none'`],
-        'font-src': [`'self'`, 'fonts.gstatic.com', 'data:'],
-        'style-src': [`'self'`, `'unsafe-inline'`, 'fonts.googleapis.com', 'data:'],
-        'img-src': [`'self'`, 'data:', 'https:', matomoUriBase],
+        'font-src': [`'self'`, 'data:'],
+        'style-src': [`'self'`, 'data:'],
+        'img-src': [`'self'`, 'data:', matomoUriBase, ...imageHosts],
         'script-src': [
-          `'self'`,
           donateHost,
           matomoUriBase,
-          `'unsafe-eval'`,
           // See index.html for the following 3.
           `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
           `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
@@ -78,11 +76,10 @@ app.use(
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
           `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
-          `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
+          `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
           'https://*.js.stripe.com',
           'https://js.stripe.com',
         ],

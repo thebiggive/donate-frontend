@@ -24,6 +24,7 @@ export const environment: Environment = {
   matchbotApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
+  imageHosts: ['images-staging.thebiggivetest.org.uk', 'images-production.thebiggive.org.uk'],
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
   matomoAbTest: {
