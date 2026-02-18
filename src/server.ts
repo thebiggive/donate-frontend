@@ -72,7 +72,24 @@ function buildCspDirectives(nonce: string) {
     ],
     'default-src': [`'none'`],
     'font-src': [`'self'`, 'data:'],
-    'style-src': [`'self'`, 'data:', `'nonce-${nonce}'`],
+    'style-src': [
+      `'self'`,
+      'data:',
+      `'nonce-${nonce}'`,
+      // following hashes should be for styles used by GetSiteControl and FriendlyCaptcha, - taken from
+      // errors shown in browser on local env - but it's not obvious to me which is which
+      // --bdsl
+      `'sha256-5vMQGIzlAdBmrJQHl2L9ApHjj3LBBI7QIyE01EY85DI='`,
+      `'sha256-6EANf3q7TA3PzDpgLK8msCpC3+5Oq9al9X2vFTn/4Zo='`,
+      `'sha256-WRBs1E1nYBdNZJA8kjcHk/Uz9Yhse9hagHTOBHMCvG4='`,
+      `'sha256-kbHtQyYDQKz4SWMQ8OHVol3EC0t3tHEJFPCSwNG9NxQ='`,
+      `'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='`,
+      `'sha256-9UmBnu+pWtFRlfZAt/bOwiX0rByXZz/6/uk4wVB6Sg8='`,
+      `'sha256-LR+RVVtU9MmXpqHwkuHNtzyeyDeoxS/MQjpPn75nMZ0='`,
+      `'sha256-T0onletLkmIqjZzgWmIeb6ZHs/iABkj2yivmMz1ejtk='`,
+      `'sha256-QlkrqbX5mMCYnK4QS+468VDxsAE446Glp/5pSpAH3AA='`,
+      `'sha256-VRKw2JPTITOgVTLRULypIbtKZQ093R9by3QSefOA9RY='`,
+    ],
     'img-src': [
       `'self'`,
       'data:',
@@ -88,6 +105,8 @@ function buildCspDirectives(nonce: string) {
       `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
       `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
       `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
+
+      `''`,
       `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
       '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
       'js.stripe.com',
