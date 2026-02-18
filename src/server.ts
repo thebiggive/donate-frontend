@@ -225,6 +225,10 @@ app.get('**', (req, res, next) => {
       // See https://angular.dev/best-practices/security#content-security-policy
       html = html.replace(/<app-root/g, `<app-root ngCspNonce="${nonce}"`);
 
+      // Add nonce to inline <style> tags rendered by SSR; needed for things that get inlined still;
+      // notably the few rules in app.component.scss itself.
+      html = html.replace(/<style(?![^>]*nonce)/g, `<style nonce="${nonce}"`);
+
       res.send(html);
     })
     .catch((err) => next(err));
