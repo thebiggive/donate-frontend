@@ -1,6 +1,6 @@
 @if (campaignOpenOnLoad) {
   <form class="c-donate-form" (keyup.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
-    <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" [@.disabled]>
+    <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" animationDuration="0">
       <mat-step
         formGroupName="amounts"
         [stepControl]="amountsGroup"
