@@ -2,6 +2,10 @@
 
 export const campaignHiddenMessage =
   'This campaign is temporarily unable to accept donations – please try again later.';
+
+export const donorGiftAidTermsUrl = 'https://biggive.org/terms-and-conditions/#gift-aid';
+export const donorTermsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
+
 /**
  * Suitable digits info for summaries that don't need to be exact, e.g.
  * stats to the nearest whole £.

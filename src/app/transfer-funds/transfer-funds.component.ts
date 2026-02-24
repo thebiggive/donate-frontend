@@ -11,6 +11,7 @@ import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
 import { Donation, maximumDonationAmountForFundedDonation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
+import { donorGiftAidTermsUrl, donorTermsUrl } from '../../environments/common';
 import { environment } from '../../environments/environment';
 import { FundingInstruction } from '../fundingInstruction.model';
 import { IdentityService } from '../identity.service';
@@ -70,6 +71,8 @@ export class TransferFundsComponent implements OnInit {
   private toast = inject(Toast);
   readonly flags = flags;
 
+  donorTermsUrl = donorTermsUrl;
+  giftAidTermsUrl = donorGiftAidTermsUrl;
   isLoading: boolean = false;
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;

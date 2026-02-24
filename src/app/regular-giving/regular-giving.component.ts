@@ -36,6 +36,7 @@ import { DonationService, StripeCustomerSession } from '../donation.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { donorGiftAidTermsUrl, donorTermsUrl } from '../../environments/common';
 import { environment } from '../../environments/environment';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -118,7 +119,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected campaign!: Campaign;
   @ViewChild('stepper') private stepper!: MatStepper;
-  readonly termsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
   readonly privacyUrl = 'https://biggive.org/privacy';
   protected donor?: Person;
   protected donorAccount!: DonorAccount;
@@ -127,6 +127,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
 
+  donorTermsUrl = donorTermsUrl;
+  giftAidTermsUrl = donorGiftAidTermsUrl;
   public readonly labelYourPaymentInformation = 'Your Payment Information';
 
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;

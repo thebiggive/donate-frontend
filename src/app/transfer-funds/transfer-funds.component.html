@@ -163,9 +163,7 @@
                 charity's campaign.
               </p>
               <p>
-                <a href="https://biggive.org/terms-and-conditions/#donation-terms" target="_blank"
-                  >Find out more about Gift Aid</a
-                >
+                <a [href]="giftAidTermsUrl" target="_blank">Find out more about Gift Aid</a>
               </p>
               <mat-radio-group required aria-label="Select a Gift Aid option" formControlName="giftAid">
                 <mat-radio-button [value]="true"
@@ -244,8 +242,7 @@
             <p>
               By clicking on the 'Submit Donation Funds transfer form' button below, you agree to transfer the funds via
               bank transfer to the bank account and sort code displayed on the next screen. See our
-              <a href="https://biggive.org/terms-and-conditions" target="_blank">Terms and Conditions</a> for more
-              information.
+              <a [href]="donorTermsUrl" target="_blank">Terms and Conditions</a> for more information.
             </p>
             <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
             <div>
