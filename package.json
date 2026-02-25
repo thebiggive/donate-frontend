@@ -28,7 +28,6 @@
     "serve:ssr": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
-    "@angular/animations": "^21.1.2",
     "@angular/cdk": "^21.1.2",
     "@angular/common": "^21.1.2",
     "@angular/compiler": "^21.1.2",
