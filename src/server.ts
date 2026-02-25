@@ -73,7 +73,7 @@ function buildCspDirectives(styleNonce: string, externalScriptNonce: string) {
     ],
     'default-src': [`'none'`],
     'font-src': [`'self'`, 'data:'],
-    'style-src': [`'self'`, 'data:', `'unsafe-inline'`, `'nonce-${styleNonce}'`],
+    'style-src': [`'self'`, 'data:', `'nonce-${styleNonce}'`, 'https://*.getsitecontrol.com'],
     'img-src': [
       `'self'`,
       'data:',
@@ -89,8 +89,6 @@ function buildCspDirectives(styleNonce: string, externalScriptNonce: string) {
       `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
       `'sha256-DE6hwZ1S7dULOe0jGZBNN5/DfHRm5z2TSGvQ//6OJXg='`, // Modern / legacy bundle choice
       `'sha256-1ax1jsrfb/mp8BcqopMnSNZo5r5VMGq+/sqVWcWcwsk='`, // Fully unsupported check / message visibility toggle
-
-      `''`,
       `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
       '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
       'js.stripe.com',
