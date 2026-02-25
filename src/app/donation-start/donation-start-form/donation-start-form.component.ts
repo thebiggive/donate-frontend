@@ -31,7 +31,7 @@ import {
 import { firstValueFrom } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
-import { campaignHiddenMessage } from '../../../environments/common';
+import { campaignHiddenMessage, donorGiftAidTermsUrl, donorTermsUrl } from '../../../environments/common';
 import { countryOptions } from '../../countries';
 import { Donation, maximumDonationAmount, PaymentMethodType } from '../../donation.model';
 import { DonationCreatedResponse } from '../../donation-created-response.model';
@@ -207,11 +207,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     (a, b) => a.tipPercentage - b.tipPercentage,
   );
   readonly tipPercentageFixedOneDecimalValues = this.tipPercentageDefaults.map((d) => d.tipPercentage.toFixed(1));
-  readonly percentagesWithLabelsLowestFirst = this.tipPercentageDefaultsByPercent.map((d) => ({
-    value: d.tipPercentage.toString(),
-    label: `${d.tipPercentage}%`,
-  }));
 
+  donorTermsUrl = donorTermsUrl;
+  giftAidTermsUrl = donorGiftAidTermsUrl;
   noPsps = false;
   psp!: 'stripe';
   retrying = false;
@@ -233,7 +231,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   stripePaymentMethodReady = false;
   stripeError?: string;
   submitting = false;
-  termsUrl = 'https://biggive.org/terms-and-conditions/#donation-terms';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;

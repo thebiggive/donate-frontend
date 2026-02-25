@@ -11,7 +11,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
@@ -31,7 +30,6 @@ export const appConfig: ApplicationConfig = {
       setAssetPath(`${environment.donateUriPrefix}/assets`);
       defineCustomElements();
     }),
-    provideAnimationsAsync(),
     provideRouter(
       routes,
       withComponentInputBinding(),
