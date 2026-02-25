@@ -16,7 +16,6 @@ import bootstrap from './main.server';
 import { environment } from './environments/environment';
 import { supportedBrowsers } from './supportedBrowsers';
 import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
-const donateHost = new URL(environment.donateUriPrefix).host;
 const imageHosts = environment.imageHosts;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -70,6 +69,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       'api.friendlycaptcha.com',
       'https://api.stripe.com',
       `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script.
+      `'self'`, // For e.g. Cloudflare injected script to connect back to same origin
     ],
     'default-src': [`'none'`],
     'font-src': [`'self'`, 'data:'],
@@ -87,7 +87,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       ...imageHosts,
     ],
     'script-src': [
-      donateHost,
+      `'self'`,
       matomoUriBase,
       // See index.html for the following 3.
       `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check
