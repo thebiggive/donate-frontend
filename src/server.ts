@@ -73,12 +73,7 @@ function buildCspDirectives(styleNonce: string, externalScriptNonce: string) {
     ],
     'default-src': [`'none'`],
     'font-src': [`'self'`, 'data:'],
-    'style-src': [
-      `'self'`,
-      'data:',
-      `'unsafe-inline'`,
-      `'nonce-${styleNonce}'`,
-    ],
+    'style-src': [`'self'`, 'data:', `'unsafe-inline'`, `'nonce-${styleNonce}'`],
     'img-src': [
       `'self'`,
       'data:',
