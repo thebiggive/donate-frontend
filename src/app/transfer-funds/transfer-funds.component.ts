@@ -257,6 +257,10 @@ export class TransferFundsComponent implements OnInit {
       return false;
     }
 
+    if (this.donor?.is_organisation) {
+      return false;
+    }
+
     if (this.donorHasPendingTipBalance || this.donorHasRecentlyTipped) {
       return false;
     }
@@ -421,6 +425,10 @@ export class TransferFundsComponent implements OnInit {
 
     if (this.donor.id) {
       donation.pspCustomerId = this.identityService.getPspId();
+    }
+
+    if (this.donor?.is_organisation) {
+      donation.isOrganisationDonor = true;
     }
 
     // No re-tries for create() where donors have only entered amounts. If the
