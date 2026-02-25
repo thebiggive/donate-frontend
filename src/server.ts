@@ -69,6 +69,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       matomoUriBase,
       'api.friendlycaptcha.com',
       'https://api.stripe.com',
+      `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script.
     ],
     'default-src': [`'none'`],
     'font-src': [`'self'`, 'data:'],
@@ -101,7 +102,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
       'https://*.js.stripe.com',
       'https://js.stripe.com',
-      `'nonce-${externalScriptNonce}'`,
+      `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script.
     ],
     'worker-src': [
       'blob:', // friendly-captcha
