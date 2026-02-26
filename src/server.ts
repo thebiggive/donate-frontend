@@ -6,6 +6,7 @@ import { createHash, randomBytes } from 'crypto';
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import os from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -32,8 +33,33 @@ function isLegacyBrowser(userAgent: string): boolean {
 
 enableProdMode();
 const app = express();
+
+function getServerIPv6(): string | undefined {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name] || []) {
+      if (iface.family === 'IPv6' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return undefined;
+}
+
+const serverIPv6 = getServerIPv6();
+const allowedHosts = [
+  donateHost,
+  'donate-ecs-production.thebiggive.org.uk',
+  'donate-ecs-regression.thebiggivetest.org.uk',
+  'donate-ecs-staging.thebiggivetest.org.uk',
+];
+if (serverIPv6) {
+  allowedHosts.push(serverIPv6);
+  console.log(`Dynamically allowing hostname ${serverIPv6} for health checks`);
+}
+
 const commonEngine = new CommonEngine({
-  allowedHosts: [donateHost],
+  allowedHosts,
 });
 
 app.use(compression());
