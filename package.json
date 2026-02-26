@@ -38,7 +38,7 @@
     "@angular/platform-browser-dynamic": "^21.1.2",
     "@angular/platform-server": "^21.1.2",
     "@angular/router": "^21.1.2",
-    "@angular/ssr": "^21.1.2",
+    "@angular/ssr": "^21.2.0",
     "@biggive/components": "^202602031610.0.0",
     "@biggive/components-angular": "^202602031610.0.0",
     "@fortawesome/angular-fontawesome": "^4.0.0",
