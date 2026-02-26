@@ -33,7 +33,7 @@ function isLegacyBrowser(userAgent: string): boolean {
 enableProdMode();
 const app = express();
 const commonEngine = new CommonEngine({
-  allowedHosts: [donateHost]
+  allowedHosts: [donateHost],
 });
 
 app.use(compression());
