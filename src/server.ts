@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { enableProdMode } from '@angular/core';
+import { CSP_NONCE, enableProdMode } from '@angular/core';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import compression from 'compression';
 import { createHash, randomBytes } from 'crypto';
@@ -216,6 +216,8 @@ app.get('**', (req, res, next) => {
         // days, I suspect this will still not be reliable for us.)
         { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
         { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+        // We'll rename this if it does turn out to fix Angular event replay.
+        { provide: CSP_NONCE, useValue: res.locals['cspExternalScriptNonce'] },
         { provide: RESPONSE, useValue: res },
         { provide: REQUEST, useValue: req },
       ],
