@@ -16,6 +16,8 @@ import bootstrap from './main.server';
 import { environment } from './environments/environment';
 import { supportedBrowsers } from './supportedBrowsers';
 import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
+
+const donateHost = new URL(environment.donateUriPrefix).host;
 const imageHosts = environment.imageHosts;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -30,7 +32,9 @@ function isLegacyBrowser(userAgent: string): boolean {
 
 enableProdMode();
 const app = express();
-const commonEngine = new CommonEngine();
+const commonEngine = new CommonEngine({
+  allowedHosts: [donateHost]
+});
 
 app.use(compression());
 
