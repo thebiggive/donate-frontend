@@ -73,7 +73,11 @@ let taskIps: string[] = [];
 getTaskMetadata().then((info) => {
   taskInfo = info;
   if (taskInfo) {
-    taskIps = [taskInfo.privateIP, ...taskInfo.ipv6Addresses];
+    // IPv6 addresses need brackets to match the Host format used by ALB health check client.
+    taskIps = [
+      taskInfo.privateIP,
+      ...taskInfo.ipv6Addresses.map((ip: string | string[]) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
+    ].filter(Boolean); // Remove any that end up falsey.
   }
   console.log('Task network info:', taskInfo);
 });
