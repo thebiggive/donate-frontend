@@ -1,12 +1,12 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CSP_NONCE, enableProdMode } from '@angular/core';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
+import axios from 'axios';
 import compression from 'compression';
 import { createHash, randomBytes } from 'crypto';
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import os from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,32 +34,53 @@ function isLegacyBrowser(userAgent: string): boolean {
 enableProdMode();
 const app = express();
 
-function getServerIPv6(): string | undefined {
-  const interfaces = os.networkInterfaces();
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name] || []) {
-      if (iface.family === 'IPv6' && !iface.internal) {
-        return iface.address;
-      }
+async function getTaskMetadata() {
+  try {
+    const metadataUri = process.env.ECS_CONTAINER_METADATA_URI_V4 || process.env.ECS_CONTAINER_METADATA_URI;
+    if (!metadataUri) {
+      console.log('Not running in ECS');
+      return null;
     }
+
+    const response = await axios.get(`${metadataUri}/task`);
+    const taskMetadata = response.data;
+
+    // Extract network information from the first container
+    const containers = taskMetadata.Containers;
+    const networkInfo = containers[0]?.Networks?.[0];
+
+    return {
+      privateIP: networkInfo?.IPv4Addresses?.[0],
+      ipv6Addresses: networkInfo?.IPv6Addresses || [],
+      availabilityZone: taskMetadata.AvailabilityZone,
+      taskArn: taskMetadata.TaskARN,
+    };
+  } catch (error) {
+    console.error('Error fetching task metadata:', error);
+    return null;
   }
-  return undefined;
 }
 
-const serverIPv6 = getServerIPv6();
 const allowedHosts = [
   donateHost,
   'donate-ecs-production.thebiggive.org.uk',
   'donate-ecs-regression.thebiggivetest.org.uk',
   'donate-ecs-staging.thebiggivetest.org.uk',
 ];
-if (serverIPv6) {
-  allowedHosts.push(serverIPv6);
-  console.log(`Dynamically allowing hostname ${serverIPv6} for health checks`);
-}
+
+let taskInfo = null;
+let taskIps: string[] = [];
+getTaskMetadata().then((info) => {
+  taskInfo = info;
+  if (taskInfo) {
+    taskIps = [taskInfo.privateIP, ...taskInfo.ipv6Addresses];
+  }
+  console.log('Task network info:', taskInfo);
+});
 
 const commonEngine = new CommonEngine({
   allowedHosts,
+  ...taskIps, // For ALB health checks
 });
 
 app.use(compression());

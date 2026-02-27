@@ -24,7 +24,11 @@ export const environment: Environment = {
   matchbotApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
-  imageHosts: ['images-regression.thebiggivetest.org.uk', 'images-production.thebiggive.org.uk'],
+  imageHosts: [
+    'images-regression.thebiggivetest.org.uk',
+    'images-staging.thebiggivetest.org.uk',
+    'images-production.thebiggive.org.uk',
+  ],
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: null,
   minimumCreditAmount: 500,
