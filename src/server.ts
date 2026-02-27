@@ -68,23 +68,20 @@ const allowedHosts = [
   'donate-ecs-staging.thebiggivetest.org.uk',
 ];
 
-let taskInfo = null;
-let taskIps: string[] = [];
-getTaskMetadata().then((info) => {
-  taskInfo = info;
-  if (taskInfo) {
-    // IPv6 addresses need brackets to match the Host format used by ALB health check client.
-    taskIps = [
-      taskInfo.privateIP,
-      ...taskInfo.ipv6Addresses.map((ip: string | string[]) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
-    ].filter(Boolean); // Remove any that end up falsey.
-  }
+const taskInfo = await getTaskMetadata();
+if (taskInfo) { // Should be set for any ECS task.
+  // IPv6 addresses need brackets to match the Host format used by ALB health check client.
+  const taskIps = [
+    taskInfo.privateIP,
+    ...taskInfo.ipv6Addresses.map((ip: string | string[]) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
+  ].filter(Boolean);
+  allowedHosts.push(...taskIps); // For ALB health checks
   console.log('Task network info:', taskInfo);
-});
+  console.log('Complete allowedHosts:', allowedHosts);
+}
 
 const commonEngine = new CommonEngine({
   allowedHosts,
-  ...taskIps, // For ALB health checks
 });
 
 app.use(compression());
