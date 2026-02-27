@@ -68,15 +68,15 @@ const app = express();
   const allowedHosts = [donateHost, ...(donateEcsIntermediateHost ? [donateEcsIntermediateHost] : [])];
 
   // Should be set for any ECS task.
-  const taskInfo = await getTaskMetadata();
-  if (taskInfo) {
+  const taskMetaData = await getTaskMetadata();
+  if (taskMetaData) {
     // IPv6 addresses need brackets to match the Host format used by ALB health check client.
     const taskIps = [
-      taskInfo.privateIP,
-      ...taskInfo.ipv6Addresses.map((ip: string) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
+      taskMetaData.privateIP,
+      ...taskMetaData.ipv6Addresses.map((ip: string) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
     ].filter(Boolean);
     allowedHosts.push(...taskIps);
-    console.log('Task network info:', taskInfo);
+    console.log('Task network info:', taskMetaData);
     console.log('Complete allowedHosts:', allowedHosts);
   }
 
