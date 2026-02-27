@@ -69,7 +69,8 @@ const allowedHosts = [
 ];
 
 const taskInfo = await getTaskMetadata();
-if (taskInfo) { // Should be set for any ECS task.
+if (taskInfo) {
+  // Should be set for any ECS task.
   // IPv6 addresses need brackets to match the Host format used by ALB health check client.
   const taskIps = [
     taskInfo.privateIP,
