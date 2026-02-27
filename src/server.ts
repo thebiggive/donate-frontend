@@ -86,9 +86,9 @@ const app = express();
 
   app.use(compression());
 
-  // Generate unique style and script nonces for each request
+  // Generate unique script nonce for each request
   app.use((_req, res, next) => {
-    res.locals['cspExternalScriptNonce'] = randomBytes(16).toString('base64');
+    res.locals['cspScriptNonce'] = randomBytes(16).toString('base64');
     next();
   });
 
@@ -120,7 +120,7 @@ const app = express();
         matomoUriBase,
         'api.friendlycaptcha.com',
         'https://api.stripe.com',
-        `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script.
+        `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script; possibly Angular inline state handover scripts.
         `'self'`, // For e.g. Cloudflare injected script to connect back to same origin
       ],
       'default-src': [`'none'`],
@@ -165,7 +165,7 @@ const app = express();
   }
 
   app.use((req, res, next) => {
-    const externalScriptNonce = res.locals['cspExternalScriptNonce'] as string;
+    const externalScriptNonce = res.locals['cspScriptNonce'] as string;
     helmet({
       contentSecurityPolicy: {
         directives: buildCspDirectives(externalScriptNonce),
@@ -259,8 +259,9 @@ const app = express();
           // days, I suspect this will still not be reliable for us.)
           { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
           { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-          // We'll rename this if it does turn out to fix Angular event replay.
-          { provide: CSP_NONCE, useValue: res.locals['cspExternalScriptNonce'] },
+          // This usage *may* be fixing Angular event replay in `ng-event-dispatch-contract` inline script,
+          // I've not been able to confirm either way yet. Keeping it in place for now.
+          { provide: CSP_NONCE, useValue: res.locals['cspScriptNonce'] },
           { provide: RESPONSE, useValue: res },
           { provide: REQUEST, useValue: req },
         ],
