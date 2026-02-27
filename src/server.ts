@@ -19,6 +19,9 @@ import { supportedBrowsers } from './supportedBrowsers';
 import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
 
 const donateHost = new URL(environment.donateUriPrefix).host;
+/** May be technically redundant, but could be useful for part-testing how CloudFront origin requests run
+ *  without spoofing Host */
+const donateEcsIntermediateHost: string | null = environment.donateEcsIntermediateHost;
 const imageHosts = environment.imageHosts;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -62,12 +65,7 @@ const app = express();
     }
   }
 
-  const allowedHosts = [
-    donateHost,
-    'donate-ecs-production.thebiggive.org.uk',
-    'donate-ecs-regression.thebiggivetest.org.uk',
-    'donate-ecs-staging.thebiggivetest.org.uk',
-  ];
+  const allowedHosts = [donateHost, ...(donateEcsIntermediateHost ? [donateEcsIntermediateHost] : [])];
 
   // Should be set for any ECS task.
   const taskInfo = await getTaskMetadata();
