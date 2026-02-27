@@ -18,26 +18,26 @@ import { environment } from './environments/environment';
 import { supportedBrowsers } from './supportedBrowsers';
 import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchantid-domain-association';
 
-const donateHost = new URL(environment.donateUriPrefix).host;
-/** May be technically redundant, but could be useful for part-testing how CloudFront origin requests run
- *  without spoofing Host */
-const donateEcsIntermediateHost: string | null = environment.donateEcsIntermediateHost;
-const imageHosts = environment.imageHosts;
-const matomoUriBase = 'https://biggive.matomo.cloud';
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
-const indexHtml = join(serverDistFolder, 'index.server.html');
-
-function isLegacyBrowser(userAgent: string): boolean {
-  // Use the same browserslist-generated logic as client-side code
-  // Modern browsers (Tier 1) get modern bundle, all others get ES5 bundle
-  return !supportedBrowsers.test(userAgent);
-}
-
-enableProdMode();
-const app = express();
-
 (async () => {
+  const donateHost = new URL(environment.donateUriPrefix).host;
+  /** May be technically redundant, but could be useful for part-testing how CloudFront origin requests run
+   *  without spoofing Host */
+  const donateEcsIntermediateHost: string | null = environment.donateEcsIntermediateHost;
+  const imageHosts = environment.imageHosts;
+  const matomoUriBase = 'https://biggive.matomo.cloud';
+  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+  const browserDistFolder = resolve(serverDistFolder, '../browser');
+  const indexHtml = join(serverDistFolder, 'index.server.html');
+
+  function isLegacyBrowser(userAgent: string): boolean {
+    // Use the same browserslist-generated logic as client-side code
+    // Modern browsers (Tier 1) get modern bundle, all others get ES5 bundle
+    return !supportedBrowsers.test(userAgent);
+  }
+
+  enableProdMode();
+  const app = express();
+
   async function getTaskMetadata() {
     try {
       const metadataUri = process.env.ECS_CONTAINER_METADATA_URI_V4 || process.env.ECS_CONTAINER_METADATA_URI;
