@@ -19,6 +19,7 @@ export interface Environment {
   sfApiUriPrefix: string;
   creditDonationsEnabled: boolean;
 
+  donateEcsIntermediateHost: string | null;
   /** Prefix for pages served by this Angular application */
   donateUriPrefix: string;
 
