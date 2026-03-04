@@ -134,6 +134,17 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     } // Else fall back to normal link behaviour
   }
 
+  /**
+   * Avoid navigating from any no-op link with class `.no-op-link`, whether from components or this app.
+   */
+  @HostListener('click', ['$event']) onAnyClick(event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.closest('.no-op-link')) {
+      console.log('preventing nav');
+      event.preventDefault();
+    }
+  }
+
   ngOnInit() {
     if (this.isPlatformBrowser) {
       // Show warning for users getting ES5 bundle (Tier 2: Legacy-Compatible browsers)

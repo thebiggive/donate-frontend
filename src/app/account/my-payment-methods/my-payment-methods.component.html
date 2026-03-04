@@ -87,11 +87,13 @@
               @if (method.card !== undefined) {
                 <td class="cardUpdateButton">
                   <!--            href must be set to make link interactable with keyboard-->
-                  <a href="#" (click)="updateCard(method.id, method.card, method.billing_details)">Edit</a>
+                  <a href="#" class="no-op-link" (click)="updateCard(method.id, method.card, method.billing_details)"
+                    >Edit</a
+                  >
                 </td>
               }
               <td class="cardDeleteButton">
-                <a href="#" (click)="deleteMethod(method)">Delete</a>
+                <a href="#" class="no-op-link" (click)="deleteMethod(method)">Delete</a>
               </td>
             </tr>
           }
