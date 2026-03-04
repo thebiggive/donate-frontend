@@ -44,14 +44,12 @@
                 <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
               } @else {
                 <biggive-button
-                  space-above="5"
                   spaceBelow="0"
                   colour-scheme="primary"
                   label="Stop donations"
                   full-width="true"
                   size="medium"
-                  rounded="false"
-                  (click)="cancel(mandate)"
+                  (doButtonClick)="cancel(mandate)"
                 />
               }
             </div>

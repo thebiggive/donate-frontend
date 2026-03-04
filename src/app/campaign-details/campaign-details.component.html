@@ -146,7 +146,6 @@
               label="Donate now"
               full-width="true"
               size="medium"
-              rounded="false"
               [url]="'/donate/' + campaign.id"
             ></biggive-button>
           }
@@ -157,7 +156,6 @@
               label="Donate monthly"
               full-width="true"
               size="medium"
-              rounded="false"
               [url]="'/regular-giving/' + campaign.id"
             ></biggive-button>
           }
@@ -374,23 +372,19 @@
           -->
           @if (donateEnabled && !campaign.isRegularGiving) {
             <biggive-button
-              space-above="5"
               colour-scheme="primary"
               label="Donate now"
               full-width="true"
               size="medium"
-              rounded="false"
               [url]="'/donate/' + campaign.id"
             ></biggive-button>
           }
           @if (donateEnabled && campaign.isRegularGiving && !campaignInPast) {
             <biggive-button
-              space-above="5"
               colour-scheme="primary"
               label="Donate monthly"
               full-width="true"
               size="medium"
-              rounded="false"
               [url]="'/regular-giving/' + campaign.id"
             ></biggive-button>
           }

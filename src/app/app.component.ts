@@ -125,12 +125,17 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
    * input to the buttons.
    */
   @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: Event) {
-    const customEvent = event as CustomEvent;
-    const url = customEvent.detail.url;
+    const customEvent = event as CustomEvent<{ url?: string; event?: Event }>;
+    const url = customEvent.detail?.url;
+
+    // Action buttons can emit without a destination URL.
+    if (!url) {
+      return;
+    }
 
     if (url.startsWith(this.baseHref)) {
-      customEvent.detail.event.preventDefault();
-      this.router.navigateByUrl(url.replace(this.baseHref, ''));
+      customEvent.detail?.event?.preventDefault();
+      void this.router.navigateByUrl(url.replace(this.baseHref, ''));
     } // Else fall back to normal link behaviour
   }
 
@@ -138,9 +143,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
    * Avoid navigating from any no-op link with class `.no-op-link`, whether from components or this app.
    */
   @HostListener('click', ['$event']) onAnyClick(event: Event) {
-    const target = event.target as HTMLElement;
-    if (target.closest('.no-op-link')) {
-      console.log('preventing nav');
+    const path = event.composedPath();
+    const hasNoOpLinkInPath = path.some((node) => node instanceof HTMLElement && node.classList.contains('no-op-link'));
+
+    if (hasNoOpLinkInPath) {
       event.preventDefault();
     }
   }

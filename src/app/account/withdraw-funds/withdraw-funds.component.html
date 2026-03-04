@@ -21,11 +21,9 @@
 
           <div class="u-float-left">
             <biggive-button
-              space-above="5"
               spaceBelow="0"
               colour-scheme="white"
               label="Return to account page"
-              full-width="false"
               size="medium"
               url="/my-account"
             />
@@ -38,13 +36,11 @@
           @if (!processing) {
             <div class="u-float-right">
               <biggive-button
-                space-above="5"
                 spaceBelow="4"
                 colour-scheme="white"
                 label="Withdraw funds"
-                full-width="false"
                 size="medium"
-                (click)="withdrawFunds()"
+                (doButtonClick)="withdrawFunds()"
               />
             </div>
           }
