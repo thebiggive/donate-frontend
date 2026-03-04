@@ -8,7 +8,6 @@
             @case ("donor") {
               <div class="heading-wrapper">
                 <biggive-heading
-                  space-above="0"
                   space-below="6"
                   html-element="h1"
                   size="1"
@@ -129,14 +128,12 @@
             <div class="button-container">
               <biggive-button
                 id="subscribe-button"
-                space-above="5"
-                spaceBelow="4"
-                colour-scheme="primary"
+                [spaceBelow]="4"
+                [colourScheme]="'primary'"
                 label="Subscribe"
-                full-width="true"
+                [fullWidth]="true"
                 size="medium"
-                rounded="false"
-                (click)="onSubmit()"
+                (doButtonClick)="onSubmit()"
               ></biggive-button>
             </div>
 
@@ -164,13 +161,10 @@
 
             <div class="button-container">
               <biggive-button
-                space-above="5"
-                spaceBelow="0"
-                colour-scheme="primary"
+                [spaceBelow]="0"
+                [colourScheme]="'primary'"
                 label="Return to Home"
-                full-width="false"
                 size="medium"
-                rounded="false"
                 url="/"
               ></biggive-button>
             </div>

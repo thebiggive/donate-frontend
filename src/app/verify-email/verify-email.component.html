@@ -21,13 +21,11 @@
       <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
     } @else {
       <biggive-button
-        space-above="5"
-        spaceBelow="0"
+        [spaceBelow]="0"
         colour-scheme="primary"
         label="Continue"
         full-width="true"
         size="medium"
-        rounded="false"
         (click)="onFormSubmit()"
       />
     }

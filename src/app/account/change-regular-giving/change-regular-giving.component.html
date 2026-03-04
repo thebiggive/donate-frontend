@@ -77,13 +77,7 @@
             <strong>{{ errorMessage }}</strong>
           </div>
           <div class="u-height-80"></div>
-          <biggive-button
-            (click)="confirmSetup()"
-            label="Confirm"
-            full-width="false"
-            size="medium"
-            colour-scheme="white"
-          />
+          <biggive-button (doButtonClick)="confirmSetup()" label="Confirm" size="medium" colour-scheme="white" />
         </form>
       </div>
     </biggive-page-section>

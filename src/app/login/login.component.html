@@ -53,13 +53,11 @@
                   <div id="reset-password-button">
                     @if (!userAskedForResetLink) {
                       <biggive-button
-                        space-above="5"
-                        colour-scheme="primary"
+                        [colourScheme]="'primary'"
                         label="Reset password"
-                        full-width="true"
+                        [fullWidth]="true"
                         size="medium"
-                        rounded="false"
-                        (click)="resetPasswordClicked()"
+                        (doButtonClick)="resetPasswordClicked()"
                       />
                     }
                   </div>
@@ -132,15 +130,11 @@
               </div>
               @if (!loggingIn) {
                 <biggive-button
-                  space-above="5"
-                  spaceBelow="0"
-                  colour-scheme="primary"
+                  [spaceBelow]="0"
                   label="Log in"
-                  full-width="true"
-                  disabled="!loginForm.valid"
+                  [fullWidth]="true"
                   size="medium"
-                  rounded="false"
-                  (click)="login()"
+                  (doButtonClick)="login()"
                 />
               }
             </div>
