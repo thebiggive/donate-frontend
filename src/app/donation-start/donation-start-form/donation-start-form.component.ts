@@ -608,9 +608,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (this.donation) {
       // We already know the requested amount, so no need to jump back.
       this.clearDonation(this.donation, { clearAllRecord: true, jumpToStart: false });
+
+      this.createDonationAndMaybePerson();
+      this.prepareStripeElements();
     }
-    this.createDonationAndMaybePerson();
-    this.prepareStripeElements();
+    // else we can't create a donation and therefore can't create the new stripe element until the donor tells us
+    // how much they want to donate again.
   }
 
   reset = () => {

@@ -196,6 +196,10 @@ export class DonationService {
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
+    if (donation.donationAmount === 0) {
+      throw new Error('cannot create a donation for 0 amount');
+    }
+
     const endpoint = personId
       ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}`
       : `${environment.matchbotApiPrefix}${this.apiPath}`;
