@@ -12,7 +12,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'staging':
       return { enableEditHomeAddress: true, enableWithdrawFunds: true, enableOrgAccount: true };
     case 'production':
-      return { enableEditHomeAddress: true, enableWithdrawFunds: true, enableOrgAccount: false };
+      return { enableEditHomeAddress: true, enableWithdrawFunds: true, enableOrgAccount: true };
   }
 };
 
