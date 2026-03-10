@@ -4,7 +4,6 @@
     <biggive-page-section>
       <div class="heading-wrapper">
         <biggive-heading
-          space-above="0"
           space-below="1"
           colour="tertiary"
           html-element="h1"
@@ -59,13 +58,11 @@
           <div class="u-height-2em"></div>
 
           <biggive-button
-            space-above="5"
             spaceBelow="0"
             [label]="'Delete account for ' + person.email_address"
             full-width="true"
             size="medium"
-            rounded="false"
-            (click)="deleteAccount()"
+            (doButtonClick)="deleteAccount()"
           />
         }
       }

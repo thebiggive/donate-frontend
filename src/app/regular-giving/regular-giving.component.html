@@ -27,17 +27,15 @@
     </p>
 
     <biggive-button
-      space-above="5"
       colour-scheme="primary"
       label="View Mandate"
-      full-width="false"
       size="medium"
       url="/my-account/regular-giving/{{ preExistingActiveMandate[0].id }}"
     />
   } @else if (donor?.is_organisation) {
     <p>
-      Your account {{ donor?.last_name }} is an organisation. Regular giving is not currently supported for
-      organisational donors. If you wish to make a regular donation as an individual please log out of this account.
+      Our regular giving campaigns are currently not supported for Organisations. If you wish to set up a regular gift
+      through Big Give, please create/sign into a donor account as an Individual.
     </p>
   } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
     <div class="c-form-container">
