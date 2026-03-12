@@ -32,6 +32,8 @@ export class StripeService {
   private readonly secondaryColour = '#FF7272'; // Match SCSS $colour-secondary & components counterprt
   private readonly highlightColour = '#2AF135'; // Match SCSS $colour-highlight & components counterpart
 
+  public readonly defaultPaymentMethodOrder = ['card', 'apple_pay', 'google_pay', 'pay_by_bank'];
+
   private readonly appearance = {
     theme: 'flat',
     variables: {
@@ -230,11 +232,11 @@ export class StripeService {
     });
   }
 
-  public static createStripeElement(stripeElements: StripeElements) {
+  public static createStripeElement(stripeElements: StripeElements, paymentMethodOrder: string[]) {
     return stripeElements.create('payment', {
       // Stripe note that in this context you can use Apple & Google Pay, as well as payment methods that are distinct
       // in their API. https://docs.stripe.com/payments/customize-payment-methods#sort-payment-methods
-      paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'pay_by_bank'],
+      paymentMethodOrder,
       wallets: {
         applePay: 'auto',
         googlePay: 'auto',
@@ -293,7 +295,7 @@ export class StripeService {
       fonts: this.fonts,
     });
 
-    return [elements, StripeService.createStripeElement(elements)];
+    return [elements, StripeService.createStripeElement(elements, this.defaultPaymentMethodOrder)];
   }
 
   public async confirmSetup({
