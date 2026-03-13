@@ -187,10 +187,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * of custom tip, including zero.
    */
   get minimumTipPercentage() {
-    if (this.tipInputABTestVariant === 'B') {
-      return 0;
-    }
-
     return 1;
   }
 
@@ -303,7 +299,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
-  protected tipInputABTestVariant: 'A' | 'B' | 'C' = 'A';
+  protected paymentMethodOrderVariant: 'A' | 'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
@@ -322,8 +318,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     const requestedVariant = this.manuallySelectedABTestVariant || '';
-    if (requestedVariant === 'B' || requestedVariant === 'C') {
-      this.tipInputABTestVariant = requestedVariant;
+    if (requestedVariant === 'B') {
+      this.paymentMethodOrderVariant = requestedVariant;
     }
   }
 
@@ -381,7 +377,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
                   }
                   // No change from the original form.
                   console.log('Original test variant active!');
-                  this.tipInputABTestVariant = 'A';
+                  this.paymentMethodOrderVariant = 'A';
                 },
               },
               {
@@ -390,26 +386,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
                   if (this.manuallySelectedABTestVariant) {
                     return;
                   }
-                  this.tipInputABTestVariant = 'B';
+                  this.paymentMethodOrderVariant = 'B';
                   console.log('B test variant active!');
                 },
               },
-              // TODO finish removing support after CC25
-              ...(environment.matomoAbTest.additionalVariantName
-                ? [
-                    {
-                      name: environment.matomoAbTest.additionalVariantName,
-                      percentage: 0,
-                      activate: (_event: unknown) => {
-                        if (this.manuallySelectedABTestVariant) {
-                          return;
-                        }
-                        this.tipInputABTestVariant = 'C';
-                        console.log('C test variant active!');
-                      },
-                    },
-                  ]
-                : []),
             ],
             trigger: () => {
               return true;
@@ -655,6 +635,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
       return;
     }
+
+    this.matomoTracker.trackEvent('donate', 'donate_step_changed', `Entered step ${event.selectedStep.label}`);
 
     // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
@@ -1536,7 +1518,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     const stripeElements = this.stripeElements;
-    this.stripePaymentElement = StripeService.createStripeElement(stripeElements);
+    this.stripePaymentElement = StripeService.createStripeElement(stripeElements, this.paymentMethodOrder);
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
@@ -2468,6 +2450,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     return this.paymentReadinessTracker.readyToProgressFromPaymentStep;
   }
 
+  get paymentMethodOrder(): string[] {
+    return this.paymentMethodOrderVariant === 'B'
+      ? ['pay_by_bank', 'card', 'apple_pay', 'google_pay']
+      : this.stripeService.defaultPaymentMethodOrder;
+  }
+
   private async promptToContinue(
     title: string,
     status: string,
@@ -2652,7 +2640,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       action,
       `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}, stripe method ${stripeMethod}`,
     );
-    this.conversionTrackingService.convert(donation, this.campaign);
+    this.conversionTrackingService.convert(donation, this.campaign, stripe_donation_method);
 
     this.cancelExpiryWarning();
     await this.router.navigate(['thanks', donation.donationId], {

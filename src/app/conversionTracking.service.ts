@@ -21,8 +21,8 @@ export class ConversionTrackingService {
       );
   }
 
-  public convert(donation: Donation, campaign: Campaign) {
-    this.trackAnonymousEventsWithMatomo(donation);
+  public convert(donation: Donation, campaign: Campaign, stripePaymentMethod: string | undefined) {
+    this.trackAnonymousEventsWithMatomo(donation, stripePaymentMethod);
     this.trackConversionWithMatomo(donation, campaign);
   }
 
@@ -30,7 +30,7 @@ export class ConversionTrackingService {
    * Send events, including the one we use to see non-zero tip A/B conversion, which DO NOT
    * require PII or cookie consent. No-op when no A/B test running.
    */
-  private trackAnonymousEventsWithMatomo(donation: Donation) {
+  private trackAnonymousEventsWithMatomo(donation: Donation, stripePaymentMethod: string | undefined) {
     const tippedGoalId = environment.matomoNonZeroTipGoalId;
     if (donation.tipAmount > 0 && tippedGoalId) {
       this.matomoTracker.trackEvent(
@@ -40,6 +40,10 @@ export class ConversionTrackingService {
         donation.tipAmount,
       );
       this.matomoTracker.trackGoal(tippedGoalId, donation.tipAmount);
+    }
+
+    if (stripePaymentMethod === 'pay_by_bank') {
+      this.matomoTracker.trackGoal(environment.matomoPayByBankGoalId, donation.donationAmount);
     }
   }
 

@@ -38,7 +38,6 @@ import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { donorGiftAidTermsUrl, donorTermsUrl } from '../../environments/common';
 import { environment } from '../../environments/environment';
-import { MatOption } from '@angular/material/autocomplete';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
@@ -82,7 +81,6 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MatIconAnchor,
     RouterLink,
     MatCheckbox,
-    MatOption,
     MoneyPipe,
     AsyncPipe,
   ],
@@ -477,7 +475,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    this.stripePaymentElement = StripeService.createStripeElement(this.stripeElements);
+    this.stripePaymentElement = StripeService.createStripeElement(
+      this.stripeElements,
+      this.stripeService.defaultPaymentMethodOrder,
+    );
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
