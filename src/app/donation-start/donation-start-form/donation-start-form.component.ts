@@ -636,6 +636,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       return;
     }
 
+    this.matomoTracker.trackEvent('donate', 'donate_step_changed', `Entered step ${event.selectedStep.label}`);
+
     // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
