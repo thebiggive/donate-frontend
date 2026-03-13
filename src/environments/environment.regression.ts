@@ -30,6 +30,7 @@ export const environment: Environment = {
     'images-staging.thebiggivetest.org.uk',
     'images-production.thebiggive.org.uk',
   ],
+  matomoPayByBankGoalId: 4,
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: null,
   minimumCreditAmount: 500,

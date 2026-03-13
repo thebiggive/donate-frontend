@@ -41,10 +41,10 @@ export interface Environment {
   identityApiPrefix: string;
   matomoSiteId: number | null;
   matomoNonZeroTipGoalId: number | null; // Only tracks GBP campaigns; sends tip as value in £.
+  matomoPayByBankGoalId: number; // Intended for GBP campaigns; send core donation amount as value in £.
   matomoAbTest?: {
     name: string;
     variantName: string; // First one that's not 'original'.
-    additionalVariantName?: string; // e.g. for a 3rd variant test.
     startDate: MatomoDate;
     endDate?: MatomoDate; // Typically omit for dev/staging evaluation.
   };

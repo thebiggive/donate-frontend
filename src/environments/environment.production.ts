@@ -20,11 +20,12 @@ export const environment: Environment = {
   imageHosts: ['images-production.thebiggive.org.uk'],
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
+  matomoPayByBankGoalId: 14,
   matomoAbTest: {
-    name: 'tip_slider_2025_12_ii',
+    name: 'payment_method_order_2026',
     variantName: 'B',
-    startDate: '2025/12/04 13:00:00 UTC',
-    endDate: '2025/12/09 13:00:00 UTC',
+    startDate: '2026/03/13 12:00:00 UTC', // Roughly when we expect this to go to Production
+    endDate: '2026/04/29 11:30:00 UTC', // End of EarthRaise 2026. 12.30 BST.
   },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
