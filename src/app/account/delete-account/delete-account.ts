@@ -63,6 +63,7 @@ export class DeleteAccount implements OnInit {
 
     if (this.form.value.accountName !== actualAccountName) {
       this.toast.showError('Please enter your account name exactly as shown to delete your account');
+      console.log('Account name mismatch:', { formValue: this.form.value.accountName, actualAccountName });
       return;
     }
 
