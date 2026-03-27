@@ -82,7 +82,7 @@ export interface Donation {
    */
   projectId: string;
 
-  psp: 'stripe';
+  psp: 'stripe' | 'ryft';
 
   pspCustomerId?: string;
 

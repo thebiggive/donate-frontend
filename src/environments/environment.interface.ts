@@ -55,6 +55,9 @@ export interface Environment {
       enabled: boolean; // currently this is true in all envs, but typing as boolean in case we want to change it at short notice.
       publishableKey: string;
     };
+    ryft: {
+      enabled: boolean;
+    };
   };
   reservationMinutes: number;
   showDebugInfo: boolean;
