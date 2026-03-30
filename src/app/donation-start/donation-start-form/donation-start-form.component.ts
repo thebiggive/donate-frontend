@@ -71,6 +71,7 @@ import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
+import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -181,6 +182,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   maximumDonationAmount!: number;
   maximumTipPercentage = 30 as const;
+  private ryftController: RyftControllerResponse | undefined;
+  ryftCardForm: RyftCardFormComponentResponse | undefined;
 
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
@@ -1016,6 +1019,37 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     await this.payWithStripe();
   }
+
+  payWithRyft: () => Promise<void> = async () => {
+    if (this.ryftCardForm === undefined) {
+      throw new Error('Ryft card form is not initialized');
+    }
+
+    try {
+      // Await the payment attempt
+      const result = await this.ryftCardForm.attemptPayment();
+
+      if (result.type == 'final') {
+        const session = result.paymentSession;
+
+        if (session.status === 'Approved' || session.status === 'Captured') {
+          // Payment successful – show success page
+          console.log('Payment Successful', session);
+          return;
+        }
+        if (session.lastError) {
+          // Payment failed – show error to customer
+          const message = result.userFacingErrorMessage;
+          console.error('Payment Error', message);
+        }
+      } else if (result.type == 'action-required') {
+        // todo - deal with ryft action-required
+      }
+    } catch (error) {
+      // Log and display the error
+      console.error('System Error:', error);
+    }
+  };
 
   payWithStripe = async () => {
     const hasCredit = this.creditPenceToUse > 0;
@@ -1899,6 +1933,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       }
     }
 
+    if (this.psp === 'ryft') {
+      this.initaliseRyft();
+    }
+
     if (
       environment.environmentId !== 'regression' ||
       new URLSearchParams(window.location.search).has('include-continue-prompt')
@@ -2738,5 +2776,25 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   setTipPercentage(newPercentage: number) {
     this.updateTipAmountFromSelectedPercentage(newPercentage.toString());
     this.amountsGroup?.get('tipPercentage')?.setValue(newPercentage);
+  }
+
+  private initaliseRyft(): void {
+    const dummyRyftPublicKey = 'pk_dummyRyftPublicKey';
+    const dummyRyftClientSecret = 'sk_sandbox_1234'; // todo-take from donation object
+    this.ryftController = createController({
+      publicKey: dummyRyftPublicKey,
+      clientSecret: dummyRyftClientSecret,
+      accountId: this.campaign.charity.ryftAccountId,
+    });
+
+    alert('about to create and mount ryft card form');
+    this.ryftCardForm = createCardForm(this.ryftController);
+
+    this.ryftCardForm.on('validationChange', (event) => {
+      alert(JSON.stringify(event));
+    });
+    this.ryftCardForm.mount('#ryft-card-form-container');
+
+    alert('done created and mounted ryft card form');
   }
 }
