@@ -207,7 +207,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   donorTermsUrl = donorTermsUrl;
   giftAidTermsUrl = donorGiftAidTermsUrl;
   noPsps = false;
-  psp!: 'stripe';
+  psp!: 'stripe' | 'ryft';
   retrying = false;
   donationCreateError = false;
   donationUpdateError = false;
@@ -1679,6 +1679,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
+    } else if (environment.psps.ryft.enabled && this.campaign.charity.psp === 'ryft') {
+      this.psp = 'ryft';
     } else {
       this.noPsps = true;
     }
@@ -1721,6 +1723,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+      console.error('Missing required fields for donation creation:', {
+        campaign: this.campaign,
+        charityId: this.campaign.charity.id,
+        psp: this.psp,
+      });
       this.donationCreateError = true;
       this.showDonationCreateError();
       return;

@@ -46,6 +46,9 @@ export const environment: Environment = {
       publishableKey:
         'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
+    ryft: {
+      enabled: true,
+    },
   },
   reservationMinutes: 25,
   showDebugInfo: true,
