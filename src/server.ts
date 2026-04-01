@@ -22,7 +22,10 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
   const donateHost = new URL(environment.donateUriPrefix).host;
   /** May be technically redundant, but could be useful for part-testing how CloudFront origin requests run
    *  without spoofing Host */
-  const donateEcsIntermediateHost: string | null = environment.donateEcsIntermediateHost;
+  const donateExtraHosts = [
+    ...(environment.donateEcsIntermediateHost ? [environment.donateEcsIntermediateHost] : []),
+    ...(donateHost === 'donate.biggive.org' ? ['donate-production.thebiggive.org.uk'] : []),
+  ];
   const imageHosts = environment.imageHosts;
   const matomoUriBase = 'https://biggive.matomo.cloud';
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -65,7 +68,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
     }
   }
 
-  const allowedHosts = [donateHost, ...(donateEcsIntermediateHost ? [donateEcsIntermediateHost] : [])];
+  const allowedHosts = [donateHost, ...donateExtraHosts];
 
   // Should be set for any ECS task.
   const taskMetaData = await getTaskMetadata();
