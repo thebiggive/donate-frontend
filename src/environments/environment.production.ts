@@ -37,6 +37,7 @@ export const environment: Environment = {
     },
     ryft: {
       enabled: true,
+      publicKey: 'ryft-public-key-placeholder',
     },
   },
   reservationMinutes: 25,

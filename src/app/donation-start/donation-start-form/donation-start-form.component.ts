@@ -135,6 +135,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   private toast = inject(Toast);
   private liveAnnouncer = inject(LiveAnnouncer);
   protected readonly flags = flags;
+  protected showDebugInfo = environment.showDebugInfo;
 
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
@@ -2779,22 +2780,35 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   private initaliseRyft(): void {
-    const dummyRyftPublicKey = 'pk_dummyRyftPublicKey';
-    const dummyRyftClientSecret = 'sk_sandbox_1234'; // todo-take from donation object
+    const clientSecret = this.donationService.ryftClientSecret;
+
+    if (!clientSecret) {
+      throw new Error('Ryft client secret is required to initialise Ryft');
+    }
+
     this.ryftController = createController({
-      publicKey: dummyRyftPublicKey,
-      clientSecret: dummyRyftClientSecret,
+      publicKey: environment.psps.ryft.publicKey,
+      clientSecret: clientSecret,
       accountId: this.campaign.charity.ryftAccountId,
+      theme: {
+        fontFamily: '"Euclid Triangle", sans-serif',
+        baseBackground: '#F6F6F6',
+        baseBorderWidth: '0',
+        baseInputShadow: 'none',
+        baseBorderRadius: '8px',
+        textColor1: '#000000',
+        textColor2: '#2C089B',
+      },
     });
 
-    alert('about to create and mount ryft card form');
     this.ryftCardForm = createCardForm(this.ryftController);
 
     this.ryftCardForm.on('validationChange', (event) => {
-      alert(JSON.stringify(event));
+      this.paymentReadinessTracker.onStripeCardChange({ complete: event.isValid });
+
+      this.stripeManualCardInputValid = event.isValid;
+      this.stripePaymentMethodReady = event.isValid;
     });
     this.ryftCardForm.mount('#ryft-card-form-container');
-
-    alert('done created and mounted ryft card form');
   }
 }

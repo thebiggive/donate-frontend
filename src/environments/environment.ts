@@ -48,6 +48,7 @@ export const environment: Environment = {
     },
     ryft: {
       enabled: true,
+      publicKey: 'pk_sandbox_xUO+D9iWyM2C1TLkEcaKejCRDum2ij1xx3Y/4NBdCOpzJtkrgv4Mj4py4itFNhAz',
     },
   },
   reservationMinutes: 25,

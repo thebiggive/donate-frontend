@@ -57,6 +57,7 @@ export interface Environment {
     };
     ryft: {
       enabled: boolean;
+      publicKey: string;
     };
   };
   reservationMinutes: number;
