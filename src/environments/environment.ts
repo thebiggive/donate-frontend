@@ -42,12 +42,11 @@ export const environment: Environment = {
   maximumCreditAmount: 500_000,
   psps: {
     stripe: {
-      enabled: true,
       publishableKey:
         'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
     ryft: {
-      enabled: true,
+      publicKey: 'pk_sandbox_xUO+D9iWyM2C1TLkEcaKejCRDum2ij1xx3Y/4NBdCOpzJtkrgv4Mj4py4itFNhAz',
     },
   },
   reservationMinutes: 25,

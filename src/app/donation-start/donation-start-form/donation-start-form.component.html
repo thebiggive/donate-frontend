@@ -416,14 +416,26 @@
               element when not needed, and always mount it. -->
         <div class="payment-details" [style.display]="creditPenceToUse === 0 ? 'block' : 'none'">
           <div class="sr-combo-inputs-row">
+            @if (showDebugInfo && psp === "ryft") {
+              <b>Ryft</b><br />
+              <a
+                target="_blank"
+                href="https://developer.ryftpay.com/documentation/get_started/process_payments/test_cards"
+                >Test Cards</a
+              >
+            }
             <biggive-text-input>
               <span slot="label">Payment Method</span>
-              <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
+              <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe/Ryft not us -->
               <div slot="input">
                 @if (stripeElementLoading) {
                   <mat-spinner color="primary" diameter="30" aria-label="Loading payment form"> </mat-spinner>
                 }
-                <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+                @if (psp === "stripe") {
+                  <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+                } @else if (psp === "ryft") {
+                  <div class="sr-input sr-card-element" id="ryft-card-form-container" #ryftCardForm></div>
+                }
               </div>
             </biggive-text-input>
             @if (!donor) {

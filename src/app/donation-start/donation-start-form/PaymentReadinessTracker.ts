@@ -109,6 +109,10 @@ export class PaymentReadinessTracker {
     this.donorFunds = true;
   }
 
+  /**
+   * Also called when Ryft card validation changes
+   * @param state
+   */
   onStripeCardChange(state: { complete: boolean; value?: { type: string; payment_method?: PaymentMethod } }) {
     this.paymentElementIsComplete = state.complete || state.value?.type === 'pay_by_bank';
   }
