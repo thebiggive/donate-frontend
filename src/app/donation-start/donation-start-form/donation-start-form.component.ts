@@ -1018,17 +1018,38 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       );
     }
 
-    await this.payWithStripe();
+    switch (this.psp) {
+      case 'stripe':
+        await this.payWithStripe();
+        break;
+      case 'ryft':
+        await this.payWithRyft();
+        break;
+      default:
+        throw new Error(`Unsupported PSP: ${this.psp}`);
+    }
   }
 
   payWithRyft: () => Promise<void> = async () => {
     if (this.ryftCardForm === undefined) {
       throw new Error('Ryft card form is not initialized');
     }
+    if (this.donation === undefined) {
+      throw new Error('donation  is not initialized');
+    }
+
+    // @todo BG2-3106 - call matchbot to check it's OK to take payment for this donation
+    // (e.g. matching hasn't expired) and await the decision before the next line, as
+    // it isn't possible to initiate the payment from server side.
+
+    // Also make sure the amount on the payment session is updated based on the selected tip.
 
     try {
       // Await the payment attempt
-      const result = await this.ryftCardForm.attemptPayment();
+      const result = await this.ryftCardForm.attemptPayment({
+        clientSecret: this.donationService.ryftClientSecret,
+        customerEmail: this.donation?.emailAddress,
+      });
 
       if (result.type == 'final') {
         const session = result.paymentSession;
@@ -1036,15 +1057,19 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         if (session.status === 'Approved' || session.status === 'Captured') {
           // Payment successful – show success page
           console.log('Payment Successful', session);
+          await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
+
           return;
         }
         if (session.lastError) {
           // Payment failed – show error to customer
           const message = result.userFacingErrorMessage;
-          console.error('Payment Error', message);
+          this.toast.showError(message || 'Sorry, we were not able to take your payment');
         }
       } else if (result.type == 'action-required') {
-        // todo - deal with ryft action-required
+        // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
+        // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
+        // been handled within the ryft UI before attemptPayment resolves.
       }
     } catch (error) {
       // Log and display the error
@@ -2788,7 +2813,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.ryftController = createController({
       publicKey: environment.psps.ryft.publicKey,
-      clientSecret: clientSecret,
+      // clientSecret: clientSecret,
       accountId: this.campaign.charity.ryftAccountId,
       theme: {
         fontFamily: '"Euclid Triangle", sans-serif',
