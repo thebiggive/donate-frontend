@@ -46,6 +46,8 @@ export type Campaign = {
     regulatorNumber: string;
     regulatorRegion: string;
     stripeAccountId?: string;
+    ryftAccountId?: string;
+    psp?: null | 'stripe' | 'ryft';
     twitter?: string;
     website: string;
   };
