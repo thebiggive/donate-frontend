@@ -166,38 +166,20 @@
                 }
               </div>
             }
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-              <mat-expansion-panel-header>
-                <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
-              </mat-expansion-panel-header>
-              <p><strong>Everything we receive goes back into supporting charities:</strong></p>
-              <ul>
-                <li>We’re a charity, too — you help us keep our platform running!</li>
-                <li>
-                  Free training and resources build the resilience of charities that do not have access to the funds or
-                  publicity that others do.
-                </li>
-                <li>We give additional funds to help match donations in campaigns through our Anchor Match Fund.</li>
-              </ul>
-              <p>Thank you! If you have any questions about tips, please contact us at hello&#64;biggive.org.</p>
-            </mat-expansion-panel>
           </div>
         }
 
-        @if (
-          donationAmount &&
-          donationAmount > 0 &&
-          (! tipAmountField?.invalid)
-          ) {
+        @if (donationAmount && donationAmount > 0 && !tipAmountField?.invalid) {
           <div class="stepOneAmountSummary">
-            Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }} <br>
-            Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }} <br>
+            Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }} <br />
+            Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
+            <a role="button" tabindex="0" (click)="showTipExplanation()">(Why tip?)</a>
+            <br />
             <span class="total">
               Total to pay: {{ donationAmount + tipAmount() | exactCurrency: campaign.currencyCode }}
             </span>
           </div>
         }
-
 
         <div aria-live="polite">
           <div class="u-text-center">
