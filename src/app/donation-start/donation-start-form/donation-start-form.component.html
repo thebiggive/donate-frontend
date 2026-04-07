@@ -58,7 +58,7 @@
             @if (creditPenceToUse === 0) {
               <div class="u-text-center">
                 @if (!showCustomTipInput) {
-                  <div class="donation-input donation-input-main">
+                  <div class="donation-input donation-input-main tipSliderWrapper">
                     <mat-slider
                       id="tipSlider"
                       [min]="minimumTipPercentage"
@@ -130,20 +130,6 @@
                   </div>
                 }
 
-                <!-- We could only reliably get new values from Material Slider at the end of a drag, so hide this during -->
-                @if (
-                  !showCustomTipInput &&
-                  !isTipSliderBeingDragged &&
-                  donationAmount &&
-                  donationAmount > 0 &&
-                  tipAmountField?.valid &&
-                  tipAmount() > 0
-                ) {
-                  <mat-hint>
-                    <p>{{ tipValue | exactCurrency: campaign.currencyCode }} donation to support Big Give</p>
-                  </mat-hint>
-                }
-
                 @if (showCustomTipInput) {
                   <p>
                     <a
@@ -197,6 +183,22 @@
             </mat-expansion-panel>
           </div>
         }
+
+        @if (
+          donationAmount &&
+          donationAmount > 0 &&
+          (! tipAmountField?.invalid)
+          ) {
+          <div class="stepOneAmountSummary">
+            Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }} <br>
+            Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }} <br>
+            <span class="total">
+              Total to pay: {{ donationAmount + tipAmount() | exactCurrency: campaign.currencyCode }}
+            </span>
+          </div>
+        }
+
+
         <div aria-live="polite">
           <div class="u-text-center">
             @if (donationCreateError) {
