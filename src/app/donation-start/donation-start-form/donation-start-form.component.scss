@@ -31,7 +31,6 @@
   margin-bottom: -1em;
   text-align: center;
   .total {
-    font-size: 20px;
     font-weight: bold;
     color: abstract.$colour-primary;
   }
@@ -62,6 +61,7 @@ div.mat-step-label.mat-step-label-selected {
   font-size: 17px !important;
   line-height: 20px;
   @media #{abstract.$breakpoint-lg} {
+    font-size: 20px !important;
     line-height: 27px;
   }
 }
