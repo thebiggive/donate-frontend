@@ -2813,7 +2813,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.ryftController = createController({
       publicKey: environment.psps.ryft.publicKey,
-      // clientSecret: clientSecret,
       accountId: this.campaign.charity.ryftAccountId,
       theme: {
         fontFamily: '"Euclid Triangle", sans-serif',
