@@ -155,12 +155,3 @@ div.mat-expansion-panel-body {
   font-size: 18px;
   font-weight: normal;
 }
-
-:root {
-  @include mat.dialog-overrides(
-    (
-      supporting-text-color: abstract.$colour-black,
-      // overrides default grey
-    )
-  );
-}
