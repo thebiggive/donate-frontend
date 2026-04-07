@@ -72,6 +72,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
 import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
+import { DonationStartWhyTipDialogComponent } from '../donation-start-why-tip-dialog.component';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -2834,5 +2835,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.stripePaymentMethodReady = event.isValid;
     });
     this.ryftCardForm.mount('#ryft-card-form-container');
+  }
+
+  showTipExplanation(): void {
+    this.dialog.open(DonationStartWhyTipDialogComponent);
   }
 }

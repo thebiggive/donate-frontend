@@ -56,4 +56,11 @@ mat-spinner {
       value-indicator-border-radius: 4px,
     )
   );
+
+  @include mat.dialog-overrides(
+    (
+      supporting-text-color: abstract.$colour-black,
+      // overrides default grey
+    )
+  );
 }
