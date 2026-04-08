@@ -71,6 +71,8 @@ import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
+import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
+import { DonationStartWhyTipDialogComponent } from '../donation-start-why-tip-dialog.component';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -134,6 +136,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   private toast = inject(Toast);
   private liveAnnouncer = inject(LiveAnnouncer);
   protected readonly flags = flags;
+  protected showDebugInfo = environment.showDebugInfo;
 
   /**
    * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
@@ -181,6 +184,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   maximumDonationAmount!: number;
   maximumTipPercentage = 30 as const;
+  private ryftController: RyftControllerResponse | undefined;
+  ryftCardForm: RyftCardFormComponentResponse | undefined;
 
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
@@ -1014,8 +1019,64 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       );
     }
 
-    await this.payWithStripe();
+    switch (this.psp) {
+      case 'stripe':
+        await this.payWithStripe();
+        break;
+      case 'ryft':
+        await this.payWithRyft();
+        break;
+      default:
+        throw new Error(`Unsupported PSP: ${this.psp}`);
+    }
   }
+
+  payWithRyft: () => Promise<void> = async () => {
+    if (this.ryftCardForm === undefined) {
+      throw new Error('Ryft card form is not initialized');
+    }
+    if (this.donation === undefined) {
+      throw new Error('donation  is not initialized');
+    }
+
+    // @todo BG2-3106 - call matchbot to check it's OK to take payment for this donation
+    // (e.g. matching hasn't expired) and await the decision before the next line, as
+    // it isn't possible to initiate the payment from server side.
+
+    // Also make sure the amount on the payment session is updated based on the selected tip.
+
+    try {
+      // Await the payment attempt
+      const result = await this.ryftCardForm.attemptPayment({
+        clientSecret: this.donationService.ryftClientSecret,
+        customerEmail: this.donation?.emailAddress,
+      });
+
+      if (result.type == 'final') {
+        const session = result.paymentSession;
+
+        if (session.status === 'Approved' || session.status === 'Captured') {
+          // Payment successful – show success page
+          console.log('Payment Successful', session);
+          await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
+
+          return;
+        }
+        if (session.lastError) {
+          // Payment failed – show error to customer
+          const message = result.userFacingErrorMessage;
+          this.toast.showError(message || 'Sorry, we were not able to take your payment');
+        }
+      } else if (result.type == 'action-required') {
+        // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
+        // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
+        // been handled within the ryft UI before attemptPayment resolves.
+      }
+    } catch (error) {
+      // Log and display the error
+      console.error('System Error:', error);
+    }
+  };
 
   payWithStripe = async () => {
     const hasCredit = this.creditPenceToUse > 0;
@@ -1677,9 +1738,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.currencySymbol = this.getCurrencySymbol(this.campaign.currencyCode);
 
-    if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
+    if (this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
-    } else if (environment.psps.ryft.enabled && this.campaign.charity.psp === 'ryft') {
+    } else if (this.campaign.charity.psp === 'ryft') {
       this.psp = 'ryft';
     } else {
       this.noPsps = true;
@@ -1897,6 +1958,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       } else {
         this.prepareStripeElements();
       }
+    }
+
+    if (this.psp === 'ryft') {
+      this.initaliseRyft();
     }
 
     if (
@@ -2738,5 +2803,41 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   setTipPercentage(newPercentage: number) {
     this.updateTipAmountFromSelectedPercentage(newPercentage.toString());
     this.amountsGroup?.get('tipPercentage')?.setValue(newPercentage);
+  }
+
+  private initaliseRyft(): void {
+    const clientSecret = this.donationService.ryftClientSecret;
+
+    if (!clientSecret) {
+      throw new Error('Ryft client secret is required to initialise Ryft');
+    }
+
+    this.ryftController = createController({
+      publicKey: environment.psps.ryft.publicKey,
+      accountId: this.campaign.charity.ryftAccountId,
+      theme: {
+        fontFamily: '"Euclid Triangle", sans-serif',
+        baseBackground: '#F6F6F6',
+        baseBorderWidth: '0',
+        baseInputShadow: 'none',
+        baseBorderRadius: '8px',
+        textColor1: '#000000',
+        textColor2: '#2C089B',
+      },
+    });
+
+    this.ryftCardForm = createCardForm(this.ryftController);
+
+    this.ryftCardForm.on('validationChange', (event) => {
+      this.paymentReadinessTracker.onStripeCardChange({ complete: event.isValid });
+
+      this.stripeManualCardInputValid = event.isValid;
+      this.stripePaymentMethodReady = event.isValid;
+    });
+    this.ryftCardForm.mount('#ryft-card-form-container');
+  }
+
+  showTipExplanation(): void {
+    this.dialog.open(DonationStartWhyTipDialogComponent);
   }
 }

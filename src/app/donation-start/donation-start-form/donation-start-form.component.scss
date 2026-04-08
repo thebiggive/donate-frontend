@@ -22,6 +22,20 @@
   width: 100%;
 }
 
+.donation-input.donation-input-main.tipSliderWrapper {
+  margin-bottom: 0;
+}
+
+.stepOneAmountSummary {
+  margin-top: 1em;
+  margin-bottom: -1em;
+  text-align: center;
+  .total {
+    font-weight: bold;
+    color: abstract.$colour-primary;
+  }
+}
+
 .mat-stepper-horizontal,
 .mat-stepper-vertical {
   background: none;

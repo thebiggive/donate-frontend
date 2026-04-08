@@ -21,6 +21,8 @@ export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE
 
 export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
 
+export const RYFT_CLIENT_SECRET_COOKIE_NAME = 'ryft-client-secret';
+
 export type StripeCustomerSession = { stripeSessionSecret: string };
 
 @Injectable({
@@ -228,7 +230,16 @@ export class DonationService {
     return secret;
   }
 
-  saveDonation({ donation, jwt, stripeSessionSecret }: DonationCreatedResponse) {
+  public get ryftClientSecret(): string | undefined {
+    const secret = this.cookieService.get(RYFT_CLIENT_SECRET_COOKIE_NAME);
+    if (secret == '') {
+      return undefined;
+    }
+
+    return secret;
+  }
+
+  saveDonation({ donation, jwt, stripeSessionSecret, ryftClientSecret }: DonationCreatedResponse) {
     // Salesforce doesn't add this until after the async persist so we need to set it
     // locally in order to later determine which donations are new and eligible for reuse.
     // Note that updates call this too so this must check for existing values and not
@@ -237,9 +248,13 @@ export class DonationService {
       donation.createdTime = new Date().toISOString();
     }
 
+    const daysTilExpiry = 1;
     if (stripeSessionSecret) {
-      const daysTilExpiry = 1;
       this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, stripeSessionSecret, daysTilExpiry, '/');
+    }
+
+    if (ryftClientSecret) {
+      this.cookieService.set(RYFT_CLIENT_SECRET_COOKIE_NAME, ryftClientSecret, daysTilExpiry, '/');
     }
 
     const donationCouplets = this.getDonationCouplets();
