@@ -1047,27 +1047,45 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     try {
       // Await the payment attempt
-      const result = await this.ryftCardForm.attemptPayment({
+      const ryftPaymentAttemptResponse = await this.ryftCardForm.attemptPayment({
         clientSecret: this.donationService.ryftClientSecret,
         customerEmail: this.donation?.emailAddress,
       });
 
-      if (result.type == 'final') {
-        const session = result.paymentSession;
+      console.log({ ryftPaymentAttemptResponse });
 
-        if (session.status === 'Approved' || session.status === 'Captured') {
+      if (ryftPaymentAttemptResponse.type == 'final') {
+        const session = ryftPaymentAttemptResponse.paymentSession;
+
+        if (session.status === 'Approved') {
+          // should be 'Approved' so we cand do the capture from Matchbot.
           // Payment successful – show success page
           console.log('Payment Successful', session);
+
+          if (!session.amount) {
+            throw new Error('Ryft payment session amount is falsy');
+          }
+
+          if (!session.id) {
+            throw new Error('Ryft payment session id is falsy');
+          }
+
+          const result = await firstValueFrom(
+            this.donationService.confirmRyftPayment(this.donation, session.amount, session.id),
+          );
+
+          console.log({ result });
+
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
 
           return;
         }
         if (session.lastError) {
           // Payment failed – show error to customer
-          const message = result.userFacingErrorMessage;
+          const message = ryftPaymentAttemptResponse.userFacingErrorMessage;
           this.toast.showError(message || 'Sorry, we were not able to take your payment');
         }
-      } else if (result.type == 'action-required') {
+      } else if (ryftPaymentAttemptResponse.type == 'action-required') {
         // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
         // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
         // been handled within the ryft UI before attemptPayment resolves.
