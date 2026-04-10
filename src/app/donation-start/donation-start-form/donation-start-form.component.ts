@@ -1052,8 +1052,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         customerEmail: this.donation?.emailAddress,
       });
 
-      console.log({ ryftPaymentAttemptResponse });
-
       if (ryftPaymentAttemptResponse.type == 'final') {
         const session = ryftPaymentAttemptResponse.paymentSession;
 
@@ -1073,8 +1071,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           const result = await firstValueFrom(
             this.donationService.confirmRyftPayment(this.donation, session.amount, session.id),
           );
-
-          console.log({ result });
 
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
 
