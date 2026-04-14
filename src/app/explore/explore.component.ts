@@ -19,7 +19,6 @@ import {
   BiggiveCampaignCardFilterGrid,
   BiggiveTotalizer,
   BiggiveTotalizerTickerItem,
-  BiggiveHeroImage,
   BiggivePageSection,
   BiggiveGrid,
   BiggiveCampaignCard,
@@ -66,7 +65,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
   imports: [
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
-    BiggiveHeroImage,
     BiggivePageSection,
     BiggiveCampaignCardFilterGrid,
     BiggiveGrid,
