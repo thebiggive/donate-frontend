@@ -1047,27 +1047,47 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     try {
       // Await the payment attempt
-      const result = await this.ryftCardForm.attemptPayment({
+      const ryftPaymentAttemptResponse = await this.ryftCardForm.attemptPayment({
         clientSecret: this.donationService.ryftClientSecret,
         customerEmail: this.donation?.emailAddress,
       });
 
-      if (result.type == 'final') {
-        const session = result.paymentSession;
+      if (ryftPaymentAttemptResponse.type == 'final') {
+        const session = ryftPaymentAttemptResponse.paymentSession;
 
-        if (session.status === 'Approved' || session.status === 'Captured') {
+        if (session.status === 'Approved') {
+          // should be 'Approved' so we cand do the capture from Matchbot.
           // Payment successful – show success page
           console.log('Payment Successful', session);
+
+          if (!session.amount) {
+            throw new Error('Ryft payment session amount is falsy');
+          }
+
+          if (!session.id) {
+            throw new Error('Ryft payment session id is falsy');
+          }
+
+          try {
+            await firstValueFrom(this.donationService.confirmRyftPayment(this.donation, session.amount, session.id));
+          } catch (_error) {
+            this.paymentStepErrors = 'Sorry, we were not able to take your payment';
+            this.toast.showError('Sorry, we were not able to take your payment');
+            return;
+          }
+
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
 
           return;
         }
         if (session.lastError) {
           // Payment failed – show error to customer
-          const message = result.userFacingErrorMessage;
-          this.toast.showError(message || 'Sorry, we were not able to take your payment');
+          const message =
+            ryftPaymentAttemptResponse.userFacingErrorMessage || 'Sorry, we were not able to take your payment';
+          this.toast.showError(message);
+          this.paymentStepErrors = message;
         }
-      } else if (result.type == 'action-required') {
+      } else if (ryftPaymentAttemptResponse.type == 'action-required') {
         // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
         // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
         // been handled within the ryft UI before attemptPayment resolves.

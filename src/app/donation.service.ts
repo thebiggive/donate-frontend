@@ -402,6 +402,18 @@ export class DonationService {
     );
   }
 
+  confirmRyftPayment(donation: Donation, amountInPence: number, paymentSessionId: string): Observable<unknown> {
+    return this.http.post(
+      `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
+      {
+        psp: 'ryft',
+        amount: amountInPence,
+        paymentSessionId: paymentSessionId,
+      },
+      this.getAuthHttpOptions(donation),
+    );
+  }
+
   getPastDonations(): Observable<CompleteDonation[]> {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
