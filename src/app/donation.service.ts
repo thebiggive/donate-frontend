@@ -402,12 +402,8 @@ export class DonationService {
     );
   }
 
-  confirmRyftPayment(
-    donation: Donation,
-    amountInPence: number,
-    paymentSessionId: string,
-  ): Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }> {
-    return this.http.post<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>(
+  confirmRyftPayment(donation: Donation, amountInPence: number, paymentSessionId: string): Observable<unknown> {
+    return this.http.post(
       `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
       {
         psp: 'ryft',

@@ -1068,9 +1068,13 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
             throw new Error('Ryft payment session id is falsy');
           }
 
-          const result = await firstValueFrom(
-            this.donationService.confirmRyftPayment(this.donation, session.amount, session.id),
-          );
+          try {
+            await firstValueFrom(this.donationService.confirmRyftPayment(this.donation, session.amount, session.id));
+          } catch (_error) {
+            this.paymentStepErrors = 'Sorry, we were not able to take your payment';
+            this.toast.showError('Sorry, we were not able to take your payment');
+            return;
+          }
 
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
 
@@ -1078,8 +1082,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         }
         if (session.lastError) {
           // Payment failed – show error to customer
-          const message = ryftPaymentAttemptResponse.userFacingErrorMessage;
-          this.toast.showError(message || 'Sorry, we were not able to take your payment');
+          const message =
+            ryftPaymentAttemptResponse.userFacingErrorMessage || 'Sorry, we were not able to take your payment';
+          this.toast.showError(message);
+          this.paymentStepErrors = message;
         }
       } else if (ryftPaymentAttemptResponse.type == 'action-required') {
         // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
