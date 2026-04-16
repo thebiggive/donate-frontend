@@ -63,8 +63,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { BiggiveFormFieldSelect, BiggiveTextInput } from '@biggive/components-angular';
 import { MatInput } from '@angular/material/input';
 import { MatHint } from '@angular/material/form-field';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
@@ -887,7 +887,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // type (like from customer_balance to card) if donation funds are to be used instead. It's possible to have `state.empty`
     // false even when a donor has credit because they might also have a saved card which the Stripe Payment Element will auto
     // select.
-    if (this.creditPenceToUse > 0) {
+    if (this.donorHasDonationFunds()) {
       return;
     }
 
@@ -1099,9 +1099,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   };
 
   payWithStripe = async () => {
-    const hasCredit = this.creditPenceToUse > 0;
-
-    const methodIsReady = this.stripePaymentElement || hasCredit;
+    const methodIsReady = this.stripePaymentElement || this.donorHasDonationFunds();
 
     if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
@@ -1115,7 +1113,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       return;
     }
 
-    if (hasCredit) {
+    if (this.donorHasDonationFunds()) {
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
       this.donationService.finaliseCashBalancePurchase(this.donation).subscribe({
         next: async (donation) => {
@@ -1371,7 +1369,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       // no default so TS will check we haven't missed any cases here.
     }
 
-    this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
+    this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.donorHasDonationFunds();
 
     const promptingForCaptcha = this.promptForCaptcha();
     if (promptingForCaptcha) {
@@ -1534,10 +1532,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (donationAmountErrors?.max) {
       return (
         `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.` +
-        (this.creditPenceToUse === 0
-          ? ` You can make multiple matched donations of ` +
-            `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
-          : '')
+        (this.donorHasDonationFunds()
+          ? ''
+          : ` You can make multiple matched donations of ` +
+            `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`)
       );
     }
 
@@ -1972,7 +1970,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     if (this.psp === 'stripe') {
-      if (this.creditPenceToUse > 0) {
+      if (this.donorHasDonationFunds()) {
         this.paymentReadinessTracker.donorHasFunds();
         this.stripePaymentMethodReady = true;
       } else {
@@ -2354,7 +2352,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // We need to listen for tip percentage
     // field changes and don't have a cover fee checkbox. We don't ask for a
     // tip on donation when using a donor's credit balance.
-    if (this.creditPenceToUse === 0) {
+    if (!this.donorHasDonationFunds()) {
       this.amountsGroup.controls.tipAmount!.setValidators([
         requiredNotBlankValidator,
         // We allow spaces at start and end of amount inputs because people can easily paste them in
@@ -2442,7 +2440,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       }
     });
 
-    if (this.creditPenceToUse > 0) {
+    if (this.donorHasDonationFunds()) {
       this.removeStripeCardBillingValidators();
     } else {
       this.addStripeCardBillingValidators();
@@ -2531,7 +2529,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
    */
   protected getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
-    if (this.creditPenceToUse > 0) {
+    if (this.donorHasDonationFunds()) {
       return '0'; // No tips on donation credit settlements.
     }
 
@@ -2801,7 +2799,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   private getPaymentMethodType(): PaymentMethodType {
-    return this.creditPenceToUse > 0 ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
+    return this.donorHasDonationFunds() ? 'customer_balance' : (this.selectedPaymentMethodType ?? 'card');
   }
 
   protected showCardReuseMessage = false;
@@ -2859,5 +2857,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   showTipExplanation(): void {
     this.dialog.open(DonationStartWhyTipDialogComponent);
+  }
+
+  donorHasDonationFunds(): boolean {
+    return this.creditPenceToUse > 0;
   }
 }

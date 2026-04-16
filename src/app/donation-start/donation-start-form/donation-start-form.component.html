@@ -44,128 +44,122 @@
             {{ displayableAmountsStepErrors() }}
           </div>
         }
-        @if (creditPenceToUse === 0) {
+        @if (!donorHasDonationFunds()) {
           <div>
             <hr class="u-margin-auto-y-20" />
             <h2 class="b-rt-0 b-m-0 b-bold">Support Big Give</h2>
-            @if (creditPenceToUse === 0) {
-              <p>
-                Tips to Big Give (registered charity number 1136547) enable us to deliver our charitable mission and
-                help us provide match funds to our charity partners. We truly appreciate any tip you can give - no
-                matter the size.
-              </p>
-            }
-            @if (creditPenceToUse === 0) {
-              <div class="u-text-center">
-                @if (!showCustomTipInput) {
-                  <div class="donation-input donation-input-main tipSliderWrapper">
-                    <mat-slider
-                      id="tipSlider"
-                      [min]="minimumTipPercentage"
-                      [max]="maximumTipPercentage"
-                      step="1"
-                      discrete
-                      [displayWith]="formatSliderLabel"
-                      class="tip-slider"
-                      [class.slider-being-dragged]="isTipSliderBeingDragged"
-                      aria-label="Tip percentage"
-                    >
-                      <input
-                        matSliderThumb
-                        [value]="tipPercentage"
-                        (dragStart)="startTipSliderDrag()"
-                        (dragEnd)="endTipSliderDrag()"
-                        (valueChange)="setTipPercentage($event)"
-                      />
-                    </mat-slider>
-                  </div>
-                }
-
-                @if (donationAmount && (tipAmount() === 0 || showCustomTipInput)) {
-                  <div class="u-text-left">
-                    <h3>A small tip makes a big difference. You will help us:</h3>
-                    <ul>
-                      <li>
-                        <strong>Build our charity partners' digital skills and resilience</strong>
-                        <br />
-                        With your support, we can continue to provide free training and resources.
-                      </li>
-                      <li>
-                        <strong>Provide innovative fundraising technology</strong>
-                        <br />
-                        Help us invest in cutting-edge tech and make it even easier to donate through Big Give.
-                      </li>
-                      <li>
-                        <strong>Double the difference and then some!</strong>
-                        <br />
-                        We transform your tips into match funds. Since 2022, charities have received over £200,000 in
-                        match funding from Big Give.
-                      </li>
-                    </ul>
-                  </div>
-                }
-
-                <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
-                  <biggive-text-input currency="{{ campaign.currencyCode }}">
-                    <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
+            <p>
+              Tips to Big Give (registered charity number 1136547) enable us to deliver our charitable mission and help
+              us provide match funds to our charity partners. We truly appreciate any tip you can give - no matter the
+              size.
+            </p>
+            <div class="u-text-center">
+              @if (!showCustomTipInput) {
+                <div class="donation-input donation-input-main tipSliderWrapper">
+                  <mat-slider
+                    id="tipSlider"
+                    [min]="minimumTipPercentage"
+                    [max]="maximumTipPercentage"
+                    step="1"
+                    discrete
+                    [displayWith]="formatSliderLabel"
+                    class="tip-slider"
+                    [class.slider-being-dragged]="isTipSliderBeingDragged"
+                    aria-label="Tip percentage"
+                  >
                     <input
-                      maxlength="10"
-                      formControlName="tipAmount"
-                      id="tipAmount"
-                      matInput
-                      aria-describedby="custom-tip-status"
-                      slot="input"
+                      matSliderThumb
+                      [value]="tipPercentage"
+                      (dragStart)="startTipSliderDrag()"
+                      (dragEnd)="endTipSliderDrag()"
+                      (valueChange)="setTipPercentage($event)"
                     />
-                  </biggive-text-input>
+                  </mat-slider>
                 </div>
-                @if (
-                  tipAmountField?.invalid &&
-                  tipAmountField?.errors &&
-                  (tipAmountField?.dirty || tipAmountField?.touched)
-                ) {
-                  <div class="error" aria-live="polite">
-                    Please enter how much you would like to donate to Big Give as a number of
-                    {{ currencySymbol }}, optionally with 2 decimals and up to
-                    {{ maximumDonationAmount | exactCurrency: campaign.currencyCode }}.
-                  </div>
-                }
+              }
 
-                @if (showCustomTipInput) {
-                  <p>
-                    <a
-                      role="button"
-                      tabindex="0"
-                      (click)="hideCustomTipInput($event)"
-                      (keyup.space)="hideCustomTipInput($event)"
-                      (keyup.enter)="hideCustomTipInput($event)"
-                      >Choose as percentage</a
-                    >
-                  </p>
-                } @else {
-                  <p>
-                    <a
-                      role="button"
-                      tabindex="0"
-                      (click)="displayCustomTipInput($event)"
-                      (keyup.space)="displayCustomTipInput($event)"
-                      (keyup.enter)="displayCustomTipInput($event)"
-                      >Custom amount</a
-                    >
-                  </p>
-                }
+              @if (donationAmount && (tipAmount() === 0 || showCustomTipInput)) {
+                <div class="u-text-left">
+                  <h3>A small tip makes a big difference. You will help us:</h3>
+                  <ul>
+                    <li>
+                      <strong>Build our charity partners' digital skills and resilience</strong>
+                      <br />
+                      With your support, we can continue to provide free training and resources.
+                    </li>
+                    <li>
+                      <strong>Provide innovative fundraising technology</strong>
+                      <br />
+                      Help us invest in cutting-edge tech and make it even easier to donate through Big Give.
+                    </li>
+                    <li>
+                      <strong>Double the difference and then some!</strong>
+                      <br />
+                      We transform your tips into match funds. Since 2022, charities have received over £200,000 in
+                      match funding from Big Give.
+                    </li>
+                  </ul>
+                </div>
+              }
 
-                @if (showCustomTipInput && donationAmount && donationAmount > 0) {
-                  <mat-hint>
-                    {{
-                      tipAmount() > 0 && tipAmount() / donationAmount < 0.001
-                        ? "Less than 0.1%"
-                        : (tipAmount() / donationAmount | percent: "1.0-1")
-                    }}
-                    of main donation
-                  </mat-hint>
-                }
+              <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
+                <biggive-text-input currency="{{ campaign.currencyCode }}">
+                  <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
+                  <input
+                    maxlength="10"
+                    formControlName="tipAmount"
+                    id="tipAmount"
+                    matInput
+                    aria-describedby="custom-tip-status"
+                    slot="input"
+                  />
+                </biggive-text-input>
               </div>
-            }
+              @if (
+                tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)
+              ) {
+                <div class="error" aria-live="polite">
+                  Please enter how much you would like to donate to Big Give as a number of
+                  {{ currencySymbol }}, optionally with 2 decimals and up to
+                  {{ maximumDonationAmount | exactCurrency: campaign.currencyCode }}.
+                </div>
+              }
+
+              @if (showCustomTipInput) {
+                <p>
+                  <a
+                    role="button"
+                    tabindex="0"
+                    (click)="hideCustomTipInput($event)"
+                    (keyup.space)="hideCustomTipInput($event)"
+                    (keyup.enter)="hideCustomTipInput($event)"
+                    >Choose as percentage</a
+                  >
+                </p>
+              } @else {
+                <p>
+                  <a
+                    role="button"
+                    tabindex="0"
+                    (click)="displayCustomTipInput($event)"
+                    (keyup.space)="displayCustomTipInput($event)"
+                    (keyup.enter)="displayCustomTipInput($event)"
+                    >Custom amount</a
+                  >
+                </p>
+              }
+
+              @if (showCustomTipInput && donationAmount && donationAmount > 0) {
+                <mat-hint>
+                  {{
+                    tipAmount() > 0 && tipAmount() / donationAmount < 0.001
+                      ? "Less than 0.1%"
+                      : (tipAmount() / donationAmount | percent: "1.0-1")
+                  }}
+                  of main donation
+                </mat-hint>
+              }
+            </div>
           </div>
         }
 
@@ -173,9 +167,11 @@
           <div class="stepOneAmountSummary">
             <p>
               Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }}
-              <br />
-              Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
-              <a role="button" tabindex="0" (click)="showTipExplanation()">(Why&nbsp;tip?)</a>
+              @if (!donorHasDonationFunds) {
+                <br />
+                Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
+                <a role="button" tabindex="0" (click)="showTipExplanation()">(Why&nbsp;tip?)</a>
+              }
             </p>
             <p class="total">Total to pay: {{ donationAmount + tipAmount() | exactCurrency: campaign.currencyCode }}</p>
           </div>
@@ -388,7 +384,7 @@
             <!-- Placeholder to occupy last part the row and stop previous field expanding -->
           </div>
         </div>
-        @if (creditPenceToUse > 0) {
+        @if (donorHasDonationFunds()) {
           <div>
             <p id="useCreditsMessage" class="b-center">
               Your donation funds balance will be applied against this donation. No further funds will be taken.
@@ -398,7 +394,7 @@
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
               a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
               element when not needed, and always mount it. -->
-        <div class="payment-details" [style.display]="creditPenceToUse === 0 ? 'block' : 'none'">
+        <div class="payment-details" [style.display]="donorHasDonationFunds() ? 'none' : 'block'">
           <div class="sr-combo-inputs-row">
             @if (showDebugInfo && psp === "ryft") {
               <b>Ryft</b><br />
@@ -668,7 +664,7 @@
               <!-- If the donor is using credit we wouldn't be taking a tip at this point,
                 and if we are charging a campaign fee we wouldn't have asked for a tip
                 -->
-              @if (creditPenceToUse === 0) {
+              @if (!donorHasDonationFunds()) {
                 <tr>
                   <td>Tip Amount</td>
                   <td>{{ donation.tipAmount | exactCurrency: donation.currencyCode }}</td>
