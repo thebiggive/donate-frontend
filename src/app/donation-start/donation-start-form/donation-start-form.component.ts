@@ -2352,7 +2352,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // We need to listen for tip percentage
     // field changes and don't have a cover fee checkbox. We don't ask for a
     // tip on donation when using a donor's credit balance.
-    if (! this.donorHasDonationFunds()) {
+    if (!this.donorHasDonationFunds()) {
       this.amountsGroup.controls.tipAmount!.setValidators([
         requiredNotBlankValidator,
         // We allow spaces at start and end of amount inputs because people can easily paste them in
