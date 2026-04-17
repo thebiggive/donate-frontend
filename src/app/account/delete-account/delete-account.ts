@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -27,6 +27,7 @@ export class DeleteAccount implements OnInit {
   public person!: Person;
 
   protected countryCode: string | null = null;
+  protected readonly showPassword = signal(false);
 
   protected form = new FormGroup({
     password: new FormControl('', [
@@ -59,6 +60,11 @@ export class DeleteAccount implements OnInit {
       return;
     }
 
+    if (this.showPassword()) {
+      this.showPassword.set(false);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
     const actualAccountName = this.person.first_name + ' ' + this.person.last_name;
 
     if (this.form.value.accountName !== actualAccountName) {
@@ -86,4 +92,8 @@ export class DeleteAccount implements OnInit {
   }
 
   protected readonly flags = flags;
+
+  protected toggleShowPassword() {
+    this.showPassword.update((current) => !current);
+  }
 }

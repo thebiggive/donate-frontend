@@ -31,13 +31,12 @@
         @if (person) {
           <biggive-text-input spaceBelow="0">
             <label slot="label" for="password">Confirm password *</label>
-            <input
-              slot="input"
-              id="password"
-              type="password"
-              autocomplete="password"
-              [formControl]="form.controls.password"
-            />
+            <div slot="input" style="display: flex">
+              <input id="password" type="password" autocomplete="password" [formControl]="form.controls.password" />
+              <button type="button" (click)="toggleShowPassword()">
+                {{ showPassword() ? "Hide" : "Show" }}
+              </button>
+            </div>
           </biggive-text-input>
 
           <div class="u-height-2em"></div>
