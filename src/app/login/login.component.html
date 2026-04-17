@@ -28,7 +28,6 @@
                   <biggive-text-input spaceBelow="4">
                     <label slot="label" for="loginEmailAddress">Email address *</label>
                     <input
-                      slot="input"
                       matInput
                       type="email"
                       id="ResetPasswordEmailAddress"
@@ -108,7 +107,17 @@
             </biggive-text-input>
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
-              <input slot="input" matInput type="password" id="loginPassword" formControlName="password" />
+              <div slot="input" style="display: flex">
+                <input
+                  matInput
+                  [type]="showLoginPassword() ? 'text' : 'password'"
+                  id="loginPassword"
+                  formControlName="password"
+                />
+                <button type="button" (click)="toggleShowLoginPassword()">
+                  {{ showLoginPassword() ? "Hide" : "Show" }}
+                </button>
+              </div>
             </biggive-text-input>
             <div aria-live="polite">
               @if (loginError) {
