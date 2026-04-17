@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -44,6 +44,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
+  protected readonly showPassword = signal(false);
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -69,7 +70,18 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
 
     await this.friendlyCaptchaWidget.start();
   }
-  login(): void {
+  async login(): Promise<void> {
+    if (this.showPassword()) {
+      this.showPassword.set(false);
+
+      // wait for angular to update the view so that the browser
+      // doesn't think the password is something to save
+      // when the request is submitted.
+
+      // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
     this.loggingIn = true;
     const credentials: Credentials = {
       captcha_code: this.captchaCode || '',
@@ -108,5 +120,9 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   forgotPasswordClicked(event: Event): void {
     event.preventDefault();
     this.forgotPassword = true;
+  }
+
+  protected toggleShowPassword() {
+    this.showPassword.update((current) => !current);
   }
 }

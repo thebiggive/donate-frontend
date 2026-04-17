@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +29,7 @@ export class ResetPasswordComponent implements OnInit {
   errorMessageHtml: string | undefined;
   token!: string;
   tokenValid: boolean | undefined = undefined;
+  protected readonly showPassword = signal(false);
 
   constructor() {
     this.minPasswordLength = minPasswordLength;
@@ -64,7 +65,12 @@ export class ResetPasswordComponent implements OnInit {
     return this.passwordForm.controls.confirmPassword;
   }
 
-  saveNewPassword = () => {
+  saveNewPassword = async () => {
+    if (this.showPassword()) {
+      this.showPassword.set(false);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
     this.savingNewPassword = true;
     this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe({
       next: (_) => {
@@ -89,4 +95,8 @@ export class ResetPasswordComponent implements OnInit {
         getPasswordValidator(this.passwordForm.controls.password!.value),
       ]);
   };
+
+  protected toggleShowPassword() {
+    this.showPassword.update((current) => !current);
+  }
 }
