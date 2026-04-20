@@ -71,7 +71,17 @@
 
           <biggive-text-input spaceBelow="4">
             <label slot="label" for="password">Password *</label>
-            <input slot="input" matInput type="password" id="password-post-donation" formControlName="password" />
+            <div slot="input" style="display: flex">
+              <input
+                matInput
+                [type]="showPassword() ? 'text' : 'password'"
+                id="password-post-donation"
+                formControlName="password"
+              />
+              <button type="button" (click)="toggleShowPassword()">
+                {{ showPassword() ? "Hide" : "Show" }}
+              </button>
+            </div>
           </biggive-text-input>
 
           <div aria-live="polite">
@@ -170,7 +180,17 @@
           @if (readyToTakeAccountDetails) {
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="password">Password *</label>
-              <input slot="input" matInput type="password" id="password" formControlName="password" />
+              <div slot="input" style="display: flex">
+                <input
+                  matInput
+                  [type]="showPassword() ? 'text' : 'password'"
+                  id="password"
+                  formControlName="password"
+                />
+                <button type="button" (click)="toggleShowPassword()">
+                  {{ showPassword() ? "Hide" : "Show" }}
+                </button>
+              </div>
             </biggive-text-input>
           }
 
