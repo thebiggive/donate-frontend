@@ -163,15 +163,13 @@
           </div>
         }
 
-        @if (donationAmount && donationAmount > 0 && !tipAmountField?.invalid) {
+        @if (donationAmount && donationAmount > 0 && !tipAmountField?.invalid && !donorHasDonationFunds()) {
           <div class="stepOneAmountSummary">
             <p>
               Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }}
-              @if (!donorHasDonationFunds) {
-                <br />
-                Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
-                <a role="button" tabindex="0" (click)="showTipExplanation()">(Why&nbsp;tip?)</a>
-              }
+              <br />
+              Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
+              <a role="button" tabindex="0" (click)="showTipExplanation()">(Why&nbsp;tip?)</a>
             </p>
             <p class="total">Total to pay: {{ donationAmount + tipAmount() | exactCurrency: campaign.currencyCode }}</p>
           </div>
