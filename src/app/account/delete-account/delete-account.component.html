@@ -32,7 +32,12 @@
           <biggive-text-input spaceBelow="0">
             <label slot="label" for="password">Confirm password *</label>
             <div slot="input" style="display: flex">
-              <input id="password" type="password" autocomplete="password" [formControl]="form.controls.password" />
+              <input
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                autocomplete="password"
+                [formControl]="form.controls.password"
+              />
               <button type="button" (click)="toggleShowPassword()">
                 {{ showPassword() ? "Hide" : "Show" }}
               </button>
