@@ -79,6 +79,7 @@
                 formControlName="password"
               />
               <biggive-button
+                aria-controls="password-post-donation"
                 colourScheme="clear-primary"
                 (doButtonClick)="toggleShowPassword()"
                 [label]="showPassword() ? 'Hide' : 'Show'"
@@ -191,6 +192,7 @@
                   formControlName="password"
                 />
                 <biggive-button
+                  aria-controls="password"
                   colourScheme="clear-primary"
                   (doButtonClick)="toggleShowPassword()"
                   [label]="showPassword() ? 'Hide' : 'Show'"
