@@ -56,6 +56,9 @@
       <div style="display: flex">
         <mat-form-field class="b-w-100" color="primary">
           <mat-label for="loginPassword">Password</mat-label>
+          <div class="visually-hidden" aria-live="polite">
+            {{showPassword() ? 'Your password is shown' : 'Your password is hidden'}}
+          </div>
           <input matInput [type]="showPassword() ? 'text' : 'password'" id="loginPassword" formControlName="password" />
         </mat-form-field>
         &nbsp;

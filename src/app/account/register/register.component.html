@@ -72,6 +72,9 @@
           <biggive-text-input spaceBelow="4">
             <label slot="label" for="password">Password *</label>
             <div slot="input" style="display: flex">
+              <div class="visually-hidden" aria-live="polite">
+                {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+              </div>
               <input
                 matInput
                 [type]="showPassword() ? 'text' : 'password'"
@@ -185,6 +188,9 @@
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="password">Password *</label>
               <div slot="input" style="display: flex">
+                <div class="visually-hidden" aria-live="polite">
+                  {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+                </div>
                 <input
                   matInput
                   [type]="showPassword() ? 'text' : 'password'"

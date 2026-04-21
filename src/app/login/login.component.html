@@ -108,6 +108,9 @@
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
               <div slot="input" style="display: flex">
+                <div class="visually-hidden" aria-live="polite">
+                  {{ showLoginPassword() ? "Your password is shown" : "Your password is hidden" }}
+                </div>
                 <input
                   matInput
                   [type]="showLoginPassword() ? 'text' : 'password'"
