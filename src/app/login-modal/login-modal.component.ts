@@ -12,6 +12,7 @@ import { EMAIL_REGEXP } from '../validators/patterns';
 import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.component';
 import { WidgetInstance } from 'friendly-challenge';
 import { BackendError, errorDescription } from '../backendError';
+import { BiggiveButton } from '@biggive/components-angular';
 
 @Component({
   selector: 'app-login-modal',
@@ -25,6 +26,7 @@ import { BackendError, errorDescription } from '../backendError';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     PopupStandaloneComponent,
+    BiggiveButton,
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {

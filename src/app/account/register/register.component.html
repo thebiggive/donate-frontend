@@ -78,9 +78,12 @@
                 id="password-post-donation"
                 formControlName="password"
               />
-              <button type="button" (click)="toggleShowPassword()">
-                {{ showPassword() ? "Hide" : "Show" }}
-              </button>
+              <biggive-button
+                colourScheme="clear-primary"
+                (doButtonClick)="toggleShowPassword()"
+                [label]="showPassword() ? 'Hide' : 'Show'"
+                [spaceBelow]="0"
+              />
             </div>
           </biggive-text-input>
 
@@ -187,9 +190,12 @@
                   id="password"
                   formControlName="password"
                 />
-                <button type="button" (click)="toggleShowPassword()">
-                  {{ showPassword() ? "Hide" : "Show" }}
-                </button>
+                <biggive-button
+                  colourScheme="clear-primary"
+                  (doButtonClick)="toggleShowPassword()"
+                  [label]="showPassword() ? 'Hide' : 'Show'"
+                  [spaceBelow]="0"
+                />
               </div>
             </biggive-text-input>
           }

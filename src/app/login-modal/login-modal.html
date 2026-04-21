@@ -58,13 +58,13 @@
           <mat-label for="loginPassword">Password</mat-label>
           <input matInput [type]="showPassword() ? 'text' : 'password'" id="loginPassword" formControlName="password" />
         </mat-form-field>
-        <button
-          type="button"
-          (click)="toggleShowPassword()"
-          style="height: 2em; margin-top: 1em; margin-left: 1em; min-width: 4em"
-        >
-          {{ showPassword() ? "Hide" : "Show" }}
-        </button>
+        &nbsp;
+        <biggive-button
+          colourScheme="clear-primary"
+          (doButtonClick)="toggleShowPassword()"
+          [label]="showPassword() ? 'Hide' : 'Show'"
+          [spaceBelow]="0"
+        />
       </div>
       @if (loginError) {
       <p class="error" aria-live="assertive">Login error: {{ loginError }}</p>
@@ -73,6 +73,7 @@
   </mat-dialog-content>
   <mat-dialog-actions class="u-justify-space-between">
     <a href (click)="forgotPasswordClicked($event)">Forgot Password?</a>
+    &nbsp;
     <div>
       <button
         id="login-modal-submit"
