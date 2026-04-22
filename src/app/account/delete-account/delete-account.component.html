@@ -31,6 +31,9 @@
         @if (person) {
           <biggive-text-input spaceBelow="0">
             <label slot="label" for="password">Confirm password *</label>
+            <div class="visually-hidden" aria-live="polite">
+              {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+            </div>
             <div slot="input" style="display: flex">
               <input
                 id="password"
@@ -38,9 +41,13 @@
                 autocomplete="password"
                 [formControl]="form.controls.password"
               />
-              <button type="button" (click)="toggleShowPassword()">
-                {{ showPassword() ? "Hide" : "Show" }}
-              </button>
+              <biggive-button
+                aria-controls="password"
+                colourScheme="clear-primary"
+                (doButtonClick)="toggleShowPassword()"
+                [label]="showPassword() ? 'Hide' : 'Show'"
+                [spaceBelow]="0"
+              />
             </div>
           </biggive-text-input>
 

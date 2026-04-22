@@ -4,7 +4,7 @@ import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
 import { minPasswordLength } from '../../environments/common';
-import { BiggiveHeading } from '@biggive/components-angular';
+import { BiggiveButton, BiggiveHeading } from '@biggive/components-angular';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -14,7 +14,16 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
-  imports: [BiggiveHeading, MatProgressSpinner, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton],
+  imports: [
+    BiggiveHeading,
+    MatProgressSpinner,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatButton,
+    BiggiveButton,
+  ],
 })
 export class ResetPasswordComponent implements OnInit {
   private formBuilder = inject(FormBuilder);

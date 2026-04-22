@@ -72,15 +72,22 @@
           <biggive-text-input spaceBelow="4">
             <label slot="label" for="password">Password *</label>
             <div slot="input" style="display: flex">
+              <div class="visually-hidden" aria-live="polite">
+                {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+              </div>
               <input
                 matInput
                 [type]="showPassword() ? 'text' : 'password'"
                 id="password-post-donation"
                 formControlName="password"
               />
-              <button type="button" (click)="toggleShowPassword()">
-                {{ showPassword() ? "Hide" : "Show" }}
-              </button>
+              <biggive-button
+                aria-controls="password-post-donation"
+                colourScheme="clear-primary"
+                (doButtonClick)="toggleShowPassword()"
+                [label]="showPassword() ? 'Hide' : 'Show'"
+                [spaceBelow]="0"
+              />
             </div>
           </biggive-text-input>
 
@@ -181,15 +188,22 @@
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="password">Password *</label>
               <div slot="input" style="display: flex">
+                <div class="visually-hidden" aria-live="polite">
+                  {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+                </div>
                 <input
                   matInput
                   [type]="showPassword() ? 'text' : 'password'"
                   id="password"
                   formControlName="password"
                 />
-                <button type="button" (click)="toggleShowPassword()">
-                  {{ showPassword() ? "Hide" : "Show" }}
-                </button>
+                <biggive-button
+                  aria-controls="password"
+                  colourScheme="clear-primary"
+                  (doButtonClick)="toggleShowPassword()"
+                  [label]="showPassword() ? 'Hide' : 'Show'"
+                  [spaceBelow]="0"
+                />
               </div>
             </biggive-text-input>
           }
