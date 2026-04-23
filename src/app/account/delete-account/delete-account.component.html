@@ -31,24 +31,13 @@
         @if (person) {
           <biggive-text-input spaceBelow="0">
             <label slot="label" for="password">Confirm password *</label>
-            <div class="visually-hidden" aria-live="polite">
-              {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-            </div>
-            <div slot="input" style="display: flex">
-              <input
-                id="password"
-                [type]="showPassword() ? 'text' : 'password'"
-                autocomplete="password"
-                [formControl]="form.controls.password"
-              />
-              <biggive-button
-                aria-controls="password"
-                colourScheme="clear-primary"
-                (doButtonClick)="toggleShowPassword()"
-                [label]="showPassword() ? 'Hide' : 'Show'"
-                [spaceBelow]="0"
-              />
-            </div>
+            <input
+              slot="input"
+              id="password"
+              type="password"
+              autocomplete="password"
+              [formControl]="form.controls.password"
+            />
           </biggive-text-input>
 
           <div class="u-height-2em"></div>
