@@ -53,23 +53,10 @@
         <mat-label for="loginEmailAddress">Email address</mat-label>
         <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off" />
       </mat-form-field>
-      <div style="display: flex">
-        <mat-form-field class="b-w-100" color="primary">
-          <mat-label for="loginPassword">Password</mat-label>
-          <div class="visually-hidden" aria-live="polite">
-            {{showPassword() ? 'Your password is shown' : 'Your password is hidden'}}
-          </div>
-          <input matInput [type]="showPassword() ? 'text' : 'password'" id="loginPassword" formControlName="password" />
-        </mat-form-field>
-        &nbsp;
-        <biggive-button
-          aria-controls="loginPassword"
-          colourScheme="clear-primary"
-          (doButtonClick)="toggleShowPassword()"
-          [label]="showPassword() ? 'Hide' : 'Show'"
-          [spaceBelow]="0"
-        />
-      </div>
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="loginPassword">Password</mat-label>
+        <input matInput type="password" id="loginPassword" formControlName="password" />
+      </mat-form-field>
       @if (loginError) {
       <p class="error" aria-live="assertive">Login error: {{ loginError }}</p>
       }
@@ -77,7 +64,6 @@
   </mat-dialog-content>
   <mat-dialog-actions class="u-justify-space-between">
     <a href (click)="forgotPasswordClicked($event)">Forgot Password?</a>
-    &nbsp;
     <div>
       <button
         id="login-modal-submit"

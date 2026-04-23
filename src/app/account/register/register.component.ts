@@ -8,7 +8,6 @@ import {
   ViewChild,
   inject,
   ChangeDetectorRef,
-  signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -98,7 +97,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected emailVerificationToken?: EmailVerificationToken;
   protected readonly enableOrgAccount = this.flags.enableOrgAccount;
   protected accountType: 'individual' | 'organisation' = 'individual';
-  protected readonly showPassword = signal(false);
 
   constructor() {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
@@ -151,11 +149,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async register(): Promise<void> {
     this.errorHtml = this.error = undefined;
-
-    if (this.showPassword()) {
-      this.showPassword.set(false);
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
 
     if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
       // Ensure the UI marks the fields as touched so any field-level UI (present or future) can react.
@@ -357,11 +350,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   async registerPostDonation() {
-    if (this.showPassword()) {
-      this.showPassword.set(false);
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
     this.processing = true;
     this.registerPostDonationForm.markAllAsTouched();
     const password = this.registerPostDonationForm.value.password;
@@ -398,8 +386,4 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       this.error = errorDescription(error);
     }
   };
-
-  protected toggleShowPassword() {
-    this.showPassword.update((current) => !current);
-  }
 }
