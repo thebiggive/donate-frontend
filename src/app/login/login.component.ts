@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { MatButtonModule } from '@angular/material/button';
@@ -72,6 +82,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private captchaCode: string | undefined;
   protected registerLink!: string;
   protected isNewRegistration: boolean = false;
+  protected showLoginPassword = signal(false);
 
   constructor() {
     const state: LoginNavigationState = <LoginNavigationState>this.router.currentNavigation()?.extras.state;
@@ -137,7 +148,18 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     await this.friendlyCaptchaWidget.start();
   }
 
-  login(): void {
+  async login(): Promise<void> {
+    if (this.showLoginPassword()) {
+      this.showLoginPassword.set(false);
+
+      // wait for angular to update the view so that the browser
+      // doesn't think the password is something to save
+      // when the request is submitted.
+
+      // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
     if (!this.loginForm.valid) {
       const emailErrors = this.loginForm.controls?.emailAddress?.errors;
       const passwordErrors = this.loginForm.controls?.password?.errors;
@@ -217,5 +239,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (_) => (this.resetPasswordSuccess = true),
       error: (_) => (this.resetPasswordSuccess = false),
     });
+  }
+
+  protected toggleShowLoginPassword() {
+    this.showLoginPassword.update((current) => !current);
   }
 }
