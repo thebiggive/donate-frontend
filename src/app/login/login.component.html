@@ -108,7 +108,24 @@
             </biggive-text-input>
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
-              <input slot="input" matInput type="password" id="loginPassword" formControlName="password" />
+              <div slot="input" style="display: flex">
+                <div class="visually-hidden" aria-live="polite">
+                  {{ showLoginPassword() ? "Your password is shown" : "Your password is hidden" }}
+                </div>
+                <input
+                  matInput
+                  [type]="showLoginPassword() ? 'text' : 'password'"
+                  id="loginPassword"
+                  formControlName="password"
+                />
+                <biggive-button
+                  aria-controls="loginPassword"
+                  colourScheme="clear-primary"
+                  (doButtonClick)="toggleShowLoginPassword()"
+                  [label]="showLoginPassword() ? 'Hide' : 'Show'"
+                  [spaceBelow]="0"
+                />
+              </div>
             </biggive-text-input>
             <div aria-live="polite">
               @if (loginError) {
