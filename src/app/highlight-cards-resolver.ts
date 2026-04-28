@@ -21,7 +21,7 @@ export class HighlightCardsResolver implements Resolve<readonly HighlightCard[]>
       catchError((error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `HighlightCardsResolver: ${error.message ?? error ?? 'Unknown error'}`,
+          `HighlightCardsResolver: ${error?.message ?? error ?? 'Unknown error'}`,
           undefined,
           this.matomoTracker,
         );

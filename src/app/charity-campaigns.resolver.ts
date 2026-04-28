@@ -37,7 +37,7 @@ export class CharityCampaignsResolver
 
     return this.campaignService.getForCharity(charityId).pipe(
       catchError((error) => {
-        console.log(`CharityCampaignsResolver load error: "${error.message ?? error ?? 'Unknown error'}"`);
+        console.log(`CharityCampaignsResolver load error: "${error?.message ?? error ?? 'Unknown error'}"`);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Explore content on the requested path.
         void this.router.navigateByUrl('/explore');
