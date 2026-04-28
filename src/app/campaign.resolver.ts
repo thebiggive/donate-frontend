@@ -98,7 +98,7 @@ export class CampaignResolver implements Resolve<Campaign | MetaCampaign> {
       catchError((error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `CampaignResolver main load: ${error.message}`,
+          `CampaignResolver main load: ${error.message ?? error ?? 'Unknown error'}`,
           identifier,
           this.matomoTracker,
         );
