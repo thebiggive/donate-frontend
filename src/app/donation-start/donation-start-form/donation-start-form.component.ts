@@ -1756,10 +1756,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.currencySymbol = this.getCurrencySymbol(this.campaign.currencyCode);
 
-    if (this.campaign.charity.stripeAccountId) {
-      this.psp = 'stripe';
-    } else if (this.campaign.charity.psp === 'ryft') {
+    if (this.campaign.charity.psp === 'ryft') {
       this.psp = 'ryft';
+    } else if (this.campaign.charity.stripeAccountId) {
+      this.psp = 'stripe';
     } else {
       this.noPsps = true;
     }
