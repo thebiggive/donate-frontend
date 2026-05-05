@@ -21,7 +21,7 @@ export class CampaignStatsResolver implements Resolve<FormattedCampaignStats> {
       catchError((error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `CampaignStatsResolver: ${error.message}`,
+          `CampaignStatsResolver: ${error?.message ?? error ?? 'Unknown error'}`,
           undefined,
           this.matomoTracker,
         );

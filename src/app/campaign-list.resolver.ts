@@ -25,7 +25,7 @@ export class CampaignListResolver {
       error: (error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `CampaignListResolver: ${error.message}`,
+          `CampaignListResolver: ${error?.message ?? error ?? 'Unknown error'}`,
           undefined,
           this.matomoTracker,
         );
