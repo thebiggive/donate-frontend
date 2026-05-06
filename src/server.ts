@@ -103,6 +103,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
     'https://*.js.stripe.com',
     'https://js.stripe.com',
     'https://hooks.stripe.com',
+    'https://web-sdk.ryftpay.com',
     'blob:', // for friendly-captcha
     'player.vimeo.com',
     'www.youtube.com',
@@ -132,6 +133,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         `'self'`,
         'data:',
         `'unsafe-inline'`, // Currently the only supported way to use GetSiteControl and probably Friendly Captcha v1.
+        'https://web-sdk.ryftpay.com',
       ],
       'img-src': [
         `'self'`,
