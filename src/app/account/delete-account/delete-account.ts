@@ -38,6 +38,7 @@ export class DeleteAccount implements OnInit {
     accountName: new FormControl('', [Validators.required, Validators.maxLength(255)]),
   });
   protected deleted = false;
+  protected fullName: string | undefined;
 
   ngOnInit() {
     this.pageMeta.setCommon('Delete Donor Account');
@@ -49,6 +50,7 @@ export class DeleteAccount implements OnInit {
       }
 
       this.person = person;
+      this.fullName = this.normaliseName(person.first_name + ' ' + person.last_name);
     });
   }
 
@@ -65,11 +67,9 @@ export class DeleteAccount implements OnInit {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
-    const actualAccountName = this.person.first_name + ' ' + this.person.last_name;
-
-    if (this.form.value.accountName !== actualAccountName) {
+    if (this.normaliseName(this.form.value.accountName) !== this.fullName) {
       this.toast.showError('Please enter your account name exactly as shown to delete your account');
-      console.log('Account name mismatch:', { formValue: this.form.value.accountName, actualAccountName });
+      console.log('Account name mismatch:', { formValue: this.form.value.accountName, fullName: this.fullName });
       return;
     }
 
@@ -89,6 +89,14 @@ export class DeleteAccount implements OnInit {
       console.error(e);
       this.toast.showError('An error occurred while deleting your account. Please try again later.');
     }
+  }
+
+  /**
+   * Remove leading trailing and repeated whitespace to make it easier to match typed with expected name and
+   * avoid displaying a spurious space.
+   */
+  private normaliseName(name: null | undefined | string) {
+    return name?.trim()?.replace(/\s+/g, ' ');
   }
 
   protected readonly flags = flags;
