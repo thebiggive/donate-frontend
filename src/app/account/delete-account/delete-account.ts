@@ -50,7 +50,7 @@ export class DeleteAccount implements OnInit {
       }
 
       this.person = person;
-      this.fullName = this.normaliseName(person.first_name + ' ' + person.last_name);
+      this.fullName = this.normaliseName([person.first_name, person.last_name].filter(Boolean).join(' '));
     });
   }
 
