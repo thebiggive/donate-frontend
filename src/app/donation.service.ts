@@ -504,6 +504,7 @@ export class DonationService {
         return false;
 
       default:
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         throw new Error('Unexpected payment method type: ' + pspMethodType);
     }
   }

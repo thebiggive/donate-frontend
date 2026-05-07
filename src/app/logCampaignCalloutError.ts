@@ -6,6 +6,8 @@ export const logCampaignCalloutError = (
   calloutIdentifier?: string,
   matomoTracker?: MatomoTracker,
 ) => {
+  calloutIdentifier ??= 'Missing callout Identifier';
+
   if (!isBrowser) {
     console.error('Server-side error in: ' + context + '. Callout identifier: ' + calloutIdentifier);
     return;

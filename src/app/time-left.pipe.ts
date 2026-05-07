@@ -51,7 +51,8 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     for (const unit of TimeLeftPipe.unitDefinitions) {
       const wholeUnits = TimeLeftPipe.buildForUnit(date, unit.value);
       if (wholeUnits >= 1) {
-        return new DecimalPipe('en-GB').transform(wholeUnits, '1.0-0') + ` ${unit.label}` + (wholeUnits > 1 ? 's' : '');
+        const digits = new DecimalPipe('en-GB').transform(wholeUnits, '1.0-0')!;
+        return digits + ` ${unit.label}` + (wholeUnits > 1 ? 's' : '');
       }
     }
 
