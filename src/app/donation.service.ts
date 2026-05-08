@@ -403,13 +403,11 @@ export class DonationService {
     );
   }
 
-  confirmRyftPayment(donation: Donation, amountInPence: number, paymentSessionId: string): Observable<unknown> {
+  confirmRyftPayment(donation: Donation): Observable<unknown> {
     return this.http.post(
       `${environment.matchbotApiPrefix}/donations/${donation.donationId}/confirm`,
       {
         psp: 'ryft',
-        amount: amountInPence,
-        paymentSessionId: paymentSessionId,
       },
       this.getAuthHttpOptions(donation),
     );
