@@ -23,7 +23,7 @@ export class MoneyPipe implements PipeTransform {
     const formatted = exactCurrencyPipe.transform(money.amountInPence / 100, money.currency);
 
     if (typeof formatted !== 'string') {
-      throw new Error('Could not format money value: ' + money.toString());
+      throw new Error('Could not format money value: ' + JSON.stringify(money));
     }
 
     return formatted;

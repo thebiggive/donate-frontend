@@ -137,7 +137,7 @@ export class ChangeRegularGivingComponent implements OnInit {
 
     // `result` is either from the original attempt or from the next action, if applicable
     if (result.setupIntent?.status !== 'succeeded') {
-      const errorMessage = 'Payment method setup failed: ' + result?.error?.message;
+      const errorMessage = 'Payment method setup failed: ' + (result?.error?.message ?? 'unknown error');
       this.errorMessage = errorMessage;
       this.toaster.showError(errorMessage);
       return;

@@ -316,7 +316,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        { billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry },
+        { billingPostalAddress: this.billingPostCode ?? '', countryCode: billingCountry },
         this.stripeElements,
       );
 
