@@ -16,6 +16,7 @@ import { IdentityService, getPersonAuthHttpOptions } from './identity.service';
 import { completeStatuses, DonationStatus, resumableStatuses } from './donation-status.type';
 import { CookieService } from 'ngx-cookie-service';
 import { Campaign } from './campaign.model';
+import { assertUnreachable } from './assertUnreachable';
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -504,8 +505,7 @@ export class DonationService {
         return false;
 
       default:
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        throw new Error('Unexpected payment method type: ' + pspMethodType);
+        assertUnreachable(pspMethodType);
     }
   }
 }
