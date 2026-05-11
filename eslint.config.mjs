@@ -36,7 +36,11 @@ export default [
     })),
   {
     files: ["**/*.ts"],
-
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
     rules: {
       "@angular-eslint/directive-selector": [
         "error",
@@ -70,6 +74,8 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      "@typescript-eslint/no-base-to-string": "error",
+      "@typescript-eslint/restrict-plus-operands": ["error", { allowNullish: false }],
     },
   },
   ...compat

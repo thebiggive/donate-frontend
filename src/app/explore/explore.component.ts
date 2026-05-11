@@ -232,10 +232,19 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private setFundSpecificProps(fund: Fund, metaCampaign: MetaCampaign) {
-    this.tickerMainMessage =
-      this.currencyPipe.transform(fund.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
-      ' raised' +
-      (metaCampaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+    const formattedAmountRaised = this.currencyPipe.transform(
+      fund.amountRaised,
+      metaCampaign.currencyCode,
+      'symbol',
+      currencyPipeDigitsInfo,
+    );
+
+    if (formattedAmountRaised) {
+      this.tickerMainMessage =
+        formattedAmountRaised + ' raised' + (metaCampaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+    } else {
+      console.error('Failed to format amount raised for fund: ' + fund.name);
+    }
 
     const tickerItems = [];
     tickerItems.push({
@@ -568,15 +577,18 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     if (!this.fund) {
       if (!campaignInFuture) {
         const showGiftAid = metaCampaign.currencyCode === 'GBP' && metaCampaign.amountRaised > 0;
-        this.tickerMainMessage =
-          this.currencyPipe.transform(
-            metaCampaign.amountRaised,
-            metaCampaign.currencyCode,
-            'symbol',
-            currencyPipeDigitsInfo,
-          ) +
-          ' raised' +
-          (showGiftAid ? ' inc. Gift Aid' : '');
+        const formattedAmountRaised = this.currencyPipe.transform(
+          metaCampaign.amountRaised,
+          metaCampaign.currencyCode,
+          'symbol',
+          currencyPipeDigitsInfo,
+        );
+
+        if (formattedAmountRaised) {
+          this.tickerMainMessage = formattedAmountRaised + ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
+        } else {
+          console.error('Formatted amount raised is undefined for campaign:', metaCampaign);
+        }
       } else {
         this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(metaCampaign.startDate);
       }
