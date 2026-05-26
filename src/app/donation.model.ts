@@ -145,9 +145,11 @@ export interface Donation {
   tipAmount: number;
 
   /**
-   * ID assigned by PSP upon checkout initiation.
+   * Reference code for the donor to quote to us when they want to discuss this donation. For a complete donation
+   * paid through stripe will currently be the stripe PI ID, for other donations is the UUID set in matchbot. Undefined
+   * only in case of a new donation generated within frontend, not retrieved from matchbot.
    */
-  transactionId?: string;
+  referenceCode?: string;
 
   /**
    * ISO 8601 formatted datetime

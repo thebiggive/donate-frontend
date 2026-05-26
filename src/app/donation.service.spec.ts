@@ -37,7 +37,7 @@ describe('DonationService', () => {
       psp: 'stripe',
       status,
       tipAmount: 2.75,
-      transactionId: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+      referenceCode: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
       updatedTime: new Date().toISOString(),
     };
   };
@@ -78,7 +78,7 @@ describe('DonationService', () => {
           expect(result.donation.donationAmount).toEqual(1234.56);
           expect(result.donation.matchReservedAmount).toEqual(500.01);
           expect(result.donation.tipAmount).toEqual(2.75);
-          expect(result.donation.transactionId).toEqual('d290f1ee-6c54-4b01-90e6-d701748f0851');
+          expect(result.donation.referenceCode).toEqual('d290f1ee-6c54-4b01-90e6-d701748f0851');
         },
         () => {
           expect(false).toBe(true); // Always fail if observable errors
