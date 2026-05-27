@@ -94,7 +94,7 @@
             </p>
             <p>You will be able to log-in any time to see your donations or cancel the agreement.</p>
           }
-          <form [formGroup]="loginForm" (keydown.enter)="login()">
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginEmailAddress">Email address *</label>
               <input
@@ -106,6 +106,8 @@
                 autocapitalize="off"
               />
             </biggive-text-input>
+
+
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
               <div slot="input" style="display: flex">
@@ -119,6 +121,8 @@
                   formControlName="password"
                 />
                 <biggive-button
+                  role="button"
+                  tabindex="0"
                   aria-controls="loginPassword"
                   colourScheme="clear-primary"
                   (doButtonClick)="toggleShowLoginPassword()"

@@ -57,7 +57,7 @@
           >.
         </p>
 
-        <form [formGroup]="registerPostDonationForm" (keydown.enter)="registerPostDonation()">
+        <form [formGroup]="registerPostDonationForm" (ngSubmit)="registerPostDonation()">
           <div class="savedDetails">
             <div class="label">Email Address</div>
             <div class="value">
@@ -131,7 +131,7 @@
           <a href="/register">Register a new Big Give account</a>
         </p>
       } @else {
-        <form [formGroup]="registrationForm" (keydown.enter)="register()">
+        <form [formGroup]="registrationForm" (ngSubmit)="register()">
           @if (readyToTakeAccountDetails) {
             @if (enableOrgAccount) {
               <biggive-form-field-select
