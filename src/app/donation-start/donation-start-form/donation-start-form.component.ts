@@ -1338,8 +1338,47 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
   }
 
+  /**
+   * Proceed based on things like keyboard enter, including virtual mobile keyboards, iff:
+   * 1. the donor is *not* on a touch device (like a phone) AND they have the full tip information visible; or
+   * 2. they are on a later step than the first (amount and tips).
+   *
+   * When it's not appropriate to auto exit step 1, scroll down if applicable to move the tip information into view.
+   *
+   * Mobile is handled differently because of the high probability that a software keyboard is obscuring tip information
+   * in a way we can't detect. Directly pressing Continue or navigating by pressing step headers still work without
+   * this interception.
+   */
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
+
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+    if (this.stepper.selected?.label === stepLabels.yourDonation && !this.donorHasDonationFunds()) {
+      // @ViewChild seemed not to get current position, not sure why. Using the DOM directly is fine.
+      const heading = document.getElementById('supportBigGiveHeading');
+      const step1Continue = document.getElementById('step1Continue');
+
+      if (heading) {
+        const headingRect = heading.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const continueButtonBottom = step1Continue?.getBoundingClientRect().bottom || 0;
+
+        // 0 checks are a failsafe so that if DOM position values seem spurious we assume the worst and
+        // avoid advancing a step overzealously, to ensure donors see the info.
+        if (
+          isTouchDevice ||
+          continueButtonBottom > viewportHeight ||
+          headingRect.top === 0 ||
+          headingRect.height === 0
+        ) {
+          heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(() => heading.focus({ preventScroll: true }), 800);
+          return;
+        }
+      }
+    }
+
     await this.next();
   }
 
