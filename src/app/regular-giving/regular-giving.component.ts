@@ -278,17 +278,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
-    await this.next();
+    this.continue();
   }
 
   stepChanged(event: StepperSelectionEvent) {
     if (event.selectedStep.label === this.labelYourPaymentInformation) {
       this.prepareStripeElements();
     }
-  }
-
-  async next() {
-    this.stepper.next();
   }
 
   async submit() {

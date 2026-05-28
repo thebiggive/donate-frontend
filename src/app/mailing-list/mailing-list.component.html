@@ -46,7 +46,7 @@
             }
           }
 
-          <form [formGroup]="mailingListForm" (keydown.enter)="onSubmit()">
+          <form [formGroup]="mailingListForm" (ngSubmit)="onSubmit()">
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="firstName">First Name *</label>
               <input
