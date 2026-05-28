@@ -1,7 +1,7 @@
 @if (campaignOpenOnLoad) {
   <form class="c-donate-form" (ngSubmit)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
     <!-- Hidden submit button to ensure mobile / soft keyboards consistently trigger form submission -->
-    <button type="submit" class="b-hidden" style="display: none" aria-hidden="true"></button>
+    <button type="submit" class="b-hidden" aria-hidden="true"></button>
 
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" animationDuration="0">
       <mat-step
