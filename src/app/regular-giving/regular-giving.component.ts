@@ -287,10 +287,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  async next() {
-    this.stepper.next();
-  }
-
   async submit() {
     const invalid = this.mandateForm.invalid;
     if (invalid) {
