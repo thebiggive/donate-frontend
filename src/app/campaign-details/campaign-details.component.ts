@@ -1,5 +1,15 @@
 import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject, input, effect } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  AfterViewInit,
+  PLATFORM_ID,
+  ViewEncapsulation,
+  inject,
+  input,
+  effect,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -26,6 +36,7 @@ import { CampaignInfoComponent } from '../campaign-info/campaign-info.component'
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Map, TileLayer } from 'leaflet';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -55,7 +66,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     OptimisedImagePipe,
   ],
 })
-export class CampaignDetailsComponent implements OnInit, OnDestroy {
+export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   isEarlyPreview = input(false);
   private datePipe = inject(DatePipe);
   private location = inject(Location);
@@ -82,6 +93,17 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.setSecondaryProps(this.campaign);
+  }
+
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const map = new Map('map').setView([51.505, -0.09], 13);
+
+      new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+    }
   }
 
   constructor() {

@@ -58,6 +58,7 @@
     "friendly-challenge": "^0.9.16",
     "helmet": "^7.1.0",
     "jwt-decode": "^3.1.2",
+    "leaflet": "^2.0.0-alpha.1",
     "material-icons-font": "^2.1.0",
     "morgan": "^1.10.1",
     "ngx-cookie-service": "^21.1.0",
