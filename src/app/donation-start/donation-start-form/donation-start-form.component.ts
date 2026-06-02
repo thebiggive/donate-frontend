@@ -64,7 +64,6 @@ import { BiggiveFormFieldSelect, BiggiveTextInput } from '@biggive/components-an
 import { MatInput } from '@angular/material/input';
 import { MatHint } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
@@ -105,8 +104,6 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatInput,
     BiggiveFormFieldSelect,
     MatHint,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     MatIcon,
     MatButton,
     MatRadioGroup,
