@@ -19,7 +19,7 @@ card as a special case rather than changing the grid implemnation or replacing i
     />
   </div>
 } @else {
-  <biggive-grid [columnCount]="highlightCards.length" column-gap="3">
+  <biggive-grid [columnCount]="columnCount" column-gap="3">
     @for (card of highlightCards; track $index) {
       <biggive-basic-card
         [spaceBelow]="4"
