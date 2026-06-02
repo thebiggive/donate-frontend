@@ -2,4 +2,5 @@ dist
 tmp
 out-tsc
 bazel-out
+src/assets/map/*.geojson
 src/supportedBrowsers.ts

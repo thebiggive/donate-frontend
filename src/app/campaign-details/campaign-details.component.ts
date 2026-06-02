@@ -1,4 +1,5 @@
 import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 import {
   Component,
   OnDestroy,
@@ -10,6 +11,7 @@ import {
   input,
   effect,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -18,7 +20,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
-import { TimeLeftPipe } from '../time-left.pipe';
 import { Toast } from '../toast.service';
 import {
   BiggivePageSection,
@@ -36,7 +37,8 @@ import { CampaignInfoComponent } from '../campaign-info/campaign-info.component'
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Map, TileLayer } from 'leaflet';
+import { GeoJSON, Map, Rectangle } from 'leaflet';
+import type { FeatureCollection, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -44,7 +46,7 @@ import { Map, TileLayer } from 'leaflet';
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
-  providers: [TimeLeftPipe, DatePipe],
+  providers: [DatePipe],
   imports: [
     BiggivePageSection,
     BiggiveCallToAction,
@@ -69,6 +71,7 @@ import { Map, TileLayer } from 'leaflet';
 export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   isEarlyPreview = input(false);
   private datePipe = inject(DatePipe);
+  private http = inject(HttpClient);
   private location = inject(Location);
   private navigationService = inject(NavigationService);
   private pageMeta = inject(PageMetaService);
@@ -78,7 +81,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
   private sanitizer = inject(DomSanitizer);
   private toast = inject(Toast);
   private snackBar = inject(MatSnackBar);
-  timeLeftPipe = inject(TimeLeftPipe);
 
   campaign!: Campaign;
   campaignInPast = false;
@@ -95,15 +97,83 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
     this.setSecondaryProps(this.campaign);
   }
 
-  ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      const map = new Map('map').setView([51.505, -0.09], 13);
-
-      new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(map);
+  async ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+
+    const map = new Map('map', {
+      minZoom: 4,
+      maxZoom: 12,
+    }).setView([51.505, -0.09], 4);
+
+    const constantLayerStyle = {
+      fillColor: '#c9fdd4', // Light minty green for (not project-relevant) land; we'll use BG green to highlight.
+      fillOpacity: 1,
+      color: '#bbbbbb', // Grey outline
+      weight: 1,
+    };
+
+    // Blue background – sea / areas where we don't do geo highlighting.
+    new Rectangle(
+      [
+        [-90, -180],
+        [90, 180],
+      ],
+      {
+        fillColor: '#a9d1e9',
+        fillOpacity: 1,
+        stroke: false,
+        interactive: false,
+      },
+    ).addTo(map);
+
+    const nationData = await firstValueFrom(this.http.get('../../assets/map/nations.geojson'));
+    new GeoJSON(nationData, {
+      attribution:
+        'Boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
+      style: () => constantLayerStyle,
+    }).addTo(map);
+
+    const englandRegionsData = await firstValueFrom(this.http.get('../../assets/map/englandRegions.geojson'));
+    new GeoJSON(englandRegionsData, { style: () => constantLayerStyle }).addTo(map);
+
+    const localAuthorityData = await firstValueFrom(
+      this.http.get<FeatureCollection>('../../assets/map/localAuthorities.geojson'),
+    );
+    const demoAuthorities = ['E09000012', 'E09000028']; // Should be Hackney, Bermondsey
+    const matchedRegions: string[] = [];
+    // Build a layer with just project-relevant locations and a list of their names
+    const filteredAuthorities: FeatureCollection = {
+      ...localAuthorityData,
+      features: localAuthorityData.features.filter((feature: Feature<Geometry, GeoJsonProperties>) => {
+        const isMatch = demoAuthorities.includes(feature.properties?.LAD25CD);
+        if (isMatch) {
+          matchedRegions.push(feature.properties?.LAD25NM);
+        }
+        return isMatch;
+      }),
+    };
+
+    const projectLayer = new GeoJSON(filteredAuthorities, {
+      style: () => ({
+        fillColor: '#2af135',
+        fillOpacity: 1,
+        color: '#000000',
+        weight: 1.5,
+      }),
+      // No leaflet Layer type I can find, so:
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
+        if (feature.properties && feature.properties.LAD25NM) {
+          layer.bindPopup(feature.properties.LAD25NM);
+        }
+      },
+    }).addTo(map);
+
+    console.log('Regions matched via GeoJSON: ', matchedRegions);
+
+    map.fitBounds(projectLayer.getBounds());
   }
 
   constructor() {
