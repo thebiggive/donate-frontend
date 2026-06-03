@@ -1052,10 +1052,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           console.log('Payment Successful', session);
 
           if (!session.amount) {
+            this.submitting = false;
             throw new Error('Ryft payment session amount is falsy');
           }
 
           if (!session.id) {
+            this.submitting = false;
             throw new Error('Ryft payment session id is falsy');
           }
 
@@ -1064,6 +1066,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           } catch (_error) {
             this.paymentStepErrors = 'Sorry, we were not able to take your payment';
             this.toast.showError('Sorry, we were not able to take your payment');
+            this.submitting = false;
             return;
           }
 
@@ -1092,6 +1095,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         'Sorry, we were not able to take your payment. Please contact Big Give if the issue persists.',
       );
     }
+
+    this.submitting = false;
   };
 
   payWithStripe = async () => {
