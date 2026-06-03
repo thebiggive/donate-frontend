@@ -11,7 +11,6 @@ export type MetaCampaign = {
   currencyCode: 'GBP' | 'USD';
   status: 'Active' | 'Expired' | 'Preview' | null;
   hidden: boolean;
-  ready: boolean;
   summary: string;
   bannerUri: string | null;
   amountRaised: number;
