@@ -1036,12 +1036,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       throw new Error('donation  is not initialized');
     }
 
-    // @todo BG2-3106 - call matchbot to check it's OK to take payment for this donation
-    // (e.g. matching hasn't expired) and await the decision before the next line, as
-    // it isn't possible to initiate the payment from server side.
-
-    // Also make sure the amount on the payment session is updated based on the selected tip.
-
     try {
       // Await the payment attempt
       const ryftPaymentAttemptResponse = await this.ryftCardForm.attemptPayment({
@@ -1053,7 +1047,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         const session = ryftPaymentAttemptResponse.paymentSession;
 
         if (session.status === 'Approved') {
-          // should be 'Approved' so we cand do the capture from Matchbot.
+          // should be 'Approved' so we can do the capture from Matchbot.
           // Payment successful – show success page
           console.log('Payment Successful', session);
 
@@ -1078,20 +1072,25 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           return;
         }
         if (session.lastError) {
-          // Payment failed – show error to customer
           const message =
             ryftPaymentAttemptResponse.userFacingErrorMessage || 'Sorry, we were not able to take your payment';
           this.toast.showError(message);
           this.paymentStepErrors = message;
         }
       } else if (ryftPaymentAttemptResponse.type == 'action-required') {
-        // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
-        // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
-        // been handled within the ryft UI before attemptPayment resolves.
+        // this should never happen: from testing, Ryft's attemptPayment function handles
+        // 3DS requirements transparently by presenting the donor with a modal for them
+        // to authenticate as required.
+        console.error('Ryft action required, not expected:', ryftPaymentAttemptResponse);
+        this.toast.showError(
+          'Sorry, we were not able to take your payment. Please contact Big Give if the issue persists.',
+        );
       }
     } catch (error) {
-      // Log and display the error
       console.error('System Error:', error);
+      this.toast.showError(
+        'Sorry, we were not able to take your payment. Please contact Big Give if the issue persists.',
+      );
     }
   };
 
