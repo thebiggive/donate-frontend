@@ -1,5 +1,8 @@
 @if (campaignOpenOnLoad) {
-  <form class="c-donate-form" (keyup.enter)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
+  <form class="c-donate-form" (ngSubmit)="interceptSubmitAndProceedInstead($event)" [formGroup]="donationForm">
+    <!-- Hidden submit button to ensure mobile / soft keyboards consistently trigger form submission -->
+    <button type="submit" class="b-hidden" aria-hidden="true"></button>
+
     <mat-vertical-stepper id="stepper" linear #stepper (selectionChange)="stepChanged($event)" animationDuration="0">
       <mat-step
         formGroupName="amounts"
@@ -47,7 +50,7 @@
         @if (!donorHasDonationFunds()) {
           <div>
             <hr class="u-margin-auto-y-20" />
-            <h2 class="b-rt-0 b-m-0 b-bold">Support Big Give</h2>
+            <h2 id="supportBigGiveHeading" tabindex="-1" class="b-rt-0 b-m-0 b-bold">Support Big Give</h2>
             <p>
               Tips to Big Give (registered charity number 1136547) enable us to deliver our charitable mission and help
               us provide match funds to our charity partners. We truly appreciate any tip you can give - no matter the
@@ -176,7 +179,7 @@
         }
 
         <div aria-live="polite">
-          <div class="u-text-center">
+          <div id="step1Continue" class="u-text-center">
             @if (donationCreateError) {
               <p class="error">
                 Sorry, we can't register your donation right now. Please try again in a moment or
@@ -682,13 +685,7 @@
             </table>
           }
           @if (!submitting && !runningFinalPreSubmitUpdate && !finalPreSubmitUpdateFailed) {
-            <button
-              (click)="submit()"
-              (keyup.enter)="submit()"
-              class="continue c-donate-button"
-              mat-raised-button
-              color="primary"
-            >
+            <button type="button" (click)="submit()" class="continue c-donate-button" mat-raised-button color="primary">
               Donate now
             </button>
           }

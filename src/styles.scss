@@ -45,11 +45,6 @@ a {
   text-decoration: underline;
 }
 
-// this had to be styled at the root https://stackoverflow.com/a/71023336/6514933
-div.mat-expansion-panel-body {
-  padding: 0 !important;
-}
-
 .success-bar {
   --mat-snackbar-supporting-text-size: 17px;
   --mat-snackbar-supporting-text-font: mat.m2-font-family(abstract.$app-typography);

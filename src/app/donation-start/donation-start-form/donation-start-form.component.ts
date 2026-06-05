@@ -64,7 +64,6 @@ import { BiggiveFormFieldSelect, BiggiveTextInput } from '@biggive/components-an
 import { MatInput } from '@angular/material/input';
 import { MatHint } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
@@ -105,8 +104,6 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
     MatInput,
     BiggiveFormFieldSelect,
     MatHint,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     MatIcon,
     MatButton,
     MatRadioGroup,
@@ -1039,12 +1036,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       throw new Error('donation  is not initialized');
     }
 
-    // @todo BG2-3106 - call matchbot to check it's OK to take payment for this donation
-    // (e.g. matching hasn't expired) and await the decision before the next line, as
-    // it isn't possible to initiate the payment from server side.
-
-    // Also make sure the amount on the payment session is updated based on the selected tip.
-
     try {
       // Await the payment attempt
       const ryftPaymentAttemptResponse = await this.ryftCardForm.attemptPayment({
@@ -1056,15 +1047,17 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         const session = ryftPaymentAttemptResponse.paymentSession;
 
         if (session.status === 'Approved') {
-          // should be 'Approved' so we cand do the capture from Matchbot.
+          // should be 'Approved' so we can do the capture from Matchbot.
           // Payment successful – show success page
           console.log('Payment Successful', session);
 
           if (!session.amount) {
+            this.submitting = false;
             throw new Error('Ryft payment session amount is falsy');
           }
 
           if (!session.id) {
+            this.submitting = false;
             throw new Error('Ryft payment session id is falsy');
           }
 
@@ -1073,6 +1066,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           } catch (_error) {
             this.paymentStepErrors = 'Sorry, we were not able to take your payment';
             this.toast.showError('Sorry, we were not able to take your payment');
+            this.submitting = false;
             return;
           }
 
@@ -1081,21 +1075,28 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           return;
         }
         if (session.lastError) {
-          // Payment failed – show error to customer
           const message =
             ryftPaymentAttemptResponse.userFacingErrorMessage || 'Sorry, we were not able to take your payment';
           this.toast.showError(message);
           this.paymentStepErrors = message;
         }
       } else if (ryftPaymentAttemptResponse.type == 'action-required') {
-        // @todo BG2-3106   - deal with ryft action-required result if possible - although I'm not clear
-        // if that is a possible status here how we're supposed to handle if it is, or if any extra action would have
-        // been handled within the ryft UI before attemptPayment resolves.
+        // this should never happen: from testing, Ryft's attemptPayment function handles
+        // 3DS requirements transparently by presenting the donor with a modal for them
+        // to authenticate as required.
+        console.error('Ryft action required, not expected:', ryftPaymentAttemptResponse);
+        this.toast.showError(
+          'Sorry, we were not able to take your payment. Please contact Big Give if the issue persists.',
+        );
       }
     } catch (error) {
-      // Log and display the error
       console.error('System Error:', error);
+      this.toast.showError(
+        'Sorry, we were not able to take your payment. Please contact Big Give if the issue persists.',
+      );
     }
+
+    this.submitting = false;
   };
 
   payWithStripe = async () => {
@@ -1338,8 +1339,47 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
   }
 
+  /**
+   * Proceed based on things like keyboard enter, including virtual mobile keyboards, iff:
+   * 1. the donor is *not* on a touch device (like a phone) AND they have the full tip information visible; or
+   * 2. they are on a later step than the first (amount and tips).
+   *
+   * When it's not appropriate to auto exit step 1, scroll down if applicable to move the tip information into view.
+   *
+   * Mobile is handled differently because of the high probability that a software keyboard is obscuring tip information
+   * in a way we can't detect. Directly pressing Continue or navigating by pressing step headers still work without
+   * this interception.
+   */
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
+
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+    if (this.stepper.selected?.label === stepLabels.yourDonation && !this.donorHasDonationFunds()) {
+      // @ViewChild seemed not to get current position, not sure why. Using the DOM directly is fine.
+      const heading = document.getElementById('supportBigGiveHeading');
+      const step1Continue = document.getElementById('step1Continue');
+
+      if (heading) {
+        const headingRect = heading.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const continueButtonBottom = step1Continue?.getBoundingClientRect().bottom || 0;
+
+        // 0 checks are a failsafe so that if DOM position values seem spurious we assume the worst and
+        // avoid advancing a step overzealously, to ensure donors see the info.
+        if (
+          isTouchDevice ||
+          continueButtonBottom > viewportHeight ||
+          headingRect.top === 0 ||
+          headingRect.height === 0
+        ) {
+          heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(() => heading.focus({ preventScroll: true }), 800);
+          return;
+        }
+      }
+    }
+
     await this.next();
   }
 

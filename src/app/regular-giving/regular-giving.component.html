@@ -42,7 +42,7 @@
       <biggive-page-section>
         <form
           class="c-regular-giving-form"
-          (keydown.enter)="interceptSubmitAndProceedInstead($event)"
+          (ngSubmit)="interceptSubmitAndProceedInstead($event)"
           [formGroup]="mandateForm"
         >
           <mat-vertical-stepper
@@ -434,8 +434,8 @@
               <div aria-live="polite" class="u-text-center">
                 @if (!submitting) {
                   <button
+                    type="button"
                     (click)="submit()"
-                    (keyup.enter)="submit()"
                     class="c-donate-button continue"
                     mat-raised-button
                     color="primary"

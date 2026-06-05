@@ -295,10 +295,6 @@ input {
 
 // I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
 // https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
-mat-expansion-panel:has(:focus-visible) {
-  box-shadow: 0 8px 8px -7px abstract.$colour-highlight !important;
-}
-
 button:focus-visible {
   outline: 1px solid abstract.$colour-highlight;
 }
@@ -396,20 +392,6 @@ div.match-funded-badge-wrapper {
   position: relative;
 }
 
-mat-expansion-panel ul li {
-  list-style: none disc outside;
-  padding-left: 1em;
-}
-
-mat-expansion-panel {
-  margin-top: 30px;
-}
-
-.mat-expansion-panel-header {
-  padding-right: 5px;
-  padding-left: 0;
-}
-
 .button {
   text-decoration: underline;
   display: inline-block;
@@ -438,14 +420,6 @@ div.sr-card-element {
 
 h3 {
   display: inline-block;
-}
-
-.mat-expansion-panel {
-  box-shadow: none !important;
-}
-
-mat-expansion-panel-header h3 {
-  min-height: 34px; // must be at least this high or so to make the .span-hr visible
 }
 
 .span-hr {
