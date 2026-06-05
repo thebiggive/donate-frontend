@@ -110,7 +110,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
     const constantLayerStyle = {
       fillColor: '#c9fdd4', // Light minty green for (not project-relevant) land; we'll use BG green to highlight.
       fillOpacity: 1,
-      color: '#bbbbbb', // Grey outline
+      color: '#999999', // Grey outline
       weight: 1,
     };
 
@@ -121,7 +121,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
         [90, 180],
       ],
       {
-        fillColor: '#a9d1e9',
+        fillColor: '#dddddd',
         fillOpacity: 1,
         stroke: false,
         interactive: false,
@@ -155,11 +155,12 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
       }),
     };
 
+    // todo have an a11y block (probably not announcement) with active project locations.
     const projectLayer = new GeoJSON(filteredAuthorities, {
       style: () => ({
-        fillColor: '#2af135',
-        fillOpacity: 1,
-        color: '#000000',
+        fillColor: '#2c089b',
+        fillOpacity: 0.4,
+        color: '#2c089b',
         weight: 1.5,
       }),
       // No leaflet Layer type I can find, so:
