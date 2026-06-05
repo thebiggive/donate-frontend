@@ -128,9 +128,18 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.mapElement) return;
 
     this.map = new Map(this.mapElement.nativeElement, {
-      minZoom: 4,
-      maxZoom: 12,
-    }).setView([51.505, -0.09], 4);
+      dragging: false,
+      // Setting min + max zoom to the view bounds level alone didn't seem to reliably make controls do nothing.
+      // So switching off every way I could find to zoom (the following 6 lines) seems the only safe way to
+      // achieve this.
+      zoomControl: false,
+      boxZoom: false,
+      doubleClickZoom: false,
+      keyboard: false,
+      scrollWheelZoom: false,
+      touchZoom: false,
+      zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
+    }).setView([51.505, -0.09], 4); // Replaced later when we fit project highlight bounds.
 
     const constantLayerStyle = {
       fillColor: '#c9fdd4', // Light minty green for (not project-relevant) land; we'll use BG green to highlight.
