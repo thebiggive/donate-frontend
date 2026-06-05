@@ -252,7 +252,8 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   protected get countries() {
     return this.campaign.locations
       .filter((location) => location.countryName !== null)
-      .map((location) => location.countryName);
+      .map((location) => location.countryName)
+      .sort((a, b) => a.localeCompare(b));
   }
 
   protected get hasRegions() {
