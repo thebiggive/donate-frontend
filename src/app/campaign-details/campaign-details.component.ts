@@ -91,6 +91,8 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
+  /** @var List for accessible read-outs **/
+  protected impactRegions: string = '';
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -141,22 +143,13 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
     const localAuthorityData = await firstValueFrom(
       this.http.get<FeatureCollection>('../../assets/map/localAuthorities.geojson'),
     );
-    const demoAuthorities = ['E09000012', 'E09000028']; // Should be Hackney, Bermondsey
+    const demoHighlights = ['E09000012', 'E09000028', 'E12000008']; // Should be Hackney, Bermondsey, South East England
     const matchedRegions: string[] = [];
-    // Build a layer with just project-relevant locations and a list of their names
-    const filteredAuthorities: FeatureCollection = {
-      ...localAuthorityData,
-      features: localAuthorityData.features.filter((feature: Feature<Geometry, GeoJsonProperties>) => {
-        const isMatch = demoAuthorities.includes(feature.properties?.LAD25CD);
-        if (isMatch) {
-          matchedRegions.push(feature.properties?.LAD25NM);
-        }
-        return isMatch;
-      }),
-    };
 
-    // todo have an a11y block (probably not announcement) with active project locations.
-    const projectLayer = new GeoJSON(filteredAuthorities, {
+    // Build a layer with just project-relevant locations and a list of their names
+    const highlightAreas = await this.getHighlightedFeatures(demoHighlights);
+
+    const projectLayer = new GeoJSON(highlightAreas, {
       style: () => ({
         fillColor: '#2c089b',
         fillOpacity: 0.4,
@@ -166,13 +159,18 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
       // No leaflet Layer type I can find, so:
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
-        if (feature.properties && feature.properties.LAD25NM) {
-          layer.bindPopup(feature.properties.LAD25NM);
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(feature.properties.name);
+          // Check for unique to avoid duplicates from e.g. unitary authorities that are in 2 sources.
+          if (!matchedRegions.includes(feature.properties.name)) {
+            matchedRegions.push(feature.properties.name);
+          }
         }
       },
     }).addTo(map);
 
-    console.log('Regions matched via GeoJSON: ', matchedRegions);
+    // Want to change this in one go to encourage screen readers to politely announce a change just once.
+    this.impactRegions = `UK impact is in ${matchedRegions.join(', ')}`; // No 'and' for now, think it's enough to encourage pauses.
 
     map.fitBounds(projectLayer.getBounds());
   }
@@ -280,5 +278,37 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     return this.campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+  }
+
+  /**
+   * Checks all 4 layers for a region code match, returning every matching feature with the best
+   * readable place name in a property `name`.
+   */
+  private async getHighlightedFeatures(regionCodes: string[]): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
+    const layers = [
+      { path: '../../assets/map/localAuthorities.geojson', codeField: 'LAD25CD', nameField: 'LAD25NM' },
+      { path: '../../assets/map/counties.geojson', codeField: 'CTYUA25CD', nameField: 'CTYUA25NM' },
+      { path: '../../assets/map/englandRegions.geojson', codeField: 'RGN25CD', nameField: 'RGN25NM' },
+      { path: '../../assets/map/nations.geojson', codeField: 'CTRY25CD', nameField: 'CTRY25NM' },
+    ];
+
+    const fetchPromises = layers.map(async (layer) => {
+      const data = await firstValueFrom(this.http.get<FeatureCollection>(layer.path));
+
+      return data.features
+        .filter(
+          (feature: Feature<Geometry, GeoJsonProperties>) =>
+            feature.properties && regionCodes.includes(feature.properties[layer.codeField]),
+        )
+        .map((feature: Feature<Geometry, GeoJsonProperties>) => {
+          if (feature.properties) {
+            feature.properties['name'] = feature.properties[layer.nameField];
+          }
+          return feature;
+        });
+    });
+
+    const results = await Promise.all(fetchPromises);
+    return results.flat();
   }
 }
