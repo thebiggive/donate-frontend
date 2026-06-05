@@ -57,5 +57,17 @@
         }
       </ul>
     }
+
+    @if (campaign.locations.length > 0) {
+      <h5>Impact areas</h5>
+      <hr />
+      <ul>
+        @for (country of countries; track country) {
+          <li>
+            {{ country }}
+          </li>
+        }
+      </ul>
+    }
   </div>
 </div>

@@ -89,4 +89,10 @@ export class CampaignInfoComponent implements OnInit {
     // the best fallback.
     return `/${this.campaign.parentRef}/${this.campaign.championRef}`;
   }
+
+  protected get countries() {
+    return this.campaign.locations
+      .filter((location) => location.countryName !== null)
+      .map((location) => location.countryName);
+  }
 }

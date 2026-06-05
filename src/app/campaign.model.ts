@@ -51,11 +51,10 @@ export type Campaign = {
     twitter?: string;
     website: string;
   };
-  countries: string[]; // TODO remove
   impactReporting: string | null;
   impactSummary: string | null;
   isMatched: boolean;
-  locations?: Array<{ countryName: string; regionCode: string }>; // TODO make always defined once other apps ready
+  locations: Array<{ countryName: string; regionCode: null } | { countryName: null; regionCode: string }>;
   problem: string | null;
   quotes: Array<{ person: string; quote: string }>;
   solution: string | null;

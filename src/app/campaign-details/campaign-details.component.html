@@ -48,7 +48,7 @@
             [imageAlt]="campaign.banner.alt_text"
             [slug]="campaign.isMatched ? 'Match Funded' : null"
             [charityName]="campaign.charity.name"
-            [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+            [charityLocation]="null"
             [imageHeightPercent]="30.6"
           >
           </biggive-branded-image>
@@ -60,7 +60,7 @@
             [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
             [slug]="campaign.isMatched ? 'Match Funded' : null"
             [charityName]="campaign.charity.name"
-            [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : campaign.countries[0] || null"
+            [charityLocation]="null"
             [imageHeightPercent]="30.6"
           >
           </biggive-branded-image>
