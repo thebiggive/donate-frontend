@@ -57,5 +57,27 @@
         }
       </ul>
     }
+
+    @if (campaign.locations.length > 0) {
+      <h5>Impact areas</h5>
+      <hr />
+      <ul>
+        @for (country of countries; track country) {
+          <li>
+            {{ country }}
+          </li>
+        }
+      </ul>
+      @if (hasRegions) {
+        <div
+          tabindex="-1"
+          #mapElement
+          style="height: 400px; width: 100%; margin-top: 2rem; margin-bottom: 2rem; z-index: 0"
+        ></div>
+        <div tabindex="0" class="visually-hidden" aria-live="polite">
+          <p>{{ impactRegions }}</p>
+        </div>
+      }
+    }
   </div>
 </div>

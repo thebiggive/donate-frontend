@@ -35,7 +35,8 @@
             "styles": [
               "src/styles.scss",
               "node_modules/@biggive/components/dist/biggive/assets/fonts/EuclidTriangle/stylesheet.css",
-              "node_modules/material-icons-font/material-icons-font.css"
+              "node_modules/material-icons-font/material-icons-font.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -216,7 +217,8 @@
             "styles": [
               "src/styles.scss",
               "node_modules/@biggive/components/dist/biggive/assets/fonts/EuclidTriangle/stylesheet.css",
-              "node_modules/material-icons-font/material-icons-font.css"
+              "node_modules/material-icons-font/material-icons-font.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           }
