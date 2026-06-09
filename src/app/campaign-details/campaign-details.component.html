@@ -181,7 +181,7 @@
       <div class="c-tabs">
         <mat-tab-group class="c-tab-group" animationDuration="0ms" [color]="'primary'">
           @if (campaign.problem?.trim() || campaign.solution?.trim()) {
-            <mat-tab label="Campaign overview">
+            <mat-tab label="Overview">
               <div class="c-details">
                 <biggive-heading
                   space-above="6"
@@ -287,7 +287,7 @@
           }
 
           @if (campaign.budgetDetails.length > 0 || campaign.alternativeFundUse) {
-            <mat-tab label="Where's the money going?">
+            <mat-tab label="Budget">
               <biggive-heading
                 space-above="6"
                 space-below="0"
@@ -327,7 +327,7 @@
           }
 
           @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim()) {
-            <mat-tab label="Impact &amp; reporting">
+            <mat-tab label="Impact">
               <div class="c-impact">
                 <biggive-heading
                   space-above="6"

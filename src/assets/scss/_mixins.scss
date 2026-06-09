@@ -2,7 +2,7 @@
 @use "sass:color";
 
 @mixin size-md {
-  font-size: 14px;
+  font-size: 16px;
 }
 @mixin size-lg {
   font-size: 18px;
@@ -19,16 +19,16 @@
 
 @mixin b-rt-sm {
   font-size: 11px;
-  line-height: 14px;
+  line-height: 16px;
   @media #{var.$breakpoint-lg} {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 22px;
   }
 }
 
 @mixin b-rt-0 {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 22px;
   @media #{var.$breakpoint-lg} {
     font-size: 18px;
     line-height: 27px;
