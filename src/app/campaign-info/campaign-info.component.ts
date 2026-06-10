@@ -58,6 +58,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   // We explicitly use 'any' here since the actual typings for Leaflet Map aren't strictly available in this declaration.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private map?: any;
+  private projectBounds?: DOMRect;
   private resizeObserver?: ResizeObserver;
 
   ngOnInit() {
@@ -110,6 +111,9 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
             this.initMap(regionCodes);
           } else {
             this.map.invalidateSize();
+            if (this.projectBounds) {
+              this.map.fitBounds(this.projectBounds);
+            }
           }
         }
       }
@@ -199,7 +203,8 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     // Want to change this in one go to encourage screen readers to politely announce a change just once.
     this.impactRegions = `UK impact is in ${matchedRegions.join(', ')}`; // No 'and' for now, think it's enough to encourage pauses.
 
-    this.map.fitBounds(projectLayer.getBounds());
+    this.projectBounds = projectLayer.getBounds();
+    this.map.fitBounds(this.projectBounds);
   }
 
   private async getHighlightedFeatures(regionCodes: string[]): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
