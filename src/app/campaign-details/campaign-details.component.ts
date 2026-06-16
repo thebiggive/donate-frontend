@@ -1,5 +1,6 @@
 import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject, input, effect } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -8,7 +9,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
-import { TimeLeftPipe } from '../time-left.pipe';
 import { Toast } from '../toast.service';
 import {
   BiggivePageSection,
@@ -33,7 +33,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
-  providers: [TimeLeftPipe, DatePipe],
+  providers: [DatePipe],
   imports: [
     BiggivePageSection,
     BiggiveCallToAction,
@@ -58,6 +58,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   isEarlyPreview = input(false);
   private datePipe = inject(DatePipe);
+  private http = inject(HttpClient);
   private location = inject(Location);
   private navigationService = inject(NavigationService);
   private pageMeta = inject(PageMetaService);
@@ -67,7 +68,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private toast = inject(Toast);
   private snackBar = inject(MatSnackBar);
-  timeLeftPipe = inject(TimeLeftPipe);
 
   campaign!: Campaign;
   campaignInPast = false;
