@@ -18,6 +18,7 @@ export class DonationStartLoginComponent {
   @Input({ required: true }) loadAuthedPersonInfo!: (dataId: string, dataJwt: string) => void;
   @Input({ required: true }) campaign!: Campaign;
   @Input({ required: true }) creditPenceToUse!: number;
+  @Input({ required: true }) donorsCreditPence!: number;
   @Input({ required: true }) email: string = '';
   @Input({ required: true }) personId: string | undefined;
   @Input({ required: false }) loggedInWithPassword?: boolean;
