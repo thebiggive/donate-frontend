@@ -416,7 +416,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     } = {
       amounts: this.formBuilder.group({
         donationAmount: [
-          null,
+          { value: null, disabled: this.noPsps },
           [
             requiredNotBlankValidator,
             getCurrencyMinValidator(1), // min donation is £1
