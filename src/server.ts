@@ -125,6 +125,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'api.friendlycaptcha.com',
         'https://api.stripe.com',
+        'https://*.ryftpay.com', // Required in Ryft 3DS, e.g. sandbox-api.ryftpay.com
         `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script; possibly Angular inline state handover scripts.
         `'self'`, // For e.g. Cloudflare injected script to connect back to same origin
       ],
