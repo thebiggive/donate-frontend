@@ -171,7 +171,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   donorsCreditPence = 0; // Set non-zero if logged in and Customer has a credit balance in the right currency.
-  creditPenceToUse = 0; // Set non-zero if donorsCreditPence is non-zero and the campaign is one that can accept donor credit (i.e. on stripe)
+  creditPenceToUse = 0; // Set non-zero if donorsCreditPence is non-zero and the campaign is one that can accept donor credit (i.e. on stripe). Limits donation amount too in that case.
   currencySymbol!: string;
 
   donationForm!: FormGroup;
