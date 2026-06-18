@@ -170,7 +170,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
-  creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
+  donorsCreditPence = 0; // Set non-zero if logged in and Customer has a credit balance in the right currency.
+  creditPenceToUse = 0; // Set non-zero if donorsCreditPence is non-zero and the campaign is one that can accept donor credit (i.e. on stripe)
   currencySymbol!: string;
 
   donationForm!: FormGroup;
@@ -1679,10 +1680,17 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       person.cash_balance &&
       person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0
     ) {
-      this.creditPenceToUse = parseInt(
+      this.donorsCreditPence = parseInt(
         person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
         10,
       );
+
+      if (this.campaign.charity.psp === 'stripe') {
+        // credit is stored at stripe so can't be used to donate to campaigns using any other PSP.
+
+        this.creditPenceToUse = this.donorsCreditPence;
+      }
+
       this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);

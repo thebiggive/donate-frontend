@@ -26,7 +26,9 @@
         [campaign]="campaign"
         [loggedInWithPassword]="this.loggedInWithPassword"
         [loginChangeEmitter]="identityService.loginStatusChanged"
-      ></app-donation-start-login>
+        [donorsCreditPence]="(this.donationStartForm && this.donationStartForm.donorsCreditPence) || 0"
+      >
+      </app-donation-start-login>
 
       @if (!campaignOpenOnLoad) {
         <p>
