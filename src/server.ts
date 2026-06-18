@@ -104,6 +104,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
     'https://js.stripe.com',
     'https://hooks.stripe.com',
     'https://web-sdk.ryftpay.com',
+    'https://*.3dsecure.io', // Ryft 3DS
     'blob:', // for friendly-captcha
     'player.vimeo.com',
     'www.youtube.com',
