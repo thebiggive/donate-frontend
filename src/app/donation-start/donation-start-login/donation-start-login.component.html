@@ -11,7 +11,14 @@
           {{ creditPenceToUse / 100 | exactCurrency: campaign.currencyCode }}
         </p>
       }
-      @if (donorsCreditPence > 0 && creditPenceToUse === 0 && this.campaign.charity.psp !== "stripe") {
+      @if (
+        donorsCreditPence > 0 &&
+        creditPenceToUse === 0 &&
+        this.campaign.charity.psp &&
+        this.campaign.charity.psp !== "stripe"
+      ) {
+        <!-- relevant only for a truthy non-stripe psp. Falsy psp doesn't really mean the charity doesn't use stripe, it just means
+       no PSP is correctly configured but they may still use stripe when possible..-->
         <p>
           You have a credit balance of
           {{ donorsCreditPence / 100 | exactCurrency: campaign.currencyCode }}, but this charity's campaign does not use
