@@ -129,6 +129,10 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
       ],
       'default-src': [`'none'`],
       'font-src': [`'self'`, 'data:'],
+      'form-action': [
+        `'self'`,
+        'https://*.3dsecure.io', // Ryft 3DS
+      ],
       'style-src': [
         `'self'`,
         'data:',
@@ -141,6 +145,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'https://app.getsitecontrol.com',
         'https://www.fundraisingregulator.org.uk',
+        'https://web-sdk.ryftpay.com', // Requests made during 3DS, maybe elsewhere.
         ...imageHosts,
       ],
       'script-src': [
