@@ -100,15 +100,10 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
 
   // frame-src and child-src do very nearly the same thing, specifying both the same.
   const frameAndChildSrc = [
-    'https://*.js.stripe.com',
-    'https://js.stripe.com',
-    'https://hooks.stripe.com',
-    'https://*.ryftpay.com', // Ryft generally requires web-sdk.ryftpay.com and 3DS requires e.g. sandbox-hooks.ryftpay.com
-    'https://*.3dsecure.io', // Ryft 3DS
+    // Any https host, as required by Ryft for their 3DS. Their own code also runs in frame on *.ryftpay.com.
+    // Also covers previous *.js.stripe.com, js.stripe.com and hooks.stripe.com, and video providers.
+    'https:',
     'blob:', // for friendly-captcha
-    'player.vimeo.com',
-    'www.youtube.com',
-    'www.youtube-nocookie.com',
   ];
 
   /**
@@ -133,7 +128,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
       'font-src': [`'self'`, 'data:'],
       'form-action': [
         `'self'`,
-        'https://*.3dsecure.io', // Ryft 3DS
+        'https:', // Ryft 3DS
       ],
       'style-src': [
         `'self'`,
