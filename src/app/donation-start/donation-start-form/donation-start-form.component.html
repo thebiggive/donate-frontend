@@ -38,6 +38,12 @@
             />
           </biggive-text-input>
         </div>
+        @if (noPsps) {
+          <p class="error">
+            Sorry, there is a technical issue with this campaign. We cannot take donations right now. Please try again
+            later.
+          </p>
+        }
         @if (
           donationAmountField?.invalid &&
           donationAmountField?.errors &&
@@ -631,12 +637,6 @@
           }
           @if (retrying) {
             <p class="error" aria-live="polite">It looks like our system is a bit busy, one moment please&hellip;</p>
-          }
-          @if (noPsps) {
-            <p class="error" aria-live="assertive">
-              Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few
-              minutes to try again.
-            </p>
           }
           @if (stripeError) {
             <p class="stripeError" aria-live="assertive">
