@@ -103,7 +103,8 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
     'https://*.js.stripe.com',
     'https://js.stripe.com',
     'https://hooks.stripe.com',
-    'https://web-sdk.ryftpay.com',
+    'https://*.ryftpay.com', // Ryft generally requires web-sdk.ryftpay.com and 3DS requires e.g. sandbox-hooks.ryftpay.com
+    'https://*.3dsecure.io', // Ryft 3DS
     'blob:', // for friendly-captcha
     'player.vimeo.com',
     'www.youtube.com',
@@ -124,11 +125,16 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'api.friendlycaptcha.com',
         'https://api.stripe.com',
+        'https://*.ryftpay.com', // Required in Ryft 3DS, e.g. sandbox-api.ryftpay.com
         `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script; possibly Angular inline state handover scripts.
         `'self'`, // For e.g. Cloudflare injected script to connect back to same origin
       ],
       'default-src': [`'none'`],
       'font-src': [`'self'`, 'data:'],
+      'form-action': [
+        `'self'`,
+        'https://*.3dsecure.io', // Ryft 3DS
+      ],
       'style-src': [
         `'self'`,
         'data:',
@@ -141,6 +147,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'https://app.getsitecontrol.com',
         'https://www.fundraisingregulator.org.uk',
+        'https://web-sdk.ryftpay.com', // Requests made during 3DS, maybe elsewhere.
         ...imageHosts,
       ],
       'script-src': [

@@ -11,6 +11,15 @@
           {{ creditPenceToUse / 100 | exactCurrency: campaign.currencyCode }}
         </p>
       }
+      @if (donorsCreditPence > 0 && creditPenceToUse === 0 && this.campaign.charity.psp !== "stripe") {
+        <p>
+          You have a credit balance of
+          {{ donorsCreditPence / 100 | exactCurrency: campaign.currencyCode }}, but this charity's campaign does not use
+          Stripe as its payment processor, which means you can't use the stored credit on this page. You may donate
+          using a payment card here.
+        </p>
+      }
+
       <p>
         <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
       </p>

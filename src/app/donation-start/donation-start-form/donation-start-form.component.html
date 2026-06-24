@@ -38,6 +38,12 @@
             />
           </biggive-text-input>
         </div>
+        @if (noPsps) {
+          <p class="error">
+            Sorry, there is a technical issue with this campaign. We cannot take donations right now. Please try again
+            later.
+          </p>
+        }
         @if (
           donationAmountField?.invalid &&
           donationAmountField?.errors &&
@@ -312,14 +318,16 @@
         </mat-step>
       }
       <mat-step formGroupName="payment" [stepControl]="paymentGroup" [label]="stepLabels.paymentDetails">
-        <p class="b-grey b-rt-sm u-padding-top-20">
-          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" class="u-width-stripe-logo" />
-          <br />
-          <a href="https://stripe.com/docs/security/stripe" target="_blank" class="u-inline-block u-width-13rem"
-            ><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn
-            more about Stripe</a
-          >
-        </p>
+        @if (campaign.charity.psp === "stripe") {
+          <p class="b-grey b-rt-sm u-padding-top-20">
+            <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" class="u-width-stripe-logo" />
+            <br />
+            <a href="https://stripe.com/docs/security/stripe" target="_blank" class="u-inline-block u-width-13rem"
+              ><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+              Learn more about Stripe</a
+            >
+          </p>
+        }
         <div class="payment-details">
           @if (!donor?.is_organisation) {
             <div>
@@ -629,12 +637,6 @@
           }
           @if (retrying) {
             <p class="error" aria-live="polite">It looks like our system is a bit busy, one moment please&hellip;</p>
-          }
-          @if (noPsps) {
-            <p class="error" aria-live="assertive">
-              Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few
-              minutes to try again.
-            </p>
           }
           @if (stripeError) {
             <p class="stripeError" aria-live="assertive">
