@@ -131,7 +131,7 @@ export class SearchService {
    * Get just the params which should be in the query string as they diverge
    * from the defaults.
    */
-  getQueryParams(defaultSort = ''): { [key: string]: string } {
+  getQueryParams(defaultSort = '', location: GeolocationPosition | undefined): { [key: string]: string } {
     const defaults: { [key: string]: string } = SearchService.selectedDefaults(defaultSort);
     const queryParams: { [key: string]: string } = {};
     const length = this.selected.term?.length || 0;
@@ -147,6 +147,13 @@ export class SearchService {
 
     if (this.selected['sortField'] === 'relevance' && length === 0) {
       delete queryParams['sortField'];
+    }
+
+    if (location) {
+      queryParams['sortField'] = 'location';
+
+      // we don't put the actual location for privacy, put a random number to make sure the query string changes every time and the change can be picked up by event listeners.
+      queryParams['r'] = Math.random().toString();
     }
 
     return queryParams;

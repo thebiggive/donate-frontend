@@ -21,6 +21,9 @@ export class CampaignService {
 
   private apiPath = '/campaigns/services/apexrest/v1.0' as const;
 
+  /** Location around which the donor wants to search for campaigns, as given by their device */
+  private geoLocationPosition?: GeolocationPosition;
+
   /**
    * See also the less forgiving variant `campaignIsOpenLessForgiving`.
    */
@@ -104,11 +107,25 @@ export class CampaignService {
     return CampaignService.percentRaisedOfIndividualCampaign(campaign);
   }
 
+  /**
+   * If a location is passed then also has a side-effect of storing a reference to the location on the service,
+   * since for privacy reasons we don't want to show the precise location in the address bar. May be able to refactor
+   * later to avoid side-effects.
+   */
   buildQuery(
-    selected: SelectedType,
-    offset: number,
-    campaignSlug?: string,
-    fundSlug?: string,
+    {
+      selected,
+      offset,
+      campaignSlug,
+      fundSlug,
+      geoLocationPosition,
+    }: {
+      selected: SelectedType;
+      offset: number;
+      campaignSlug?: string;
+      fundSlug?: string;
+      geoLocationPosition?: GeolocationPosition;
+    },
     // any predates having this linting rule on.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): { [key: string]: any } {
@@ -128,6 +145,9 @@ export class CampaignService {
     }
 
     this.sortForMatchbot(query, selected);
+
+    this.geoLocationPosition = geoLocationPosition;
+
     return query;
   }
 
@@ -189,6 +209,14 @@ export class CampaignService {
 
     if (searchQuery.term) {
       params = params.append('term', searchQuery.term);
+    }
+
+    if (this.geoLocationPosition) {
+      params = params
+        .append('latitude', this.geoLocationPosition.coords.latitude)
+        .append('longitude', this.geoLocationPosition.coords.longitude);
+
+      params = params.set('sortField', 'location');
     }
 
     return this.http
