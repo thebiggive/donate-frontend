@@ -22,14 +22,14 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableEditHomeAddress: true,
         enableWithdrawFunds: true,
         enableOrgAccount: true,
-        enableSearchByLocation: false,
+        enableSearchByLocation: true,
       };
     case 'staging':
       return {
         enableEditHomeAddress: true,
         enableWithdrawFunds: true,
         enableOrgAccount: true,
-        enableSearchByLocation: false,
+        enableSearchByLocation: true,
       };
     case 'production':
       return {
