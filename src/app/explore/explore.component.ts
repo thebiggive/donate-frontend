@@ -22,7 +22,7 @@ import {
   BiggivePageSection,
   BiggiveGrid,
   BiggiveCampaignCard,
-  BiggiveHeadingBanner,
+  BiggiveHeadingBanner, BiggiveButton,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
@@ -77,6 +77,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     CurrencyPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
+    BiggiveButton,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -663,5 +664,15 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.setTickerParams(metaCampaign);
       }, 1000);
     }
+  }
+
+  protected searchByLocation() {
+    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+      console.log(position);
+      alert("Your position is: " + JSON.stringify(position.coords));
+    }, (error: GeolocationPositionError) => {
+      console.error(error);
+      alert("GeolocationPositionError: " + error.message)
+    });
   }
 }

@@ -54,6 +54,10 @@
     />
   }
   <biggive-page-section>
+    @if (flags.enableSearchByLocation) {
+      <p>(Temporary UI for location search below - to be integrated into filter grid and/or future map display of campaigns)</p>
+      <biggive-button (doButtonClick)="searchByLocation()" label="Find Campaigns near me" size="medium" colour-scheme="primary"/>
+    }
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <biggive-campaign-card-filter-grid
