@@ -60,7 +60,7 @@
           (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
         </p>
 
-        @if (this.clientCountryCode === "GB" || ! this.clientCountryCode) {
+        @if (this.clientCountryCode === "GB" || !this.clientCountryCode) {
           <!-- We only support searching by geolocation coordinates within the UK.
         Dev environments don't have this header so we also need to support it there. -->
           <biggive-button
