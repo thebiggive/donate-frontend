@@ -59,19 +59,24 @@
         <p>
           (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
         </p>
-        <biggive-button
-          (doButtonClick)="searchByLocation()"
-          [disabled]="fetchingLocation"
-          [label]="fetchingLocation ? 'Fetching location info....' : 'Set location from device'"
-          size="medium"
-          colour-scheme="primary"
-        ></biggive-button>
-        <biggive-button
-          (doButtonClick)="this.toaster.showError('Sorry, Not implemented jut yet')"
-          [label]="'Enter coordinates manually for test'"
-          size="medium"
-          colour-scheme="primary"
-        ></biggive-button>
+
+        @if (this.clientCountryCode === "GB" || environment.environmentId === "development") {
+          <!-- We only support searching by geolocation coordinates within the UK.
+        Dev environments don't have this header so we also need to support it there. -->
+          <biggive-button
+            (doButtonClick)="searchByLocation()"
+            [disabled]="fetchingLocation"
+            [label]="fetchingLocation ? 'Fetching location info....' : 'Set location from device'"
+            size="medium"
+            colour-scheme="primary"
+          ></biggive-button>
+          <biggive-button
+            (doButtonClick)="promptForFakeLocation()"
+            [label]="'Enter coordinates manually for test'"
+            size="medium"
+            colour-scheme="primary"
+          ></biggive-button>
+        }
 
         @if (location) {
           <p>

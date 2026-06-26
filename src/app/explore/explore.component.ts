@@ -49,6 +49,7 @@ import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.comp
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
+import { COUNTRY_CODE } from '../country-code.token';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -154,6 +155,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected fetchingLocation = false;
   protected location: GeolocationPosition | undefined;
   protected toaster = inject(Toast);
+
+  /** country code of client, based on header from cloudfront */
+  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
+
+  protected readonly environment = environment;
 
   /**
    * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
@@ -696,5 +702,36 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     );
     this.fetchingLocation = true;
     console.log('exiting searchByLocationfunction - wait for callback.');
+  }
+
+  /**
+   * Intended for QA test use only, so testers can pretend to be in other locations around the UK and check they get appropriate search results.
+   * If/when we do something a bit like this for real donors we will ask them for a postcode, not a lat/lon pair.
+   */
+  protected promptForFakeLocation() {
+    const locationPair = window.prompt(
+      "Enter coordinates of any location in the UK to test search, as a lat/long pair, e.g '51.5164566,-0.12182341'.",
+    );
+    if (!locationPair) {
+      return;
+    }
+    const [latitude, longitude] = locationPair.split(',');
+
+    this.location = {
+      coords: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+        accuracy: NaN,
+        altitude: NaN,
+        altitudeAccuracy: NaN,
+        heading: NaN,
+        speed: NaN,
+        toJSON: () => {},
+      },
+      timestamp: Date.now(),
+      toJSON: () => {},
+    };
+
+    this.setQueryParams();
   }
 }
