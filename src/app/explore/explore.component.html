@@ -54,6 +54,40 @@
     />
   }
   <biggive-page-section>
+    @if (flags.enableSearchByLocation) {
+      <div style="outline: dotted green 4px; padding: 1em; margin: 1em">
+        <p>
+          (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
+        </p>
+        <biggive-button
+          (doButtonClick)="searchByLocation()"
+          [disabled]="fetchingLocation"
+          [label]="fetchingLocation ? 'Fetching location info....' : 'Set location from device'"
+          size="medium"
+          colour-scheme="primary"
+        ></biggive-button>
+        <biggive-button
+          (doButtonClick)="this.toaster.showError('Sorry, Not implemented jut yet')"
+          [label]="'Enter coordinates manually for test'"
+          size="medium"
+          colour-scheme="primary"
+        ></biggive-button>
+
+        @if (location) {
+          <p>
+            Searching using your location:
+            <a
+              target="_blank"
+              href="https://www.google.com/maps?ll={{ location.coords.latitude }},{{ location.coords.longitude }}&q={{
+                location.coords.latitude
+              }},{{ location.coords.longitude }}6&hl=en&t=m&z=15"
+            >
+              {{ location.coords.latitude }}, {{ location.coords.longitude }}
+            </a>
+          </p>
+        }
+      </div>
+    }
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <biggive-campaign-card-filter-grid
