@@ -100,15 +100,10 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
 
   // frame-src and child-src do very nearly the same thing, specifying both the same.
   const frameAndChildSrc = [
-    'https://*.js.stripe.com',
-    'https://js.stripe.com',
-    'https://hooks.stripe.com',
-    'https://*.ryftpay.com', // Ryft generally requires web-sdk.ryftpay.com and 3DS requires e.g. sandbox-hooks.ryftpay.com
-    'https://*.3dsecure.io', // Ryft 3DS
+    // Any https host, as required by Ryft for their 3DS. Their own code also runs in frame on *.ryftpay.com.
+    // Also covers previous *.js.stripe.com, js.stripe.com and hooks.stripe.com, and video providers.
+    'https:',
     'blob:', // for friendly-captcha
-    'player.vimeo.com',
-    'www.youtube.com',
-    'www.youtube-nocookie.com',
   ];
 
   /**
@@ -125,7 +120,12 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'api.friendlycaptcha.com',
         'https://api.stripe.com',
-        'https://*.ryftpay.com', // Required in Ryft 3DS, e.g. sandbox-api.ryftpay.com
+
+        // Next 3 for Ryft card payments, session management
+        'https://api.ryftpay.com', // live
+        'https://sandbox-api.ryftpay.com', // sandbox
+        'https://test-api.ryftpay.com', // test key
+
         `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script; possibly Angular inline state handover scripts.
         `'self'`, // For e.g. Cloudflare injected script to connect back to same origin
       ],
@@ -133,13 +133,13 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
       'font-src': [`'self'`, 'data:'],
       'form-action': [
         `'self'`,
-        'https://*.3dsecure.io', // Ryft 3DS
+        'https:', // Ryft 3DS
       ],
       'style-src': [
         `'self'`,
         'data:',
-        `'unsafe-inline'`, // Currently the only supported way to use GetSiteControl and probably Friendly Captcha v1.
-        'https://web-sdk.ryftpay.com',
+        `'unsafe-inline'`, // Currently the only supported way to use Ryft SDK (inline styles), GetSiteControl and probably Friendly Captcha v1.
+        'https://web-sdk.ryftpay.com', // Ryft SDK separate stylesheets for card form, field collection.
       ],
       'img-src': [
         `'self'`,
@@ -147,7 +147,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         matomoUriBase,
         'https://app.getsitecontrol.com',
         'https://www.fundraisingregulator.org.uk',
-        'https://web-sdk.ryftpay.com', // Requests made during 3DS, maybe elsewhere.
+        'https://web-sdk.ryftpay.com', // Ryft: Loading states, 3D Secure.
         ...imageHosts,
       ],
       'script-src': [
