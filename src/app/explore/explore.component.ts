@@ -685,6 +685,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
+  @HostListener('doGetLocationFromBrowser', ['$event'])
+  onDoGetLocationFromBrowser(_event: Event) {
+    this.searchByLocation();
+  }
+
   protected searchByLocation() {
     console.log('will get position');
     navigator.geolocation.getCurrentPosition(

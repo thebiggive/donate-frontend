@@ -54,7 +54,7 @@
     />
   }
   <biggive-page-section>
-    @if (flags.enableSearchByLocation) {
+    @if (flags.enableSearchByLocation && this.environment.environmentId !== "production") {
       <div style="outline: dotted green 4px; padding: 1em; margin: 1em">
         <p>
           (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
@@ -63,13 +63,6 @@
         @if (this.clientCountryCode === "GB" || !this.clientCountryCode) {
           <!-- We only support searching by geolocation coordinates within the UK.
         Dev environments don't have this header so we also need to support it there. -->
-          <biggive-button
-            (doButtonClick)="searchByLocation()"
-            [disabled]="fetchingLocation"
-            [label]="fetchingLocation ? 'Fetching location info....' : 'Set location from device'"
-            size="medium"
-            colour-scheme="primary"
-          ></biggive-button>
           <biggive-button
             (doButtonClick)="promptForFakeLocation()"
             [label]="'Enter coordinates manually for test'"
@@ -104,6 +97,10 @@
       [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
       [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
       [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+      [enableSearchByLocation]="flags.enableSearchByLocation"
+      [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+      [location]="location"
+      [fetchingLocation]="fetchingLocation"
     >
       @if (individualCampaigns) {
         <biggive-grid
