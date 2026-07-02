@@ -88,19 +88,14 @@
     }
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
-    <biggive-campaign-card-filter-grid
+    <app-campaign-card-filter-grid
       [categoryOptions]="categoryOptions"
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
-      [selectedSortByOption]="searchService.selectedSortLabel"
-      [searchText]="searchService.selected.term"
-      [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
-      [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
-      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
-      [enableSearchByLocation]="flags.enableSearchByLocation"
-      [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+      [clientCountryCode]="this.clientCountryCode"
       [location]="location"
       [fetchingLocation]="fetchingLocation"
+      [currencyPipeDigitsInfo]="currencyPipeDigitsInfo"
     >
       @if (individualCampaigns) {
         <biggive-grid
@@ -114,13 +109,13 @@
           @for (campaign of individualCampaigns; track campaign.id) {
             <div>
               <!-- note the secondary figure amount below in case of regular giving / shared-funds has to be a non-empty string to
-                  make the component
-                       reserve space for it to keep the layout consistent. Once we're happy with this layout
-                       consider editing component code to allow this to happen in a more intuitive way.
+                      make the component
+                           reserve space for it to keep the layout consistent. Once we're happy with this layout
+                           consider editing component code to allow this to happen in a more intuitive way.
 
-                       In practice the `|| campaign.isRegularGiving` should be redundant everywhere except on dev machines,
-                        as any campaign that's part of a regular-giving metacampaign will have parentUsesSharedFunds=true.
-                       -->
+                           In practice the `|| campaign.isRegularGiving` should be redundant everywhere except on dev machines,
+                            as any campaign that's part of a regular-giving metacampaign will have parentUsesSharedFunds=true.
+                           -->
               @if (campaign.parentUsesSharedFunds || campaign.isRegularGiving) {
                 <biggive-campaign-card
                   id="campaign-{{ campaign.id }}"
@@ -176,7 +171,7 @@
           }
         </biggive-grid>
       }
-    </biggive-campaign-card-filter-grid>
+    </app-campaign-card-filter-grid>
 
     @if (loading) {
       <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>

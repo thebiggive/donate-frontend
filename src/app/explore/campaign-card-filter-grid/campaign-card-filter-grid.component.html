@@ -1,0 +1,16 @@
+<biggive-campaign-card-filter-grid
+  [categoryOptions]="categoryOptions"
+  [beneficiaryOptions]="beneficiaryOptions"
+  [locationOptions]="locationOptions"
+  [selectedSortByOption]="searchService.selectedSortLabel"
+  [searchText]="searchService.selected.term"
+  [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
+  [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
+  [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+  [enableSearchByLocation]="flags.enableSearchByLocation"
+  [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+  [location]="location"
+  [fetchingLocation]="fetchingLocation"
+>
+  <ng-content />
+</biggive-campaign-card-filter-grid>
