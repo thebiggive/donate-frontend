@@ -82,14 +82,6 @@
             <a href (click)="hideDebugInfo($event)">(dismiss)</a>
           </div>
         }
-        @if (campaign.errors && environment.environmentId !== "production") {
-          <strong class="error">Campaign Errors</strong>
-          <ol>
-            @for (error of campaign.errors; track error) {
-              <li>{{ error }}</li>
-            }
-          </ol>
-        }
       }
     </div>
   </div>

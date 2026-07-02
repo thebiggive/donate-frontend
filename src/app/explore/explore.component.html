@@ -54,6 +54,38 @@
     />
   }
   <biggive-page-section>
+    @if (flags.enableSearchByLocation && this.environment.environmentId !== "production") {
+      <div style="outline: dotted green 4px; padding: 1em; margin: 1em">
+        <p>
+          (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
+        </p>
+
+        @if (this.clientCountryCode === "GB" || !this.clientCountryCode) {
+          <!-- We only support searching by geolocation coordinates within the UK.
+        Dev environments don't have this header so we also need to support it there. -->
+          <biggive-button
+            (doButtonClick)="promptForFakeLocation()"
+            [label]="'Enter coordinates manually for test'"
+            size="medium"
+            colour-scheme="primary"
+          ></biggive-button>
+        }
+
+        @if (location) {
+          <p>
+            Searching using your location:
+            <a
+              target="_blank"
+              href="https://www.google.com/maps?ll={{ location.coords.latitude }},{{ location.coords.longitude }}&q={{
+                location.coords.latitude
+              }},{{ location.coords.longitude }}6&hl=en&t=m&z=15"
+            >
+              {{ location.coords.latitude }}, {{ location.coords.longitude }}
+            </a>
+          </p>
+        }
+      </div>
+    }
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <biggive-campaign-card-filter-grid
@@ -65,6 +97,10 @@
       [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
       [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
       [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+      [enableSearchByLocation]="flags.enableSearchByLocation"
+      [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+      [location]="location"
+      [fetchingLocation]="fetchingLocation"
     >
       @if (individualCampaigns) {
         <biggive-grid

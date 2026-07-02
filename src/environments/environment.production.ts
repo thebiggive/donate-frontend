@@ -35,7 +35,7 @@ export const environment: Environment = {
         'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
     ryft: {
-      publicKey: 'ryft-public-key-placeholder',
+      publicKey: 'pk_Sss1hHkI/nxJfBHrbmBJwGNRX+oviQaMiEPtDI0nNq+Or4Yiij3X8kByqz1aqnn0',
     },
   },
   reservationMinutes: 25,
