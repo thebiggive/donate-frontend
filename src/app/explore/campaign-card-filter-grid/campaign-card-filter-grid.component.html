@@ -1,152 +1,159 @@
 <div #root [class]="'container space-below-' + this.spaceBelow">
-<div class="sleeve">
-  <div class="search-wrap">
-    <h4>{{ intro }}</h4>
-    <div class="field-wrap">
-      <div class="input-wrap">
-        <fa-icon [icon]="faMagnifyingGlass" />
-        <input
-          type="text"
-          [value]="searchText ?? ''"
-        class="input-text"
-        [placeholder]="placeholderText"
-        onInput={this.handleSearchTextChanged}
-        onKeyDown={this.handleEnterPressed}
-        />
+  <div class="sleeve">
+    <div class="search-wrap">
+      <h4>{{ intro }}</h4>
+      <div class="field-wrap">
+        <div class="input-wrap">
+          <fa-icon [icon]="faMagnifyingGlass" />
+          <input
+            type="text"
+            [value]="searchText ?? ''"
+            class="input-text"
+            [placeholder]="placeholderText"
+            onInput="{this.handleSearchTextChanged}"
+            onKeyDown="{this.handleEnterPressed}"
+          />
+        </div>
+        <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
       </div>
-      <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
     </div>
-  </div>
-  <div class="sort-filter-wrap">
-    @if (enableSearchByLocation && this.offerNearMeOption) {
-          <biggive-button
-        class="filter"
-        colourScheme="primary"
-        (doButtonClick)="handleNearMeButtonPressed()"
-    [label]="this.fetchingLocation ? 'Fetching location...' : 'Charities near me'"
-    [disabled]=this.fetchingLocation
-    [fullWidth]=true
-    space-below="0"
-      ></biggive-button>
-    }
-    <div class="filter-wrap">
-      <biggive-button class="filter" colourScheme="primary" (doButtonClick)="handleFilterButtonClick()" label="Filter" [fullWidth]=true space-below="0"></biggive-button>
-      <biggive-popup id="filter-popup">
-        <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
-        <div class="select-wrapper-1">
-          <biggive-form-field-select
-            backgroundColour="white"
-            prompt="Category"
-            [placeholder]="categoriesPlaceHolderText"
-            [selectedLabel]="selectedFilterCategory"
-            [selectedValue]="selectedFilterCategory"
-            [options]="optionsToArray(this.categoryOptions || [])"
-            [selectionChanged]="categoryFilterSelectionChanged"
-            id="categories"
-            space-below="2"
-          ></biggive-form-field-select>
-        </div>
+    <div class="sort-filter-wrap">
+      @if (enableSearchByLocation && this.offerNearMeOption) {
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleNearMeButtonPressed()"
+          [label]="this.fetchingLocation ? 'Fetching location...' : 'Charities near me'"
+          [disabled]="this.fetchingLocation"
+          [fullWidth]="true"
+          space-below="0"
+        ></biggive-button>
+      }
+      <div class="filter-wrap">
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleFilterButtonClick()"
+          label="Filter"
+          [fullWidth]="true"
+          space-below="0"
+        ></biggive-button>
+        <biggive-popup id="filter-popup">
+          <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
+          <div class="select-wrapper-1">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Category"
+              [placeholder]="categoriesPlaceHolderText"
+              [selectedLabel]="selectedFilterCategory"
+              [selectedValue]="selectedFilterCategory"
+              [options]="optionsToArray(this.categoryOptions || [])"
+              [selectionChanged]="categoryFilterSelectionChanged"
+              id="categories"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
 
-        <div class="select-wrapper-2">
-          <biggive-form-field-select
-            backgroundColour="white"
-            prompt="Beneficiary"
-            [placeholder]="beneficiariesPlaceHolderText"
-            [selectedLabel]="selectedFilterBeneficiary"
-            [selectedValue]="selectedFilterBeneficiary"
-            [options]="optionsToArray(this.beneficiaryOptions || [])"
-            [selectionChanged]="beneficiarySelectionChanged"
-            id="beneficiaries"
-            space-below="2"
-          ></biggive-form-field-select>
-        </div>
+          <div class="select-wrapper-2">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Beneficiary"
+              [placeholder]="beneficiariesPlaceHolderText"
+              [selectedLabel]="selectedFilterBeneficiary"
+              [selectedValue]="selectedFilterBeneficiary"
+              [options]="optionsToArray(this.beneficiaryOptions || [])"
+              [selectionChanged]="beneficiarySelectionChanged"
+              id="beneficiaries"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
 
-        <div class="select-wrapper-3">
-          <biggive-form-field-select
-            backgroundColour="white"
-            prompt="Location"
-            [placeholder]="locationsPlaceHolderText"
-            [selectedLabel]="selectedFilterLocation"
-            [selectedValue]="selectedFilterLocation"
-            [options]="optionsToArray(this.locationOptions || [])"
-            [selectionChanged]="locationSelectionChanged"
-            id="locations"
-            space-below="2"
-          ></biggive-form-field-select>
-        </div>
+          <div class="select-wrapper-3">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Location"
+              [placeholder]="locationsPlaceHolderText"
+              [selectedLabel]="selectedFilterLocation"
+              [selectedValue]="selectedFilterLocation"
+              [options]="optionsToArray(this.locationOptions || [])"
+              [selectionChanged]="locationSelectionChanged"
+              id="locations"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
 
-        <div class="align-right">
-          <biggive-button label="Apply filters" onDoButtonClick={this.handleApplyFilterButtonClick} />
-        </div>
-      </biggive-popup>
-    </div>
+          <div class="align-right">
+            <biggive-button label="Apply filters" onDoButtonClick="{this.handleApplyFilterButtonClick}" />
+          </div>
+        </biggive-popup>
+      </div>
 
-    <div class="sort-wrap">
-      <biggive-form-field-select
-        options={sortOptions}
-        prompt={null}
-        select-style="underlined"
-        [placeholder]="sortByPlaceholderText"
-        [selectedLabel]="selectedSortByOption"
-        [selectedValue]="getSelectedValue() || null"
-        [selectionChanged]="sortBySelectionChanged"
-        id="sort-by"
-      >
-        <!--
+      <div class="sort-wrap">
+        <biggive-form-field-select
+          options="{sortOptions}"
+          prompt="{null}"
+          select-style="underlined"
+          [placeholder]="sortByPlaceholderText"
+          [selectedLabel]="selectedSortByOption"
+          [selectedValue]="getSelectedValue() || null"
+          [selectionChanged]="sortBySelectionChanged"
+          id="sort-by"
+        >
+          <!--
         commented all nodes inside biggive-form-field-select out because there doesn't seem to be anything called
         biggive-form-field-select-option . These were in the stencil component but I don't think they were actually
         doing anything. The options are passed via the options attribute of the biggive-form-field-select component.
         The angular compiler won't allow them to be given here if it can't find an element with that name.
         -->
-<!--        <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>-->
-<!--        <biggive-form-field-select-option value="leastRaised" label="Least raised"></biggive-form-field-select-option>-->
-<!--        <biggive-form-field-select-option value="matchFundsRemaining" label="Most funds remaining"></biggive-form-field-select-option>-->
-<!--        <biggive-form-field-select-option value="closeToTarget" label="Nearest target"></biggive-form-field-select-option>-->
-<!--        @if ((searchText || '').length > 0) {-->
-<!--          <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>-->
-<!--        }-->
-
-      </biggive-form-field-select>
+          <!--        <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>-->
+          <!--        <biggive-form-field-select-option value="leastRaised" label="Least raised"></biggive-form-field-select-option>-->
+          <!--        <biggive-form-field-select-option value="matchFundsRemaining" label="Most funds remaining"></biggive-form-field-select-option>-->
+          <!--        <biggive-form-field-select-option value="closeToTarget" label="Nearest target"></biggive-form-field-select-option>-->
+          <!--        @if ((searchText || '').length > 0) {-->
+          <!--          <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>-->
+          <!--        }-->
+        </biggive-form-field-select>
+      </div>
     </div>
-  </div>
-  <div class="selected-filter-wrap">
-    <div class="selected-filters">
-      @if (selectedFilterCategory) {
+    <div class="selected-filter-wrap">
+      <div class="selected-filters">
+        @if (selectedFilterCategory) {
           <span
             class="button"
-        onClick="() => {
+            onClick="() => {
       this.removeFilter('categories');
       }"
-      >
-      {{selectedFilterCategory}}
-      </span>
-      }
-      @if (selectedFilterBeneficiary) {
-        <span
-          class="button"
-        onClick="{() => {
+          >
+            {{ selectedFilterCategory }}
+          </span>
+        }
+        @if (selectedFilterBeneficiary) {
+          <span
+            class="button"
+            onClick="{() => {
       this.removeFilter('beneficiaries');
       }}"
-      >
-      {{selectedFilterBeneficiary}}
-      </span>
-    }
-      @if (selectedFilterLocation) {
-        <span
-          class="button"
-        onClick="() => {
+          >
+            {{ selectedFilterBeneficiary }}
+          </span>
+        }
+        @if (selectedFilterLocation) {
+          <span
+            class="button"
+            onClick="() => {
       this.removeFilter('locations');
       }"
-      >
-      {{selectedFilterLocation}}
-      </span>
-    }
+          >
+            {{ selectedFilterLocation }}
+          </span>
+        }
+      </div>
+      <div class="clear-all">
+        <a onClick="{this.handleClearAll}">Clear all</a>
+      </div>
     </div>
-    <div class="clear-all">
-      <a onClick={this.handleClearAll}>Clear all</a>
+    <div class="campaign-grid">
+      <ng-content />
     </div>
-  </div>
-  <div class="campaign-grid">
-    <ng-content />
   </div>
 </div>

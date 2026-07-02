@@ -7,7 +7,10 @@
 
 // Each select needs a higher z-index than the one below,
 // so that the drop-down part will occlude it.
-.select-wrapper-1, .select-wrapper-2, .select-wrapper-3, .select-wrapper-4 {
+.select-wrapper-1,
+.select-wrapper-2,
+.select-wrapper-3,
+.select-wrapper-4 {
   position: relative;
   margin-top: 1em;
 }
@@ -127,7 +130,7 @@
       padding-right: 30px;
 
       .filter-icon {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         left: 25px;
@@ -152,7 +155,7 @@
 .icon {
   height: 1rem;
   width: 2rem;
-  vertical-align: -.125rem;
+  vertical-align: -0.125rem;
   margin: auto;
 
   > path {

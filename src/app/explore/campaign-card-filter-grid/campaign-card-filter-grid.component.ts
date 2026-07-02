@@ -1,14 +1,10 @@
-import {Component, ElementRef, inject, Input, output, ViewChild} from '@angular/core';
+import { Component, ElementRef, inject, Input, output, ViewChild } from '@angular/core';
 import { SearchService } from '../../search.service';
 import { COUNTRY_CODE } from '../../country-code.token';
 import { flags } from '../../featureFlags';
-import {
-  BiggiveButton,
-  BiggiveFormFieldSelect,
-  BiggivePopup
-} from '@biggive/components-angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faExclamationTriangle, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
+import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 // import {options} from 'axios' - was used in Stencil component, may not be needed now.;
 
 const sortOptionLabels = {
@@ -34,30 +30,30 @@ export class CampaignCardFilterGridComponent {
   /**
    * JSON array of category key/values
    */
-  @Input({required: true}) categoryOptions!: string[];
+  @Input({ required: true }) categoryOptions!: string[];
 
   /**
    * JSON array of beneficiary key/values
    */
-  @Input({required: true}) beneficiaryOptions!: string[];
+  @Input({ required: true }) beneficiaryOptions!: string[];
 
   /**
    * JSON array of location key/values
    */
-  @Input({required: true}) locationOptions!: string[];
+  @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
-  protected clientCountryCode = inject(COUNTRY_CODE, {optional: true});
+  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
 
   /**
    * Selected location around which donor is looking for campaigns
    */
-  @Input({required: true}) location: GeolocationPosition | undefined;
+  @Input({ required: true }) location: GeolocationPosition | undefined;
 
   /**
    * Indicates that the component is currently fetching the browser location
    */
-  @Input({required: true}) fetchingLocation!: boolean;
+  @Input({ required: true }) fetchingLocation!: boolean;
 
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
@@ -149,7 +145,7 @@ export class CampaignCardFilterGridComponent {
    */
   enableSearchByLocation = flags.enableSearchByLocation;
 
-  @Input({required: true}) offerNearMeOption!: boolean;
+  @Input({ required: true }) offerNearMeOption!: boolean;
 
   protected filtersApplied: boolean;
 
@@ -165,7 +161,7 @@ export class CampaignCardFilterGridComponent {
     this.newSelectedFilterLocation = value;
   };
 
-  protected sortBySelectionChanged = (value: sortOptionLabel|string) => {
+  protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
     // @ts-expect-error
     this.selectedSortByOption = value;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -195,7 +191,9 @@ export class CampaignCardFilterGridComponent {
     }
 
     this.filtersApplied =
-      typeof searchAndFilterObj.filterBeneficiary === 'string' || typeof searchAndFilterObj.filterCategory === 'string' || typeof searchAndFilterObj.filterLocation === 'string';
+      typeof searchAndFilterObj.filterBeneficiary === 'string' ||
+      typeof searchAndFilterObj.filterCategory === 'string' ||
+      typeof searchAndFilterObj.filterLocation === 'string';
   };
 
   private removeFilter(filterKey: 'locations' | 'categories' | 'beneficiaries') {
@@ -256,7 +254,7 @@ export class CampaignCardFilterGridComponent {
     this.newSelectedFilterCategory = this.selectedFilterCategory;
     this.newSelectedFilterLocation = this.selectedFilterLocation;
 
-    console.log([this.el, this.el.nativeElement])
+    console.log([this.el, this.el.nativeElement]);
     const filterPopup = this.el.nativeElement.querySelector('#filter-popup') as HTMLBiggivePopupElement | undefined;
     if (filterPopup) {
       filterPopup.openFromOutside();
@@ -277,7 +275,7 @@ export class CampaignCardFilterGridComponent {
     this.selectedFilterLocation = null;
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
-    ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach(id => {
+    ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
       const theEl = this.el.nativeElement.getElementById(id) as HTMLBiggiveFormFieldSelectElement | undefined;
       if (!theEl) {
         return;
@@ -314,48 +312,51 @@ export class CampaignCardFilterGridComponent {
   }
 
   constructor() {
-    this.filtersApplied = this.selectedFilterCategory !== null || this.selectedFilterBeneficiary !== null || this.selectedFilterLocation !== null;
+    this.filtersApplied =
+      this.selectedFilterCategory !== null ||
+      this.selectedFilterBeneficiary !== null ||
+      this.selectedFilterLocation !== null;
     this.initialSortByOption = this.selectedSortByOption;
   }
 
   public getSelectedValue(): undefined | string {
-      const sortByOption = this.selectedSortByOption;
-      if (sortByOption === undefined) {
-        return undefined;
-      }
-      const sortOptions = this.getSortOptions();
-      const selected = sortOptions.filter(option => {
-        return option.label.toLowerCase() === sortByOption.toLowerCase();
-      })[0];
-
-      return selected?.value;
+    const sortByOption = this.selectedSortByOption;
+    if (sortByOption === undefined) {
+      return undefined;
     }
+    const sortOptions = this.getSortOptions();
+    const selected = sortOptions.filter((option) => {
+      return option.label.toLowerCase() === sortByOption.toLowerCase();
+    })[0];
+
+    return selected?.value;
+  }
 
   private getSortOptions(): {
-      label: sortOptionLabel;
-      value: sortOptionKey;
-    }[] {
-      // @ts-ignore  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
-      const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
-      const relevantOptionKeys = sortOptionKeys.filter(key => key !== 'relevance' || this.hasSearchTerm());
+    label: sortOptionLabel;
+    value: sortOptionKey;
+  }[] {
+    // @ts-ignore  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
+    const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
+    const relevantOptionKeys = sortOptionKeys.filter((key) => key !== 'relevance' || this.hasSearchTerm());
 
-      return relevantOptionKeys.map((key: sortOptionKey) => ({ value: key, label: sortOptionLabels[key] }));
-    }
+    return relevantOptionKeys.map((key: sortOptionKey) => ({ value: key, label: sortOptionLabels[key] }));
+  }
 
   private hasSearchTerm() {
-      return typeof this.searchText === 'string' && this.searchText.length > 0;
-    }
+    return typeof this.searchText === 'string' && this.searchText.length > 0;
+  }
 
   protected optionsToArray(options: string | string[] | Record<string, string>): { label: string; value: string }[] {
-      if (typeof options === 'string') {
-        options = JSON.parse(options);
-      }
-      if (Array.isArray(options)) {
-        return options.map((option: string) => ({ value: option, label: option }));
-      }
-
-      return Object.entries(options).map(entry => ({ value: entry[0], label: entry[1] }));
+    if (typeof options === 'string') {
+      options = JSON.parse(options);
     }
+    if (Array.isArray(options)) {
+      return options.map((option: string) => ({ value: option, label: option }));
+    }
+
+    return Object.entries(options).map((entry) => ({ value: entry[0], label: entry[1] }));
+  }
 
   protected readonly faExclamationTriangle = faExclamationTriangle;
 }
