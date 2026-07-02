@@ -346,11 +346,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  @HostListener('doSearchAndFilterUpdate', ['$event'])
-  onDoSearchAndFilterUpdate(event: Event) {
-    const customEvent = event as CustomEvent;
-
-    this.searchService.doSearchAndFilterAndSort(customEvent.detail, this.defaultSort);
+  onDoSearchAndFilterUpdate(event: {
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+  }) {
+    this.searchService.doSearchAndFilterAndSort(event, this.defaultSort);
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
@@ -685,11 +688,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.setTickerParams(metaCampaign);
       }, 1000);
     }
-  }
-
-  @HostListener('doGetLocationFromBrowser', ['$event'])
-  onDoGetLocationFromBrowser(_event: Event) {
-    this.searchByLocation();
   }
 
   protected searchByLocation() {

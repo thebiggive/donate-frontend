@@ -1,7 +1,9 @@
 $colour-background: #f6f6f6; // Global / main app background
 $colour-grey-light: #e1e2e5;
 $colour-grey: #333;
+$colour-grey-dark: #4A4A4A;
 $colour-black: #000;
+$colour-white: #fff;
 $colour-black-contrast: #fff; // Suitable for legible text on `$colour-black` backgrounds
 $colour-highlight: #2af135;
 $colour-card-background: #fff;
@@ -33,3 +35,30 @@ $box-shadow-hard:
   0px 2px 2px rgba(0, 0, 0, 0.12),
   0px 0px 2px rgba(0, 0, 0, 0.14);
 $box-shadow-super-soft: 0px 0px 5px 0px rgb(0 0 0 / 10%);
+
+// spacers used by component(s) ported over from our stencil web-component library
+$spacer-0: 0;
+$spacer-1: 5px;
+$spacer-2: 10px;
+$spacer-3: 15px;
+$spacer-4: 30px;
+$spacer-5: 45px;
+$spacer-6: 60px;
+$spacer-7: 90px;
+$spacer-8: 120px;
+$spacer-9: 150px;
+$spacer-10: 180px;
+
+// input text used by campaign-filter-grid ported from stencil.
+@mixin input-text {
+  color: $colour-black;
+  padding: $spacer-1 $spacer-2;
+  box-sizing: border-box;
+  width: 100%;
+  &:focus {
+    outline: 0;
+  }
+  &::placeholder {
+    color: $colour-grey-dark;
+  }
+}

@@ -92,10 +92,11 @@
       [categoryOptions]="categoryOptions"
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
-      [clientCountryCode]="this.clientCountryCode"
       [location]="location"
       [fetchingLocation]="fetchingLocation"
-      [currencyPipeDigitsInfo]="currencyPipeDigitsInfo"
+      [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+      (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
+      (doGetLocationFromBrowser)="searchByLocation()"
     >
       @if (individualCampaigns) {
         <biggive-grid
