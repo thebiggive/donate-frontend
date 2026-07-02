@@ -28,7 +28,7 @@ the rest of the app.
 Examples of tier 2 browsers include:
 
 - Chrome 71 through 105, including on Android
-- Safari 12.1 through 14.0
+- Safari 12.1 through 14.x
 - Edge 79 through 105
 - Firefox 65 through 103
 

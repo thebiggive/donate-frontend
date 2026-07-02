@@ -16,6 +16,6 @@ Edge >= 107 # released 2022-10-27
 Firefox >= 104 # released 2022-10-23
 FirefoxAndroid >= 104 # released 2022-10-23
 
-Safari >= 14.1 # released 2020-12-01
+Safari >= 15.0 # released 2021-09-20
 # Support for mobile IOS users
-iOS >= 14.1 # released 2020-12-01
+iOS >= 15.0 # released 2021-09-20
