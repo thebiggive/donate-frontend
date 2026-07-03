@@ -177,7 +177,7 @@ export class CampaignCardFilterGridComponent {
     };
   }
 
-  private handleApplyFilterButtonClick = () => {
+  protected handleApplyFilterButtonClick = () => {
     this.selectedFilterCategory = this.newSelectedFilterCategory ?? this.selectedFilterCategory;
     this.selectedFilterBeneficiary = this.newSelectedFilterBeneficiary ?? this.selectedFilterBeneficiary;
     this.selectedFilterLocation = this.newSelectedFilterLocation ?? this.selectedFilterLocation;
@@ -185,7 +185,7 @@ export class CampaignCardFilterGridComponent {
     const searchAndFilterObj = this.getSearchAndFilterObject();
     this.doSearchAndFilterUpdate.emit(searchAndFilterObj);
 
-    const filterPopup = this.el.nativeElement.getElementById('filter-popup') as HTMLBiggivePopupElement | undefined;
+    const filterPopup = this.el.nativeElement.querySelector('#filter-popup') as HTMLBiggivePopupElement | undefined;
     if (filterPopup) {
       filterPopup.closeFromOutside();
     }
@@ -196,7 +196,7 @@ export class CampaignCardFilterGridComponent {
       typeof searchAndFilterObj.filterLocation === 'string';
   };
 
-  private removeFilter(filterKey: 'locations' | 'categories' | 'beneficiaries') {
+  protected removeFilter(filterKey: "locations" | "categories" | "beneficiaries") {
     switch (filterKey) {
       case 'beneficiaries':
         this.selectedFilterBeneficiary = null;
@@ -214,7 +214,7 @@ export class CampaignCardFilterGridComponent {
         console.error(exhaustiveSwitch);
     }
 
-    const selectEl = this.el.nativeElement.getElementById(filterKey) as HTMLBiggiveFormFieldSelectElement | undefined;
+    const selectEl = this.el.nativeElement.querySelector('#' + filterKey) as HTMLBiggiveFormFieldSelectElement | undefined;
     if (!selectEl) {
       return;
     }
@@ -238,12 +238,13 @@ export class CampaignCardFilterGridComponent {
     this.doGetLocationFromBrowser.emit();
   };
 
-  private handleSearchTextChanged = (event: any) => {
+  protected handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;
   };
 
-  private handleEnterPressed = (ev: KeyboardEvent) => {
-    if (ev.key === 'Enter') {
+  protected handleEnterPressed = (ev: Event) => {
+    const keyboardEvent = ev as KeyboardEvent;
+    if (keyboardEvent.key === 'Enter') {
       this.unfocusTextInput();
       this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
@@ -261,7 +262,7 @@ export class CampaignCardFilterGridComponent {
     }
   };
 
-  private handleClearAll = () => {
+  protected handleClearAll = () => {
     this.unfocusTextInput();
 
     // Set the 'Filters' button back to the primary background colour
@@ -276,7 +277,7 @@ export class CampaignCardFilterGridComponent {
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
     ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
-      const theEl = this.el.nativeElement.getElementById(id) as HTMLBiggiveFormFieldSelectElement | undefined;
+      const theEl = this.el.nativeElement.querySelector('#' + id) as HTMLBiggiveFormFieldSelectElement | undefined;
       if (!theEl) {
         return;
       }

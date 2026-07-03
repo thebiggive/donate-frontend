@@ -70,7 +70,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    BiggiveCampaignCardFilterGrid,
     BiggiveGrid,
     InfiniteScrollDirective,
     BiggiveCampaignCard,

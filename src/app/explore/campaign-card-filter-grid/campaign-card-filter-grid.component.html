@@ -10,8 +10,8 @@
             [value]="searchText ?? ''"
             class="input-text"
             [placeholder]="placeholderText"
-            onInput="{this.handleSearchTextChanged}"
-            onKeyDown="{this.handleEnterPressed}"
+            (input)="handleSearchTextChanged($event)"
+            (keydown)="handleEnterPressed($event)"
           />
         </div>
         <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
@@ -83,7 +83,7 @@
           </div>
 
           <div class="align-right">
-            <biggive-button label="Apply filters" onDoButtonClick="{this.handleApplyFilterButtonClick}" />
+            <biggive-button label="Apply filters" (doButtonClick)="handleApplyFilterButtonClick()" />
           </div>
         </biggive-popup>
       </div>
@@ -120,9 +120,7 @@
         @if (selectedFilterCategory) {
           <span
             class="button"
-            onClick="() => {
-      this.removeFilter('categories');
-      }"
+            (click)="removeFilter('categories')"
           >
             {{ selectedFilterCategory }}
           </span>
@@ -130,9 +128,7 @@
         @if (selectedFilterBeneficiary) {
           <span
             class="button"
-            onClick="{() => {
-      this.removeFilter('beneficiaries');
-      }}"
+            (click)="removeFilter('beneficiaries')"
           >
             {{ selectedFilterBeneficiary }}
           </span>
@@ -140,16 +136,14 @@
         @if (selectedFilterLocation) {
           <span
             class="button"
-            onClick="() => {
-      this.removeFilter('locations');
-      }"
+            (click)="removeFilter('locations');"
           >
             {{ selectedFilterLocation }}
           </span>
         }
       </div>
       <div class="clear-all">
-        <a onClick="{this.handleClearAll}">Clear all</a>
+        <a (click)="handleClearAll()">Clear all</a>
       </div>
     </div>
     <div class="campaign-grid">
