@@ -202,3 +202,12 @@
 .text-colour-primary {
   color: abstract.$colour-primary;
 }
+
+fa-icon {
+  color: abstract.$colour-primary;
+  // attempting near pixel-perfect copy of version from components library - may not be needed for actual design reasons.
+  position: relative;
+  top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}

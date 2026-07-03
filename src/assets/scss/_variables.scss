@@ -51,6 +51,11 @@ $spacer-10: 180px;
 
 // input text used by campaign-filter-grid ported from stencil.
 @mixin input-text {
+  // next three lines are 'standard-font' mixin in components library.
+  font-family: 'Euclid Triangle', sans-serif;
+  font-size: 17px;
+  line-height: 24px;
+
   color: $colour-black;
   padding: $spacer-1 $spacer-2;
   box-sizing: border-box;
