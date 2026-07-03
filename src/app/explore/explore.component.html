@@ -89,6 +89,11 @@
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <app-campaign-card-filter-grid
+      [searchText]="searchService.selected.term || null"
+      [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
+      [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
+      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+      [selectedSortByOption]="searchService.selectedSortLabel || null"
       [categoryOptions]="categoryOptions"
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"

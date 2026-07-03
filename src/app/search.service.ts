@@ -24,7 +24,7 @@ type sortLabel = (typeof sortOptions)[camelCaseSortOption];
   providedIn: 'root',
 })
 export class SearchService {
-  selected: { [key: string]: string | boolean } & { term?: string }; // SelectedType but allowing string key lookups.
+  selected: { [key: string]: string } & { term?: string }; // SelectedType but allowing string key lookups.
 
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
@@ -120,7 +120,7 @@ export class SearchService {
     }
   }
 
-  filter(filterName: string, value: string | boolean) {
+  filter(filterName: string, value: string) {
     this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);

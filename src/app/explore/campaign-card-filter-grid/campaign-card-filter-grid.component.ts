@@ -103,7 +103,7 @@ export class CampaignCardFilterGridComponent {
    * the search box text will clear, unless we use this to it on
    * rendering. DON-652.
    */
-  searchText: string | null = null;
+  @Input({required: true}) searchText: string | null = null;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -123,22 +123,22 @@ export class CampaignCardFilterGridComponent {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  selectedSortByOption = this.searchService.selectedSortLabel || 'Relevance';
+  @Input({required: true}) selectedSortByOption!: sortOptionLabel | null;
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
    */
-  selectedFilterCategory: string | null = null;
+  @Input({required: true}) selectedFilterCategory: string | null = null;
 
   /**
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
-  selectedFilterBeneficiary: string | null = null;
+  @Input({required: true}) selectedFilterBeneficiary: string | null = null;
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
    */
-  selectedFilterLocation: string | null = null;
+  @Input({required: true}) selectedFilterLocation: string | null = null;
 
   /**
    * Allow donors to select campaigns near to themselves.
@@ -317,12 +317,12 @@ export class CampaignCardFilterGridComponent {
       this.selectedFilterCategory !== null ||
       this.selectedFilterBeneficiary !== null ||
       this.selectedFilterLocation !== null;
-    this.initialSortByOption = this.selectedSortByOption;
+    this.initialSortByOption = this.selectedSortByOption || 'Relevance';
   }
 
   public getSelectedValue(): undefined | string {
     const sortByOption = this.selectedSortByOption;
-    if (sortByOption === undefined) {
+    if (! sortByOption) {
       return undefined;
     }
     const sortOptions = this.getSortOptions();
