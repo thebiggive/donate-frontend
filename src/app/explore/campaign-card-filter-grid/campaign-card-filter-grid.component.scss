@@ -1,0 +1,213 @@
+//@include spacers();
+@use "../../../abstract";
+
+:host {
+  display: content;
+}
+
+// Each select needs a higher z-index than the one below,
+// so that the drop-down part will occlude it.
+.select-wrapper-1,
+.select-wrapper-2,
+.select-wrapper-3,
+.select-wrapper-4 {
+  position: relative;
+  margin-top: 1em;
+}
+.select-wrapper-1 {
+  z-index: 4;
+}
+.select-wrapper-2 {
+  z-index: 3;
+}
+.select-wrapper-3 {
+  z-index: 2;
+}
+.select-wrapper-4 {
+  z-index: 1;
+}
+
+.container {
+  //@include standard-font();
+  position: relative;
+  .search-wrap {
+    // @include lower-shadow(); <-- commented out because content of lower-shadow mixin in stencil is commented out
+    background-color: abstract.$colour-white;
+    padding: abstract.$spacer-3 abstract.$spacer-4;
+    margin-bottom: abstract.$spacer-3;
+    h4 {
+      margin-bottom: abstract.$spacer-3;
+    }
+    .field-wrap {
+      display: flex;
+      justify-content: space-between;
+
+      .input-wrap {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: abstract.$spacer-1;
+        border-bottom: 1px solid abstract.$colour-black;
+        margin-right: abstract.$spacer-4;
+        flex-grow: 1;
+        input {
+          border: 0;
+        }
+      }
+      button {
+        padding: 5px 30px;
+      }
+    }
+  }
+}
+.selected-filter-wrap {
+  display: flex;
+  margin-bottom: 23px;
+  padding: 0;
+  .button {
+    margin-bottom: 7px;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 5px 50px 5px 20px;
+    margin-right: 15px;
+    background-color: abstract.$colour-secondary;
+    color: abstract.$colour-black;
+    border: 1px solid abstract.$colour-secondary;
+    text-decoration: none;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgMTguNCAxOC40IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxOC40IDE4LjQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7c3Ryb2tlOiMwMDAwMDA7fQo8L3N0eWxlPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNOS4yLDguNUwxNywwLjdsMC43LDAuN0w5LjksOS4ybDcuOCw3LjhMMTcsMTcuN0w5LjIsOS45bC03LjgsNy44TDAuNywxN2w3LjgtNy44TDAuNywxLjRsMC43LTAuN0w5LjIsOC41eiIvPgo8L3N2Zz4K);
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 12px auto;
+    &:hover {
+      background-color: abstract.$colour-white;
+      color: abstract.$colour-black;
+    }
+  }
+  .clear-all {
+    margin-left: auto;
+    a {
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 20px;
+      padding: 5px 20px;
+      background-color: abstract.$colour-primary;
+      color: abstract.$colour-white;
+      border: 1px solid abstract.$colour-primary;
+      text-decoration: none;
+      &:hover {
+        background-color: abstract.$colour-white;
+        color: abstract.$colour-primary;
+      }
+    }
+  }
+}
+
+.sort-filter-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: abstract.$spacer-4;
+  padding: 0;
+  text-align: right;
+  .clear-all {
+    cursor: pointer;
+    vertical-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  display: flex;
+  .sort-wrap {
+    margin-left: 15px;
+  }
+
+  .filter-wrap {
+    background-color: abstract.$colour-background; // temp for testing dropdown
+
+    margin-left: abstract.$spacer-3;
+
+    .button.filter {
+      padding-left: 60px;
+      padding-right: 30px;
+
+      .filter-icon {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 25px;
+        top: 17px;
+        width: 13px;
+        height: 13px;
+
+        svg {
+          width: 100%;
+          height: auto;
+          vertical-align: top;
+
+          &:hover {
+            fill: abstract.$colour-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.icon {
+  height: 1rem;
+  width: 2rem;
+  vertical-align: -0.125rem;
+  margin: auto;
+
+  > path {
+    fill: abstract.$colour-primary;
+  }
+}
+
+.icon-clear-all {
+  > path {
+    fill: abstract.$colour-black;
+  }
+}
+
+@media screen and (max-width: abstract.$smallish) {
+  .sort-filter-wrap {
+    flex-direction: column-reverse;
+    .sort-wrap {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .sort-filter-wrap {
+    justify-content: space-between;
+    .sort-wrap {
+      margin-left: 0;
+    }
+    .filter-wrap {
+      margin-left: 3px;
+    }
+  }
+}
+
+.align-right {
+  text-align: right;
+}
+
+.input-text {
+  @include abstract.input-text();
+}
+
+.text-colour-primary {
+  color: abstract.$colour-primary;
+}
+
+fa-icon {
+  color: abstract.$colour-primary;
+  // attempting near pixel-perfect copy of version from components library - may not be needed for actual design reasons.
+  position: relative;
+  top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}

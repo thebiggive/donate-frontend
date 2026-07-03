@@ -50,6 +50,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
 import { COUNTRY_CODE } from '../country-code.token';
+import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -69,7 +70,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    BiggiveCampaignCardFilterGrid,
     BiggiveGrid,
     InfiniteScrollDirective,
     BiggiveCampaignCard,
@@ -81,6 +81,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     OptimisedImagePipe,
     BiggiveHeadingBanner,
     BiggiveButton,
+    CampaignCardFilterGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -344,11 +345,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  @HostListener('doSearchAndFilterUpdate', ['$event'])
-  onDoSearchAndFilterUpdate(event: Event) {
-    const customEvent = event as CustomEvent;
-
-    this.searchService.doSearchAndFilterAndSort(customEvent.detail, this.defaultSort);
+  onDoSearchAndFilterUpdate(event: {
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+  }) {
+    this.searchService.doSearchAndFilterAndSort(event, this.defaultSort);
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
@@ -683,11 +687,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.setTickerParams(metaCampaign);
       }, 1000);
     }
-  }
-
-  @HostListener('doGetLocationFromBrowser', ['$event'])
-  onDoGetLocationFromBrowser(_event: Event) {
-    this.searchByLocation();
   }
 
   protected searchByLocation() {

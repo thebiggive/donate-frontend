@@ -24,7 +24,7 @@ type sortLabel = (typeof sortOptions)[camelCaseSortOption];
   providedIn: 'root',
 })
 export class SearchService {
-  selected: { [key: string]: string | boolean } & { term?: string }; // SelectedType but allowing string key lookups.
+  selected: { [key: string]: string } & { term?: string }; // SelectedType but allowing string key lookups.
 
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
@@ -49,12 +49,11 @@ export class SearchService {
 
   doSearchAndFilterAndSort(
     customSearchEvent: {
-      searchText: string;
-      sortBy: string;
-      filterCategory: string;
-      filterBeneficiary: string;
-      filterLocation: string;
-      filterFunding: string;
+      searchText: string | null;
+      sortBy: string | null;
+      filterCategory: string | null;
+      filterBeneficiary: string | null;
+      filterLocation: string | null;
     },
     defaultSort: camelCaseSortOption,
   ) {
@@ -67,7 +66,7 @@ export class SearchService {
 
     const previousSearchText = this.selected.term;
     // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
-    this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
+    this.selected.term = blankSearchText ? '' : customSearchEvent.searchText || '';
     this.selected['sortField'] = SearchService.sortFieldToCamelCase(customSearchEvent.sortBy, defaultSort);
 
     this.updateSelectedSortLabel();
@@ -85,7 +84,7 @@ export class SearchService {
     this.changed.emit(true);
   }
 
-  private static sortFieldToCamelCase(sortBy: string, defaultSort: camelCaseSortOption): camelCaseSortOption {
+  private static sortFieldToCamelCase(sortBy: string | null, defaultSort: camelCaseSortOption): camelCaseSortOption {
     let selected;
 
     // Not sure why TS isn't inferring `sortOptions`'s type any more; using `as` for now.
@@ -121,7 +120,7 @@ export class SearchService {
     }
   }
 
-  filter(filterName: string, value: string | boolean) {
+  filter(filterName: string, value: string) {
     this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);

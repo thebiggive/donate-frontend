@@ -1,0 +1,134 @@
+<div #root [class]="'container space-below-' + this.spaceBelow">
+  <div class="sleeve">
+    <div class="search-wrap">
+      <h4>{{ intro }}</h4>
+      <div class="field-wrap">
+        <div class="input-wrap">
+          <fa-icon [icon]="faMagnifyingGlass" />
+          <input
+            type="text"
+            [value]="searchText ?? ''"
+            class="input-text"
+            [placeholder]="placeholderText"
+            (input)="handleSearchTextChanged($event)"
+            (keydown)="handleEnterPressed($event)"
+          />
+        </div>
+        <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
+      </div>
+    </div>
+    <div class="sort-filter-wrap">
+      @if (enableSearchByLocation && this.offerNearMeOption) {
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleNearMeButtonPressed()"
+          [label]="this.fetchingLocation ? 'Fetching location...' : 'Charities near me'"
+          [disabled]="this.fetchingLocation"
+          [fullWidth]="true"
+          space-below="0"
+        ></biggive-button>
+      }
+      <div class="filter-wrap">
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleFilterButtonClick()"
+          label="Filter"
+          [fullWidth]="true"
+          space-below="0"
+        ></biggive-button>
+        <biggive-popup id="filter-popup">
+          <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
+          <div class="select-wrapper-1">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Category"
+              [placeholder]="categoriesPlaceHolderText"
+              [selectedLabel]="selectedFilterCategory"
+              [selectedValue]="selectedFilterCategory"
+              [options]="optionsToArray(this.categoryOptions || [])"
+              [selectionChanged]="categoryFilterSelectionChanged"
+              id="categories"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="select-wrapper-2">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Beneficiary"
+              [placeholder]="beneficiariesPlaceHolderText"
+              [selectedLabel]="selectedFilterBeneficiary"
+              [selectedValue]="selectedFilterBeneficiary"
+              [options]="optionsToArray(this.beneficiaryOptions || [])"
+              [selectionChanged]="beneficiarySelectionChanged"
+              id="beneficiaries"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="select-wrapper-3">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Location"
+              [placeholder]="locationsPlaceHolderText"
+              [selectedLabel]="selectedFilterLocation"
+              [selectedValue]="selectedFilterLocation"
+              [options]="optionsToArray(this.locationOptions || [])"
+              [selectionChanged]="locationSelectionChanged"
+              id="locations"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="align-right">
+            <biggive-button label="Apply filters" (doButtonClick)="handleApplyFilterButtonClick()" />
+          </div>
+        </biggive-popup>
+      </div>
+
+      <div class="sort-wrap" style="">
+        <biggive-form-field-select
+          [options]="sortOptions"
+          [prompt]="null"
+          select-style="underlined"
+          [placeholder]="sortByPlaceholderText"
+          [selectedLabel]="selectedSortByOption"
+          [selectedValue]="getSelectedValue() || null"
+          [selectionChanged]="sortBySelectionChanged"
+          id="sort-by"
+        />
+      </div>
+    </div>
+    <div class="selected-filter-wrap">
+      <div class="selected-filters">
+        @if (selectedFilterCategory) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('categories')">
+            {{ selectedFilterCategory }}
+          </span>
+        }
+        @if (selectedFilterBeneficiary) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('beneficiaries')">
+            {{ selectedFilterBeneficiary }}
+          </span>
+        }
+        @if (selectedFilterLocation) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('locations')">
+            {{ selectedFilterLocation }}
+          </span>
+        }
+      </div>
+      <div class="clear-all">
+        <!-- eslint-disable-next-line -->
+        <a (click)="handleClearAll()">Clear all</a>
+      </div>
+    </div>
+    <div class="campaign-grid">
+      <ng-content />
+    </div>
+  </div>
+</div>
