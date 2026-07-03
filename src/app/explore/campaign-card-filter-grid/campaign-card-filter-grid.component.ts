@@ -25,7 +25,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
   styleUrl: './campaign-card-filter-grid.component.scss',
 })
 export class CampaignCardFilterGridComponent {
-  private sortOptions = this.getSortOptions();
+  protected sortOptions = this.getSortOptions();
 
   /**
    * JSON array of category key/values

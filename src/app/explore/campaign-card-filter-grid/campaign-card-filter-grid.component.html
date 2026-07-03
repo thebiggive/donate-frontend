@@ -88,10 +88,10 @@
         </biggive-popup>
       </div>
 
-      <div class="sort-wrap">
+      <div class="sort-wrap" style="">
         <biggive-form-field-select
-          options="{sortOptions}"
-          prompt="{null}"
+          [options]="sortOptions"
+          [prompt]="null"
           select-style="underlined"
           [placeholder]="sortByPlaceholderText"
           [selectedLabel]="selectedSortByOption"
