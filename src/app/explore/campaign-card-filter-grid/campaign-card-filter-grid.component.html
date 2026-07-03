@@ -4,7 +4,7 @@
       <h4>{{ intro }}</h4>
       <div class="field-wrap">
         <div class="input-wrap">
-          <fa-icon [icon]="faMagnifyingGlass"/>
+          <fa-icon [icon]="faMagnifyingGlass" />
           <input
             type="text"
             [value]="searchText ?? ''"
@@ -118,31 +118,26 @@
     <div class="selected-filter-wrap">
       <div class="selected-filters">
         @if (selectedFilterCategory) {
-          <span
-            class="button"
-            (click)="removeFilter('categories')"
-          >
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('categories')">
             {{ selectedFilterCategory }}
           </span>
         }
         @if (selectedFilterBeneficiary) {
-          <span
-            class="button"
-            (click)="removeFilter('beneficiaries')"
-          >
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('beneficiaries')">
             {{ selectedFilterBeneficiary }}
           </span>
         }
         @if (selectedFilterLocation) {
-          <span
-            class="button"
-            (click)="removeFilter('locations');"
-          >
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('locations')">
             {{ selectedFilterLocation }}
           </span>
         }
       </div>
       <div class="clear-all">
+        <!-- eslint-disable-next-line -->
         <a (click)="handleClearAll()">Clear all</a>
       </div>
     </div>

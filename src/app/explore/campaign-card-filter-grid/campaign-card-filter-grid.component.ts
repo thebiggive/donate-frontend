@@ -103,7 +103,7 @@ export class CampaignCardFilterGridComponent {
    * the search box text will clear, unless we use this to it on
    * rendering. DON-652.
    */
-  @Input({required: true}) searchText: string | null = null;
+  @Input({ required: true }) searchText: string | null = null;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -123,22 +123,22 @@ export class CampaignCardFilterGridComponent {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Input({required: true}) selectedSortByOption!: sortOptionLabel | null;
+  @Input({ required: true }) selectedSortByOption!: sortOptionLabel | null;
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Input({required: true}) selectedFilterCategory: string | null = null;
+  @Input({ required: true }) selectedFilterCategory: string | null = null;
 
   /**
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Input({required: true}) selectedFilterBeneficiary: string | null = null;
+  @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Input({required: true}) selectedFilterLocation: string | null = null;
+  @Input({ required: true }) selectedFilterLocation: string | null = null;
 
   /**
    * Allow donors to select campaigns near to themselves.
@@ -162,7 +162,7 @@ export class CampaignCardFilterGridComponent {
   };
 
   protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
-    // @ts-expect-error
+    // @ts-expect-error getting Type string is not assignable to type sortOptionLabel | null . Maybe somethign we can 'grandfather' from before port from stencil.
     this.selectedSortByOption = value;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
@@ -196,7 +196,7 @@ export class CampaignCardFilterGridComponent {
       typeof searchAndFilterObj.filterLocation === 'string';
   };
 
-  protected removeFilter(filterKey: "locations" | "categories" | "beneficiaries") {
+  protected removeFilter(filterKey: 'locations' | 'categories' | 'beneficiaries') {
     switch (filterKey) {
       case 'beneficiaries':
         this.selectedFilterBeneficiary = null;
@@ -210,11 +210,13 @@ export class CampaignCardFilterGridComponent {
       default:
         // This asks the compiler to check that we are in dead code, i.e. we covered all the possible filter keys
         // above. If we missed one we would get a compile error trying to assign a string to a never.
-        const exhaustiveSwitch: never = filterKey;
+        const exhaustiveSwitch: never = filterKey; // eslint-disable-line
         console.error(exhaustiveSwitch);
     }
 
-    const selectEl = this.el.nativeElement.querySelector('#' + filterKey) as HTMLBiggiveFormFieldSelectElement | undefined;
+    const selectEl = this.el.nativeElement.querySelector('#' + filterKey) as
+      | HTMLBiggiveFormFieldSelectElement
+      | undefined;
     if (!selectEl) {
       return;
     }
@@ -238,7 +240,7 @@ export class CampaignCardFilterGridComponent {
     this.doGetLocationFromBrowser.emit();
   };
 
-  protected handleSearchTextChanged = (event: any) => {
+  protected handleSearchTextChanged = (event: Event & { target: HTMLInputElement }) => {
     this.searchText = event.target.value;
   };
 
@@ -322,7 +324,7 @@ export class CampaignCardFilterGridComponent {
 
   public getSelectedValue(): undefined | string {
     const sortByOption = this.selectedSortByOption;
-    if (! sortByOption) {
+    if (!sortByOption) {
       return undefined;
     }
     const sortOptions = this.getSortOptions();
@@ -337,7 +339,7 @@ export class CampaignCardFilterGridComponent {
     label: sortOptionLabel;
     value: sortOptionKey;
   }[] {
-    // @ts-ignore  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
+    // @ts-expect-error  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
     const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
     const relevantOptionKeys = sortOptionKeys.filter((key) => key !== 'relevance' || this.hasSearchTerm());
 
