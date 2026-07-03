@@ -240,7 +240,8 @@ export class CampaignCardFilterGridComponent {
     this.doGetLocationFromBrowser.emit();
   };
 
-  protected handleSearchTextChanged = (event: Event & { target: HTMLInputElement }) => {
+  protected handleSearchTextChanged = (event: Event) => {
+    // @ts-expect-error - we know it will be from an input element so will have a value.
     this.searchText = event.target.value;
   };
 
