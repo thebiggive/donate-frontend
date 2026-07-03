@@ -98,21 +98,7 @@
           [selectedValue]="getSelectedValue() || null"
           [selectionChanged]="sortBySelectionChanged"
           id="sort-by"
-        >
-          <!--
-        commented all nodes inside biggive-form-field-select out because there doesn't seem to be anything called
-        biggive-form-field-select-option . These were in the stencil component but I don't think they were actually
-        doing anything. The options are passed via the options attribute of the biggive-form-field-select component.
-        The angular compiler won't allow them to be given here if it can't find an element with that name.
-        -->
-          <!--        <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>-->
-          <!--        <biggive-form-field-select-option value="leastRaised" label="Least raised"></biggive-form-field-select-option>-->
-          <!--        <biggive-form-field-select-option value="matchFundsRemaining" label="Most funds remaining"></biggive-form-field-select-option>-->
-          <!--        <biggive-form-field-select-option value="closeToTarget" label="Nearest target"></biggive-form-field-select-option>-->
-          <!--        @if ((searchText || '').length > 0) {-->
-          <!--          <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>-->
-          <!--        }-->
-        </biggive-form-field-select>
+        />
       </div>
     </div>
     <div class="selected-filter-wrap">
