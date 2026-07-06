@@ -510,4 +510,17 @@ export class DonationService {
         assertUnreachable(pspMethodType);
     }
   }
+
+  public async extendReservation(donation: Donation) {
+    const updatedDonation = await firstValueFrom(
+      this.http.post<Donation>(
+        `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}/extend`,
+        donation,
+        this.getAuthHttpOptions(donation),
+      ),
+    );
+
+    // updating existing donation object instead of making new one so references to it stay intact.
+    donation.fundsReservedUntil = updatedDonation.fundsReservedUntil;
+  }
 }

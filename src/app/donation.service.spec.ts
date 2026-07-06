@@ -85,7 +85,7 @@ describe('DonationService', () => {
         },
       );
 
-      const mockPost = httpMock.expectOne(`${environment.matchbotApiPrefix}/donations`);
+      const mockPost = httpMock.expectOne(`${environment.matchbotApiPrefix}/donations?short-reservation`);
       expect(mockPost.request.method).toEqual('POST');
       expect(mockPost.cancelled).toBeFalsy();
       expect(mockPost.request.responseType).toEqual('json');

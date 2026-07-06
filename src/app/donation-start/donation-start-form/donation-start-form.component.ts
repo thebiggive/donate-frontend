@@ -184,6 +184,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   maximumTipPercentage = 30 as const;
   private ryftController: RyftControllerResponse | undefined;
   ryftCardForm: RyftCardFormComponentResponse | undefined;
+  private donationExtender: ReturnType<typeof setInterval> | undefined;
 
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
@@ -344,6 +345,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.destroyStripeElements();
 
     clearTimeout(this.donationRetryTimeout);
+    clearTimeout(this.donationExtender);
   }
 
   ngOnInit() {
@@ -506,6 +508,32 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.donationExtender = setInterval(async () => await this.extendReservationTime(), 60_000);
+    }
+  }
+
+  async extendReservationTime() {
+    if (!this.donation) {
+      return;
+    }
+
+    if (!this.donation.maxReservationTime) {
+      return;
+    }
+
+    if (new Date(this.donation.maxReservationTime) < new Date()) {
+      return;
+    }
+
+    try {
+      await this.donationService.extendReservation(this.donation);
+    } catch (e: unknown) {
+      console.error('Error upating match funds reservation', e);
+    }
+
+    console.log('updated match funds reservation for donation', this.donation);
   }
 
   async ngAfterViewInit() {
