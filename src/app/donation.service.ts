@@ -203,9 +203,11 @@ export class DonationService {
       throw new Error('cannot create a donation for 0 amount');
     }
 
+    const queryString = `short-reservation`; // only needed temporarily - matchbot will do this automatically in future.
+
     const endpoint = personId
-      ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}`
-      : `${environment.matchbotApiPrefix}${this.apiPath}`;
+      ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}?${queryString}`
+      : `${environment.matchbotApiPrefix}${this.apiPath}?${queryString}`;
 
     return this.http.post<DonationCreatedResponse>(endpoint, donation, getPersonAuthHttpOptions(jwt));
   }
