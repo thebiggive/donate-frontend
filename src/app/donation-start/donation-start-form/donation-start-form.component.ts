@@ -1014,8 +1014,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     // Check if matching has expired without the timer firing (e.g. iOS issue or page backgrounded)
-    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.createdTime) {
-      const expiryTime = environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime();
+    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.maxReservationTime) {
+      const expiryTime = new Date(this.donation.maxReservationTime).getTime();
       const now = Date.now();
 
       if (now > expiryTime) {
@@ -1038,7 +1038,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
       const timeSinceCreation = Date.now() - new Date(this.donation?.createdTime).getTime();
-      const expiryMs = environment.reservationMinutes * 60000;
+      const expiryMs = new Date(this.donation?.maxReservationTime || '1970').getTime() - timeSinceCreation;
 
       this.matomoTracker.trackEvent(
         'donate_submit_attempt',
@@ -2103,7 +2103,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() < Date.now()
+      donation.maxReservationTime &&
+      new Date(donation.maxReservationTime) < new Date()
     ) {
       donation.matchReservedAmount = 0;
       matchExpired = true;
@@ -2122,7 +2123,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   private scheduleMatchingExpiryWarning(donation: Donation) {
     // Only set the timeout when relevant part 1/2: exclude cases with no
     // matching.
-    if (!donation.createdTime || donation.matchReservedAmount <= 0) {
+    if (!donation.createdTime || donation.matchReservedAmount <= 0 || !donation.maxReservationTime) {
       return;
     }
 
@@ -2134,11 +2135,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // least brittle option here.
     this.cancelExpiryWarning();
 
-    // To make this safe to call for both new and resumed donations, we look up
-    // the donation's creation time and determine the timeout based on that rather
-    // than e.g. always using 30 minutes.
-    const msUntilExpiryTime =
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+    const msUntilExpiryTime = new Date(donation.maxReservationTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
     // the timeout has already passed. This happens e.g. when the reuse
