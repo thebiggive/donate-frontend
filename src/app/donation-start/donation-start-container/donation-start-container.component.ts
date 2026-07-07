@@ -16,6 +16,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DonationStartLoginComponent } from '../donation-start-login/donation-start-login.component';
 import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
+import {TimeLeftPipe} from '../../time-left.pipe';
 
 @Component({
   templateUrl: './donation-start-container.component.html',
@@ -29,6 +30,7 @@ import { CampaignInfoComponent } from '../../campaign-info/campaign-info.compone
     CampaignInfoComponent,
     DatePipe,
     AsyncPipe,
+    TimeLeftPipe,
   ],
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit {
