@@ -134,6 +134,18 @@ export interface Donation {
   matchReservedAmount: number;
 
   /**
+   * ISO 8601 formatted datetime for when any funds will be held until if we don't ask to extend the reservation
+   */
+  fundsReservedUntil?: string;
+
+  /**
+   * ISO 8601 formatted datetime for when any funds will be held until assuming we ask to extend the reservation
+   * every few minutes until that time. After that we should assume the funds will have been released and if we want
+   * to make a matched donation we will need to start a new one. Not set on donation created locally.
+   */
+  maxReservationTime?: string;
+
+  /**
    * One of the status strings defined in the `DonationStatus` type.
    * See `donation-status.enum.ts` where the type and backing enum are defined.
    */
