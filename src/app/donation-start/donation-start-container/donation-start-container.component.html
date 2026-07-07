@@ -1,5 +1,5 @@
 <main class="b-container">
-  @if (reservationExpiryDate && ! (isOffline$ | async)) {
+  @if (reservationExpiryDate && (isOffline$ | async) === false) {
     <div class="c-timer">
       <div class="centered">
         <!-- this is based on the assumption that their browser will request extensions to their reservation
