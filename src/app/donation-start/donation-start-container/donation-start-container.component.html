@@ -1,15 +1,4 @@
 <main class="b-container">
-  @if (reservationExpiryDate) {
-    <div class="c-timer">
-      <div class="centered">
-        <span class="b-rt-0">Your match funds are reserved for:&nbsp;</span>
-        <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
-      </div>
-    </div>
-    <div class="u-height-4em">
-      <!-- timer has fixed position so would occlude the content below without this empty div to push it down-->
-    </div>
-  }
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
@@ -88,7 +77,13 @@
   <div aria-live="polite">
     @if (isOffline$ | async) {
       <div id="offline-warning">
-        <div>Offline</div>
+        <div class="heading">Offline</div>
+        @if (reservationExpiryDate) {
+          <div>
+            You may lose match funds if you don't reconnect soon; you’ll be able to continue without guaranteed
+            matching.
+          </div>
+        }
       </div>
     }
   </div>

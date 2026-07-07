@@ -520,10 +520,13 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     if (!this.donation.maxReservationTime) {
+      // as this is missing, the donation is probably a new one created locally, not yet replaced with a copy generated
+      // server-side.
       return;
     }
 
     if (new Date(this.donation.maxReservationTime) < new Date()) {
+      // no point asking to extend, we know it won't be allowed.
       return;
     }
 
