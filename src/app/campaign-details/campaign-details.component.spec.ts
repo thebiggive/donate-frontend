@@ -79,7 +79,6 @@ describe('CampaignDetailsComponent', () => {
       championOptInStatement: undefined,
       championRef: undefined,
       hidden: false,
-      logoUri: undefined,
       parentRef: undefined,
       surplusDonationInfo: undefined,
       target: 1234,
