@@ -42,7 +42,6 @@ describe('CampaignDetailsComponent', () => {
       aims: ['Aim 1'],
       amountRaised: 123,
       additionalImages: [],
-      additionalImageUris: [],
       banner: { uri: 'https://example.com/some-banner.png', alt_text: 'This is some alt-text' },
       beneficiaries: ['Other'],
       budgetDetails: [],
