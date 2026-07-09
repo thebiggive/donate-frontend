@@ -73,12 +73,6 @@ describe('DonationStartContainer', () => {
       id: campaignId,
       aims: ['Aim 1'],
       amountRaised: 200.0,
-      additionalImageUris: [
-        {
-          uri: 'https://example.com/some-additional-image.png',
-          order: 100,
-        },
-      ],
       bannerUri: 'https://example.com/some-banner.png',
       beneficiaries: ['Other'],
       budgetDetails: [
