@@ -36,12 +36,6 @@ describe('DonationStartForm', () => {
       aims: ['Aim 1'],
       amountRaised: 200.0,
       additionalImages: [],
-      additionalImageUris: [
-        {
-          uri: 'https://example.com/some-additional-image.png',
-          order: 100,
-        },
-      ],
       banner: { uri: 'https://example.com/some-banner.png', alt_text: 'This is some alt-text' },
       beneficiaries: ['Other'],
       budgetDetails: [
