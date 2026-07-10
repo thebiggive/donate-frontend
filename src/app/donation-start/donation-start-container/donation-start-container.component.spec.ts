@@ -73,7 +73,9 @@ describe('DonationStartContainer', () => {
       id: campaignId,
       aims: ['Aim 1'],
       amountRaised: 200.0,
-      bannerUri: 'https://example.com/some-banner.png',
+      banner: {
+        uri: 'https://example.com/some-banner.png',
+      },
       beneficiaries: ['Other'],
       budgetDetails: [
         {
@@ -122,7 +124,6 @@ describe('DonationStartContainer', () => {
       championOptInStatement: undefined,
       championRef: undefined,
       hidden: false,
-      logoUri: undefined,
       parentRef: undefined,
       surplusDonationInfo: undefined,
       target: 2000.01,

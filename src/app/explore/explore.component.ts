@@ -162,23 +162,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected readonly environment = environment;
 
-  /**
-   * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
-   * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
-   * component
-   *
-   * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
-   */
-  protected readonly campaignIdsWithRectangleImage: string[] =
-    environment.environmentId !== 'production'
-      ? [
-          'a056900002RXrXtAAL',
-          'a056900002SEVVPAA5', // Christmas Challenge 2024
-        ]
-      : [
-          'a056900002SEVVPAA5', // Christmas Challenge 2024
-        ];
-
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
       clearTimeout(this.tickerUpdateTimer);
@@ -466,7 +449,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       error: (error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `ExploreComponent.doCampaignSearch: ${error.message}`,
+          `ExploreComponent.doCampaignSearch: ${error?.message ?? error ?? 'Unknown error'}`,
           undefined,
           this.matomoTracker,
         );
