@@ -38,19 +38,19 @@
     <div class="b-primary-column">
       <div class="banner-container">
         <!-- 30.6 is approx. 352/1152 as %, the typical app campaign & standalone campaign banner ratio hardcoded in Salesforce -->
-        @if (campaign.banner) {
-          <biggive-branded-image
-            space-below="4"
-            [imageUrl]="campaign.banner.uri | optimisedImage: 2000 | async"
-            [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-            [imageAlt]="campaign.banner.alt_text"
-            [slug]="campaign.isMatched ? 'Match Funded' : null"
-            [charityName]="campaign.charity.name"
-            [charityLocation]="null"
-            [imageHeightPercent]="30.6"
-          >
-          </biggive-branded-image>
-        }
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="
+            campaign.banner && campaign.banner.uri ? (campaign.banner.uri | optimisedImage: 2000 | async) : null
+          "
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [imageAlt]="campaign.banner?.alt_text"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="null"
+          [imageHeightPercent]="30.6"
+        >
+        </biggive-branded-image>
       </div>
 
       <biggive-heading
