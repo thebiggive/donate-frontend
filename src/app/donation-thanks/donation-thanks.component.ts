@@ -18,8 +18,7 @@ import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
 import { GIFT_AID_FACTOR } from '../Money';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { BiggiveButton, BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
@@ -29,16 +28,7 @@ import { Toast } from '../toast.service';
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
   styleUrl: './donation-thanks.component.scss',
-  imports: [
-    MatProgressSpinner,
-    BiggiveButton,
-    FaIconComponent,
-    BiggivePageSection,
-    BiggiveSocialIcon,
-    RouterLink,
-    DatePipe,
-    ExactCurrencyPipe,
-  ],
+  imports: [MatProgressSpinner, BiggivePageSection, BiggiveSocialIcon, RouterLink, DatePipe, ExactCurrencyPipe],
 })
 export class DonationThanksComponent implements OnDestroy, OnInit {
   private campaignService = inject(CampaignService);
@@ -221,7 +211,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     this.donation = donation;
     this.campaignService.getCharityCampaignById(donation.projectId).subscribe((campaign) => {
       this.campaign = campaign;
-      this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.banner.uri);
+      this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.banner?.uri);
       this.setSocialShares(campaign);
     });
 

@@ -82,8 +82,10 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
     }
 
     this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
-    const bannerUri = this.campaign.banner.uri;
-    this.imageService.getImageUri(bannerUri!, 830).subscribe((uri) => (this.bannerUri = uri));
+    const bannerUri = this.campaign.banner?.uri;
+    if (bannerUri !== null) {
+      this.imageService.getImageUri(bannerUri!, 830).subscribe((uri) => (this.bannerUri = uri));
+    }
   }
 
   ngAfterViewInit() {
