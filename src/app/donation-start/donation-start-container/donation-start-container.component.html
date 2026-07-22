@@ -62,10 +62,8 @@
             }
           </div>
           <div class="c-banner">
-            @if (campaign.banner.alt_text) {
+            @if (campaign.banner && bannerUri) {
               <img class="c-banner__image b-w-100" [src]="bannerUri" [alt]="campaign.banner.alt_text" />
-            } @else if (bannerUri) {
-              <img class="c-banner__image b-w-100" [src]="bannerUri" alt="" role="presentation" />
             }
           </div>
           <app-campaign-info [campaign]="campaign"></app-campaign-info>

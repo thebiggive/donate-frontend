@@ -29,7 +29,7 @@ export type Campaign = {
   matchFundsTotal: number;
   aims: string[];
   additionalImages: Array<{ altText: string; rank: number; uri: string }>;
-  banner: { uri: string; alt_text: string | undefined };
+  banner: null | { uri: string; alt_text: string | undefined };
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];

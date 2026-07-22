@@ -13,7 +13,6 @@ import {
 } from '@biggive/components-angular';
 import { flags } from '../../featureFlags';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { firstValueFrom } from 'rxjs';
 import { countryOptions } from '../../countries';
 
@@ -26,7 +25,6 @@ import { countryOptions } from '../../countries';
     BiggivePageSection,
     BiggiveHeading,
     BiggiveButton,
-    MatCheckbox,
     ReactiveFormsModule,
     BiggiveFormFieldSelect,
     BiggiveTextInput,

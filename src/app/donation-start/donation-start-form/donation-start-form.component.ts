@@ -1863,7 +1863,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
-      this.campaign.banner.uri,
+      this.campaign.banner?.uri,
     );
   }
 
