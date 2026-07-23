@@ -85,6 +85,7 @@ module.exports = {
     // Disable scope hoisting for better ES5 compatibility
     concatenateModules: false,
   },
+  plugins: [["polyfill-corejs3", { method: "usage-global" }]],
   // Ensure proper source maps for debugging
   devtool: "source-map",
   // Target browsers that support ES5
