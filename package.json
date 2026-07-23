@@ -94,6 +94,7 @@
     "@types/node": "^20.13.1",
     "angular-eslint": "21.2.0",
     "babel-loader": "^10.0.0",
+    "babel-plugin-polyfill-corejs3": "^1.0.0",
     "browser-sync": "^3.0.0",
     "cypress": "^15.15.0",
     "eslint": "^9.28.0",
