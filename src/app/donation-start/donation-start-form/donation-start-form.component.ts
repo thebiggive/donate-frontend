@@ -1621,7 +1621,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     // todo - refactor tip messages below to remove duplication.
     if (tipErrors?.pattern) {
-      return 'Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000.';
+      return 'Please enter how much you would like to donate to Big Give as a number of £.';
     }
 
     if (tipErrors?.required) {
