@@ -4,7 +4,7 @@ type errorDetail = {
   message?: string;
   publicMessage?: string;
   description?: string;
-  type: string;
+  type: 'INSUFFICIENT_MATCH_FUNDS' | 'EXPECTED_MATCH_FUNDS_NOT_FOUND' | (string & {});
   htmlDescription?: string;
 };
 
