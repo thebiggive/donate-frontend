@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { Campaign } from '../../campaign.model';
@@ -59,6 +60,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.isOffline$ = merge(of(null), fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(
         map(() => !navigator.onLine),
+        takeUntilDestroyed(),
       );
     } else {
       this.isOffline$ = of(false);

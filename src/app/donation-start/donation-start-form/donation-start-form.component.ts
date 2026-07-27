@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   inject,
   Input,
   OnDestroy,
@@ -28,7 +29,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { campaignHiddenMessage, donorGiftAidTermsUrl, donorTermsUrl } from '../../../environments/common';
@@ -72,6 +73,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
 import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
 import { DonationStartWhyTipDialogComponent } from '../donation-start-why-tip-dialog.component';
+import { BackendError } from '../../backendError';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -167,6 +169,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    *
    */
   @Input() campaignOpenOnLoad = false;
+
+  @Input({ required: true }) isOffline!: Observable<boolean>;
 
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
@@ -514,6 +518,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
   }
 
+  @HostListener('window:online')
   async extendReservationTime() {
     if (!this.donation) {
       return;
@@ -533,10 +538,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     try {
       await this.donationService.extendReservation(this.donation);
     } catch (e: unknown) {
-      console.error('Error upating match funds reservation', e);
+      const backendError = e as BackendError | HttpErrorResponse;
+      console.error('Error updating match funds reservation', backendError);
+      if (backendError?.error?.error?.type === 'EXPECTED_MATCH_FUNDS_NOT_FOUND') {
+        await this.handleMatchingExpiry(this.donation);
+      }
     }
-
-    console.log('updated match funds reservation for donation', this.donation);
   }
 
   async ngAfterViewInit() {
