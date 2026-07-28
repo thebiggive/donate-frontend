@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   inject,
   Input,
   OnDestroy,
@@ -28,7 +29,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { campaignHiddenMessage, donorGiftAidTermsUrl, donorTermsUrl } from '../../../environments/common';
@@ -72,6 +73,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
 import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
 import { DonationStartWhyTipDialogComponent } from '../donation-start-why-tip-dialog.component';
+import { BackendError } from '../../backendError';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -168,6 +170,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    */
   @Input() campaignOpenOnLoad = false;
 
+  @Input({ required: true }) isOffline!: Observable<boolean>;
+
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   donorsCreditPence = 0; // Set non-zero if logged in and Customer has a credit balance in the right currency.
@@ -184,6 +188,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   maximumTipPercentage = 30 as const;
   private ryftController: RyftControllerResponse | undefined;
   ryftCardForm: RyftCardFormComponentResponse | undefined;
+  private donationExtender: ReturnType<typeof setInterval> | undefined;
 
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
@@ -344,6 +349,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.destroyStripeElements();
 
     clearTimeout(this.donationRetryTimeout);
+    clearTimeout(this.donationExtender);
   }
 
   ngOnInit() {
@@ -505,6 +511,38 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.donationExtender = setInterval(async () => await this.extendReservationTime(), 60_000);
+    }
+  }
+
+  @HostListener('window:online')
+  async extendReservationTime() {
+    if (!this.donation) {
+      return;
+    }
+
+    if (!this.donation.maxReservationTime) {
+      // as this is missing, the donation is probably a new one created locally, not yet replaced with a copy generated
+      // server-side.
+      return;
+    }
+
+    if (new Date(this.donation.maxReservationTime) < new Date()) {
+      // no point asking to extend, we know it won't be allowed.
+      return;
+    }
+
+    try {
+      await this.donationService.extendReservation(this.donation);
+    } catch (e: unknown) {
+      const backendError = e as BackendError | HttpErrorResponse;
+      console.error('Error updating match funds reservation', backendError);
+      if (backendError?.error?.error?.type === 'EXPECTED_MATCH_FUNDS_NOT_FOUND') {
+        await this.handleMatchingExpiry(this.donation);
+      }
     }
   }
 
@@ -983,8 +1021,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     // Check if matching has expired without the timer firing (e.g. iOS issue or page backgrounded)
-    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.createdTime) {
-      const expiryTime = environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime();
+    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.maxReservationTime) {
+      const expiryTime = new Date(this.donation.maxReservationTime).getTime();
       const now = Date.now();
 
       if (now > expiryTime) {
@@ -1007,7 +1045,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
       const timeSinceCreation = Date.now() - new Date(this.donation?.createdTime).getTime();
-      const expiryMs = environment.reservationMinutes * 60000;
+      const expiryMs = new Date(this.donation?.maxReservationTime || '1970').getTime() - timeSinceCreation;
 
       this.matomoTracker.trackEvent(
         'donate_submit_attempt',
@@ -1590,7 +1628,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     // todo - refactor tip messages below to remove duplication.
     if (tipErrors?.pattern) {
-      return 'Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000.';
+      return 'Please enter how much you would like to donate to Big Give as a number of £.';
     }
 
     if (tipErrors?.required) {
@@ -1829,11 +1867,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.setConditionalValidators();
     this.setChampionOptInValidity();
 
-    const bannerUri = this.campaign.banner?.uri || this.campaign.bannerUri;
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
-      bannerUri,
+      this.campaign.banner?.uri,
     );
   }
 
@@ -2072,7 +2109,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() < Date.now()
+      donation.maxReservationTime &&
+      new Date(donation.maxReservationTime) < new Date()
     ) {
       donation.matchReservedAmount = 0;
       matchExpired = true;
@@ -2091,7 +2129,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   private scheduleMatchingExpiryWarning(donation: Donation) {
     // Only set the timeout when relevant part 1/2: exclude cases with no
     // matching.
-    if (!donation.createdTime || donation.matchReservedAmount <= 0) {
+    if (!donation.createdTime || donation.matchReservedAmount <= 0 || !donation.maxReservationTime) {
       return;
     }
 
@@ -2103,11 +2141,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // least brittle option here.
     this.cancelExpiryWarning();
 
-    // To make this safe to call for both new and resumed donations, we look up
-    // the donation's creation time and determine the timeout based on that rather
-    // than e.g. always using 30 minutes.
-    const msUntilExpiryTime =
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+    const msUntilExpiryTime = new Date(donation.maxReservationTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
     // the timeout has already passed. This happens e.g. when the reuse

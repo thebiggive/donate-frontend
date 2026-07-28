@@ -154,7 +154,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
 
-    const bannerUri = campaign.banner?.uri || campaign.bannerUri;
+    const bannerUri = campaign.banner?.uri;
     if (this.isEarlyPreview()) {
       this.pageMeta.setCommon('PREVIEW: ' + campaign.title, summaryStart, bannerUri, true);
     } else {

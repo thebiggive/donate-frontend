@@ -242,7 +242,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
    * Handle all other requests by rendering the Angular application.
    */
   app.get('**', (req, res, next) => {
-    const { protocol, originalUrl, headers, query } = req;
+    const { originalUrl, headers, query } = req;
     const ua = headers['user-agent'] || '';
 
     // Use legacy bundle if explicitly requested via query param or if User-Agent indicates legacy browser
@@ -262,7 +262,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         bootstrap,
         documentFilePath: indexHtml, // Always use the SSR-capable index
         inlineCriticalCss: false,
-        url: `${protocol}://${headers.host}${originalUrl}`,
+        url: `${environment.donateUriPrefix}${originalUrl}`,
         publicPath: bundleFolder,
         providers: [
           // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
@@ -286,7 +286,10 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
 
         res.send(html);
       })
-      .catch((err) => next(err));
+      .catch((err) => {
+        console.error('SSR error:', err.message, err.stack);
+        next(err);
+      });
   });
 
   /**

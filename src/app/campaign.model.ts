@@ -29,6 +29,7 @@ export type Campaign = {
   matchFundsTotal: number;
   aims: string[];
   additionalImages: Array<{ altText: string; rank: number; uri: string }>;
+  banner: null | { uri: string; alt_text: string | undefined };
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];
@@ -63,7 +64,6 @@ export type Campaign = {
   alternativeFundUse?: string;
   championOptInStatement?: string;
   championRef?: string;
-  logoUri?: string;
   parentRef?: string;
   surplusDonationInfo?: string;
   target?: number;
@@ -78,15 +78,4 @@ export type Campaign = {
   | {
       parentUsesSharedFunds: false;
     }
-) &
-  (
-    | {
-        /** this is to be phased out, matchbot will start sending banner instead of bannerUri */
-        bannerUri: string;
-        banner?: undefined;
-      }
-    | {
-        banner: { uri: string; alt_text: string | undefined };
-        bannerUri?: undefined;
-      }
-  );
+);

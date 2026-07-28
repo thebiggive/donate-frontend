@@ -58,6 +58,5 @@ export interface Environment {
       publicKey: string;
     };
   };
-  reservationMinutes: number;
   showDebugInfo: boolean;
 }

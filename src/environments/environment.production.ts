@@ -38,6 +38,5 @@ export const environment: Environment = {
       publicKey: 'pk_Sss1hHkI/nxJfBHrbmBJwGNRX+oviQaMiEPtDI0nNq+Or4Yiij3X8kByqz1aqnn0',
     },
   },
-  reservationMinutes: 25,
   showDebugInfo: false,
 };
