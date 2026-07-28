@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { GeoJSON, Map, Rectangle } from 'leaflet';
+import { GeoJSON, Map, TileLayer } from 'leaflet';
 import type { FeatureCollection, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
 const integerPipeToken = new InjectionToken<DecimalPipe>('integerPipe');
@@ -145,46 +145,22 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
     }).setView([51.505, -0.09], 4); // Replaced later when we fit project highlight bounds.
 
-    const constantLayerStyle = {
-      fillColor: '#c9fdd4', // Light minty green for (not project-relevant) land; we'll use BG green to highlight.
-      fillOpacity: 1,
-      color: '#999999', // Grey outline
-      weight: 1,
-    };
-
-    // Blue background – sea / areas where we don't do geo highlighting.
-    new Rectangle(
-      [
-        [-90, -180],
-        [90, 180],
-      ],
-      {
-        fillColor: '#dddddd',
-        fillOpacity: 1,
-        stroke: false,
-        interactive: false,
-      },
-    ).addTo(this.map);
-
-    const nationData = await firstValueFrom(this.http.get('../../assets/map/nations.geojson'));
-    new GeoJSON(nationData, {
-      attribution:
-        'Boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
-      style: () => constantLayerStyle,
-    }).addTo(this.map);
-
-    const englandRegionsData = await firstValueFrom(this.http.get('../../assets/map/englandRegions.geojson'));
-    new GeoJSON(englandRegionsData, { style: () => constantLayerStyle }).addTo(this.map);
-
     const matchedRegions: string[] = [];
 
     // Build a layer with just project-relevant locations and a list of their names
     const highlightAreas = await this.getHighlightedFeatures(regionCodes);
 
+    new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 13,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(this.map);
+
     const projectLayer = new GeoJSON(highlightAreas, {
+      attribution:
+        'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
       style: () => ({
         fillColor: '#2c089b',
-        fillOpacity: 0.4,
+        fillOpacity: 0.2,
         color: '#2c089b',
         weight: 1.5,
       }),
