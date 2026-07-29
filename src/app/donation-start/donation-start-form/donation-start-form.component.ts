@@ -531,7 +531,19 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     if (new Date(this.donation.maxReservationTime) < new Date()) {
+      this.matomoTracker.trackEvent(
+        'donate',
+        'matching_expired_timeout',
+        `Matching expired for donation ${this.donation.donationId}`,
+      );
+
       // no point asking to extend, we know it won't be allowed.
+      return;
+    }
+
+    if (this.donation.matchReservedAmount <= 0) {
+      // matching may have already been lost by e.g. matching expiry or
+      // this was just an unmatched donation ot start with
       return;
     }
 
@@ -541,6 +553,15 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       const backendError = e as BackendError | HttpErrorResponse;
       console.error('Error updating match funds reservation', backendError);
       if (backendError?.error?.error?.type === 'EXPECTED_MATCH_FUNDS_NOT_FOUND') {
+        // guard clauses should have exited earlier if donor stayed online, this error response from matchbot
+        // indicates they probably lost the matching due to regular expiry job because they were not online to request
+        // extension in the last five minutes.
+        this.matomoTracker.trackEvent(
+          'donate',
+          'matching_expired_likely_offline',
+          `Matching expired for donation ${this.donation.donationId}`,
+        );
+
         await this.handleMatchingExpiry(this.donation);
       }
     }
@@ -2168,7 +2189,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.matomoTracker.trackEvent('matching_expiry', 'timer_fired_no_donation', 'Timer fired but no donation object');
       return;
     }
-
     // Safety check: ensure the timer is still relevant for the current donation
     if (donation.donationId && this.donation.donationId !== donation.donationId) {
       this.matomoTracker.trackEvent(
