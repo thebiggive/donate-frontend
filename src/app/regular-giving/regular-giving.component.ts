@@ -712,7 +712,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (this.giftAid && !this.homeOutsideUK && !this.homePostcode?.match(postcodeRegExp)) {
-      errors.push('Please enter a UK postcode');
+      errors.push('Please enter a UK postcode.');
+    }
+
+    if (!this.donorAccount) {
+      // @todo-don-1195 - replace with a more detailed message based on exactly how far through logging in or creating the
+      // account they've got.
+      // also confirm if this error needs to come before they see the Gift Aid step or if it is actually OK for them to fill
+      // in the Gift Aid section of the form before logging in.
+      // and of course add the facility for them to actuall log in or signup into the stepper before they reach this point.
+      errors.push('Please login or create a donor account.');
     }
 
     this.giftAidErrorMessage = errors.join(' ');
