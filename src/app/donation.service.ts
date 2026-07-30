@@ -192,7 +192,7 @@ export class DonationService {
     const person = await firstValueFrom(this.identityService.getLoggedInPerson());
 
     if (!person) {
-      throw new Error('logged in person required');
+      throw new Error('logged in person required for getPaymentMethods');
     }
 
     return { jwt, person };
@@ -424,7 +424,7 @@ export class DonationService {
     return person$.pipe(
       switchMap((person) => {
         if (!person) {
-          throw new Error('logged in person required');
+          throw new Error('logged in person required for getPastDonations');
         }
 
         return this.http
@@ -443,7 +443,7 @@ export class DonationService {
     return person$.pipe(
       switchMap((person) => {
         if (!person) {
-          throw new Error('logged in person required');
+          throw new Error('logged in person required for cancelDonationFundsToCampaign');
         }
 
         return this.http

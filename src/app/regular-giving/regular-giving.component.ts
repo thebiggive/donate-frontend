@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import {
@@ -118,8 +118,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected campaign!: Campaign;
   @ViewChild('stepper') private stepper!: MatStepper;
   readonly privacyUrl = 'https://biggive.org/privacy';
-  protected donor?: Person;
-  protected donorAccount!: DonorAccount;
+  protected donor?: Person | null;
+
+  /** May now be undefined as we will be allowing viewing of this page for new users before signup */
+  protected donorAccount: DonorAccount | undefined;
   protected countryOptionsObject = countryOptions;
   protected selectedBillingCountryCode!: string;
   private stripeElements: StripeElements | undefined;
@@ -185,11 +187,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected formattedCampaignSummary!: string;
 
   ngOnInit() {
-    const donor: Person | null = this.route.snapshot.data['donor'];
-    if (!donor) {
-      throw new Error('Must be logged in to see regular giving page');
-    }
-    this.donor = donor;
+    this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
     this.campaign = this.route.snapshot.data['campaign'];
@@ -210,21 +208,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.campaign.banner?.uri,
     );
 
-    this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
+    if (this.donorAccount) {
+      // @todo DON-1195 - make this run not jut OnInit but when the donorAccount is set and details available
+      this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
+      this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
 
-    this.stripeService.init().catch(console.error);
+      this.stripeService.init().catch(console.error);
 
-    this.donationService
-      .createCustomerSessionForRegularGiving({ campaign: this.campaign })
-      .then((session) => {
-        this.stripeCustomerSession = session;
-        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
-          this.prepareStripeElements();
-        }
-      })
-      .catch(console.error);
+      this.donationService
+        .createCustomerSessionForRegularGiving({ campaign: this.campaign })
+        .then((session) => {
+          this.stripeCustomerSession = session;
+          if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+            this.prepareStripeElements();
+          }
+        })
+        .catch(console.error);
+    }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
 
@@ -233,7 +234,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.mandateForm.patchValue({ unmatched: true });
     }
 
-    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign);
+    // @todo DON-1195 - run this check again if/when an existing donor logs in to stop them making another mandate for same campaign.
+    // I think it is already blocked in matchbot.
+    this.preExistingActiveMandate$ = this.donorAccount
+      ? this.regularGivingService.activeMandate(this.campaign)
+      : of([]);
   }
 
   ngOnDestroy() {
@@ -290,6 +295,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async submit() {
+    if (!this.donorAccount) {
+      // this should never happen, we won't allow the donor to see the submit button while they aren't logged in to an
+      // account.
+      this.toast.showError('No donor account found, cannot create regular giving mandate');
+      return;
+    }
     const invalid = this.mandateForm.invalid;
     if (invalid) {
       let errorMessage = 'Form error: ';
@@ -650,7 +661,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private validatePaymentInformationStep(): boolean {
     this.paymentInfoErrorMessage = undefined;
 
-    if (!this.stripePaymentMethodReady && !this.donorAccount.regularGivingPaymentMethod) {
+    if (!this.donorAccount) {
+      // likely this branch can never happen as we will check donor has an account before they see the payment information
+      // step
+      this.paymentInfoErrorMessage = 'Please login or create your donor account';
+    } else if (!this.stripePaymentMethodReady && !this.donorAccount.regularGivingPaymentMethod) {
       this.paymentInfoErrorMessage = 'Please complete your payment method details';
     } else if (this.stripeError) {
       this.paymentInfoErrorMessage = this.stripeError;
