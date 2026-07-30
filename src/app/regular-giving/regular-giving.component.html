@@ -62,6 +62,8 @@
                 <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
               </div>
 
+              <p>{{ formattedCampaignSummary }}</p>
+
               <div class="donation-input donation-input-main">
                 <biggive-text-input currency="{{ campaign.currencyCode }}">
                   <label class="label-with-limited-space" slot="label" for="donationAmount">

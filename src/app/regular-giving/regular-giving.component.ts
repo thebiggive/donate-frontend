@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Campaign } from '../campaign.model';
+import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import {
   BiggiveButton,
   BiggiveFormFieldSelect,
@@ -182,6 +182,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * is quite baked into the logic for matching regular giving in matchbot.
    */
   public readonly standardNumberOfDonationsMatched = 3;
+  protected formattedCampaignSummary!: string;
 
   ngOnInit() {
     const donor: Person | null = this.route.snapshot.data['donor'];
@@ -192,6 +193,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
     this.campaign = this.route.snapshot.data['campaign'];
+    this.formattedCampaignSummary = formattedCampaignSummary(this.campaign);
 
     if (!this.campaign.isRegularGiving) {
       console.error('Campaign ' + this.campaign.id + ' is not a regular giving campaign');
