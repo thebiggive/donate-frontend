@@ -45,6 +45,8 @@ import { CampaignService } from '../campaign.service';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
+import {EMAIL_REGEXP} from '../validators/patterns';
+import {flags} from '../featureFlags';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -104,6 +106,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       getCurrencyMaxValidator(maxAmount),
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]),
+    emailAddress: new FormControl('',
+      [
+        requiredNotBlankValidator,
+        // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+        Validators.pattern(EMAIL_REGEXP),
+      ],
+    ),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
@@ -138,6 +147,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected submitting: boolean = false;
 
   protected amountErrorMessage: string | undefined;
+  protected emailErrorMessage: string | undefined;
   private stripePaymentMethodReady: boolean = false;
   protected stripeError: string | undefined;
   private cardHandler = this.onStripeCardChange.bind(this);
@@ -443,6 +453,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected giftAidErrorMessage: string | undefined = undefined;
+  protected enableCondensedRegularGivingSignup = flags.enableCondensedRegularGivingSignup;
 
   protected get homeOutsideUK(): boolean {
     return !!this.mandateForm.value.homeOutsideUK;
@@ -627,6 +638,28 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.ageErrorMessage = undefined;
       }
     }
+
+    const emailErrors = this.mandateForm.controls.emailAddress.errors;
+    if (emailErrors && flags.enableCondensedRegularGivingSignup) {
+      for (const [key] of Object.entries(emailErrors)) {
+        switch (key) {
+          case 'required':
+            this.emailErrorMessage = 'Please enter your email address. You will be able to set up a new account or log in to any existing Big Give donor account';
+            break;
+          case 'pattern':
+            this.emailErrorMessage = `Sorry, your email address is not recognised - please enter a valid email address.`;
+            break;
+          default:
+            this.emailErrorMessage = 'Unexpected donation email address error';
+            console.error({ emailErrors });
+            break;
+        }
+      }
+      this.toast.showError(this.emailErrorMessage!);
+      errorFound = true;
+    }
+
+
     return errorFound;
   }
 

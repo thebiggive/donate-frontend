@@ -71,6 +71,24 @@
                   </label>
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
+                @if (enableCondensedRegularGivingSignup) {
+                <div>
+                  <biggive-text-input>
+                    <label slot="label" for="emailAddress">Email Address *</label>
+                    <input
+                      slot="input"
+                      formControlName="emailAddress"
+                      id="emailAddress"
+                      type="email"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      matInput
+                    />
+                  </biggive-text-input>
+                  <mat-hint>We will email you to create an account.</mat-hint>
+                </div>
+                }
+
               </div>
 
               @if (showUnmatchedDonationOption) {
@@ -111,11 +129,17 @@
                     {{ maximumMatchableDonation | money }}, or make an unmatched donation using the option above.
                   </p>
                 }
+
+                @if (emailErrorMessage) {
+                  <div class="error">
+                    {{ this.emailErrorMessage }}
+                  </div>
+                }
               </div>
 
               <div class="u-text-center">
                 <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                  Continue
+                  {{ enableCondensedRegularGivingSignup ? 'Send email' : 'Continue'}}
                 </button>
               </div>
             </mat-step>
