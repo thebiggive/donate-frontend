@@ -217,7 +217,7 @@
                      donor account - if donors want to edit them direct them to do so on the My Account page,
                      to make clear that it will affect existing mandates as well as the new one -->
 
-                @if (donorAccount.regularGivingPaymentMethod) {
+                @if (donorAccount?.regularGivingPaymentMethod) {
                   <!--
                   @todo-regular-giving-DON-1021: Consider showing existing payment method detail here here,
                     instead of just link to account. Might require either saving card brand and last4 to our matchbot
