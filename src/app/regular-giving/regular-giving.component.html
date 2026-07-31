@@ -85,7 +85,6 @@
                         matInput
                       />
                     </biggive-text-input>
-                    <mat-hint>We will email you to create an account.</mat-hint>
                   </div>
                 }
               </div>
@@ -140,6 +139,10 @@
                 <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
                   {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
                 </button>
+                @if (enableCondensedRegularGivingSignup) {
+                  <br />
+                  We will email you a temporary password for the next step, if you are not already registered.
+                }
               </div>
             </mat-step>
             <mat-step label="Gift Aid">
