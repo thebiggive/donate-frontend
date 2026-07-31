@@ -1357,10 +1357,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * replace some of the calls with a different more specific message that identifies the cause of the problem if it will
    * either help donors directly or if they might usefully quote it to us in a support case.
    */
-  showDonationCreateError() {
+  showDonationCreateError(errorDetail: string) {
     this.toast.showError(
       "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
-        ' us if this message persists.',
+        ' us if this message persists.' +
+        (environment.environmentId === 'production' ? '' : ' ' + errorDetail),
     );
   }
 
@@ -1914,7 +1915,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         psp: this.psp,
       });
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError('create-donation: missing required fields');
       return;
     }
 
@@ -1966,7 +1967,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.creatingDonation = false;
           this.donationCreateError = true;
           this.friendlyCaptchaWidget?.reset();
-          this.showDonationCreateError();
+          this.showDonationCreateError('identity-create: ' + error.message);
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         },
       );
@@ -2033,7 +2034,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
-    this.showDonationCreateError();
+    this.showDonationCreateError('newDonationError: ' + errorMessage);
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
@@ -2043,13 +2044,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     const createResponseMissingData =
       !response.donation.charityId || !response.donation.donationId || !response.donation.projectId;
     if (createResponseMissingData) {
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'donation_create_response_incomplete',
-        `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-      );
+      const errorName = `Missing expected response data creating new donation for campaign ${this.campaignId}`;
+      this.matomoTracker.trackEvent('donate_error', 'donation_create_response_incomplete', errorName);
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError(errorName);
       this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;
