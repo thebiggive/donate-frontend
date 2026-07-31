@@ -10,6 +10,10 @@ export type Campaign = {
   currencyCode: 'GBP' | 'USD';
   hidden: boolean;
   ready: boolean;
+
+  /**
+   * General information about the campaign. Do not display directly - use formattedCampaignSummary instead.
+   */
   summary: string;
   amountRaised: number;
   /**
@@ -79,3 +83,15 @@ export type Campaign = {
       parentUsesSharedFunds: false;
     }
 );
+
+/**
+ * Collapses sequences of line breaks in the campaign summary then returns a version of the summary with
+ * each line break doubled to appear like a paragraph break.
+ */
+export function formattedCampaignSummary(campaign: Campaign): string {
+  if (!campaign.summary) {
+    return '';
+  }
+
+  return campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+}

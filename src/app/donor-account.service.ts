@@ -20,7 +20,7 @@ export class DonorAccountService {
   getLoggedInDonorAccount(): Observable<null | DonorAccount> {
     const jwt = this.identityService.getJWT();
     if (!jwt) {
-      throw new Error("Missing JWT, can't fetch donor account");
+      return of(null);
     }
 
     const identityPerson = this.identityService.getLoggedInPerson();

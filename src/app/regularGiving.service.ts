@@ -127,7 +127,7 @@ export class RegularGivingService {
     return person$.pipe(
       switchMap((person) => {
         if (!person) {
-          throw new Error('logged in person required');
+          throw new Error('logged in person required for withLoggedInDonor');
         }
 
         return callable(personAuthHttpOptions);
