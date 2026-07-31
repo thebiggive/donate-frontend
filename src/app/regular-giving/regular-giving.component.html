@@ -133,6 +133,10 @@
                     {{ this.emailErrorMessage }}
                   </div>
                 }
+
+                @if (errorHtml) {
+                  <p class="error" aria-live="assertive">Registration error: <span [innerHtml]="errorHtml"></span></p>
+                }
               </div>
 
               <div class="u-text-center">
@@ -144,6 +148,13 @@
                   We will email you a temporary password for the next step, if you are not already registered.
                 }
               </div>
+
+              <div
+                class="frc-captcha"
+                [attr.data-sitekey]="friendlyCaptchaSiteKey"
+                data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+                #frccaptcha
+              ></div>
             </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">

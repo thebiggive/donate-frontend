@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import {
@@ -43,10 +43,13 @@ import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
 import { Observable, of } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { flags } from '../featureFlags';
+import { IdentityService } from '../identity.service';
+import { WidgetInstance } from 'friendly-challenge';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -98,6 +101,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private pageMeta = inject(PageMetaService);
   private stripeService = inject(StripeService);
   private donationService = inject(DonationService);
+  private readonly identityService = inject(IdentityService);
+  protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
@@ -146,6 +151,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected amountErrorMessage: string | undefined;
   protected emailErrorMessage: string | undefined;
+  protected errorHtml: SafeHtml | undefined;
   private stripePaymentMethodReady: boolean = false;
   protected stripeError: string | undefined;
   private cardHandler = this.onStripeCardChange.bind(this);
@@ -193,6 +199,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    */
   public readonly standardNumberOfDonationsMatched = 3;
   protected formattedCampaignSummary!: string;
+  private sanitizer = inject(DomSanitizer);
+
+  @ViewChild('frccaptcha', { static: false })
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
+  private friendlyCaptchaSolution: string | undefined;
+  private friendlyCaptchaWidget!: WidgetInstance;
+  private platformId = inject(PLATFORM_ID);
+
+  protected processing = false;
 
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
@@ -262,7 +277,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return this.matchFundsZeroOnLoad || this.newDonationAmountOverMaxMatchable || this.unmatched;
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
@@ -277,6 +292,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       },
       500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
     );
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    if (environment.environmentId === 'regression') {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      return;
+    }
+
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.friendlyCaptchaSolution = solution;
+      },
+      errorCallback: () => {},
+    });
+    await this.friendlyCaptchaWidget.start();
   }
 
   protected get newDonationAmountOverMaxMatchable() {
@@ -540,16 +572,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  protected continue(): void {
+  protected async continue(): Promise<void> {
     const nextStepIndex = this.stepper.selectedIndex + 1;
     if (nextStepIndex > this.stepper.steps.length - 1) {
       throw new Error('Cannot continue past last step');
     }
 
-    this.selectStep(nextStepIndex);
+    await this.selectStep(nextStepIndex);
   }
 
-  private selectStep(stepIndex: number) {
+  private async selectStep(stepIndex: number) {
     if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
@@ -570,6 +602,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
+    }
+
+    if (stepIndex === 1 && flags.enableCondensedRegularGivingSignup) {
+      // this is the Send email button so let's send an email.
+
+      try {
+        // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
+        // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
+        // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
+        // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
+        // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
+        await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
+          captcha_code: this.friendlyCaptchaSolution!,
+        });
+        // this.verificationLinkSentToEmail = emailAddress;
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      } catch (error: any) {
+        this.extractErrorMessage(error);
+      } finally {
+        this.friendlyCaptchaWidget?.reset();
+        await this.friendlyCaptchaWidget?.start();
+        this.processing = false;
+      }
     }
 
     this.stepper.selected = this.stepper.steps.get(stepIndex);
@@ -776,4 +831,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       amountInPence: Math.max(Math.floor(fundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100,
     };
   }
+
+  private extractErrorMessage = (error: BackendError) => {
+    const errorInfo = errorDetails(error);
+    if (errorInfo.htmlDescription) {
+      // this HTML can only have come back from our identity server, which we consider trustworthy.
+      this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription);
+    } else {
+      this.emailErrorMessage = errorDescription(error);
+    }
+  };
 }
