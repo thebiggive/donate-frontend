@@ -306,7 +306,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       doneCallback: (solution) => {
         this.friendlyCaptchaSolution = solution;
       },
-      errorCallback: () => {},
+      errorCallback: (error: unknown) => {
+        // not sure if this ever really happens, but will show an error message in case it does.
+        console.error(error);
+        this.toast.showError(
+          'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
+        );
+      },
     });
     await this.friendlyCaptchaWidget.start();
   }
