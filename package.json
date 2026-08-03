@@ -36,9 +36,9 @@
     "@angular/material": "^21.1.2",
     "@angular/platform-browser": "^21.1.2",
     "@angular/platform-browser-dynamic": "^21.1.2",
-    "@angular/platform-server": "^21.1.2",
+    "@angular/platform-server": "^22.1.0",
     "@angular/router": "^21.1.2",
-    "@angular/ssr": "^21.2.10",
+    "@angular/ssr": "^22.1.2",
     "@biggive/components": "^202606301318.0.0",
     "@biggive/components-angular": "^202606301318.0.0",
     "@fortawesome/angular-fontawesome": "^4.0.0",
@@ -72,7 +72,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.1.2",
+    "@angular/build": "^22.1.2",
     "@angular/cli": "^21.1.3",
     "@angular/compiler-cli": "^21.1.2",
     "@angular/language-service": "^21.1.2",
