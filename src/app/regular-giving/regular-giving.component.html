@@ -140,9 +140,16 @@
               </div>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                  {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
-                </button>
+                <div aria-live="polite">
+                  @if (processingTempPasswordRequest) {
+                    <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+                  }
+                </div>
+                @if (!processingTempPasswordRequest) {
+                  <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
+                  </button>
+                }
                 @if (enableCondensedRegularGivingSignup) {
                   <br />
                   We will email you a temporary password for the next step, if you are not already registered.

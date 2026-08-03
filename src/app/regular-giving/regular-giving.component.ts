@@ -207,7 +207,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private friendlyCaptchaWidget!: WidgetInstance;
   private platformId = inject(PLATFORM_ID);
 
-  protected processing = false;
+  protected processingTempPasswordRequest = false;
 
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
@@ -612,6 +612,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         return;
       }
 
+      this.processingTempPasswordRequest = true;
       try {
         // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
         // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
@@ -629,7 +630,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       } finally {
         this.friendlyCaptchaWidget?.reset();
         await this.friendlyCaptchaWidget?.start();
-        this.processing = false;
+        this.processingTempPasswordRequest = false;
       }
     }
 
