@@ -107,9 +107,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]),
     emailAddress: new FormControl('', [
-      requiredNotBlankValidator,
-      // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-      Validators.pattern(EMAIL_REGEXP),
+      ...(flags.enableCondensedRegularGivingSignup
+        ? [
+            requiredNotBlankValidator,
+            // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+            Validators.pattern(EMAIL_REGEXP),
+          ]
+        : []),
     ]),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
