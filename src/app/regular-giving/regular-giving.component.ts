@@ -620,6 +620,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
       } catch (error: any) {
         this.extractErrorMessage(error);
+        return;
       } finally {
         this.friendlyCaptchaWidget?.reset();
         await this.friendlyCaptchaWidget?.start();
