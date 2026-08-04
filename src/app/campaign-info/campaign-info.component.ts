@@ -245,10 +245,14 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
    * Gets the main text to show on near the top of the sidebar, about if/when the campaign is going to open or close
    */
   protected get primaryStatText(): string {
-    return this.campaignFinished
-      ? 'Closed ' + this.datePipe.transform(this.campaign.endDate, 'd LLL yyyy')!
-      : this.campaignOpen
-        ? this.timeLeftToEndPipe.transform(this.campaign.endDate) + ' left'
-        : 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
+    if (this.campaignFinished) {
+      return 'Closed ' + this.datePipe.transform(this.campaign.endDate, 'd LLL yyyy')!;
+    }
+
+    if (this.campaignOpen) {
+      return this.timeLeftToEndPipe.transform(this.campaign.endDate) + ' left';
+    }
+
+    return 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
   }
 }
