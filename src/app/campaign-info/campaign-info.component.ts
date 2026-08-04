@@ -253,6 +253,15 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.timeLeftToEndPipe.transform(this.campaign.endDate) + ' left';
     }
 
-    return 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
+    if (new Date(this.campaign.startDate) > new Date()) {
+      return 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
+    }
+
+    // If we're here we know that the campaign is not open, but neither closed in the past
+    // nor is opening in the future. It may be not open because it doesn't have the
+    // required funds. In that case we don't expect the public to be looking at this
+    //  page, so we just return the empty string and don't say why it's not open:
+
+    return '';
   }
 }
