@@ -133,17 +133,35 @@
                     {{ this.emailErrorMessage }}
                   </div>
                 }
+
+                @if (errorHtml) {
+                  <p class="error" aria-live="assertive">Registration error: <span [innerHtml]="errorHtml"></span></p>
+                }
               </div>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                  {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
-                </button>
+                <div aria-live="polite">
+                  @if (processingTempPasswordRequest) {
+                    <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+                  }
+                </div>
+                @if (!processingTempPasswordRequest) {
+                  <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
+                  </button>
+                }
                 @if (enableCondensedRegularGivingSignup) {
                   <br />
                   We will email you a temporary password for the next step, if you are not already registered.
                 }
               </div>
+
+              <div
+                class="frc-captcha"
+                [attr.data-sitekey]="friendlyCaptchaSiteKey"
+                data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+                #frccaptcha
+              ></div>
             </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">
