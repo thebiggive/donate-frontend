@@ -224,7 +224,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       console.error('Campaign ' + this.campaign.id + ' is not a regular giving campaign');
     }
 
-    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
+    this.campaignOpenOnLoad = CampaignService.isOpenForDonations(this.campaign);
     if (!this.campaignOpenOnLoad) {
       void this.router.navigateByUrl(`/campaign/${this.campaign.id}`);
     }
