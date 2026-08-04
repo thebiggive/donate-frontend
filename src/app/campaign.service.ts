@@ -73,8 +73,7 @@ export class CampaignService {
     return dateToUse;
   }
 
-  static isClosedDueToMissingRequiredMatchFunds(campaign: Campaign): boolean
-  {
+  static isClosedDueToMissingRequiredMatchFunds(campaign: Campaign): boolean {
     return !campaign.parentRef && campaign.isMatched && campaign.matchFundsTotal <= 0;
   }
 
