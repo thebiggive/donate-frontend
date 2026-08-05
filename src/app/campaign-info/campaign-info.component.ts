@@ -60,6 +60,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   private map?: any;
   private projectBounds?: DOMRect;
   private resizeObserver?: ResizeObserver;
+  private readonly boundsPadding = [8, 8];
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign || this.campaign;
@@ -112,7 +113,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           } else {
             this.map.invalidateSize();
             if (this.projectBounds) {
-              this.map.fitBounds(this.projectBounds);
+              this.map.fitBounds(this.projectBounds, { padding: this.boundsPadding });
             }
           }
         }
@@ -180,7 +181,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.impactRegions = `UK impact is in ${matchedRegions.join(', ')}`; // No 'and' for now, think it's enough to encourage pauses.
 
     this.projectBounds = projectLayer.getBounds();
-    this.map.fitBounds(this.projectBounds);
+    this.map.fitBounds(this.projectBounds, { padding: this.boundsPadding });
   }
 
   private async getHighlightedFeatures(regionCodes: string[]): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
