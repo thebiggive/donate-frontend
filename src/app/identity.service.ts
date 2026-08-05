@@ -281,7 +281,19 @@ export class IdentityService {
     return firstValueFrom(this.http.get(uri).pipe(map((response: any) => response.token)));
   }
 
-  async requestEmailAuthToken(emailAddress: string, { captcha_code }: { captcha_code: string }): Promise<object> {
+  /**
+   *
+   * @param emailAddress
+   * @param param1
+   * @param param1.captcha_code
+   * @param param1.regularGiving - whether to request a regular-giving specific style of auth token. This may be functionally the same as the standard auth token email
+   *                               but will acknowledge that the user is in the process of setting up a regular giving agreement and will refer to the auth code
+   *                               as a temporary password so it can be typed into the same form field as an existing password.
+   */
+  async requestEmailAuthToken(
+    emailAddress: string,
+    { captcha_code, regularGiving }: { captcha_code: string; regularGiving: boolean },
+  ): Promise<object> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken`;
 
     return firstValueFrom(
@@ -289,6 +301,7 @@ export class IdentityService {
         uri,
         {
           emailAddress,
+          regularGiving,
         },
         {
           headers: {

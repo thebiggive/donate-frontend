@@ -631,6 +631,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
         await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
           captcha_code: this.friendlyCaptchaSolution,
+          regularGiving: true,
         });
         // this.verificationLinkSentToEmail = emailAddress;
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
