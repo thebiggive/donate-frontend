@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Campaign } from '../campaign.model';
+import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import {
   BiggiveButton,
   BiggiveFormFieldSelect,
@@ -43,8 +43,13 @@ import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
 import { Observable, of } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
+import { EMAIL_REGEXP } from '../validators/patterns';
+import { flags } from '../featureFlags';
+import { IdentityService } from '../identity.service';
+import { WidgetInstance } from 'friendly-challenge';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -96,6 +101,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private pageMeta = inject(PageMetaService);
   private stripeService = inject(StripeService);
   private donationService = inject(DonationService);
+  private readonly identityService = inject(IdentityService);
+  protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
@@ -103,6 +110,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       getCurrencyMinValidator(minAmount),
       getCurrencyMaxValidator(maxAmount),
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
+    ]),
+    emailAddress: new FormControl('', [
+      ...(flags.enableCondensedRegularGivingSignup
+        ? [
+            requiredNotBlankValidator,
+            // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+            Validators.pattern(EMAIL_REGEXP),
+          ]
+        : []),
     ]),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
@@ -118,8 +134,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected campaign!: Campaign;
   @ViewChild('stepper') private stepper!: MatStepper;
   readonly privacyUrl = 'https://biggive.org/privacy';
-  protected donor?: Person;
-  protected donorAccount!: DonorAccount;
+  protected donor?: Person | null;
+
+  /** May now be undefined as we will be allowing viewing of this page for new users before signup */
+  protected donorAccount: DonorAccount | undefined;
   protected countryOptionsObject = countryOptions;
   protected selectedBillingCountryCode!: string;
   private stripeElements: StripeElements | undefined;
@@ -136,6 +154,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected submitting: boolean = false;
 
   protected amountErrorMessage: string | undefined;
+  protected emailErrorMessage: string | undefined;
+  protected errorHtml: SafeHtml | undefined;
   private stripePaymentMethodReady: boolean = false;
   protected stripeError: string | undefined;
   private cardHandler = this.onStripeCardChange.bind(this);
@@ -182,22 +202,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    * is quite baked into the logic for matching regular giving in matchbot.
    */
   public readonly standardNumberOfDonationsMatched = 3;
+  protected formattedCampaignSummary!: string;
+  private sanitizer = inject(DomSanitizer);
+
+  @ViewChild('frccaptcha', { static: false })
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
+  private friendlyCaptchaSolution: string | undefined;
+  private friendlyCaptchaWidget!: WidgetInstance;
+  private platformId = inject(PLATFORM_ID);
+
+  protected processingTempPasswordRequest = false;
 
   ngOnInit() {
-    const donor: Person | null = this.route.snapshot.data['donor'];
-    if (!donor) {
-      throw new Error('Must be logged in to see regular giving page');
-    }
-    this.donor = donor;
+    this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
     this.campaign = this.route.snapshot.data['campaign'];
+    this.formattedCampaignSummary = formattedCampaignSummary(this.campaign);
 
     if (!this.campaign.isRegularGiving) {
       console.error('Campaign ' + this.campaign.id + ' is not a regular giving campaign');
     }
 
-    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
+    this.campaignOpenOnLoad = CampaignService.isOpenForDonations(this.campaign);
     if (!this.campaignOpenOnLoad) {
       void this.router.navigateByUrl(`/campaign/${this.campaign.id}`);
     }
@@ -208,21 +235,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.campaign.banner?.uri,
     );
 
-    this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
+    if (this.donorAccount) {
+      // @todo DON-1195 - make this run not jut OnInit but when the donorAccount is set and details available
+      this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
+      this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
 
-    this.stripeService.init().catch(console.error);
+      this.stripeService.init().catch(console.error);
 
-    this.donationService
-      .createCustomerSessionForRegularGiving({ campaign: this.campaign })
-      .then((session) => {
-        this.stripeCustomerSession = session;
-        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
-          this.prepareStripeElements();
-        }
-      })
-      .catch(console.error);
+      this.donationService
+        .createCustomerSessionForRegularGiving({ campaign: this.campaign })
+        .then((session) => {
+          this.stripeCustomerSession = session;
+          if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+            this.prepareStripeElements();
+          }
+        })
+        .catch(console.error);
+    }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
 
@@ -231,7 +261,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.mandateForm.patchValue({ unmatched: true });
     }
 
-    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign);
+    // @todo DON-1195 - run this check again if/when an existing donor logs in to stop them making another mandate for same campaign.
+    // I think it is already blocked in matchbot.
+    this.preExistingActiveMandate$ = this.donorAccount
+      ? this.regularGivingService.activeMandate(this.campaign)
+      : of([]);
   }
 
   ngOnDestroy() {
@@ -247,7 +281,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return this.matchFundsZeroOnLoad || this.newDonationAmountOverMaxMatchable || this.unmatched;
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
@@ -262,6 +296,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       },
       500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
     );
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    if (environment.environmentId === 'regression') {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      return;
+    }
+
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.friendlyCaptchaSolution = solution;
+      },
+      errorCallback: (error: unknown) => {
+        // not sure if this ever really happens, but will show an error message in case it does.
+        console.error(error);
+        this.toast.showError(
+          'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
+        );
+      },
+    });
+    await this.friendlyCaptchaWidget.start();
   }
 
   protected get newDonationAmountOverMaxMatchable() {
@@ -288,6 +345,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async submit() {
+    if (!this.donorAccount) {
+      // this should never happen, we won't allow the donor to see the submit button while they aren't logged in to an
+      // account.
+      this.toast.showError('No donor account found, cannot create regular giving mandate');
+      return;
+    }
     const invalid = this.mandateForm.invalid;
     if (invalid) {
       let errorMessage = 'Form error: ';
@@ -430,6 +493,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected giftAidErrorMessage: string | undefined = undefined;
+  protected enableCondensedRegularGivingSignup = flags.enableCondensedRegularGivingSignup;
 
   protected get homeOutsideUK(): boolean {
     return !!this.mandateForm.value.homeOutsideUK;
@@ -518,16 +582,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  protected continue(): void {
+  protected async continue(): Promise<void> {
     const nextStepIndex = this.stepper.selectedIndex + 1;
     if (nextStepIndex > this.stepper.steps.length - 1) {
       throw new Error('Cannot continue past last step');
     }
 
-    this.selectStep(nextStepIndex);
+    await this.selectStep(nextStepIndex);
   }
 
-  private selectStep(stepIndex: number) {
+  private async selectStep(stepIndex: number) {
     if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
@@ -548,6 +612,36 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
+    }
+
+    if (stepIndex === 1 && flags.enableCondensedRegularGivingSignup) {
+      // this is the Send email button so let's send an email.
+
+      if (!this.friendlyCaptchaSolution) {
+        this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
+        return;
+      }
+
+      this.processingTempPasswordRequest = true;
+      try {
+        // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
+        // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
+        // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
+        // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
+        // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
+        await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
+          captcha_code: this.friendlyCaptchaSolution,
+        });
+        // this.verificationLinkSentToEmail = emailAddress;
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      } catch (error: any) {
+        this.extractErrorMessage(error);
+        return;
+      } finally {
+        this.friendlyCaptchaWidget?.reset();
+        await this.friendlyCaptchaWidget?.start();
+        this.processingTempPasswordRequest = false;
+      }
     }
 
     this.stepper.selected = this.stepper.steps.get(stepIndex);
@@ -614,6 +708,28 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.ageErrorMessage = undefined;
       }
     }
+
+    const emailErrors = this.mandateForm.controls.emailAddress.errors;
+    if (emailErrors && flags.enableCondensedRegularGivingSignup) {
+      for (const [key] of Object.entries(emailErrors)) {
+        switch (key) {
+          case 'required':
+            this.emailErrorMessage =
+              'Please enter your email address. You will be able to set up a new account or log in to any existing Big Give donor account';
+            break;
+          case 'pattern':
+            this.emailErrorMessage = `Sorry, your email address is not recognised - please enter a valid email address.`;
+            break;
+          default:
+            this.emailErrorMessage = 'Unexpected donation email address error';
+            console.error({ emailErrors });
+            break;
+        }
+      }
+      this.toast.showError(this.emailErrorMessage!);
+      errorFound = true;
+    }
+
     return errorFound;
   }
 
@@ -648,7 +764,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private validatePaymentInformationStep(): boolean {
     this.paymentInfoErrorMessage = undefined;
 
-    if (!this.stripePaymentMethodReady && !this.donorAccount.regularGivingPaymentMethod) {
+    if (!this.donorAccount) {
+      // likely this branch can never happen as we will check donor has an account before they see the payment information
+      // step
+      this.paymentInfoErrorMessage = 'Please login or create your donor account';
+    } else if (!this.stripePaymentMethodReady && !this.donorAccount.regularGivingPaymentMethod) {
       this.paymentInfoErrorMessage = 'Please complete your payment method details';
     } else if (this.stripeError) {
       this.paymentInfoErrorMessage = this.stripeError;
@@ -695,7 +815,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (this.giftAid && !this.homeOutsideUK && !this.homePostcode?.match(postcodeRegExp)) {
-      errors.push('Please enter a UK postcode');
+      errors.push('Please enter a UK postcode.');
+    }
+
+    if (!this.donorAccount) {
+      // @todo-don-1195 - replace with a more detailed message based on exactly how far through logging in or creating the
+      // account they've got.
+      // also confirm if this error needs to come before they see the Gift Aid step or if it is actually OK for them to fill
+      // in the Gift Aid section of the form before logging in.
+      // and of course add the facility for them to actuall log in or signup into the stepper before they reach this point.
+      errors.push('Please login or create a donor account.');
     }
 
     this.giftAidErrorMessage = errors.join(' ');
@@ -719,4 +848,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       amountInPence: Math.max(Math.floor(fundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100,
     };
   }
+
+  private extractErrorMessage = (error: BackendError) => {
+    const errorInfo = errorDetails(error);
+    if (errorInfo.htmlDescription) {
+      // this HTML can only have come back from our identity server, which we consider trustworthy.
+      this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription);
+    } else {
+      this.emailErrorMessage = errorDescription(error);
+    }
+  };
 }

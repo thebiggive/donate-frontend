@@ -531,7 +531,19 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     if (new Date(this.donation.maxReservationTime) < new Date()) {
+      this.matomoTracker.trackEvent(
+        'donate',
+        'matching_expired_timeout',
+        `Matching expired for donation ${this.donation.donationId}`,
+      );
+
       // no point asking to extend, we know it won't be allowed.
+      return;
+    }
+
+    if (this.donation.matchReservedAmount <= 0) {
+      // matching may have already been lost by e.g. matching expiry or
+      // this was just an unmatched donation ot start with
       return;
     }
 
@@ -541,6 +553,15 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       const backendError = e as BackendError | HttpErrorResponse;
       console.error('Error updating match funds reservation', backendError);
       if (backendError?.error?.error?.type === 'EXPECTED_MATCH_FUNDS_NOT_FOUND') {
+        // guard clauses should have exited earlier if donor stayed online, this error response from matchbot
+        // indicates they probably lost the matching due to regular expiry job because they were not online to request
+        // extension in the last five minutes.
+        this.matomoTracker.trackEvent(
+          'donate',
+          'matching_expired_likely_offline',
+          `Matching expired for donation ${this.donation.donationId}`,
+        );
+
         await this.handleMatchingExpiry(this.donation);
       }
     }
@@ -1336,10 +1357,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * replace some of the calls with a different more specific message that identifies the cause of the problem if it will
    * either help donors directly or if they might usefully quote it to us in a support case.
    */
-  showDonationCreateError() {
+  showDonationCreateError(errorDetail: string) {
     this.toast.showError(
       "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
-        ' us if this message persists.',
+        ' us if this message persists.' +
+        (environment.environmentId === 'production' ? '' : ' ' + errorDetail),
     );
   }
 
@@ -1893,7 +1915,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         psp: this.psp,
       });
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError('create-donation: missing required fields');
       return;
     }
 
@@ -1945,7 +1967,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.creatingDonation = false;
           this.donationCreateError = true;
           this.friendlyCaptchaWidget?.reset();
-          this.showDonationCreateError();
+          this.showDonationCreateError('identity-create: ' + error.message);
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         },
       );
@@ -2012,7 +2034,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
-    this.showDonationCreateError();
+    this.showDonationCreateError('newDonationError: ' + errorMessage);
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
@@ -2022,13 +2044,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     const createResponseMissingData =
       !response.donation.charityId || !response.donation.donationId || !response.donation.projectId;
     if (createResponseMissingData) {
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'donation_create_response_incomplete',
-        `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-      );
+      const errorName = `Missing expected response data creating new donation for campaign ${this.campaignId}`;
+      this.matomoTracker.trackEvent('donate_error', 'donation_create_response_incomplete', errorName);
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError(errorName);
       this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;
@@ -2168,7 +2187,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.matomoTracker.trackEvent('matching_expiry', 'timer_fired_no_donation', 'Timer fired but no donation object');
       return;
     }
-
     // Safety check: ensure the timer is still relevant for the current donation
     if (donation.donationId && this.donation.donationId !== donation.donationId) {
       this.matomoTracker.trackEvent(

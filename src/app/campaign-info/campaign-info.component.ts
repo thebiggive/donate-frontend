@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { GeoJSON, Map, Rectangle } from 'leaflet';
+import { GeoJSON, Map, TileLayer } from 'leaflet';
 import type { FeatureCollection, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
 const integerPipeToken = new InjectionToken<DecimalPipe>('integerPipe');
@@ -60,6 +60,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   private map?: any;
   private projectBounds?: DOMRect;
   private resizeObserver?: ResizeObserver;
+  private readonly boundsPadding = [8, 8];
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign || this.campaign;
@@ -112,7 +113,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           } else {
             this.map.invalidateSize();
             if (this.projectBounds) {
-              this.map.fitBounds(this.projectBounds);
+              this.map.fitBounds(this.projectBounds, { padding: this.boundsPadding });
             }
           }
         }
@@ -145,46 +146,22 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
     }).setView([51.505, -0.09], 4); // Replaced later when we fit project highlight bounds.
 
-    const constantLayerStyle = {
-      fillColor: '#c9fdd4', // Light minty green for (not project-relevant) land; we'll use BG green to highlight.
-      fillOpacity: 1,
-      color: '#999999', // Grey outline
-      weight: 1,
-    };
-
-    // Blue background – sea / areas where we don't do geo highlighting.
-    new Rectangle(
-      [
-        [-90, -180],
-        [90, 180],
-      ],
-      {
-        fillColor: '#dddddd',
-        fillOpacity: 1,
-        stroke: false,
-        interactive: false,
-      },
-    ).addTo(this.map);
-
-    const nationData = await firstValueFrom(this.http.get('../../assets/map/nations.geojson'));
-    new GeoJSON(nationData, {
-      attribution:
-        'Boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
-      style: () => constantLayerStyle,
-    }).addTo(this.map);
-
-    const englandRegionsData = await firstValueFrom(this.http.get('../../assets/map/englandRegions.geojson'));
-    new GeoJSON(englandRegionsData, { style: () => constantLayerStyle }).addTo(this.map);
-
     const matchedRegions: string[] = [];
 
     // Build a layer with just project-relevant locations and a list of their names
     const highlightAreas = await this.getHighlightedFeatures(regionCodes);
 
+    new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 13,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(this.map);
+
     const projectLayer = new GeoJSON(highlightAreas, {
+      attribution:
+        'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
       style: () => ({
         fillColor: '#2c089b',
-        fillOpacity: 0.4,
+        fillOpacity: 0.2,
         color: '#2c089b',
         weight: 1.5,
       }),
@@ -204,7 +181,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.impactRegions = `UK impact is in ${matchedRegions.join(', ')}`; // No 'and' for now, think it's enough to encourage pauses.
 
     this.projectBounds = projectLayer.getBounds();
-    this.map.fitBounds(this.projectBounds);
+    this.map.fitBounds(this.projectBounds, { padding: this.boundsPadding });
   }
 
   private async getHighlightedFeatures(regionCodes: string[]): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
@@ -263,5 +240,29 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected get hasRegions() {
     return this.campaign.locations.some((loc) => loc.regionCode !== null);
+  }
+
+  /**
+   * Gets the main text to show on near the top of the sidebar, about if/when the campaign is going to open or close
+   */
+  protected get primaryStatText(): string {
+    if (this.campaignFinished) {
+      return 'Closed ' + this.datePipe.transform(this.campaign.endDate, 'd LLL yyyy')!;
+    }
+
+    if (this.campaignOpen) {
+      return this.timeLeftToEndPipe.transform(this.campaign.endDate) + ' left';
+    }
+
+    if (new Date(this.campaign.startDate) > new Date()) {
+      return 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
+    }
+
+    // If we're here we know that the campaign is not open, but neither closed in the past
+    // nor is opening in the future. It may be not open because it doesn't have the
+    // required funds. In that case we don't expect the public to be looking at this
+    //  page, so we just return the empty string and don't say why it's not open:
+
+    return '';
   }
 }

@@ -62,6 +62,8 @@
                 <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
               </div>
 
+              <p>{{ formattedCampaignSummary }}</p>
+
               <div class="donation-input donation-input-main">
                 <biggive-text-input currency="{{ campaign.currencyCode }}">
                   <label class="label-with-limited-space" slot="label" for="donationAmount">
@@ -69,6 +71,22 @@
                   </label>
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
+                @if (enableCondensedRegularGivingSignup) {
+                  <div>
+                    <biggive-text-input>
+                      <label slot="label" for="emailAddress">Email Address *</label>
+                      <input
+                        slot="input"
+                        formControlName="emailAddress"
+                        id="emailAddress"
+                        type="email"
+                        autocapitalize="off"
+                        autocomplete="email"
+                        matInput
+                      />
+                    </biggive-text-input>
+                  </div>
+                }
               </div>
 
               @if (showUnmatchedDonationOption) {
@@ -109,13 +127,41 @@
                     {{ maximumMatchableDonation | money }}, or make an unmatched donation using the option above.
                   </p>
                 }
+
+                @if (emailErrorMessage) {
+                  <div class="error">
+                    {{ this.emailErrorMessage }}
+                  </div>
+                }
+
+                @if (errorHtml) {
+                  <p class="error" aria-live="assertive">Registration error: <span [innerHtml]="errorHtml"></span></p>
+                }
               </div>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                  Continue
-                </button>
+                <div aria-live="polite">
+                  @if (processingTempPasswordRequest) {
+                    <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+                  }
+                </div>
+                @if (!processingTempPasswordRequest) {
+                  <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
+                  </button>
+                }
+                @if (enableCondensedRegularGivingSignup) {
+                  <br />
+                  We will email you a temporary password for the next step, if you are not already registered.
+                }
               </div>
+
+              <div
+                class="frc-captcha"
+                [attr.data-sitekey]="friendlyCaptchaSiteKey"
+                data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+                #frccaptcha
+              ></div>
             </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">
@@ -215,7 +261,7 @@
                      donor account - if donors want to edit them direct them to do so on the My Account page,
                      to make clear that it will affect existing mandates as well as the new one -->
 
-                @if (donorAccount.regularGivingPaymentMethod) {
+                @if (donorAccount?.regularGivingPaymentMethod) {
                   <!--
                   @todo-regular-giving-DON-1021: Consider showing existing payment method detail here here,
                     instead of just link to account. Might require either saving card brand and last4 to our matchbot

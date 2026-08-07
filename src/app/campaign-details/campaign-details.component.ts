@@ -5,7 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
-import { Campaign } from '../campaign.model';
+import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
@@ -78,9 +78,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
+  protected formattedCampaignSummary!: string;
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+    this.formattedCampaignSummary = formattedCampaignSummary(this.campaign);
     this.setSecondaryProps(this.campaign);
   }
 
@@ -175,17 +177,5 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     if (campaign.hidden) {
       this.toast.showError(campaignHiddenMessage);
     }
-  }
-
-  /**
-   * Collapses sequences of line breaks in the campaign summary then returns a version of the summary with
-   * each line break doubled to appear like a paragraph break.
-   */
-  public get formattedCampaignSummary(): string {
-    if (!this.campaign.summary) {
-      return '';
-    }
-
-    return this.campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
   }
 }
