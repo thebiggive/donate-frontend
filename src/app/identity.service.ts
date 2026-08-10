@@ -54,6 +54,34 @@ export class IdentityService {
       );
   }
 
+  loginOrGetAuthToken(
+    credentials: Credentials,
+  ): Observable<
+    | ({ id: string; jwt: string } & { type: 'jwt' })
+    | ({ token: EmailVerificationToken } & { type: 'emailVerificationToken' })
+  > {
+    return this.http
+      .post<
+        | ({ id: string; jwt: string } & { type: 'jwt' })
+        | ({ token: EmailVerificationToken } & { type: 'emailVerificationToken' })
+      >(`${environment.identityApiPrefix}/auth-or-get-token`, {
+        captcha_code: credentials.captcha_code,
+        email_address: credentials.email_address,
+        raw_password: credentials.raw_password,
+      })
+      .pipe(
+        tap({
+          next: (response) => {
+            if (response.type !== 'jwt') {
+              return;
+            }
+            this.saveJWT(response.id, response.jwt);
+            this.loginStatusChanged.emit(true);
+          },
+        }),
+      );
+  }
+
   getResetPasswordToken(email: string, captchaCode: string): Observable<[]> {
     return this.http.post<[]>(
       `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,

@@ -52,7 +52,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
 import { EMAIL_REGEXP } from '../validators/patterns';
@@ -228,6 +228,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected processingTempPasswordRequest = false;
   protected readonly showPassword = signal(false);
+  protected emailTokenValid = false;
 
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
@@ -880,7 +881,50 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.showPassword.update((current) => !current);
   }
 
-  protected continueFromAuthentication() {
+  protected async continueFromAuthentication() {
+    const captchaCode = this.friendlyCaptchaSolution;
+    if (!captchaCode) {
+      this.toast.showError('Captcha code missing - cannot continue');
+      return;
+    }
+
+    const emailAddress = this.mandateForm.controls.emailAddress.value;
+    if (!emailAddress) {
+      this.toast.showError('Email address missing - cannot continue');
+      return;
+    }
+
+    const password = this.mandateForm.controls.password.value;
+    if (!password) {
+      this.toast.showError('password address missing - cannot continue');
+      return;
+    }
+
+    const response$ = this.identityService.loginOrGetAuthToken({
+      captcha_code: captchaCode,
+      email_address: emailAddress,
+      raw_password: password,
+    });
+
+    let response;
+    try {
+      response = await firstValueFrom(response$);
+    } catch (error: unknown) {
+      const backendError = error as BackendError;
+      this.toast.showError(backendError.message);
+      return;
+    }
+
+    if (response.type === 'jwt') {
+      console.log('donor logged in');
+      // todo - update the form to show their name as a logged in user. May be better to do by listening to the
+      // loginStatusChanged event rather than directly within this block, so we might also be able to react to e.g.
+      // logging in with the login form in another tab.
+    } else if (response.type === 'emailVerificationToken') {
+      this.emailTokenValid = true;
+      // FE will need to get a new password, first and last name now so we can register and login
+    }
+
     // here we want to do something like RegisterComponent.doRegistrationAndLogin but we only have the donor's email
     // address and verificaiton code (which we're calling a temporary password),
     // so instead we need to call probably a new URI to create in identity, which accepts an email address and a
