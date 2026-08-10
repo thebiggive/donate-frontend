@@ -199,6 +199,53 @@
                 Continue
               </button>
             </mat-step>
+            <mat-step label="About You">
+                <biggive-text-input>
+                  <label slot="label" for="firstName">First Name *</label>
+                  <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
+                </biggive-text-input>
+              <biggive-text-input>
+                <label slot="label" for="lastName">Last Name *</label>
+                <input
+                  slot="input"
+                  formControlName="lastName"
+                  id="lastName"
+                  autocomplete="family-name"
+                  matInput
+                  [disabled]="!!donor?.is_organisation"
+                />
+              </biggive-text-input>
+              <biggive-text-input spaceBelow="4">
+                <label slot="label" for="password">Set new password *</label>
+                <div slot="input" style="display: flex">
+                  <div class="visually-hidden" aria-live="polite">
+                    {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+                  </div>
+                  <input
+                    matInput
+                    [type]="showPassword() ? 'text' : 'password'"
+                    id="password-post-donation"
+                    formControlName="newPassword"
+                  />
+                  <biggive-button
+                    aria-controls="password-post-donation"
+                    colourScheme="clear-primary"
+                    (doButtonClick)="toggleShowPassword()"
+                    [label]="showPassword() ? 'Hide' : 'Show'"
+                    [spaceBelow]="0"
+                  />
+                </div>
+              </biggive-text-input>
+              <button
+                type="button"
+                class="continue"
+                mat-raised-button
+                color="primary"
+                (click)="this.continueFromAboutYou()"
+              >
+                Continue
+              </button>
+            </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">
                 Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every

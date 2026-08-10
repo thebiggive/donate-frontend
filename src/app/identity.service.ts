@@ -48,7 +48,6 @@ export class IdentityService {
         tap({
           next: (response) => {
             this.saveJWT(response.id, response.jwt);
-            this.loginStatusChanged.emit(true);
           },
         }),
       );
@@ -76,7 +75,6 @@ export class IdentityService {
               return;
             }
             this.saveJWT(response.id, response.jwt);
-            this.loginStatusChanged.emit(true);
           },
         }),
       );
@@ -251,6 +249,8 @@ export class IdentityService {
     if (this.probablyHaveLoggedInPerson()) {
       this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
     }
+
+    this.loginStatusChanged.emit(true);
   }
 
   private domainSharedWithWordpress() {

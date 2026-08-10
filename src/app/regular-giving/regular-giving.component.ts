@@ -60,6 +60,8 @@ import { flags } from '../featureFlags';
 import { IdentityService } from '../identity.service';
 import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import {noLongNumberValidator} from '../validators/noLongNumberValidator';
+import {DonorAccountService} from '../donor-account.service';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -113,6 +115,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private donationService = inject(DonationService);
   private readonly identityService = inject(IdentityService);
   protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  private donorAccountService = inject(DonorAccountService);
 
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
@@ -130,6 +133,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           ]
         : []),
     ]),
+    firstName: new FormControl('', [
+      ...(flags.enableCondensedRegularGivingSignup
+        ? [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]
+        : []),
+    ]),
+
+    lastName: new FormControl('', [
+      ...(flags.enableCondensedRegularGivingSignup
+        ? [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]
+        : []),
+    ]),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
@@ -144,6 +158,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         ? [Validators.required, Validators.minLength(minPasswordLength)]
         : []),
     ]),
+    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
   });
 
   protected campaign!: Campaign;
@@ -613,15 +628,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    if (stepIndex > 1 && this.validateGiftAidStep()) {
+    // 1 is new password which doesn't yet have validation code here.
+    // 2 is about you which doesn't yet have validation code here.
+
+    if (stepIndex > 3 && this.validateGiftAidStep()) {
       return;
     }
 
-    if (stepIndex > 2 && this.validatePaymentInformationStep()) {
+    if (stepIndex > 4 && this.validatePaymentInformationStep()) {
       return;
     }
 
-    if (stepIndex > 3 && this.validateUpdatesStep()) {
+    if (stepIndex > 5 && this.validateUpdatesStep()) {
       return;
     }
 
@@ -938,5 +956,45 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // we can allow the user to go to the next step which has to be written. If it's a new account, it will ask for their name
     // and new password and then register the user. If it's an existing account, then it should probably just display their
     // name to let them check that the name on the donation will be the name they want to use.
+
+    this.stepper.next();
+  }
+
+  protected async continueFromAboutYou() {
+    if (this.donor) {
+      // already logged in, no need to do anything.
+      return;
+    }
+
+    // @todo-DON-1195 - replace exclamation marks below with proper guards
+    this.identityService
+      .create({
+        captcha_code: this.friendlyCaptchaSolution,
+        email_address: this.mandateForm.controls.emailAddress.value!,
+        first_name: this.mandateForm.controls.firstName.value!,
+        last_name: this.mandateForm.controls.lastName.value!,
+        is_organisation: false,
+        raw_password: this.mandateForm.controls.newPassword.value!,
+        secretNumber: this.mandateForm.controls.password.value!,
+      })
+      .subscribe({
+        next: async (person: Person) => {
+          this.identityService.saveJWT(person.id!, person.completion_jwt! );
+          const donor = await firstValueFrom(this.identityService.getLoggedInPerson());
+          if (! donor) {
+            this.toast.showError("Sorry, couldn't load details of donor account");
+            return;
+          }
+          this.donor = donor;
+          this.donorAccount = await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount()) || undefined;
+          console.log("set donor and donor account", this.donor, this.donorAccount);
+          this.stepper.next();
+        },
+        error: async (error) => {
+          this.extractErrorMessage(error);
+          this.friendlyCaptchaWidget?.reset();
+          await this.friendlyCaptchaWidget?.start();
+        },
+      });
   }
 }
