@@ -905,7 +905,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     const password = this.mandateForm.controls.password.value;
     if (!password) {
-      this.toast.showError('password address missing - cannot continue');
+      this.toast.showError('password missing - cannot continue');
       return;
     }
 
