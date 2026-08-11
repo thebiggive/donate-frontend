@@ -56,7 +56,6 @@ import { firstValueFrom, Observable, of } from 'rxjs';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
 import { EMAIL_REGEXP } from '../validators/patterns';
-import { flags } from '../featureFlags';
 import { IdentityService } from '../identity.service';
 import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
