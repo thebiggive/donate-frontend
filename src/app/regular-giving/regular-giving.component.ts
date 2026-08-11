@@ -142,7 +142,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(6), // temp password is a number between 0 and 1,000,000.
+      Validators.minLength(6), // temp password is six random digits
     ]),
     newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
   });
