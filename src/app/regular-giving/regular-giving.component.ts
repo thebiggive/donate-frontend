@@ -161,7 +161,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           ]
         : []),
     ]),
-    newPassword: new FormControl('', [Validators.minLength(6)]),
+    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
   });
 
   protected campaign!: Campaign;
