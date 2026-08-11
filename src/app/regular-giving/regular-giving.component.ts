@@ -60,14 +60,14 @@ import { flags } from '../featureFlags';
 import { IdentityService } from '../identity.service';
 import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import {noLongNumberValidator} from '../validators/noLongNumberValidator';
-import {DonorAccountService} from '../donor-account.service';
+import { noLongNumberValidator } from '../validators/noLongNumberValidator';
+import { DonorAccountService } from '../donor-account.service';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
-const paymentStepIndex = 2;
+const paymentStepIndex = 4;
 
 // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
 // and prefilling them with 'no' values in that case.
@@ -155,10 +155,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
     password: new FormControl('', [
       ...(flags.enableCondensedRegularGivingSignup
-        ? [Validators.required, Validators.minLength(minPasswordLength)]
+        ? [
+            Validators.required,
+            Validators.minLength(6), // temp password is a number between 0 and 1,000,000.
+          ]
         : []),
     ]),
-    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
+    newPassword: new FormControl('', [Validators.minLength(6)]),
   });
 
   protected campaign!: Campaign;
@@ -286,17 +289,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private prepareFormForDonor() {
-    if (! this.donorAccount) {
+    if (!this.donorAccount) {
       throw new Error('Donor account not set');
     }
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    this.mandateForm.patchValue({billingPostcode: this.donorAccount.billingPostCode});
+    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
 
     this.stripeService.init().catch(console.error);
 
     this.donationService
-      .createCustomerSessionForRegularGiving({campaign: this.campaign})
+      .createCustomerSessionForRegularGiving({ campaign: this.campaign })
       .then((session) => {
         this.stripeCustomerSession = session;
         if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
@@ -985,18 +988,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       })
       .subscribe({
         next: async (person: Person) => {
-          this.identityService.saveJWT(person.id!, person.completion_jwt! );
+          this.identityService.saveJWT(person.id!, person.completion_jwt!);
           const donor = await firstValueFrom(this.identityService.getLoggedInPerson());
-          if (! donor) {
+          if (!donor) {
             this.toast.showError("Sorry, couldn't load details of donor account");
             return;
           }
           this.donor = donor;
-          this.donorAccount = await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount()) || undefined;
+          this.donorAccount = (await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount())) || undefined;
           if (this.donorAccount) {
             this.prepareFormForDonor();
           }
-          console.log("set donor and donor account", this.donor, this.donorAccount);
+          console.log('set donor and donor account', this.donor, this.donorAccount);
           this.stepper.next();
         },
         error: async (error) => {
