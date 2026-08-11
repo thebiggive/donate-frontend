@@ -70,6 +70,8 @@ jobs:
         type: string
     docker:
       - image: "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+        aws_auth:
+          oidc_role_arn: ${AWS_ROLE_ARN}
     steps:
       - aws-cli/setup:
           role_arn: ${AWS_ROLE_ARN}
