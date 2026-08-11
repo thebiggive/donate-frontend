@@ -931,23 +931,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       // logging in with the login form in another tab.
     } else if (response.type === 'emailVerificationToken') {
       this.emailTokenValid = true;
-      // FE will need to get a new password, first and last name now so we can register and login
     }
-
-    // here we want to do something like RegisterComponent.doRegistrationAndLogin but we only have the donor's email
-    // address and verificaiton code (which we're calling a temporary password),
-    // so instead we need to call probably a new URI to create in identity, which accepts an email address and a
-    // 'password' which may be a permanent password or it may be this temporary password. In the case where it's an existing
-    // permanent password, it should issue and return a JWT so we can be logged in, in the case where it's a valid temporary
-    // password/auth code then it should just return a message to tell us that it is valid so we can go on to get the user's
-    // first and last name and new password.
-    // could also keep the two separate routes in identity and try one and then the other, but I think it's probably better
-    // to shift as much of the complexity as possible to the back end.
-    // In any case once this step is completed and we have either a JWT or an email-based auth token that we know is correct
-    // we can allow the user to go to the next step which has to be written. If it's a new account, it will ask for their name
-    // and new password and then register the user. If it's an existing account, then it should probably just display their
-    // name to let them check that the name on the donation will be the name they want to use.
-
     this.stepper.next();
   }
 
