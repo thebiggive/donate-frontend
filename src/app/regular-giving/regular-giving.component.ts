@@ -268,22 +268,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     );
 
     if (this.donorAccount) {
-      // @todo DON-1195 - make this run not jut OnInit but when the donorAccount is set and details available
-      this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
-
-      this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
-
-      this.stripeService.init().catch(console.error);
-
-      this.donationService
-        .createCustomerSessionForRegularGiving({ campaign: this.campaign })
-        .then((session) => {
-          this.stripeCustomerSession = session;
-          if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
-            this.prepareStripeElements();
-          }
-        })
-        .catch(console.error);
+      this.prepareFormForDonor();
     }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
@@ -298,6 +283,27 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.preExistingActiveMandate$ = this.donorAccount
       ? this.regularGivingService.activeMandate(this.campaign)
       : of([]);
+  }
+
+  private prepareFormForDonor() {
+    if (! this.donorAccount) {
+      throw new Error('Donor account not set');
+    }
+    this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
+
+    this.mandateForm.patchValue({billingPostcode: this.donorAccount.billingPostCode});
+
+    this.stripeService.init().catch(console.error);
+
+    this.donationService
+      .createCustomerSessionForRegularGiving({campaign: this.campaign})
+      .then((session) => {
+        this.stripeCustomerSession = session;
+        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+          this.prepareStripeElements();
+        }
+      })
+      .catch(console.error);
   }
 
   ngOnDestroy() {
@@ -987,6 +993,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           }
           this.donor = donor;
           this.donorAccount = await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount()) || undefined;
+          if (this.donorAccount) {
+            this.prepareFormForDonor();
+          }
           console.log("set donor and donor account", this.donor, this.donorAccount);
           this.stepper.next();
         },
