@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign, formattedCampaignSummary } from '../campaign.model';
 import {
@@ -36,26 +46,27 @@ import { DonationService, StripeCustomerSession } from '../donation.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { billingPostcodeRegExp, HomeAddress, postcodeRegExp } from '../address';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { donorGiftAidTermsUrl, donorTermsUrl } from '../../environments/common';
+import { donorGiftAidTermsUrl, donorTermsUrl, minPasswordLength } from '../../environments/common';
 import { environment } from '../../environments/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
 import { EMAIL_REGEXP } from '../validators/patterns';
-import { flags } from '../featureFlags';
 import { IdentityService } from '../identity.service';
 import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { noLongNumberValidator } from '../validators/noLongNumberValidator';
+import { DonorAccountService } from '../donor-account.service';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
-const paymentStepIndex = 2;
+const paymentStepIndex = 4;
 
 // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
 // and prefilling them with 'no' values in that case.
@@ -103,6 +114,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private donationService = inject(DonationService);
   private readonly identityService = inject(IdentityService);
   protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  private donorAccountService = inject(DonorAccountService);
 
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
@@ -112,14 +124,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]),
     emailAddress: new FormControl('', [
-      ...(flags.enableCondensedRegularGivingSignup
-        ? [
-            requiredNotBlankValidator,
-            // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-            Validators.pattern(EMAIL_REGEXP),
-          ]
-        : []),
+      requiredNotBlankValidator,
+      // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+      Validators.pattern(EMAIL_REGEXP),
     ]),
+    firstName: new FormControl('', [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]),
+    lastName: new FormControl('', [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
@@ -129,6 +139,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     homePostcode: new FormControl<string | null>(null),
     unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
     aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6), // temp password is six random digits
+    ]),
+    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
   });
 
   protected campaign!: Campaign;
@@ -212,6 +227,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private platformId = inject(PLATFORM_ID);
 
   protected processingTempPasswordRequest = false;
+  protected readonly showPassword = signal(false);
+  protected emailTokenValid = false;
 
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
@@ -236,22 +253,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     );
 
     if (this.donorAccount) {
-      // @todo DON-1195 - make this run not jut OnInit but when the donorAccount is set and details available
-      this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
-
-      this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
-
-      this.stripeService.init().catch(console.error);
-
-      this.donationService
-        .createCustomerSessionForRegularGiving({ campaign: this.campaign })
-        .then((session) => {
-          this.stripeCustomerSession = session;
-          if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
-            this.prepareStripeElements();
-          }
-        })
-        .catch(console.error);
+      this.prepareFormForDonor();
     }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
@@ -266,6 +268,27 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.preExistingActiveMandate$ = this.donorAccount
       ? this.regularGivingService.activeMandate(this.campaign)
       : of([]);
+  }
+
+  private prepareFormForDonor() {
+    if (!this.donorAccount) {
+      throw new Error('Donor account not set');
+    }
+    this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
+
+    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
+
+    this.stripeService.init().catch(console.error);
+
+    this.donationService
+      .createCustomerSessionForRegularGiving({ campaign: this.campaign })
+      .then((session) => {
+        this.stripeCustomerSession = session;
+        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+          this.prepareStripeElements();
+        }
+      })
+      .catch(console.error);
   }
 
   ngOnDestroy() {
@@ -493,7 +516,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected giftAidErrorMessage: string | undefined = undefined;
-  protected enableCondensedRegularGivingSignup = flags.enableCondensedRegularGivingSignup;
 
   protected get homeOutsideUK(): boolean {
     return !!this.mandateForm.value.homeOutsideUK;
@@ -596,15 +618,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    if (stepIndex > 1 && this.validateGiftAidStep()) {
+    // 1 is new password which doesn't yet have validation code here.
+    // 2 is about you which doesn't yet have validation code here.
+
+    if (stepIndex > 3 && this.validateGiftAidStep()) {
       return;
     }
 
-    if (stepIndex > 2 && this.validatePaymentInformationStep()) {
+    if (stepIndex > 4 && this.validatePaymentInformationStep()) {
       return;
     }
 
-    if (stepIndex > 3 && this.validateUpdatesStep()) {
+    if (stepIndex > 5 && this.validateUpdatesStep()) {
       return;
     }
 
@@ -614,7 +639,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       });
     }
 
-    if (stepIndex === 1 && flags.enableCondensedRegularGivingSignup) {
+    if (stepIndex === 1) {
       // this is the Send email button so let's send an email.
 
       if (!this.friendlyCaptchaSolution) {
@@ -631,6 +656,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
         await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
           captcha_code: this.friendlyCaptchaSolution,
+          regularGiving: true,
         });
         // this.verificationLinkSentToEmail = emailAddress;
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -710,7 +736,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     const emailErrors = this.mandateForm.controls.emailAddress.errors;
-    if (emailErrors && flags.enableCondensedRegularGivingSignup) {
+    if (emailErrors) {
       for (const [key] of Object.entries(emailErrors)) {
         switch (key) {
           case 'required':
@@ -858,4 +884,94 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.emailErrorMessage = errorDescription(error);
     }
   };
+
+  protected toggleShowPassword() {
+    this.showPassword.update((current) => !current);
+  }
+
+  protected async continueFromAuthentication() {
+    const captchaCode = this.friendlyCaptchaSolution;
+    if (!captchaCode) {
+      this.toast.showError('Captcha code missing - cannot continue');
+      return;
+    }
+
+    const emailAddress = this.mandateForm.controls.emailAddress.value;
+    if (!emailAddress) {
+      this.toast.showError('Email address missing - cannot continue');
+      return;
+    }
+
+    const password = this.mandateForm.controls.password.value;
+    if (!password) {
+      this.toast.showError('password missing - cannot continue');
+      return;
+    }
+
+    const response$ = this.identityService.loginOrGetAuthToken({
+      captcha_code: captchaCode,
+      email_address: emailAddress,
+      raw_password: password,
+    });
+
+    let response;
+    try {
+      response = await firstValueFrom(response$);
+    } catch (error: unknown) {
+      const backendError = error as BackendError;
+      this.toast.showError(backendError.message);
+      return;
+    }
+
+    if (response.type === 'jwt') {
+      console.log('donor logged in');
+      // todo - update the form to show their name as a logged in user. May be better to do by listening to the
+      // loginStatusChanged event rather than directly within this block, so we might also be able to react to e.g.
+      // logging in with the login form in another tab.
+    } else if (response.type === 'emailVerificationToken') {
+      this.emailTokenValid = true;
+    }
+    this.stepper.next();
+  }
+
+  protected async continueFromAboutYou() {
+    if (this.donor) {
+      // already logged in, no need to do anything.
+      return;
+    }
+
+    // @todo-DON-1195 - replace exclamation marks below with proper guards
+    this.identityService
+      .create({
+        captcha_code: this.friendlyCaptchaSolution,
+        email_address: this.mandateForm.controls.emailAddress.value!,
+        first_name: this.mandateForm.controls.firstName.value!,
+        last_name: this.mandateForm.controls.lastName.value!,
+        is_organisation: false,
+        raw_password: this.mandateForm.controls.newPassword.value!,
+        secretNumber: this.mandateForm.controls.password.value!,
+      })
+      .subscribe({
+        next: async (person: Person) => {
+          this.identityService.saveJWT(person.id!, person.completion_jwt!);
+          const donor = await firstValueFrom(this.identityService.getLoggedInPerson());
+          if (!donor) {
+            this.toast.showError("Sorry, couldn't load details of donor account");
+            return;
+          }
+          this.donor = donor;
+          this.donorAccount = (await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount())) || undefined;
+          if (this.donorAccount) {
+            this.prepareFormForDonor();
+          }
+          console.log('set donor and donor account', this.donor, this.donorAccount);
+          this.stepper.next();
+        },
+        error: async (error) => {
+          this.extractErrorMessage(error);
+          this.friendlyCaptchaWidget?.reset();
+          await this.friendlyCaptchaWidget?.start();
+        },
+      });
+  }
 }
