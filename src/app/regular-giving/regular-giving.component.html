@@ -71,22 +71,20 @@
                   </label>
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
-                @if (enableCondensedRegularGivingSignup) {
-                  <div>
-                    <biggive-text-input>
-                      <label slot="label" for="emailAddress">Email Address *</label>
-                      <input
-                        slot="input"
-                        formControlName="emailAddress"
-                        id="emailAddress"
-                        type="email"
-                        autocapitalize="off"
-                        autocomplete="email"
-                        matInput
-                      />
-                    </biggive-text-input>
-                  </div>
-                }
+                <div>
+                  <biggive-text-input>
+                    <label slot="label" for="emailAddress">Email Address *</label>
+                    <input
+                      slot="input"
+                      formControlName="emailAddress"
+                      id="emailAddress"
+                      type="email"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      matInput
+                    />
+                  </biggive-text-input>
+                </div>
               </div>
 
               @if (showUnmatchedDonationOption) {
@@ -147,13 +145,11 @@
                 </div>
                 @if (!processingTempPasswordRequest) {
                   <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
+                    Send email
                   </button>
                 }
-                @if (enableCondensedRegularGivingSignup) {
-                  <br />
-                  We will email you a temporary password for the next step, if you are not already registered.
-                }
+                <br />
+                We will email you a temporary password for the next step, if you are not already registered.
               </div>
 
               <div

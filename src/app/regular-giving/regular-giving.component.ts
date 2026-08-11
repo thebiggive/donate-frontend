@@ -125,25 +125,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]),
     emailAddress: new FormControl('', [
-      ...(flags.enableCondensedRegularGivingSignup
-        ? [
-            requiredNotBlankValidator,
-            // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-            Validators.pattern(EMAIL_REGEXP),
-          ]
-        : []),
+      requiredNotBlankValidator,
+      // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+      Validators.pattern(EMAIL_REGEXP),
     ]),
-    firstName: new FormControl('', [
-      ...(flags.enableCondensedRegularGivingSignup
-        ? [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]
-        : []),
-    ]),
-
-    lastName: new FormControl('', [
-      ...(flags.enableCondensedRegularGivingSignup
-        ? [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]
-        : []),
-    ]),
+    firstName: new FormControl('', [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]),
+    lastName: new FormControl('', [Validators.maxLength(40), requiredNotBlankValidator, noLongNumberValidator]),
     billingPostcode: new FormControl('', [requiredNotBlankValidator, Validators.pattern(billingPostcodeRegExp)]),
     optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
     optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
@@ -154,12 +141,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
     aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
     password: new FormControl('', [
-      ...(flags.enableCondensedRegularGivingSignup
-        ? [
-            Validators.required,
-            Validators.minLength(6), // temp password is a number between 0 and 1,000,000.
-          ]
-        : []),
+      Validators.required,
+      Validators.minLength(6), // temp password is a number between 0 and 1,000,000.
     ]),
     newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
   });
@@ -534,7 +517,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected giftAidErrorMessage: string | undefined = undefined;
-  protected enableCondensedRegularGivingSignup = flags.enableCondensedRegularGivingSignup;
 
   protected get homeOutsideUK(): boolean {
     return !!this.mandateForm.value.homeOutsideUK;
@@ -658,7 +640,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       });
     }
 
-    if (stepIndex === 1 && flags.enableCondensedRegularGivingSignup) {
+    if (stepIndex === 1) {
       // this is the Send email button so let's send an email.
 
       if (!this.friendlyCaptchaSolution) {
@@ -755,7 +737,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     const emailErrors = this.mandateForm.controls.emailAddress.errors;
-    if (emailErrors && flags.enableCondensedRegularGivingSignup) {
+    if (emailErrors) {
       for (const [key] of Object.entries(emailErrors)) {
         switch (key) {
           case 'required':
