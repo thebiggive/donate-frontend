@@ -56,7 +56,7 @@ jobs:
           auth:
             - aws-cli/setup:
                 role_arn: ${AWS_ROLE_ARN}
-                region: ${AWS_REGION}
+                region: "us-east-1"
           # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
           extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
           repo: "${AWS_ECR_REPO_NAME}"
@@ -72,7 +72,7 @@ jobs:
     steps:
       - aws-cli/setup:
           role_arn: ${AWS_ROLE_ARN}
-          region: ${AWS_REGION}
+          region: "us-east-1"
 
       - aws-s3/sync: # Sync dist/donate-frontend/browser to S3 with 1 year lifetime
           from: /usr/src/app/dist/donate-frontend/browser
@@ -153,7 +153,6 @@ workflows:
           context:
             - ecs-deploys
           requires: ["Copy Regression ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-regression-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=regression-${CIRCLE_SHA1}"
@@ -186,7 +185,6 @@ workflows:
             - ecs-deploys
             - jira
           requires: ["Copy Staging ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-staging-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
@@ -226,7 +224,6 @@ workflows:
             - ecs-deploys
             - jira
           requires: ["Copy Production ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-production-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
