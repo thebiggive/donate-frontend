@@ -31,6 +31,9 @@ import { requiredNotBlankValidator } from '../validators/notBlank';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { Toast } from '../toast.service';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { ConversionTrackingService } from '../conversionTracking.service';
+import { Donation } from '../donation.model';
 import { DonorAccount } from '../donorAccount.model';
 import { countryOptions } from '../countries';
 import { PageMetaService } from '../page-meta.service';
@@ -113,6 +116,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private stripeService = inject(StripeService);
   private donationService = inject(DonationService);
   private readonly identityService = inject(IdentityService);
+  private matomoTracker = inject(MatomoTracker);
+  private conversionTrackingService = inject(ConversionTrackingService);
   protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   private donorAccountService = inject(DonorAccountService);
 
@@ -362,6 +367,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   stepChanged(event: StepperSelectionEvent) {
+    this.matomoTracker.trackEvent('donate', 'regular_giving_step_changed', `Entered step ${event.selectedStep.label}`);
+
     if (event.selectedStep.label === this.labelYourPaymentInformation) {
       this.prepareStripeElements();
     }
@@ -458,8 +465,27 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
               // a way for donor to retry the 3DS or other next action on the existing mandate, without calling matchbot
               // to create a new one.
               return;
+            } else {
+              this.matomoTracker.trackEvent('donate', 'exit_requires_action_non_error', 'Assuming 3DS or PBB success');
             }
           }
+
+          const stripeMethod = confirmationToken?.payment_method_preview?.type || 'card';
+          this.matomoTracker.trackEvent(
+            'donate',
+            `stripe_${stripeMethod}_payment_success`,
+            `Stripe Intent processing or done for mandate ${response.mandate.id} to campaign ${this.campaign.id}, stripe method ${stripeMethod}`,
+          );
+
+          // We don't directly make a Donation so need a dummy one in order to share the same ecommerce
+          // tracking as the one-time donation journey.
+          const dummyDonation = {
+            donationAmount: response.mandate.donationAmount.amountInPence / 100,
+            donationId: response.mandate.id,
+            projectId: response.mandate.campaignId,
+            tipAmount: 0,
+          } as unknown as Donation;
+          this.conversionTrackingService.convert(dummyDonation, this.campaign, stripeMethod);
 
           await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}/thanks`);
         },
