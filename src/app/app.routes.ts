@@ -198,10 +198,6 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     component: RegularGivingComponent,
-    canActivate: [
-      (activatedRouteSnapshot, routerStateSnapshot) =>
-        flags.enableCondensedRegularGivingSignup || requireLogin(activatedRouteSnapshot, routerStateSnapshot),
-    ],
     resolve: {
       campaign: CampaignResolver,
       donor: LoggedInPersonResolver,

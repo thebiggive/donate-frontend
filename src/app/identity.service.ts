@@ -48,7 +48,33 @@ export class IdentityService {
         tap({
           next: (response) => {
             this.saveJWT(response.id, response.jwt);
-            this.loginStatusChanged.emit(true);
+          },
+        }),
+      );
+  }
+
+  loginOrGetAuthToken(
+    credentials: Credentials,
+  ): Observable<
+    | ({ id: string; jwt: string } & { type: 'jwt' })
+    | ({ token: EmailVerificationToken } & { type: 'emailVerificationToken' })
+  > {
+    return this.http
+      .post<
+        | ({ id: string; jwt: string } & { type: 'jwt' })
+        | ({ token: EmailVerificationToken } & { type: 'emailVerificationToken' })
+      >(`${environment.identityApiPrefix}/auth-or-get-token`, {
+        captcha_code: credentials.captcha_code,
+        email_address: credentials.email_address,
+        raw_password: credentials.raw_password,
+      })
+      .pipe(
+        tap({
+          next: (response) => {
+            if (response.type !== 'jwt') {
+              return;
+            }
+            this.saveJWT(response.id, response.jwt);
           },
         }),
       );
@@ -223,6 +249,8 @@ export class IdentityService {
     if (this.probablyHaveLoggedInPerson()) {
       this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
     }
+
+    this.loginStatusChanged.emit(true);
   }
 
   private domainSharedWithWordpress() {
@@ -281,7 +309,19 @@ export class IdentityService {
     return firstValueFrom(this.http.get(uri).pipe(map((response: any) => response.token)));
   }
 
-  async requestEmailAuthToken(emailAddress: string, { captcha_code }: { captcha_code: string }): Promise<object> {
+  /**
+   *
+   * @param emailAddress
+   * @param param1
+   * @param param1.captcha_code
+   * @param param1.regularGiving - whether to request a regular-giving specific style of auth token. This may be functionally the same as the standard auth token email
+   *                               but will acknowledge that the user is in the process of setting up a regular giving agreement and will refer to the auth code
+   *                               as a temporary password so it can be typed into the same form field as an existing password.
+   */
+  async requestEmailAuthToken(
+    emailAddress: string,
+    { captcha_code, regularGiving }: { captcha_code: string; regularGiving: boolean },
+  ): Promise<object> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken`;
 
     return firstValueFrom(
@@ -289,6 +329,7 @@ export class IdentityService {
         uri,
         {
           emailAddress,
+          regularGiving,
         },
         {
           headers: {
