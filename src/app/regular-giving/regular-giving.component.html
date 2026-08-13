@@ -237,6 +237,7 @@
                 type="button"
                 class="continue"
                 mat-raised-button
+                id="continue-from-about-you"
                 color="primary"
                 (click)="this.continueFromAboutYou()"
               >
@@ -328,7 +329,14 @@
               <p></p>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  class="continue"
+                  id="continue-from-gift-aid"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -401,7 +409,14 @@
               </div>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  id="continue-from-payment-details"
+                  class="continue"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -488,7 +503,14 @@
               <p></p>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  id="continue-from-coms-preferences"
+                  class="continue"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -564,6 +586,7 @@
                     (click)="submit()"
                     class="c-donate-button continue"
                     mat-raised-button
+                    id="start-regular-giving-now"
                     color="primary"
                   >
                     Start regular giving now
