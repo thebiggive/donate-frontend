@@ -71,20 +71,22 @@
                   </label>
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
-                <div>
-                  <biggive-text-input>
-                    <label slot="label" for="emailAddress">Email Address *</label>
-                    <input
-                      slot="input"
-                      formControlName="emailAddress"
-                      id="emailAddress"
-                      type="email"
-                      autocapitalize="off"
-                      autocomplete="email"
-                      matInput
-                    />
-                  </biggive-text-input>
-                </div>
+                @if (enableCondensedRegularGivingSignup) {
+                  <div>
+                    <biggive-text-input>
+                      <label slot="label" for="emailAddress">Email Address *</label>
+                      <input
+                        slot="input"
+                        formControlName="emailAddress"
+                        id="emailAddress"
+                        type="email"
+                        autocapitalize="off"
+                        autocomplete="email"
+                        matInput
+                      />
+                    </biggive-text-input>
+                  </div>
+                }
               </div>
 
               @if (showUnmatchedDonationOption) {
@@ -145,11 +147,13 @@
                 </div>
                 @if (!processingTempPasswordRequest) {
                   <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                    Send email
+                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
                   </button>
                 }
-                <br />
-                We will email you a temporary password for the next step, if you are not already registered.
+                @if (enableCondensedRegularGivingSignup) {
+                  <br />
+                  We will email you a temporary password for the next step, if you are not already registered.
+                }
               </div>
 
               <div
@@ -158,89 +162,6 @@
                 data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
                 #frccaptcha
               ></div>
-            </mat-step>
-            <mat-step label="Your password">
-              <!-- below biggive-text-input usage copied from register.component.html - consider extracting a new component -->
-              <biggive-text-input spaceBelow="4">
-                <label slot="label" for="password">Password *</label>
-                <div slot="input" style="display: flex">
-                  <div class="visually-hidden" aria-live="polite">
-                    {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-                  </div>
-                  <input
-                    matInput
-                    [type]="showPassword() ? 'text' : 'password'"
-                    id="password-post-donation"
-                    formControlName="password"
-                  />
-                  <biggive-button
-                    aria-controls="password-post-donation"
-                    colourScheme="clear-primary"
-                    (doButtonClick)="toggleShowPassword()"
-                    [label]="showPassword() ? 'Hide' : 'Show'"
-                    [spaceBelow]="0"
-                  />
-                </div>
-              </biggive-text-input>
-              Please enter the temporary password we have emailed to you, or your existing password if you have a Big
-              Give donation account.
-
-              <button
-                type="button"
-                class="continue"
-                mat-raised-button
-                color="primary"
-                (click)="this.continueFromAuthentication()"
-              >
-                Continue
-              </button>
-            </mat-step>
-            <mat-step label="About You">
-              <biggive-text-input>
-                <label slot="label" for="firstName">First Name *</label>
-                <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
-              </biggive-text-input>
-              <biggive-text-input>
-                <label slot="label" for="lastName">Last Name *</label>
-                <input
-                  slot="input"
-                  formControlName="lastName"
-                  id="lastName"
-                  autocomplete="family-name"
-                  matInput
-                  [disabled]="!!donor?.is_organisation"
-                />
-              </biggive-text-input>
-              <biggive-text-input spaceBelow="4">
-                <label slot="label" for="password">New password *</label>
-                <div slot="input" style="display: flex">
-                  <div class="visually-hidden" aria-live="polite">
-                    {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-                  </div>
-                  <input
-                    matInput
-                    [type]="showPassword() ? 'text' : 'password'"
-                    id="password-post-donation"
-                    formControlName="newPassword"
-                  />
-                  <biggive-button
-                    aria-controls="password-post-donation"
-                    colourScheme="clear-primary"
-                    (doButtonClick)="toggleShowPassword()"
-                    [label]="showPassword() ? 'Hide' : 'Show'"
-                    [spaceBelow]="0"
-                  />
-                </div>
-              </biggive-text-input>
-              <button
-                type="button"
-                class="continue"
-                mat-raised-button
-                color="primary"
-                (click)="this.continueFromAboutYou()"
-              >
-                Continue
-              </button>
             </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">
