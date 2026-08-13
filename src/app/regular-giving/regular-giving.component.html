@@ -170,11 +170,11 @@
                   <input
                     matInput
                     [type]="showPassword() ? 'text' : 'password'"
-                    id="password-post-donation"
+                    id="temp-password-input"
                     formControlName="password"
                   />
                   <biggive-button
-                    aria-controls="password-post-donation"
+                    aria-controls="temp-password-input"
                     colourScheme="clear-primary"
                     (doButtonClick)="toggleShowPassword()"
                     [label]="showPassword() ? 'Hide' : 'Show'"
