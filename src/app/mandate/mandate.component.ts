@@ -67,7 +67,13 @@ export class MandateComponent implements OnInit {
    * @private
    */
   private mandateIsOld() {
-    const activationDate = new Date(this.mandate.schedule.activeFrom);
+    const activeFrom = this.mandate.schedule.activeFrom;
+
+    if (! activeFrom) {
+      return false;
+    }
+
+    const activationDate = new Date(activeFrom);
     const mandateAgeMilliseconds = new Date().valueOf() - activationDate.valueOf();
 
     return mandateAgeMilliseconds > 2 * 24 * 60 * 60 * 1_000;
