@@ -69,7 +69,7 @@ export class MandateComponent implements OnInit {
   private mandateIsOld() {
     const activeFrom = this.mandate.schedule.activeFrom;
 
-    if (! activeFrom) {
+    if (!activeFrom) {
       return false;
     }
 
