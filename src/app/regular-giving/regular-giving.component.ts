@@ -66,7 +66,7 @@ import { DonorAccountService } from '../donor-account.service';
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
-const paymentStepIndex = 4;
+const paymentStepIndex = 3;
 
 // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
 // and prefilling them with 'no' values in that case.
@@ -230,6 +230,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected readonly showPassword = signal(false);
   protected emailTokenValid = false;
 
+  /** Determines if we should show form parts related to setting up a new account. If the account is created
+   * within this form, then we continue showing the filled fields
+   */
+  protected donorAccountExistsOnLoad = false;
+
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
@@ -254,6 +259,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.donorAccount) {
       this.prepareFormForDonor();
+      this.donorAccountExistsOnLoad = true;
     }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
@@ -274,11 +280,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (!this.donorAccount) {
       throw new Error('Donor account not set');
     }
+
+    if (!this.donor) {
+      throw new Error('Donor not set');
+    }
+
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    this.mandateForm.patchValue({ billingPostcode: this.donorAccount.billingPostCode });
-
     this.stripeService.init().catch(console.error);
+
+    const donor = this.donor!;
+    const controls = this.mandateForm.controls;
+
+    controls.emailAddress.setValue(donor.email_address || '');
+    controls.firstName.setValue(donor.first_name || '');
+    controls.lastName.setValue(donor.last_name || '');
+    controls.billingPostcode.setValue(this.donorAccount.billingPostCode);
+    controls.password.removeValidators(Validators.required); // they only need to supply a new password for setting up an account.
 
     this.donationService
       .createCustomerSessionForRegularGiving({ campaign: this.campaign })
@@ -596,8 +614,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // intending to edit something else in the `payment` step; let them click Next.
 
     if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      if (this.stepper.selectedIndex > paymentStepIndex) {
-        this.stepper.selectedIndex = paymentStepIndex;
+      if (this.stepper.selectedIndex > paymentStepIndex + this.newDonorAdditionalStepCount) {
+        this.stepper.selectedIndex = paymentStepIndex + this.newDonorAdditionalStepCount;
       }
 
       return;
@@ -617,19 +635,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
-
     // 1 is new password which doesn't yet have validation code here.
     // 2 is about you which doesn't yet have validation code here.
 
-    if (stepIndex > 3 && this.validateGiftAidStep()) {
+    if (stepIndex > 2 + this.newDonorAdditionalStepCount && this.validateGiftAidStep()) {
       return;
     }
 
-    if (stepIndex > 4 && this.validatePaymentInformationStep()) {
+    if (stepIndex > 3 + this.newDonorAdditionalStepCount && this.validatePaymentInformationStep()) {
       return;
     }
 
-    if (stepIndex > 5 && this.validateUpdatesStep()) {
+    if (stepIndex > 4 + this.newDonorAdditionalStepCount && this.validateUpdatesStep()) {
       return;
     }
 
@@ -640,37 +657,45 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (stepIndex === 1) {
-      // this is the Send email button so let's send an email.
+      // this is the Send email button so let's send an email unless there's already a logged in donor.
 
-      if (!this.friendlyCaptchaSolution) {
+      if (!this.friendlyCaptchaSolution && !this.donor) {
         this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
         return;
       }
 
-      this.processingTempPasswordRequest = true;
-      try {
-        // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
-        // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
-        // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
-        // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
-        // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
-        await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
-          captcha_code: this.friendlyCaptchaSolution,
-          regularGiving: true,
-        });
-        // this.verificationLinkSentToEmail = emailAddress;
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      } catch (error: any) {
-        this.extractErrorMessage(error);
-        return;
-      } finally {
-        this.friendlyCaptchaWidget?.reset();
-        await this.friendlyCaptchaWidget?.start();
-        this.processingTempPasswordRequest = false;
+      if (!this.donor) {
+        this.processingTempPasswordRequest = true;
+        try {
+          // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
+          // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
+          // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
+          // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
+          // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
+          await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
+            captcha_code: this.friendlyCaptchaSolution!,
+            regularGiving: true,
+          });
+          // this.verificationLinkSentToEmail = emailAddress;
+          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+        } catch (error: any) {
+          this.extractErrorMessage(error);
+          return;
+        } finally {
+          this.friendlyCaptchaWidget?.reset();
+          await this.friendlyCaptchaWidget?.start();
+          this.processingTempPasswordRequest = false;
+        }
       }
     }
 
     this.stepper.selected = this.stepper.steps.get(stepIndex);
+  }
+
+  private get newDonorAdditionalStepCount() {
+    // if the donor account doesn't exist or isn't logged in on form load then we have one more step "your password"
+    // for them to authenticate. That affects the numbering of later steps.
+    return this.donorAccountExistsOnLoad ? 0 : 1;
   }
 
   protected get optInCharityEmail(): boolean | undefined {
@@ -937,6 +962,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected async continueFromAboutYou() {
     if (this.donor) {
       // already logged in, no need to do anything.
+      this.stepper.next();
       return;
     }
 
