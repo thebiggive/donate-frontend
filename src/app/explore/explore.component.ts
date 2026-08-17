@@ -225,7 +225,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
     if (this.metaCampaign) {
       this.setTickerParams(this.metaCampaign);
-      this.setFallbackBanner(this.metaCampaign);
     }
   }
 
@@ -721,25 +720,5 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     };
 
     this.setQueryParams();
-  }
-
-  /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
-   * of a quick fix here.
-   */
-  private setFallbackBanner(metaCampaign: MetaCampaign) {
-    if (metaCampaign.bannerUri) {
-      return;
-    }
-
-    switch (this.campaignSlug) {
-      case 'women-and-girls-2026':
-        metaCampaign.bannerUri = '/assets/images/banners/WGMF26.jpg';
-        break;
-      case 'venezuela-earthquake-appeal-2026':
-        metaCampaign.bannerUri = '/assets/images/banners/DEC2026.png';
-        break;
-      default:
-      // no-op
-    }
   }
 }
