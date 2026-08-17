@@ -52,7 +52,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MoneyPipe } from '../money.pipe';
 import { BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError } from '../backendError';
 import { CampaignService } from '../campaign.service';
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of, Subscription } from 'rxjs';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { GIFT_AID_FACTOR, Money } from '../Money';
 import { EMAIL_REGEXP } from '../validators/patterns';
@@ -235,6 +235,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
    */
   protected donorAccountExistsOnLoad = false;
 
+  /**
+   * True if the donor logged into an existing account within this page, rather than either creating a new one or
+   * already being logged in. In this case we continue to show the email and password fields that they used to log in
+   * but don't ask them to set a password etc.
+   */
+  protected loggedInToExistingAccount = false;
+
+  private loginStatusChangeSubscription: Subscription | undefined;
+
   ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
@@ -274,6 +283,22 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     this.preExistingActiveMandate$ = this.donorAccount
       ? this.regularGivingService.activeMandate(this.campaign)
       : of([]);
+
+    this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
+      next: async () => {
+        const donor = await firstValueFrom(this.identityService.getLoggedInPerson());
+        if (!donor) {
+          // should be impossible as on logout we refresh the page anyway.
+          return;
+        }
+        this.donor = donor;
+        this.donorAccount = (await firstValueFrom(this.donorAccountService.getLoggedInDonorAccount())) || undefined;
+        this.mandateForm.get('emailAddress')?.disable();
+        this.mandateForm.get('password')?.disable();
+        this.prepareFormForDonor();
+        this.toast.showSuccess('You are now logged in');
+      },
+    });
   }
 
   private prepareFormForDonor() {
@@ -316,6 +341,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.stripePaymentElement = undefined;
       this.stripeElements = undefined;
     }
+
+    this.loginStatusChangeSubscription?.unsubscribe();
   }
 
   protected get showUnmatchedDonationOption() {
@@ -949,10 +976,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     if (response.type === 'jwt') {
-      console.log('donor logged in');
-      // todo - update the form to show their name as a logged in user. May be better to do by listening to the
-      // loginStatusChanged event rather than directly within this block, so we might also be able to react to e.g.
-      // logging in with the login form in another tab.
+      this.loggedInToExistingAccount = true;
     } else if (response.type === 'emailVerificationToken') {
       this.emailTokenValid = true;
     }
