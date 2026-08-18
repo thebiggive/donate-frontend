@@ -68,27 +68,35 @@ jobs:
     parameters:
       env:
         type: string
-    docker:
-      - image: "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
-        aws_auth:
-          oidc_role_arn: ${AWS_ROLE_ARN}
+    machine:
+      image: ubuntu-2404:current
     steps:
       - aws-cli/setup:
           role_arn: ${AWS_ROLE_ARN}
           region: ${AWS_REGION}
 
+      - run:
+          name: Pull image and extract static assets
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AWS_US_ECR_ACCOUNT_URL}
+            IMAGE="${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+            docker pull "$IMAGE"
+            CONTAINER_ID=$(docker create "$IMAGE")
+            docker cp "$CONTAINER_ID:/usr/src/app/dist" dist
+            docker rm "$CONTAINER_ID"
+
       - aws-s3/sync: # Sync dist/donate-frontend/browser to S3 with 1 year lifetime
-          from: /usr/src/app/dist/donate-frontend/browser
+          from: dist/donate-frontend/browser
           to: "s3://tbg-<< parameters.env >>-donate-static/d"
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
       - aws-s3/sync: # Sync transpiled ES5 static JS for older browsers to S3 (1 year)
-          from: /usr/src/app/dist/donate-frontend/browser-es5
+          from: dist/donate-frontend/browser-es5
           to: "s3://tbg-<< parameters.env >>-donate-static/d-es5"
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
       - aws-s3/sync: # Sync dist/donate-frontend/browser/assets to S3 with 1 day lifetime
-          from: /usr/src/app/dist/donate-frontend/browser/assets
+          from: dist/donate-frontend/browser/assets
           to: "s3://tbg-<< parameters.env >>-donate-static/assets"
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
