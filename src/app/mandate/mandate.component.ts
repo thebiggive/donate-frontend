@@ -56,14 +56,27 @@ export class MandateComponent implements OnInit {
   }
 
   /**
-   * Returns true iff the mandate is more tha one day old.
+   * Returns true iff the mandate is more than two days old.
+   *
+   * We use two rather than one to ensure the mandate always appears new immediately after creation even if
+   * the browser clock shows a later date than the UTC date due to timezones (e.g. 0-1am in London summer) as the
+   * activation date will be the start of the previous day.
+   *
+   * Regression tests expect to see the mandate presented as new.
+   *
    * @private
    */
   private mandateIsOld() {
-    const activationDate = new Date(this.mandate.schedule.activeFrom);
+    const activeFrom = this.mandate.schedule.activeFrom;
+
+    if (!activeFrom) {
+      return false;
+    }
+
+    const activationDate = new Date(activeFrom);
     const mandateAgeMilliseconds = new Date().valueOf() - activationDate.valueOf();
 
-    return mandateAgeMilliseconds > 24 * 60 * 60 * 1_000;
+    return mandateAgeMilliseconds > 2 * 24 * 60 * 60 * 1_000;
   }
 
   private pollForMandateUpdate() {

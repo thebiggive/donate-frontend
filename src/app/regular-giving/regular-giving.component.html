@@ -71,7 +71,7 @@
                   </label>
                   <input maxlength="10" formControlName="donationAmount" id="donationAmount" matInput slot="input" />
                 </biggive-text-input>
-                @if (enableCondensedRegularGivingSignup) {
+                @if (!donorAccountExistsOnLoad) {
                   <div>
                     <biggive-text-input>
                       <label slot="label" for="emailAddress">Email Address *</label>
@@ -147,10 +147,11 @@
                 </div>
                 @if (!processingTempPasswordRequest) {
                   <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                    {{ enableCondensedRegularGivingSignup ? "Send email" : "Continue" }}
+                    <!--  if we have a logged in donor then no need to send an email to authenticate them -->
+                    {{ this.donor ? "Continue" : "Send email" }}
                   </button>
                 }
-                @if (enableCondensedRegularGivingSignup) {
+                @if (!donor) {
                   <br />
                   We will email you a temporary password for the next step, if you are not already registered.
                 }
@@ -162,6 +163,106 @@
                 data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
                 #frccaptcha
               ></div>
+            </mat-step>
+            @if (!donorAccountExistsOnLoad) {
+              <mat-step label="Your password">
+                <!-- below biggive-text-input usage copied from register.component.html - consider extracting a new component -->
+                <biggive-text-input spaceBelow="4">
+                  <label slot="label" for="password">Password *</label>
+                  <div slot="input" style="display: flex">
+                    <div class="visually-hidden" aria-live="polite">
+                      {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+                    </div>
+                    <input
+                      matInput
+                      [type]="showPassword() ? 'text' : 'password'"
+                      id="temp-password-input"
+                      formControlName="password"
+                    />
+                    <biggive-button
+                      aria-controls="temp-password-input"
+                      colourScheme="clear-primary"
+                      (doButtonClick)="toggleShowPassword()"
+                      [label]="showPassword() ? 'Hide' : 'Show'"
+                      [spaceBelow]="0"
+                    />
+                  </div>
+                </biggive-text-input>
+                Please enter the temporary password we have emailed to you, or your existing password if you have a Big
+                Give donation account.
+
+                <button
+                  type="button"
+                  id="continue-from-auth"
+                  class="continue"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continueFromAuthentication()"
+                >
+                  Continue
+                </button>
+              </mat-step>
+            }
+            <mat-step label="About You">
+              <biggive-text-input>
+                <label slot="label" for="firstName">First Name *</label>
+                @if (donor) {
+                  <div slot="input">
+                    {{ donor.first_name }}
+                  </div>
+                } @else {
+                  <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
+                }
+              </biggive-text-input>
+              <biggive-text-input>
+                <label slot="label" for="lastName">Last Name *</label>
+                @if (donor) {
+                  <div slot="input">
+                    {{ donor.last_name }}
+                  </div>
+                } @else {
+                  <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput />
+                }
+              </biggive-text-input>
+
+              @if (!donorAccountExistsOnLoad && !loggedInToExistingAccount) {
+                <!-- No need to ask them to set a password if they were already logged in.
+                  @todo-1195 also don't ask for a password if they logged into an existing account during this form.
+                  But do ask if they are creating a new account, and in that case once the account exists keep the box
+                  for consistency.
+               -->
+                <biggive-text-input spaceBelow="4">
+                  <label slot="label" for="password">New password *</label>
+                  <div slot="input" style="display: flex">
+                    <div class="visually-hidden" aria-live="polite">
+                      {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
+                    </div>
+                    <input
+                      matInput
+                      [type]="showPassword() ? 'text' : 'password'"
+                      id="password-post-donation"
+                      formControlName="newPassword"
+                    />
+                    <biggive-button
+                      aria-controls="password-post-donation"
+                      colourScheme="clear-primary"
+                      (doButtonClick)="toggleShowPassword()"
+                      [label]="showPassword() ? 'Hide' : 'Show'"
+                      [spaceBelow]="0"
+                    />
+                  </div>
+                </biggive-text-input>
+              }
+              <button
+                type="button"
+                class="continue"
+                mat-raised-button
+                id="continue-from-about-you"
+                color="primary"
+                (click)="this.continueFromAboutYou()"
+              >
+                Continue
+              </button>
             </mat-step>
             <mat-step label="Gift Aid">
               <p class="b-mt-40 b-bold b-rt-0">
@@ -248,7 +349,14 @@
               <p></p>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  class="continue"
+                  id="continue-from-gift-aid"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -321,7 +429,14 @@
               </div>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  id="continue-from-payment-details"
+                  class="continue"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -408,7 +523,14 @@
               <p></p>
 
               <div class="u-text-center">
-                <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
+                <button
+                  type="button"
+                  id="continue-from-coms-preferences"
+                  class="continue"
+                  mat-raised-button
+                  color="primary"
+                  (click)="this.continue()"
+                >
                   Continue
                 </button>
               </div>
@@ -484,6 +606,7 @@
                     (click)="submit()"
                     class="c-donate-button continue"
                     mat-raised-button
+                    id="start-regular-giving-now"
                     color="primary"
                   >
                     Start regular giving now

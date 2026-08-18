@@ -266,7 +266,10 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     try {
-      await this.identityService.requestEmailAuthToken(emailAddress, { captcha_code: captchaResponse });
+      await this.identityService.requestEmailAuthToken(emailAddress, {
+        captcha_code: captchaResponse,
+        regularGiving: false,
+      });
       this.verificationLinkSentToEmail = emailAddress;
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
