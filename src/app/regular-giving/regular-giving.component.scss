@@ -154,3 +154,5 @@ table#paymentMethods {
 #giftAidAddressContainer {
   margin-top: 60px;
 }
+
+@include abstract.friendly-captcha();
