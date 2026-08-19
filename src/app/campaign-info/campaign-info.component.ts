@@ -12,9 +12,9 @@ import { TimeLeftPipe } from '../time-left.pipe';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { GeoJSON, Map, TileLayer } from 'leaflet';
-import type { FeatureCollection, Feature, Geometry, GeoJsonProperties } from 'geojson';
+import type { Feature, Geometry, GeoJsonProperties } from 'geojson';
+import { getHighlightedFeatures } from '../regions';
 
 const integerPipeToken = new InjectionToken<DecimalPipe>('integerPipe');
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
@@ -149,7 +149,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     const matchedRegions: string[] = [];
 
     // Build a layer with just project-relevant locations and a list of their names
-    const highlightAreas = await this.getHighlightedFeatures(regionCodes);
+    const highlightAreas = await getHighlightedFeatures(regionCodes, this.http);
 
     new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 13,
@@ -182,34 +182,6 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectBounds = projectLayer.getBounds();
     this.map.fitBounds(this.projectBounds, { padding: this.boundsPadding });
-  }
-
-  private async getHighlightedFeatures(regionCodes: string[]): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
-    const layers = [
-      { path: '../../assets/map/localAuthorities.geojson', codeField: 'LAD25CD', nameField: 'LAD25NM' },
-      { path: '../../assets/map/counties.geojson', codeField: 'CTYUA25CD', nameField: 'CTYUA25NM' },
-      { path: '../../assets/map/englandRegions.geojson', codeField: 'RGN25CD', nameField: 'RGN25NM' },
-      { path: '../../assets/map/nations.geojson', codeField: 'CTRY25CD', nameField: 'CTRY25NM' },
-    ];
-
-    const fetchPromises = layers.map(async (layer) => {
-      const data = await firstValueFrom(this.http.get<FeatureCollection>(layer.path));
-
-      return data.features
-        .filter(
-          (feature: Feature<Geometry, GeoJsonProperties>) =>
-            feature.properties && regionCodes.includes(feature.properties[layer.codeField]),
-        )
-        .map((feature: Feature<Geometry, GeoJsonProperties>) => {
-          if (feature.properties) {
-            feature.properties['name'] = feature.properties[layer.nameField];
-          }
-          return feature;
-        });
-    });
-
-    const results = await Promise.all(fetchPromises);
-    return results.flat();
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {
