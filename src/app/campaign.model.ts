@@ -1,3 +1,7 @@
+import { HttpClient } from '@angular/common/http';
+import { getHighlightedFeatures } from './regions';
+import { map } from 'rxjs/operators';
+
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  *
@@ -94,4 +98,26 @@ export function formattedCampaignSummary(campaign: Campaign): string {
   }
 
   return campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+}
+
+export function listImpactCountryNames(campaign: Campaign): string[] {
+  const countryNames = campaign.locations
+    .map((location) => location.countryName)
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(countryNames)];
+}
+
+export async function listImpactRegionNames(campaign: Campaign, http: HttpClient): Promise<string[]> {
+  const regionCodes = campaign.locations.map((loc) => loc.regionCode).filter((code): code is string => code !== null);
+
+  const highlightAreas = await getHighlightedFeatures(regionCodes, http);
+
+  const areaNames = highlightAreas
+    .map((feature) => feature.properties && feature.properties['name'])
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(areaNames)];
 }
