@@ -348,13 +348,6 @@
                   >
                   </biggive-heading>
 
-                  <h3>
-                    @if (impactCountryNames.length === 1) {
-                      Country
-                    } @else {
-                      Countries
-                    }
-                  </h3>
                   <ul>
                     @for (countryName of impactCountryNames; track countryName) {
                       <li>{{ countryName }}</li>
