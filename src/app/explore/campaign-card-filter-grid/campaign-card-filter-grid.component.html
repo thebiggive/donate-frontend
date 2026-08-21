@@ -128,15 +128,13 @@
         <a (click)="handleClearAll()">Clear all</a>
       </div>
     </div>
-    <div class="campaign-grid">
-      <ng-content />
+    <div class="grid-map-container">
+      <div class="campaign-grid">
+        <ng-content />
+      </div>
+      @if (ukFilterSelected() && flags.enableMapViewInExplore) {
+        <div class="campaign-map" tabindex="-1" #mapElement></div>
+      }
     </div>
-    @if (ukFilterSelected() && flags.enableMapViewInExplore) {
-      <div
-        tabindex="-1"
-        #mapElement
-        style="height: 400px; width: 100%; margin-top: 2rem; margin-bottom: 2rem; z-index: 0"
-      ></div>
-    }
   </div>
 </div>

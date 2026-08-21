@@ -211,3 +211,30 @@ fa-icon {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.grid-map-container {
+  display: flex;
+  gap: 20px;
+  flex-direction: column-reverse;
+  @media #{abstract.$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
+
+.grid-map-container div {
+  @media #{abstract.$breakpoint-lg} {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+}
+
+.campaign-map {
+  height: 500px;
+  margin-right: 23px;
+  margin-left: 9px;
+  @media #{abstract.$breakpoint-lg} {
+    height: 800px;
+  }
+  //width: 100%;
+  z-index: 0;
+}
