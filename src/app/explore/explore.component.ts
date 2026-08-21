@@ -31,7 +31,7 @@ import { skip, Subscription } from 'rxjs';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSummary } from '../campaign-summary.model';
+import {CampaignSummary, CampaignSummaryList} from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
@@ -51,6 +51,9 @@ import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
 import { COUNTRY_CODE } from '../country-code.token';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
+import {getHighlightedFeatures} from '../regions';
+import {HttpClient} from '@angular/common/http';
+import {Feature, GeoJsonProperties, Geometry} from 'geojson';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -161,6 +164,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
 
   protected readonly environment = environment;
+
+  /**
+   * Counts of how many results there are (including for pages not loaded) in each region of the UK.
+   */
+  private locationCounts: Record<string, number> | undefined;
+
+  private http = inject(HttpClient);
+  protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -428,11 +439,15 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
-      next: (campaignSummaries) => {
+      next: async (result: CampaignSummaryList) => {
         this.individualCampaigns = clearExisting
-          ? campaignSummaries
-          : [...this.individualCampaigns, ...campaignSummaries];
+          ? result.campaignSummaries
+          : [...this.individualCampaigns, ...result.campaignSummaries];
+        this.locationCounts = result.locationCounts;
+
         this.loading = false;
+
+        this.highlightAreas = await getHighlightedFeatures(Object.getOwnPropertyNames(this.locationCounts), this.http);
 
         if (isPlatformBrowser(this.platformId)) {
           // Save children so we can go 'back' here in the browser and maintain scroll position.

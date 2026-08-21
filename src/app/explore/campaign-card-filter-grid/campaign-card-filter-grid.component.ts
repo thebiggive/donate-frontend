@@ -7,6 +7,10 @@ import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/co
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { GeoJSON, Map, TileLayer } from 'leaflet';
+import {Feature, GeoJsonProperties, Geometry} from 'geojson';
+import {getHighlightedFeatures} from '../../regions';
+import {HttpClient} from '@angular/common/http';
+import * as L from 'leaflet';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -57,6 +61,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
    */
   @Input({ required: true }) fetchingLocation!: boolean;
 
+  @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined
+
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
   protected categoriesPlaceHolderText = 'Select category';
@@ -69,6 +75,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
   private newSelectedFilterCategory: string | null = null;
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
+  private http = inject(HttpClient);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -453,6 +460,16 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
     // Check again in case it got destroyed while waiting
     if (!this.mapElement || !isPlatformBrowser(this.platformId)) return;
 
+    // placeholder to develop UI - @todo replace with list of areas from backend.
+    this.highlightAreas = await getHighlightedFeatures(Object.getOwnPropertyNames({
+      E92000001: 1003, // England
+      S92000003: 1004, // Scotland
+      W92000004: 1005, // Wales
+      N92000002: 1006 // Northern Ireland
+    }), this.http);
+
+    console.log(this.highlightAreas);
+
     const UKBounds: [[number, number], [number, number]] = [
       [49.8, -8.7],
       [60.9, 1.8],
@@ -472,15 +489,36 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
       zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
     }).fitBounds(UKBounds, { padding: this.boundsPadding });
 
-    // Build a layer with just project-relevant locations and a list of their names
-    const highlightAreas = [] as const;
+    this.highlightAreas.forEach((area) => {
+        // We really want the center of each place to put the marker on showing how many campaigns it has, but
+        // there doesn't seem to be a very easy way to get that, so for now just picking the first point on its outline.
+        // Not really ever going to be suitable since by definition it will be on the border.
+
+        // @ts-expect-error - at runtime I see this currently has coordinates, but it's not shown in the type.
+        const singleCoordinate = area.geometry.coordinates[0][0][0] as [number, number];
+        const latLng = [singleCoordinate[1], singleCoordinate[0]];
+        console.log(latLng[0] + "," + latLng[1]);
+
+
+        const _L = L; // suppressing unused var error on L used in commented out code below.
+
+        // getting error L.marker is not a function. Logging shows that its undefined. Not sure why - trying to follow docs
+        // at https://leafletjs.com/reference.html#marker
+        // const marker = L.marker(latLng).addTo(this.map); // getting error L.marker is not a function
+        // marker.bindToolTip('hello', {
+        //   permanent: true,
+        //   direction: 'right',
+        // });
+
+    });
+
 
     new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 13,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(this.map);
 
-    const projectLayer = new GeoJSON(highlightAreas, {
+    const projectLayer = new GeoJSON(this.highlightAreas, {
       attribution:
         'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
       style: () => ({
@@ -489,6 +527,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
         color: '#2c089b',
         weight: 1.5,
       }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
+        console.log('each feature', {feature});
+        if (feature.properties && feature.properties['name']) {
+          layer.bindPopup(feature.properties['name']);
+        }
+    }
     }).addTo(this.map);
 
     this.projectBounds = projectLayer.getBounds();
