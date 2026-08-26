@@ -148,6 +148,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         'https://app.getsitecontrol.com',
         'https://www.fundraisingregulator.org.uk',
         'https://web-sdk.ryftpay.com', // Requests made during 3DS, maybe elsewhere.
+        'https://cdn-wp.thebiggive.org.uk',
         ...imageHosts,
       ],
       'script-src': [
