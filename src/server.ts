@@ -149,6 +149,7 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         'https://www.fundraisingregulator.org.uk',
         'https://web-sdk.ryftpay.com', // Ryft: Loading states, 3D Secure.
         'https://tile.openstreetmap.org',
+        'https://cdn-wp.thebiggive.org.uk',
         ...imageHosts,
       ],
       'script-src': [
