@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { Campaign } from '../../campaign.model';
@@ -11,7 +12,7 @@ import { DonationStartFormComponent } from '../donation-start-form/donation-star
 import { ImageService } from '../../image.service';
 import { fromEvent, merge, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isPlatformBrowser, AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DonationStartLoginComponent } from '../donation-start-login/donation-start-login.component';
@@ -28,8 +29,8 @@ import { TimeLeftPipe } from '../../time-left.pipe';
     DonationStartLoginComponent,
     DonationStartFormComponent,
     CampaignInfoComponent,
-    AsyncPipe,
     DatePipe,
+    AsyncPipe,
     TimeLeftPipe,
   ],
 })
@@ -59,6 +60,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.isOffline$ = merge(of(null), fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(
         map(() => !navigator.onLine),
+        takeUntilDestroyed(),
       );
     } else {
       this.isOffline$ = of(false);
@@ -81,9 +83,11 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
-    const bannerUri = this.campaign.banner?.uri || this.campaign.bannerUri;
-    this.imageService.getImageUri(bannerUri!, 830).subscribe((uri) => (this.bannerUri = uri));
+    this.campaignOpenOnLoad = CampaignService.isOpenForDonations(this.campaign);
+    const bannerUri = this.campaign.banner?.uri;
+    if (bannerUri !== null) {
+      this.imageService.getImageUri(bannerUri!, 830).subscribe((uri) => (this.bannerUri = uri));
+    }
   }
 
   ngAfterViewInit() {
@@ -96,13 +100,12 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   }
 
   updateReservationExpiryTime(): void {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+    if (!this.donation?.createdTime || !this.donation.matchReservedAmount || !this.donation.maxReservationTime) {
       this.reservationExpiryDate = undefined;
       return;
     }
 
-    const date = new Date(environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime());
-    this.reservationExpiryDate = date;
+    this.reservationExpiryDate = new Date(this.donation.maxReservationTime);
   }
 
   loadAuthedPersonInfo = (id: string, jwt: string) => {

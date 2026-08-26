@@ -12,7 +12,7 @@ export type Mandate = {
   schedule: {
     type: 'monthly';
     dayOfMonth: number;
-    activeFrom: string;
+    activeFrom: string | null;
     expectedNextPaymentDate: string;
   };
   giftAid: boolean;

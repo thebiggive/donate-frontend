@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   inject,
   Input,
   OnDestroy,
@@ -28,7 +29,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { campaignHiddenMessage, donorGiftAidTermsUrl, donorTermsUrl } from '../../../environments/common';
@@ -72,6 +73,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { flags } from '../../featureFlags';
 import { createCardForm, createController, RyftCardFormComponentResponse, RyftControllerResponse } from '@ryftpay/web';
 import { DonationStartWhyTipDialogComponent } from '../donation-start-why-tip-dialog.component';
+import { BackendError } from '../../backendError';
 
 declare let _paq: {
   push: (args: Array<string | object>) => void;
@@ -168,6 +170,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    */
   @Input() campaignOpenOnLoad = false;
 
+  @Input({ required: true }) isOffline!: Observable<boolean>;
+
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   donorsCreditPence = 0; // Set non-zero if logged in and Customer has a credit balance in the right currency.
@@ -184,6 +188,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   maximumTipPercentage = 30 as const;
   private ryftController: RyftControllerResponse | undefined;
   ryftCardForm: RyftCardFormComponentResponse | undefined;
+  private donationExtender: ReturnType<typeof setInterval> | undefined;
 
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
@@ -344,6 +349,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.destroyStripeElements();
 
     clearTimeout(this.donationRetryTimeout);
+    clearTimeout(this.donationExtender);
   }
 
   ngOnInit() {
@@ -505,6 +511,59 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.donationExtender = setInterval(async () => await this.extendReservationTime(), 60_000);
+    }
+  }
+
+  @HostListener('window:online')
+  async extendReservationTime() {
+    if (!this.donation) {
+      return;
+    }
+
+    if (!this.donation.maxReservationTime) {
+      // as this is missing, the donation is probably a new one created locally, not yet replaced with a copy generated
+      // server-side.
+      return;
+    }
+
+    if (new Date(this.donation.maxReservationTime) < new Date()) {
+      this.matomoTracker.trackEvent(
+        'donate',
+        'matching_expired_timeout',
+        `Matching expired for donation ${this.donation.donationId}`,
+      );
+
+      // no point asking to extend, we know it won't be allowed.
+      return;
+    }
+
+    if (this.donation.matchReservedAmount <= 0) {
+      // matching may have already been lost by e.g. matching expiry or
+      // this was just an unmatched donation ot start with
+      return;
+    }
+
+    try {
+      await this.donationService.extendReservation(this.donation);
+    } catch (e: unknown) {
+      const backendError = e as BackendError | HttpErrorResponse;
+      console.error('Error updating match funds reservation', backendError);
+      if (backendError?.error?.error?.type === 'EXPECTED_MATCH_FUNDS_NOT_FOUND') {
+        // guard clauses should have exited earlier if donor stayed online, this error response from matchbot
+        // indicates they probably lost the matching due to regular expiry job because they were not online to request
+        // extension in the last five minutes.
+        this.matomoTracker.trackEvent(
+          'donate',
+          'matching_expired_likely_offline',
+          `Matching expired for donation ${this.donation.donationId}`,
+        );
+
+        await this.handleMatchingExpiry(this.donation);
+      }
     }
   }
 
@@ -983,8 +1042,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     // Check if matching has expired without the timer firing (e.g. iOS issue or page backgrounded)
-    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.createdTime) {
-      const expiryTime = environment.reservationMinutes * 60000 + new Date(this.donation.createdTime).getTime();
+    if (this.donation && this.donation.matchReservedAmount > 0 && this.donation.maxReservationTime) {
+      const expiryTime = new Date(this.donation.maxReservationTime).getTime();
       const now = Date.now();
 
       if (now > expiryTime) {
@@ -1007,7 +1066,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     if (this.donation !== undefined && this.donation?.matchReservedAmount > 0 && this.donation?.createdTime) {
       const timeSinceCreation = Date.now() - new Date(this.donation?.createdTime).getTime();
-      const expiryMs = environment.reservationMinutes * 60000;
+      const expiryMs = new Date(this.donation?.maxReservationTime || '1970').getTime() - timeSinceCreation;
 
       this.matomoTracker.trackEvent(
         'donate_submit_attempt',
@@ -1298,10 +1357,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
    * replace some of the calls with a different more specific message that identifies the cause of the problem if it will
    * either help donors directly or if they might usefully quote it to us in a support case.
    */
-  showDonationCreateError() {
+  showDonationCreateError(errorDetail: string) {
     this.toast.showError(
       "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
-        ' us if this message persists.',
+        ' us if this message persists.' +
+        (environment.environmentId === 'production' ? '' : ' ' + errorDetail),
     );
   }
 
@@ -1590,7 +1650,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     // todo - refactor tip messages below to remove duplication.
     if (tipErrors?.pattern) {
-      return 'Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000.';
+      return 'Please enter how much you would like to donate to Big Give as a number of £.';
     }
 
     if (tipErrors?.required) {
@@ -1829,11 +1889,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.setConditionalValidators();
     this.setChampionOptInValidity();
 
-    const bannerUri = this.campaign.banner?.uri || this.campaign.bannerUri;
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
-      bannerUri,
+      this.campaign.banner?.uri,
     );
   }
 
@@ -1856,7 +1915,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         psp: this.psp,
       });
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError('create-donation: missing required fields');
       return;
     }
 
@@ -1908,7 +1967,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.creatingDonation = false;
           this.donationCreateError = true;
           this.friendlyCaptchaWidget?.reset();
-          this.showDonationCreateError();
+          this.showDonationCreateError('identity-create: ' + error.message);
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         },
       );
@@ -1975,7 +2034,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
-    this.showDonationCreateError();
+    this.showDonationCreateError('newDonationError: ' + errorMessage);
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
@@ -1985,13 +2044,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     const createResponseMissingData =
       !response.donation.charityId || !response.donation.donationId || !response.donation.projectId;
     if (createResponseMissingData) {
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'donation_create_response_incomplete',
-        `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-      );
+      const errorName = `Missing expected response data creating new donation for campaign ${this.campaignId}`;
+      this.matomoTracker.trackEvent('donate_error', 'donation_create_response_incomplete', errorName);
       this.donationCreateError = true;
-      this.showDonationCreateError();
+      this.showDonationCreateError(errorName);
       this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;
@@ -2072,7 +2128,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() < Date.now()
+      donation.maxReservationTime &&
+      new Date(donation.maxReservationTime) < new Date()
     ) {
       donation.matchReservedAmount = 0;
       matchExpired = true;
@@ -2091,7 +2148,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   private scheduleMatchingExpiryWarning(donation: Donation) {
     // Only set the timeout when relevant part 1/2: exclude cases with no
     // matching.
-    if (!donation.createdTime || donation.matchReservedAmount <= 0) {
+    if (!donation.createdTime || donation.matchReservedAmount <= 0 || !donation.maxReservationTime) {
       return;
     }
 
@@ -2103,11 +2160,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // least brittle option here.
     this.cancelExpiryWarning();
 
-    // To make this safe to call for both new and resumed donations, we look up
-    // the donation's creation time and determine the timeout based on that rather
-    // than e.g. always using 30 minutes.
-    const msUntilExpiryTime =
-      environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+    const msUntilExpiryTime = new Date(donation.maxReservationTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
     // the timeout has already passed. This happens e.g. when the reuse
@@ -2134,7 +2187,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.matomoTracker.trackEvent('matching_expiry', 'timer_fired_no_donation', 'Timer fired but no donation object');
       return;
     }
-
     // Safety check: ensure the timer is still relevant for the current donation
     if (donation.donationId && this.donation.donationId !== donation.donationId) {
       this.matomoTracker.trackEvent(

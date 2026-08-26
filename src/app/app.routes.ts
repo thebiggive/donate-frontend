@@ -198,7 +198,6 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     component: RegularGivingComponent,
-    canActivate: [requireLogin],
     resolve: {
       campaign: CampaignResolver,
       donor: LoggedInPersonResolver,

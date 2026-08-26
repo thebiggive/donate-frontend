@@ -37,32 +37,20 @@
   <div class="c-details-container">
     <div class="b-primary-column">
       <div class="banner-container">
-        @if (campaign.banner) {
-          <!-- 30.6 is approx. 352/1152 as %, the typical app campaign & standalone campaign banner ratio hardcoded in Salesforce -->
-          <biggive-branded-image
-            space-below="4"
-            [imageUrl]="campaign.banner.uri | optimisedImage: 2000 | async"
-            [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-            [imageAlt]="campaign.banner.alt_text"
-            [slug]="campaign.isMatched ? 'Match Funded' : null"
-            [charityName]="campaign.charity.name"
-            [charityLocation]="null"
-            [imageHeightPercent]="30.6"
-          >
-          </biggive-branded-image>
-        } @else {
-          <biggive-branded-image
-            space-below="4"
-            [imageUrl]="campaign.bannerUri | optimisedImage: 2000 | async"
-            [imageAlt]="null"
-            [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
-            [slug]="campaign.isMatched ? 'Match Funded' : null"
-            [charityName]="campaign.charity.name"
-            [charityLocation]="null"
-            [imageHeightPercent]="30.6"
-          >
-          </biggive-branded-image>
-        }
+        <!-- 30.6 is approx. 352/1152 as %, the typical app campaign & standalone campaign banner ratio hardcoded in Salesforce -->
+        <biggive-branded-image
+          space-below="4"
+          [imageUrl]="
+            campaign.banner && campaign.banner.uri ? (campaign.banner.uri | optimisedImage: 2000 | async) : null
+          "
+          [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage: 240 | async) : null"
+          [imageAlt]="campaign.banner?.alt_text"
+          [slug]="campaign.isMatched ? 'Match Funded' : null"
+          [charityName]="campaign.charity.name"
+          [charityLocation]="null"
+          [imageHeightPercent]="30.6"
+        >
+        </biggive-branded-image>
       </div>
 
       <biggive-heading
@@ -223,14 +211,7 @@
                       [alt]="image.altText"
                     />
                   }
-                } @else if (campaign.additionalImageUris.length > 0) {
-                  @for (image of campaign.additionalImageUris; track $index) {
-                    <!-- We didn't collect alt-text from charities for these images, so can't show it here -->
-                    <!-- eslint-disable @angular-eslint/template/alt-text -->
-                    <img [src]="image.uri | optimisedImage: 850 | async" class="c-additional__images" />
-                  }
                 }
-                <!-- eslint-enable @angular-eslint/template/alt-text -->
               </div>
 
               @if (campaign.quotes.length > 0) {
@@ -317,7 +298,7 @@
                     html-element="h4"
                     size="4"
                     align="left"
-                    text="Understanding the Target"
+                    text="Budget or Project Variations"
                   >
                   </biggive-heading>
                   <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
@@ -326,32 +307,69 @@
             </mat-tab>
           }
 
-          @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim()) {
+          @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim() || campaign.locations.length > 0) {
             <mat-tab label="Impact">
               <div class="c-impact">
-                <biggive-heading
-                  space-above="6"
-                  space-below="0"
-                  colour="primary"
-                  html-element="h3"
-                  size="3"
-                  align="left"
-                  text="Impact"
-                >
-                </biggive-heading>
-                <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+                @if (campaign.impactSummary?.trim()) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Impact"
+                  >
+                  </biggive-heading>
+                  <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+                }
+                @if (campaign.impactReporting?.trim()) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Reporting"
+                  >
+                  </biggive-heading>
+                  <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+                }
+                @if (campaign.locations.length > 0) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Locations"
+                  >
+                  </biggive-heading>
 
-                <biggive-heading
-                  space-above="6"
-                  space-below="0"
-                  colour="primary"
-                  html-element="h3"
-                  size="3"
-                  align="left"
-                  text="Reporting"
-                >
-                </biggive-heading>
-                <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+                  <ul>
+                    @for (countryName of impactCountryNames; track countryName) {
+                      <li>{{ countryName }}</li>
+                    }
+                  </ul>
+
+                  @if (impactRegionNames.length > 0) {
+                    <h3>
+                      @if (impactRegionNames.length === 1) {
+                        UK Region
+                      } @else {
+                        UK Regions
+                      }
+                    </h3>
+
+                    <ul>
+                      @for (impactRegionName of impactRegionNames; track impactRegionName) {
+                        <li>{{ impactRegionName }}</li>
+                      }
+                    </ul>
+                  }
+                }
               </div>
             </mat-tab>
           }

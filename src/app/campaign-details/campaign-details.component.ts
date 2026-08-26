@@ -5,7 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
-import { Campaign } from '../campaign.model';
+import { Campaign, formattedCampaignSummary, listImpactCountryNames, listImpactRegionNames } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
@@ -78,9 +78,12 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
+  protected formattedCampaignSummary!: string;
+  protected impactRegionNames: string[] = [];
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+    this.formattedCampaignSummary = formattedCampaignSummary(this.campaign);
     this.setSecondaryProps(this.campaign);
   }
 
@@ -113,6 +116,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  get impactCountryNames() {
+    return listImpactCountryNames(this.campaign);
+  }
+
+  protected async getImpactRegionNames() {
+    return await listImpactRegionNames(this.campaign, this.http);
+  }
+
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.timer) {
       window.clearTimeout(this.timer);
@@ -132,7 +143,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     await this.router.navigateByUrl(url);
   }
 
-  private setSecondaryProps(campaign: Campaign) {
+  private async setSecondaryProps(campaign: Campaign) {
     this.campaignInPast = CampaignService.isInPast(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
@@ -154,12 +165,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
 
-    const bannerUri = campaign.banner?.uri || campaign.bannerUri;
+    const bannerUri = campaign.banner?.uri;
     if (this.isEarlyPreview()) {
       this.pageMeta.setCommon('PREVIEW: ' + campaign.title, summaryStart, bannerUri, true);
     } else {
       this.pageMeta.setCommon(campaign.title, summaryStart, bannerUri);
     }
+
+    this.impactRegionNames = await this.getImpactRegionNames();
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {
@@ -175,17 +188,5 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     if (campaign.hidden) {
       this.toast.showError(campaignHiddenMessage);
     }
-  }
-
-  /**
-   * Collapses sequences of line breaks in the campaign summary then returns a version of the summary with
-   * each line break doubled to appear like a paragraph break.
-   */
-  public get formattedCampaignSummary(): string {
-    if (!this.campaign.summary) {
-      return '';
-    }
-
-    return this.campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
   }
 }

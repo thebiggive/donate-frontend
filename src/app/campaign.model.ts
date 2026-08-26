@@ -1,3 +1,6 @@
+import { HttpClient } from '@angular/common/http';
+import { getHighlightedFeatures } from './regions';
+
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  *
@@ -10,6 +13,10 @@ export type Campaign = {
   currencyCode: 'GBP' | 'USD';
   hidden: boolean;
   ready: boolean;
+
+  /**
+   * General information about the campaign. Do not display directly - use formattedCampaignSummary instead.
+   */
   summary: string;
   amountRaised: number;
   /**
@@ -29,7 +36,7 @@ export type Campaign = {
   matchFundsTotal: number;
   aims: string[];
   additionalImages: Array<{ altText: string; rank: number; uri: string }>;
-  additionalImageUris: Array<{ uri: string; order: number; alt_text?: string | undefined }>;
+  banner: null | { uri: string; alt_text: string | undefined };
   beneficiaries: string[];
   budgetDetails: Array<{ amount: number; description: string }>;
   categories: string[];
@@ -64,17 +71,11 @@ export type Campaign = {
   alternativeFundUse?: string;
   championOptInStatement?: string;
   championRef?: string;
-  logoUri?: string;
   parentRef?: string;
   surplusDonationInfo?: string;
   target?: number;
   thankYouMessage?: string;
   video?: { provider: string; key: string };
-  /**
-   * List of errors encountered by the backend in rendering this campaign. Intended to help us catch any issues
-   * that come up in MAT-405 work before release.
-   * */
-  errors?: string[];
 } & (
   | {
       // If parentUsesSharedFunds then we expect the backend to tell us how much of those parental shared funds are available
@@ -84,15 +85,49 @@ export type Campaign = {
   | {
       parentUsesSharedFunds: false;
     }
-) &
-  (
-    | {
-        /** this is to be phased out, matchbot will start sending banner instead of bannerUri */
-        bannerUri: string;
-        banner?: undefined;
-      }
-    | {
-        banner: { uri: string; alt_text: string | undefined };
-        bannerUri?: undefined;
-      }
-  );
+);
+
+/**
+ * Collapses sequences of line breaks in the campaign summary then returns a version of the summary with
+ * each line break doubled to appear like a paragraph break.
+ */
+export function formattedCampaignSummary(campaign: Campaign): string {
+  if (!campaign.summary) {
+    return '';
+  }
+
+  return campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+}
+
+export function listImpactCountryNames(campaign: Campaign): string[] {
+  const countryNames = campaign.locations
+    .map((location) => location.countryName)
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(countryNames)];
+}
+
+export async function listImpactRegionNames(campaign: Campaign, http: HttpClient): Promise<string[]> {
+  function addEnglandToNameWhereNeeded(basename: string) {
+    // These specific region names are parts of England, but the name doesn't make that clear. If we used the name as
+    // it comes then it could be understood as divisions of the UK instead.
+    if (['North East', 'North West', 'South East', 'South West'].includes(basename)) {
+      return basename + ' England';
+    }
+
+    return basename;
+  }
+
+  const regionCodes = campaign.locations.map((loc) => loc.regionCode).filter((code): code is string => code !== null);
+
+  const highlightAreas = await getHighlightedFeatures(regionCodes, http);
+
+  const areaNames = highlightAreas
+    .map((feature) => feature.properties && feature.properties['name'])
+    .map(addEnglandToNameWhereNeeded)
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(areaNames)];
+}

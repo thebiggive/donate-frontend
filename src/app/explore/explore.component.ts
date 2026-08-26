@@ -23,6 +23,7 @@ import {
   BiggiveGrid,
   BiggiveCampaignCard,
   BiggiveHeadingBanner,
+  BiggiveButton,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
@@ -47,6 +48,9 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
+import { Toast } from '../toast.service';
+import { COUNTRY_CODE } from '../country-code.token';
+import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -66,7 +70,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    BiggiveCampaignCardFilterGrid,
     BiggiveGrid,
     InfiniteScrollDirective,
     BiggiveCampaignCard,
@@ -77,6 +80,8 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     CurrencyPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
+    BiggiveButton,
+    CampaignCardFilterGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -148,22 +153,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected isInPast = CampaignService.isInPast;
 
-  /**
-   * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
-   * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
-   * component
-   *
-   * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
-   */
-  protected readonly campaignIdsWithRectangleImage: string[] =
-    environment.environmentId !== 'production'
-      ? [
-          'a056900002RXrXtAAL',
-          'a056900002SEVVPAA5', // Christmas Challenge 2024
-        ]
-      : [
-          'a056900002SEVVPAA5', // Christmas Challenge 2024
-        ];
+  protected fetchingLocation = false;
+  protected location: GeolocationPosition | undefined;
+  protected toaster = inject(Toast);
+
+  /** country code of client, based on header from cloudfront */
+  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
+
+  protected readonly environment = environment;
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -228,6 +225,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
     if (this.metaCampaign) {
       this.setTickerParams(this.metaCampaign);
+      this.setFallbackBanner(this.metaCampaign);
     }
   }
 
@@ -331,11 +329,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
-  @HostListener('doSearchAndFilterUpdate', ['$event'])
-  onDoSearchAndFilterUpdate(event: Event) {
-    const customEvent = event as CustomEvent;
-
-    this.searchService.doSearchAndFilterAndSort(customEvent.detail, this.defaultSort);
+  onDoSearchAndFilterUpdate(event: {
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+  }) {
+    this.searchService.doSearchAndFilterAndSort(event, this.defaultSort);
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
@@ -411,12 +412,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
-    const query = this.campaignService.buildQuery(
-      this.searchService.selected,
-      this.offset,
-      this.campaignSlug,
-      this.fundSlug,
-    );
+    const query = this.campaignService.buildQuery({
+      selected: this.searchService.selected,
+      offset: this.offset,
+      campaignSlug: this.campaignSlug,
+      fundSlug: this.fundSlug,
+      geoLocationPosition: this.location,
+    });
 
     this.doCampaignSearch(query as SearchQuery, false);
   }
@@ -448,7 +450,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       error: (error) => {
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
-          `ExploreComponent.doCampaignSearch: ${error.message}`,
+          `ExploreComponent.doCampaignSearch: ${error?.message ?? error ?? 'Unknown error'}`,
           undefined,
           this.matomoTracker,
         );
@@ -468,7 +470,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searched = this.searchService.nonDefaultsActive;
 
     this.offset = 0;
-    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignSlug, this.fundSlug);
+    const query = this.campaignService.buildQuery({
+      selected: this.searchService.selected,
+      offset: 0,
+      campaignSlug: this.campaignSlug,
+      fundSlug: this.fundSlug,
+      geoLocationPosition: this.location,
+    });
     this.individualCampaigns = [];
     this.loading = true;
 
@@ -529,7 +537,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort);
+    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort, this.location);
     if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
       // Don't navigate at all if no change in query params. This saves us from inconsistencies
       // later such as scroll adjustment kicking in only when the router params actually changed,
@@ -662,6 +670,76 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.tickerUpdateTimer = window.setTimeout(() => {
         this.setTickerParams(metaCampaign);
       }, 1000);
+    }
+  }
+
+  protected searchByLocation() {
+    console.log('will get position');
+    navigator.geolocation.getCurrentPosition(
+      (position: GeolocationPosition) => {
+        this.fetchingLocation = false;
+        this.location = position;
+        this.setQueryParams();
+      },
+      (error: GeolocationPositionError) => {
+        this.fetchingLocation = false;
+        this.toaster.showError('Error getting your location: ' + error.message);
+        // todo - if the use denies the prompt show them a message explaining how they can manaully give the permission from their browser,
+        // as the browser refuse to prompt them more than once, so them just clicking the button and running searchByLocation again won't work.
+      },
+    );
+    this.fetchingLocation = true;
+    console.log('exiting searchByLocationfunction - wait for callback.');
+  }
+
+  /**
+   * Intended for QA test use only, so testers can pretend to be in other locations around the UK and check they get appropriate search results.
+   * If/when we do something a bit like this for real donors we will ask them for a postcode, not a lat/lon pair.
+   */
+  protected promptForFakeLocation() {
+    const locationPair = window.prompt(
+      "Enter coordinates of any location in the UK to test search, as a lat/long pair, e.g '51.5164566,-0.12182341'.",
+    );
+    if (!locationPair) {
+      return;
+    }
+    const [latitude, longitude] = locationPair.split(',');
+
+    this.location = {
+      coords: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+        accuracy: NaN,
+        altitude: NaN,
+        altitudeAccuracy: NaN,
+        heading: NaN,
+        speed: NaN,
+        toJSON: () => {},
+      },
+      timestamp: Date.now(),
+      toJSON: () => {},
+    };
+
+    this.setQueryParams();
+  }
+
+  /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
+   * of a quick fix here.
+   */
+  private setFallbackBanner(metaCampaign: MetaCampaign) {
+    if (metaCampaign.bannerUri) {
+      return;
+    }
+
+    switch (this.campaignSlug) {
+      case 'women-and-girls-2026':
+        metaCampaign.bannerUri = '/assets/images/banners/WGMF26.jpg';
+        break;
+      case 'venezuela-earthquake-appeal-2026':
+        metaCampaign.bannerUri = '/assets/images/banners/DEC2026.png';
+        break;
+      default:
+      // no-op
     }
   }
 }

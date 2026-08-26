@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-cli: circleci/aws-cli@5.1.0
+  aws-cli: circleci/aws-cli@5.4.2
   aws-ecr: circleci/aws-ecr@9.3.4
   aws-ecs: circleci/aws-ecs@4.1.0
   aws-s3: circleci/aws-s3@4.0.0
@@ -55,37 +55,48 @@ jobs:
       - aws-ecr/build_and_push_image:
           auth:
             - aws-cli/setup:
-                aws_access_key_id: AWS_ACCESS_KEY_ID
-                aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+                role_arn: ${AWS_ROLE_ARN}
+                region: ${AWS_REGION}
           # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
           extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
           repo: "${AWS_ECR_REPO_NAME}"
           region: "us-east-1"
+          account_id: ${AWS_ECR_REGISTRY_ID}
           tag: "<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}"
 
   copy-ecr-static-to-s3:
     parameters:
       env:
         type: string
-    docker:
-      - image: "${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+    machine:
+      image: ubuntu-2404:current
     steps:
       - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          role_arn: ${AWS_ROLE_ARN}
+          region: ${AWS_REGION}
+
+      - run:
+          name: Pull image and extract static assets
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AWS_US_ECR_ACCOUNT_URL}
+            IMAGE="${AWS_US_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+            docker pull "$IMAGE"
+            CONTAINER_ID=$(docker create "$IMAGE")
+            docker cp "$CONTAINER_ID:/usr/src/app/dist" dist
+            docker rm "$CONTAINER_ID"
 
       - aws-s3/sync: # Sync dist/donate-frontend/browser to S3 with 1 year lifetime
-          from: /usr/src/app/dist/donate-frontend/browser
+          from: dist/donate-frontend/browser
           to: "s3://tbg-<< parameters.env >>-donate-static/d"
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
       - aws-s3/sync: # Sync transpiled ES5 static JS for older browsers to S3 (1 year)
-          from: /usr/src/app/dist/donate-frontend/browser-es5
+          from: dist/donate-frontend/browser-es5
           to: "s3://tbg-<< parameters.env >>-donate-static/d-es5"
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
       - aws-s3/sync: # Sync dist/donate-frontend/browser/assets to S3 with 1 day lifetime
-          from: /usr/src/app/dist/donate-frontend/browser/assets
+          from: dist/donate-frontend/browser/assets
           to: "s3://tbg-<< parameters.env >>-donate-static/assets"
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
@@ -148,12 +159,11 @@ workflows:
           name: "Deploy Regression ECS with new image"
           auth:
             - aws-cli/setup:
-                aws_access_key_id: AWS_ACCESS_KEY_ID
-                aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+                role_arn: ${AWS_ROLE_ARN}
+                region: ${AWS_REGION}
           context:
             - ecs-deploys
           requires: ["Copy Regression ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-regression-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=regression-${CIRCLE_SHA1}"
@@ -180,13 +190,12 @@ workflows:
           name: "Deploy Staging ECS with new image"
           auth:
             - aws-cli/setup:
-                aws_access_key_id: AWS_ACCESS_KEY_ID
-                aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+                role_arn: ${AWS_ROLE_ARN}
+                region: ${AWS_REGION}
           context:
             - ecs-deploys
             - jira
           requires: ["Copy Staging ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-staging-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
@@ -220,13 +229,12 @@ workflows:
           name: "Deploy Production ECS with new image"
           auth:
             - aws-cli/setup:
-                aws_access_key_id: AWS_ACCESS_KEY_ID
-                aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+                role_arn: ${AWS_ROLE_ARN}
+                region: ${AWS_REGION}
           context:
             - ecs-deploys
             - jira
           requires: ["Copy Production ECR static to S3"]
-          region: AWS_REGION
           family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster: "tbg-production-${AWS_REGION}"
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"

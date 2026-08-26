@@ -109,9 +109,12 @@ h5 {
   color: white;
 
   div {
-    margin: 0.7em;
-    font-size: 1.8em;
+    margin: 22px;
     width: fit-content;
+  }
+
+  div.heading {
+    font-size: 1.8em;
     text-transform: uppercase;
   }
 }

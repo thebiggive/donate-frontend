@@ -192,7 +192,7 @@ export class DonationService {
     const person = await firstValueFrom(this.identityService.getLoggedInPerson());
 
     if (!person) {
-      throw new Error('logged in person required');
+      throw new Error('logged in person required for getPaymentMethods');
     }
 
     return { jwt, person };
@@ -203,9 +203,11 @@ export class DonationService {
       throw new Error('cannot create a donation for 0 amount');
     }
 
+    const queryString = `short-reservation`; // only needed temporarily - matchbot will do this automatically in future.
+
     const endpoint = personId
-      ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}`
-      : `${environment.matchbotApiPrefix}${this.apiPath}`;
+      ? `${environment.matchbotApiPrefix}/people/${personId}${this.apiPath}?${queryString}`
+      : `${environment.matchbotApiPrefix}${this.apiPath}?${queryString}`;
 
     return this.http.post<DonationCreatedResponse>(endpoint, donation, getPersonAuthHttpOptions(jwt));
   }
@@ -422,7 +424,7 @@ export class DonationService {
     return person$.pipe(
       switchMap((person) => {
         if (!person) {
-          throw new Error('logged in person required');
+          throw new Error('logged in person required for getPastDonations');
         }
 
         return this.http
@@ -441,7 +443,7 @@ export class DonationService {
     return person$.pipe(
       switchMap((person) => {
         if (!person) {
-          throw new Error('logged in person required');
+          throw new Error('logged in person required for cancelDonationFundsToCampaign');
         }
 
         return this.http
@@ -507,5 +509,18 @@ export class DonationService {
       default:
         assertUnreachable(pspMethodType);
     }
+  }
+
+  public async extendReservation(donation: Donation) {
+    const updatedDonation = await firstValueFrom(
+      this.http.post<Donation>(
+        `${environment.matchbotApiPrefix}${this.apiPath}/${donation.donationId}/extend`,
+        donation,
+        this.getAuthHttpOptions(donation),
+      ),
+    );
+
+    // updating existing donation object instead of making new one so references to it stay intact.
+    donation.fundsReservedUntil = updatedDonation.fundsReservedUntil;
   }
 }
