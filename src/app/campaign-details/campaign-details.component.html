@@ -307,32 +307,69 @@
             </mat-tab>
           }
 
-          @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim()) {
+          @if (campaign.impactReporting?.trim() || campaign.impactSummary?.trim() || campaign.locations.length > 0) {
             <mat-tab label="Impact">
               <div class="c-impact">
-                <biggive-heading
-                  space-above="6"
-                  space-below="0"
-                  colour="primary"
-                  html-element="h3"
-                  size="3"
-                  align="left"
-                  text="Impact"
-                >
-                </biggive-heading>
-                <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+                @if (campaign.impactSummary?.trim()) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Impact"
+                  >
+                  </biggive-heading>
+                  <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+                }
+                @if (campaign.impactReporting?.trim()) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Reporting"
+                  >
+                  </biggive-heading>
+                  <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+                }
+                @if (campaign.locations.length > 0) {
+                  <biggive-heading
+                    space-above="6"
+                    space-below="0"
+                    colour="primary"
+                    html-element="h3"
+                    size="3"
+                    align="left"
+                    text="Locations"
+                  >
+                  </biggive-heading>
 
-                <biggive-heading
-                  space-above="6"
-                  space-below="0"
-                  colour="primary"
-                  html-element="h3"
-                  size="3"
-                  align="left"
-                  text="Reporting"
-                >
-                </biggive-heading>
-                <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+                  <ul>
+                    @for (countryName of impactCountryNames; track countryName) {
+                      <li>{{ countryName }}</li>
+                    }
+                  </ul>
+
+                  @if (impactRegionNames.length > 0) {
+                    <h3>
+                      @if (impactRegionNames.length === 1) {
+                        UK Region
+                      } @else {
+                        UK Regions
+                      }
+                    </h3>
+
+                    <ul>
+                      @for (impactRegionName of impactRegionNames; track impactRegionName) {
+                        <li>{{ impactRegionName }}</li>
+                      }
+                    </ul>
+                  }
+                }
               </div>
             </mat-tab>
           }

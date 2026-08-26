@@ -5,7 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
-import { Campaign, formattedCampaignSummary } from '../campaign.model';
+import { Campaign, formattedCampaignSummary, listImpactCountryNames, listImpactRegionNames } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
@@ -79,6 +79,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
   protected formattedCampaignSummary!: string;
+  protected impactRegionNames: string[] = [];
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -115,6 +116,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  get impactCountryNames() {
+    return listImpactCountryNames(this.campaign);
+  }
+
+  protected async getImpactRegionNames() {
+    return await listImpactRegionNames(this.campaign, this.http);
+  }
+
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.timer) {
       window.clearTimeout(this.timer);
@@ -134,7 +143,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     await this.router.navigateByUrl(url);
   }
 
-  private setSecondaryProps(campaign: Campaign) {
+  private async setSecondaryProps(campaign: Campaign) {
     this.campaignInPast = CampaignService.isInPast(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
@@ -162,6 +171,8 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     } else {
       this.pageMeta.setCommon(campaign.title, summaryStart, bannerUri);
     }
+
+    this.impactRegionNames = await this.getImpactRegionNames();
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {

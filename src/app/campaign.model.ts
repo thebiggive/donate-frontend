@@ -1,3 +1,6 @@
+import { HttpClient } from '@angular/common/http';
+import { getHighlightedFeatures } from './regions';
+
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  *
@@ -94,4 +97,37 @@ export function formattedCampaignSummary(campaign: Campaign): string {
   }
 
   return campaign.summary.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n\n');
+}
+
+export function listImpactCountryNames(campaign: Campaign): string[] {
+  const countryNames = campaign.locations
+    .map((location) => location.countryName)
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(countryNames)];
+}
+
+export async function listImpactRegionNames(campaign: Campaign, http: HttpClient): Promise<string[]> {
+  function addEnglandToNameWhereNeeded(basename: string) {
+    // These specific region names are parts of England, but the name doesn't make that clear. If we used the name as
+    // it comes then it could be understood as divisions of the UK instead.
+    if (['North East', 'North West', 'South East', 'South West'].includes(basename)) {
+      return basename + ' England';
+    }
+
+    return basename;
+  }
+
+  const regionCodes = campaign.locations.map((loc) => loc.regionCode).filter((code): code is string => code !== null);
+
+  const highlightAreas = await getHighlightedFeatures(regionCodes, http);
+
+  const areaNames = highlightAreas
+    .map((feature) => feature.properties && feature.properties['name'])
+    .map(addEnglandToNameWhereNeeded)
+    .filter((name): name is string => !!name)
+    .sort((a, b) => a.localeCompare(b));
+
+  return [...new Set(areaNames)];
 }

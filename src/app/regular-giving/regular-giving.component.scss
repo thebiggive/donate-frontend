@@ -45,7 +45,7 @@
   @include abstract.b-rt-0;
 }
 
-.donation-input.donation-input-main {
+.donation-input {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
   margin-left: auto;
@@ -53,12 +53,13 @@
   max-width: 400px;
   clear: both;
 
-  input {
-    text-align: right;
+  &.donation-input-main input {
     font-size: 24px;
     line-height: 30px;
     font-weight: bolder;
-
+    text-align: right; // right only required for numeric input
+  }
+  input {
     @media (max-width: 370px) {
       // on very narrow screens we need to give space for the prompt text above the input.
       margin-top: 30px;
@@ -153,3 +154,5 @@ table#paymentMethods {
 #giftAidAddressContainer {
   margin-top: 60px;
 }
+
+@include abstract.friendly-captcha();
