@@ -213,28 +213,4 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   protected get hasRegions() {
     return this.campaign.locations.some((loc) => loc.regionCode !== null);
   }
-
-  /**
-   * Gets the main text to show on near the top of the sidebar, about if/when the campaign is going to open or close
-   */
-  protected get primaryStatText(): string {
-    if (this.campaignFinished) {
-      return 'Closed ' + this.datePipe.transform(this.campaign.endDate, 'd LLL yyyy')!;
-    }
-
-    if (this.campaignOpen) {
-      return this.timeLeftToEndPipe.transform(this.campaign.endDate) + ' left';
-    }
-
-    if (new Date(this.campaign.startDate) > new Date()) {
-      return 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
-    }
-
-    // If we're here we know that the campaign is not open, but neither closed in the past
-    // nor is opening in the future. It may be not open because it doesn't have the
-    // required funds. In that case we don't expect the public to be looking at this
-    //  page, so we just return the empty string and don't say why it's not open:
-
-    return '';
-  }
 }
