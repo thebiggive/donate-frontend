@@ -14,6 +14,7 @@ export type MetaCampaign = {
   summary: string;
   bannerUri: string | null;
   amountRaised: number;
+  charity: undefined; // used to allow narrowing a type from Campaign|MetaCampaign to just Campaign.
 
   /**
    * Total value of remaining match funds that may be used for this campaign in currency major units.
