@@ -23,7 +23,7 @@ export type CampaignSummary = {
    * ISO 8601 formatted datetime
    **/
   startDate: string;
-  status: 'Preview' | 'Active' | 'Expired' | (string & {});
+  status: string;
   target: number;
   title: string;
 };
