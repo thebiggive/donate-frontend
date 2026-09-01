@@ -2,6 +2,16 @@ import { firstValueFrom } from 'rxjs';
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { HttpClient } from '@angular/common/http';
 
+export function addEnglandToNameWhereNeeded(basename: string) {
+  // These specific region names are parts of England, but the name doesn't make that clear. If we used the name as
+  // it comes then it could be understood as divisions of the UK instead.
+  if (['North East', 'North West', 'South East', 'South West'].includes(basename)) {
+    return basename + ' England';
+  }
+
+  return basename;
+}
+
 /**
  * Transforms a list of regionCodes into an array of geoJson features.
  *
@@ -30,7 +40,7 @@ export async function getHighlightedFeatures(
       )
       .map((feature: Feature<Geometry, GeoJsonProperties>) => {
         if (feature.properties) {
-          feature.properties['name'] = feature.properties[layer.nameField];
+          feature.properties['name'] = addEnglandToNameWhereNeeded(feature.properties[layer.nameField]);
         }
         return feature;
       });

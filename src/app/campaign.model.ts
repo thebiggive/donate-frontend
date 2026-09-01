@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { getHighlightedFeatures } from './regions';
+import { addEnglandToNameWhereNeeded, getHighlightedFeatures } from './regions';
 
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
@@ -109,16 +109,6 @@ export function listImpactCountryNames(campaign: Campaign): string[] {
 }
 
 export async function listImpactRegionNames(campaign: Campaign, http: HttpClient): Promise<string[]> {
-  function addEnglandToNameWhereNeeded(basename: string) {
-    // These specific region names are parts of England, but the name doesn't make that clear. If we used the name as
-    // it comes then it could be understood as divisions of the UK instead.
-    if (['North East', 'North West', 'South East', 'South West'].includes(basename)) {
-      return basename + ' England';
-    }
-
-    return basename;
-  }
-
   const regionCodes = campaign.locations.map((loc) => loc.regionCode).filter((code): code is string => code !== null);
 
   const highlightAreas = await getHighlightedFeatures(regionCodes, http);
