@@ -32,6 +32,10 @@ export class CampaignService {
       return false;
     }
 
+    if (campaign.charity && CampaignService.isClosedDueToMissingRequiredMatchFunds(campaign)) {
+      return false;
+    }
+
     if (campaign.status === 'Active') {
       return true;
     }
@@ -43,17 +47,6 @@ export class CampaignService {
     }
 
     return new Date(campaign.endDate) >= now;
-  }
-
-  /**
-   * Unlike the isOpenForDonations method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   *
-   * Two variants of logic have existed since commit 6636eeeb . Consider consolidating, maybe after backend move to
-   * matchbot.
-   */
-  static campaignIsOpenLessForgiving(campaign: Campaign) {
-    return campaign ? new Date(campaign.startDate) <= new Date() && new Date(campaign.endDate) > new Date() : false;
   }
 
   static isInFuture(campaign: Campaign | MetaCampaign | CampaignSummary): boolean {
@@ -78,6 +71,10 @@ export class CampaignService {
     }
 
     return dateToUse;
+  }
+
+  static isClosedDueToMissingRequiredMatchFunds(campaign: Campaign): boolean {
+    return !campaign.parentRef && campaign.isMatched && campaign.matchFundsTotal <= 0;
   }
 
   static campaignDurationInDays(campaign: MetaCampaign): number {
