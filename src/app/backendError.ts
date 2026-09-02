@@ -26,6 +26,7 @@ export type BackendError = {
   error: {
     error: errorDetail;
   };
+  status: number;
   message: string;
 };
 

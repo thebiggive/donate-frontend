@@ -64,6 +64,7 @@ import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { noLongNumberValidator } from '../validators/noLongNumberValidator';
 import { DonorAccountService } from '../donor-account.service';
+import { HttpStatusCode } from '@angular/common/http';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -1005,8 +1006,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     let response;
     try {
       response = await firstValueFrom(response$);
-    } catch (error: unknown) {
-      const backendError = error as BackendError;
+    } catch (e: unknown) {
+      const backendError = e as BackendError;
+      if (backendError?.status === HttpStatusCode.Unauthorized) {
+        // we might also signpost the "forgot password" feature here, but I think the below is about the limit of
+        // length we want in a toast.
+        this.toast.showError(
+          'Your email or password is incorrect. Please try typing your password again, or go back and check the email address.',
+        );
+        return;
+      }
+
+      // will happen e.g. if Identity server is down:
       this.toast.showError(backendError.message);
       return;
     }
