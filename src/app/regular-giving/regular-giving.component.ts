@@ -432,6 +432,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += 'Monthly donation amount is required';
       } else {
+        const validationErrorSummary = this.getFormValidationErrorSummary();
+        console.error('Unexpected regular giving form error', validationErrorSummary);
+        this.matomoTracker.trackEvent('donate_error', 'regular_giving_unexpected_form_error', validationErrorSummary);
         errorMessage =
           'Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance.';
       }
@@ -548,6 +551,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           this.submitting = false;
         },
       });
+  }
+
+  private getFormValidationErrorSummary(): string {
+    return Object.entries(this.mandateForm.controls)
+      .filter(([, control]) => control.invalid)
+      .map(([controlName, control]) => `${controlName}: ${Object.keys(control.errors ?? {}).join(', ')}`)
+      .join('; ');
   }
 
   protected get unmatched(): boolean {
