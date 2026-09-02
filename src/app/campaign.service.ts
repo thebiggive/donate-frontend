@@ -161,7 +161,7 @@ export class CampaignService {
     }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
   }
 
-  search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
+  search(searchQuery: SearchQuery): Observable<CampaignSummaryList> {
     let params = new HttpParams();
 
     if (searchQuery.limit) {
@@ -218,7 +218,6 @@ export class CampaignService {
 
     return this.http
       .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
-      .pipe(map((response) => response.campaignSummaries));
   }
 
   /**

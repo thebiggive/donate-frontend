@@ -30,4 +30,5 @@ export type CampaignSummary = {
 
 export type CampaignSummaryList = {
   campaignSummaries: CampaignSummary[];
+  locationCounts?: Record<string, number>;
 };
