@@ -267,6 +267,11 @@
                   </biggive-text-input>
                 </div>
               }
+              @if (newPasswordErrorMessage) {
+                <div class="error" aria-live="assertive">
+                  {{ newPasswordErrorMessage }}
+                </div>
+              }
               <div class="u-text-center">
                 <button
                   type="button"

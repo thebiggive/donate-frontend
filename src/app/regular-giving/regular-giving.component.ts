@@ -149,7 +149,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       Validators.required,
       Validators.minLength(6), // temp password is six random digits
     ]),
-    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
   });
 
   protected campaign!: Campaign;
@@ -188,6 +188,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected submitErrorMessage: string | undefined;
   protected optInTBGEmailError: string | undefined;
   protected optInCharityEmailError: string | undefined;
+  protected newPasswordErrorMessage: string | undefined;
 
   /**
    * Optional home address, used for Gift Aid purposes.
@@ -433,6 +434,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += 'Monthly donation amount is required';
+      } else if (this.mandateForm.controls.newPassword.invalid) {
+        this.validateNewPasswordStep();
+        return;
       } else {
         const validationErrorSummary = this.getFormValidationErrorSummary();
         console.error('Unexpected regular giving form error', validationErrorSummary);
@@ -700,8 +704,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
-    // 1 is new password which doesn't yet have validation code here.
-    // 2 is about you which doesn't yet have validation code here.
+    if (stepIndex > 1 + this.newDonorAdditionalStepCount && this.validateNewPasswordStep()) {
+      return;
+    }
 
     if (stepIndex > 2 + this.newDonorAdditionalStepCount && this.validateGiftAidStep()) {
       return;
@@ -874,6 +879,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return errorFound;
   }
 
+  private validateNewPasswordStep(): boolean {
+    const newPasswordControl = this.mandateForm.controls.newPassword;
+    this.newPasswordErrorMessage = undefined;
+
+    if (newPasswordControl.hasError('required')) {
+      this.newPasswordErrorMessage = 'Please enter a password for your new donor account.';
+    } else if (newPasswordControl.hasError('minlength')) {
+      this.newPasswordErrorMessage = `Please enter a password of at least ${minPasswordLength} characters.`;
+    }
+
+    if (this.newPasswordErrorMessage) {
+      newPasswordControl.markAsTouched();
+      this.toast.showError(this.newPasswordErrorMessage);
+    }
+
+    return !!this.newPasswordErrorMessage;
+  }
+
   /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
@@ -1036,7 +1059,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     const newPasswordControl = this.mandateForm.controls.newPassword;
 
     if (!this.donorAccountExistsOnLoad && !this.loggedInToExistingAccount) {
-      newPasswordControl.setValidators(Validators.minLength(minPasswordLength));
+      newPasswordControl.setValidators([Validators.required, Validators.minLength(minPasswordLength)]);
     } else {
       newPasswordControl.clearValidators();
     }
@@ -1048,6 +1071,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.donor) {
       // already logged in, no need to do anything.
       this.stepper.next();
+      return;
+    }
+
+    if (this.validateNewPasswordStep()) {
       return;
     }
 
