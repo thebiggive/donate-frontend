@@ -275,6 +275,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.donorAccount) {
       this.prepareFormForDonor();
       this.donorAccountExistsOnLoad = true;
+      this.updateNewPasswordValidation();
     }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
@@ -1024,10 +1025,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (response.type === 'jwt') {
       this.loggedInToExistingAccount = true;
+      this.updateNewPasswordValidation();
     } else if (response.type === 'emailVerificationToken') {
       this.emailTokenValid = true;
     }
     this.stepper.next();
+  }
+
+  private updateNewPasswordValidation(): void {
+    const newPasswordControl = this.mandateForm.controls.newPassword;
+
+    if (!this.donorAccountExistsOnLoad && !this.loggedInToExistingAccount) {
+      newPasswordControl.setValidators(Validators.minLength(minPasswordLength));
+    } else {
+      newPasswordControl.clearValidators();
+    }
+
+    newPasswordControl.updateValueAndValidity({ emitEvent: false });
   }
 
   protected async continueFromAboutYou() {
