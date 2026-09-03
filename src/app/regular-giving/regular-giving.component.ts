@@ -747,6 +747,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           this.extractErrorMessage(error);
           return;
         } finally {
+          this.friendlyCaptchaSolution = undefined;
           this.friendlyCaptchaWidget?.reset();
           await this.friendlyCaptchaWidget?.start();
           this.processingTempPasswordRequest = false;
