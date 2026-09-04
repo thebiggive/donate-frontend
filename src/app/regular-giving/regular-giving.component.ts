@@ -1104,8 +1104,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           }
           console.log('set donor and donor account', this.donor, this.donorAccount);
           this.stepper.next();
+          this.newPasswordErrorMessage = undefined;
         },
         error: async (error) => {
+          const message = errorDescription(error as BackendError);
+          this.newPasswordErrorMessage = message;
+          this.toast.showError(message);
           this.extractErrorMessage(error);
           this.friendlyCaptchaWidget?.reset();
           await this.friendlyCaptchaWidget?.start();
