@@ -413,29 +413,32 @@
                     </div>
                   </biggive-text-input>
 
-                  <div class="donation-input">
-                    <biggive-form-field-select
-                      [prompt]="'Billing country'"
-                      [options]="countryOptionsObject"
-                      [selectedValue]="selectedBillingCountryCode"
-                      [backgroundColour]="'grey'"
-                      [selectionChanged]="setSelectedCountry"
-                      [spaceBelow]="3"
-                      [selectedOptionColour]="'inherit'"
-                    >
-                    </biggive-form-field-select>
-                    <biggive-text-input>
-                      <label slot="label" for="billingPostcode">Billing postcode</label>
-                      <input
-                        slot="input"
-                        formControlName="billingPostcode"
-                        id="billingPostcode"
-                        matInput
-                        (change)="onBillingPostCodeChanged($event)"
-                        autocapitalize="characters"
-                        autocomplete="billing postal-code"
-                      />
-                    </biggive-text-input>
+                  <div id="country-and-postcode">
+                    <div>
+                      <biggive-form-field-select
+                        [prompt]="'Billing country'"
+                        [options]="countryOptionsObject"
+                        [selectedValue]="selectedBillingCountryCode"
+                        [backgroundColour]="'grey'"
+                        [selectionChanged]="setSelectedCountry"
+                        [selectedOptionColour]="'inherit'"
+                      >
+                      </biggive-form-field-select>
+                    </div>
+                    <div>
+                      <biggive-text-input>
+                        <label slot="label" for="billingPostcode">Billing postcode</label>
+                        <input
+                          slot="input"
+                          formControlName="billingPostcode"
+                          id="billingPostcode"
+                          matInput
+                          (change)="onBillingPostCodeChanged($event)"
+                          autocapitalize="characters"
+                          autocomplete="billing postal-code"
+                        />
+                      </biggive-text-input>
+                    </div>
                   </div>
                 }
               </p>
