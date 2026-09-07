@@ -251,7 +251,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   private loginStatusChangeSubscription: Subscription | undefined;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
