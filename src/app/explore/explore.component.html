@@ -22,7 +22,7 @@
       [logo]="fund?.logoUri ? { url: fund?.logoUri!, alt: fund?.name } : undefined"
       [mainTitle]="title"
       [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
-      [mainImageUrl]="(metaCampaign.banner?.uri ?? metaCampaign.bannerUri) | optimisedImage: 2000 | async"
+      [mainImageUrl]="metaCampaign.banner?.uri ?? metaCampaign.bannerUri | optimisedImage: 2000 | async"
       [backgroundColour]="metaCampaign.bannerLayout.backgroundColour"
       [focalPoint]="{
         x: metaCampaign.bannerLayout.focalArea.topLeftXpos,
