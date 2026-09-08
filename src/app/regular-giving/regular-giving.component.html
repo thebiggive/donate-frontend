@@ -149,11 +149,36 @@
                 </div>
                 @if (!processingTempPasswordRequest) {
                   <div class="u-text-center">
-                    <button type="button" class="continue" mat-raised-button color="primary" (click)="this.continue()">
-                      <!--  if we have a logged in donor then no need to send an email to authenticate them -->
-                      {{ this.donor ? "Continue" : "Send email" }}
-                    </button>
+                    @if (this.donor) {
+                      <button
+                        type="button"
+                        class="continue"
+                        mat-raised-button
+                        color="primary"
+                        (click)="this.continue()"
+                      >
+                        Continue
+                      </button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="continue"
+                        mat-raised-button
+                        color="primary"
+                        (click)="this.sendEmailToContinue()"
+                      >
+                        Send email
+                      </button>
+                    }
                   </div>
+                  @if (!this.donorAccountExistsOnLoad) {
+                    <biggive-button
+                      colourScheme="clear-primary"
+                      (doButtonClick)="alreadyHaveAccountClicked()"
+                      label="I have a donor account"
+                    >
+                    </biggive-button>
+                  }
                 }
                 @if (!donor) {
                   <br />
@@ -194,8 +219,15 @@
                     </div>
                   </biggive-text-input>
                 </div>
-                Please enter the temporary password we have emailed to you, or your existing password if you have a Big
-                Give donation account.
+                @if (intendsToLogInToExistingAccount) {
+                  <p>
+                    Please enter your password for donor account <strong>{{ formEmailAddress }}</strong
+                    >.
+                  </p>
+                } @else {
+                  Please enter the temporary password we have emailed to you, or your existing password if you have a
+                  Big Give donation account.
+                }
 
                 <div class="u-text-center">
                   <button
