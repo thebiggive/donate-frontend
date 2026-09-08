@@ -149,7 +149,8 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         'https://www.fundraisingregulator.org.uk',
         'https://web-sdk.ryftpay.com', // Ryft: Loading states, 3D Secure.
         'https://tile.openstreetmap.org',
-        'https://cdn-wp.thebiggive.org.uk',
+        // @todo:3359: Remove wordpress image source once banners have been moved to the default image hosting system
+        'https://cdn-wp.thebiggive.org.uk', // Wordpress content
         ...imageHosts,
       ],
       'script-src': [
