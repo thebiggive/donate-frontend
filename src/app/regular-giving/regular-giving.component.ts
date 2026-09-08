@@ -1009,6 +1009,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected async continueFromAuthentication() {
+    if (this.donor || this.emailTokenValid) {
+      this.stepper.next();
+      return;
+    }
+
     const captchaCode = this.friendlyCaptchaSolution;
     if (!captchaCode) {
       this.toast.showError('Captcha code missing - cannot continue');
