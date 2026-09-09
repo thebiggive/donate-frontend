@@ -1,12 +1,14 @@
 import {
   AfterViewInit,
   Component,
+  effect,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   signal,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -153,7 +155,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   });
 
   protected campaign!: Campaign;
-  @ViewChild('stepper') private stepper!: MatStepper;
+  private stepper = viewChild<MatStepper>('stepper');
   readonly privacyUrl = 'https://biggive.org/privacy';
   protected donor?: Person | null;
 
@@ -227,8 +229,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected formattedCampaignSummary!: string;
   private sanitizer = inject(DomSanitizer);
 
-  @ViewChild('frccaptcha', { static: false })
-  protected friendlyCaptcha!: ElementRef<HTMLElement>;
+  protected friendlyCaptcha = viewChild<ElementRef>('frccaptcha');
   private friendlyCaptchaSolution: string | undefined;
   private friendlyCaptchaWidget!: WidgetInstance;
   private platformId = inject(PLATFORM_ID);
@@ -251,6 +252,50 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   private loginStatusChangeSubscription: Subscription | undefined;
   protected intendsToLogInToExistingAccount = false;
+
+  constructor() {
+    effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
+      const friendlyCaptcha = this.friendlyCaptcha();
+      if (!friendlyCaptcha) {
+        return;
+      }
+
+      this.friendlyCaptchaWidget = new WidgetInstance(friendlyCaptcha.nativeElement, {
+        doneCallback: (solution) => {
+          this.friendlyCaptchaSolution = solution;
+        },
+        errorCallback: (error: unknown) => {
+          // not sure if this ever really happens, but will show an error message in case it does.
+          console.error(error);
+          this.toast.showError(
+            'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
+          );
+        },
+      });
+      await this.friendlyCaptchaWidget.start();
+    });
+
+    effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
+      const stepper = this.stepper();
+      if (!stepper) {
+        return;
+      }
+
+      stepper.steps.forEach((step, stepIndex) => {
+        step.select = () => {
+          this.selectStep(stepIndex);
+        };
+      });
+    });
+  }
 
   async ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
@@ -336,7 +381,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       .createCustomerSessionForRegularGiving({ campaign: this.campaign })
       .then((session) => {
         this.stripeCustomerSession = session;
-        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+        if (!this.stripeElements && this.stepper()?.selected?.label === this.labelYourPaymentInformation) {
           this.prepareStripeElements();
         }
       })
@@ -363,17 +408,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
 
-    setTimeout(
-      () => {
-        this.stepper.steps.forEach((step, stepIndex) => {
-          step.select = () => {
-            this.selectStep(stepIndex);
-          };
-        });
-      },
-      500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
-    );
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -382,20 +416,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.friendlyCaptchaSolution = 'dummy-captcha-code';
       return;
     }
-
-    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
-      doneCallback: (solution) => {
-        this.friendlyCaptchaSolution = solution;
-      },
-      errorCallback: (error: unknown) => {
-        // not sure if this ever really happens, but will show an error message in case it does.
-        console.error(error);
-        this.toast.showError(
-          'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
-        );
-      },
-    });
-    await this.friendlyCaptchaWidget.start();
   }
 
   protected get newDonationAmountOverMaxMatchable() {
@@ -412,7 +432,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
-    this.continue();
+    await this.continue();
   }
 
   stepChanged(event: StepperSelectionEvent) {
@@ -684,17 +704,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // intending to edit something else in the `payment` step; let them click Next.
 
     if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      if (this.stepper.selectedIndex > paymentStepIndex + this.newDonorAdditionalStepCount) {
-        this.stepper.selectedIndex = paymentStepIndex + this.newDonorAdditionalStepCount;
+      if (this.stepper()!.selectedIndex > paymentStepIndex + this.newDonorAdditionalStepCount) {
+        this.stepper()!.selectedIndex = paymentStepIndex + this.newDonorAdditionalStepCount;
       }
 
       return;
     }
   }
 
-  protected alreadyHaveAccountClicked() {
+  protected async alreadyHaveAccountClicked() {
     this.intendsToLogInToExistingAccount = true;
-    this.continue();
+    await this.continue();
   }
 
   protected async sendEmailToContinue() {
@@ -727,12 +747,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.processingTempPasswordRequest = false;
     }
 
-    this.stepper.selected = this.stepper.steps.get(1);
+    this.stepper()!.selected = this.stepper()!.steps.get(1);
   }
 
   protected async continue(): Promise<void> {
-    const nextStepIndex = this.stepper.selectedIndex + 1;
-    if (nextStepIndex > this.stepper.steps.length - 1) {
+    console.log(this.stepper());
+    const nextStepIndex = this.stepper()!.selectedIndex + 1;
+    if (nextStepIndex > this.stepper()!.steps.length - 1) {
       throw new Error('Cannot continue past last step');
     }
 
@@ -765,7 +786,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       });
     }
 
-    this.stepper.selected = this.stepper.steps.get(stepIndex);
+    this.stepper()!.selected = this.stepper()!.steps.get(stepIndex);
   }
 
   private get newDonorAdditionalStepCount() {
@@ -1010,7 +1031,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected async continueFromAuthentication() {
     if (this.donor || this.emailTokenValid) {
-      this.stepper.next();
+      this.stepper()!.next();
       return;
     }
 
@@ -1065,7 +1086,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     } else if (response.type === 'emailVerificationToken') {
       this.emailTokenValid = true;
     }
-    this.stepper.next();
+    this.stepper()!.next();
   }
 
   protected get formEmailAddress() {
@@ -1087,7 +1108,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected async continueFromAboutYou() {
     if (this.donor) {
       // already logged in, no need to do anything.
-      this.stepper.next();
+      this.stepper()!.next();
       return;
     }
 
@@ -1120,7 +1141,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
             this.prepareFormForDonor();
           }
           console.log('set donor and donor account', this.donor, this.donorAccount);
-          this.stepper.next();
+          this.stepper()!.next();
           this.newPasswordErrorMessage = undefined;
         },
         error: async (error) => {
