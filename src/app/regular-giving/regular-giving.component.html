@@ -229,6 +229,13 @@
                       Please enter your password for donor account <strong>{{ formEmailAddress }}</strong
                       >.
                     </p>
+                    <!-- This message is a bit verbose - ideally we might have a dedicated forgot password page to link to
+                      but that doesn't exist - the forgot password feature just exists currently as state the login page
+                      or the login modal can be in.
+                      -->
+                    <p>
+                      <em>Forgot password? Reset it on the <a routerLink="/login">login page</a>.</em>
+                    </p>
                   } @else {
                     Please enter the temporary password we have emailed to you, or your existing password if you have a
                     Big Give donation account.
