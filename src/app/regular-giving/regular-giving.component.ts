@@ -250,8 +250,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected loggedInToExistingAccount = false;
 
   private loginStatusChangeSubscription: Subscription | undefined;
+  protected intendsToLogInToExistingAccount = false;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
@@ -691,6 +692,44 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  protected alreadyHaveAccountClicked() {
+    this.intendsToLogInToExistingAccount = true;
+    this.continue();
+  }
+
+  protected async sendEmailToContinue() {
+    if (!this.friendlyCaptchaSolution && !this.donor) {
+      this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
+      return;
+    }
+
+    if (this.donor) {
+      this.toast.showError('Sorry, something went wrong.');
+      throw new Error('Send email button should not be available if we have a donor logged in');
+    }
+
+    this.intendsToLogInToExistingAccount = false;
+
+    this.processingTempPasswordRequest = true;
+    try {
+      await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
+        captcha_code: this.friendlyCaptchaSolution!,
+        regularGiving: true,
+      });
+      // this.verificationLinkSentToEmail = emailAddress;
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (error: any) {
+      this.extractErrorMessage(error);
+      return;
+    } finally {
+      this.friendlyCaptchaWidget?.reset();
+      await this.friendlyCaptchaWidget?.start();
+      this.processingTempPasswordRequest = false;
+    }
+
+    this.stepper.selected = this.stepper.steps.get(1);
+  }
+
   protected async continue(): Promise<void> {
     const nextStepIndex = this.stepper.selectedIndex + 1;
     if (nextStepIndex > this.stepper.steps.length - 1) {
@@ -724,39 +763,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
-    }
-
-    if (stepIndex === 1) {
-      // this is the Send email button so let's send an email unless there's already a logged in donor.
-
-      if (!this.friendlyCaptchaSolution && !this.donor) {
-        this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
-        return;
-      }
-
-      if (!this.donor) {
-        this.processingTempPasswordRequest = true;
-        try {
-          // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
-          // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
-          // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
-          // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
-          // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
-          await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
-            captcha_code: this.friendlyCaptchaSolution!,
-            regularGiving: true,
-          });
-          // this.verificationLinkSentToEmail = emailAddress;
-          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        } catch (error: any) {
-          this.extractErrorMessage(error);
-          return;
-        } finally {
-          this.friendlyCaptchaWidget?.reset();
-          await this.friendlyCaptchaWidget?.start();
-          this.processingTempPasswordRequest = false;
-        }
-      }
     }
 
     this.stepper.selected = this.stepper.steps.get(stepIndex);
@@ -1003,13 +1009,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected async continueFromAuthentication() {
-    const captchaCode = this.friendlyCaptchaSolution;
-    if (!captchaCode) {
-      this.toast.showError('Captcha code missing - cannot continue');
+    if (this.donor || this.emailTokenValid) {
+      this.stepper.next();
       return;
     }
 
-    const emailAddress = this.mandateForm.controls.emailAddress.value;
+    const captchaCode = this.friendlyCaptchaSolution;
+    if (!captchaCode) {
+      this.toast.showError('Captcha code missing - please wait a moment and try again');
+      return;
+    }
+
+    const emailAddress = this.formEmailAddress;
     if (!emailAddress) {
       this.toast.showError('Email address missing - cannot continue');
       return;
@@ -1038,6 +1049,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toast.showError(
           'Your email or password is incorrect. Please try typing your password again, or go back and check the email address.',
         );
+        this.friendlyCaptchaSolution = undefined;
+        this.friendlyCaptchaWidget.reset();
         return;
       }
 
@@ -1053,6 +1066,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.emailTokenValid = true;
     }
     this.stepper.next();
+  }
+
+  protected get formEmailAddress() {
+    return this.mandateForm.controls.emailAddress.value;
   }
 
   private updateNewPasswordValidation(): void {

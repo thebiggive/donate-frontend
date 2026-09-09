@@ -111,6 +111,23 @@ input {
   }
 }
 
+#country-and-postcode {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-direction: column;
+  margin-top: 3.5rem;
+  div {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  @media #{abstract.$breakpoint-lg} {
+    align-items: flex-end;
+    flex-direction: row;
+  }
+}
+
 :host ::ng-deep .mat-stepper-vertical-line::before {
   display: none;
 }
