@@ -1016,7 +1016,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
     const captchaCode = this.friendlyCaptchaSolution;
     if (!captchaCode) {
-      this.toast.showError('Captcha code missing - cannot continue');
+      this.toast.showError('Captcha code missing - please wait a moment and try again');
       return;
     }
 
@@ -1049,6 +1049,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toast.showError(
           'Your email or password is incorrect. Please try typing your password again, or go back and check the email address.',
         );
+        this.friendlyCaptchaSolution = undefined;
+        this.friendlyCaptchaWidget.reset();
         return;
       }
 
