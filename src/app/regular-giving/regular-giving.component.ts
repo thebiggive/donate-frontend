@@ -255,6 +255,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   constructor() {
     effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
       const friendlyCaptcha = this.friendlyCaptcha();
       if (!friendlyCaptcha) {
         return;
@@ -276,6 +280,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     });
 
     effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
       const stepper = this.stepper();
       if (!stepper) {
         return;
