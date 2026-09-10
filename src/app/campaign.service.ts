@@ -216,8 +216,7 @@ export class CampaignService {
       params = params.set('sortField', 'location');
     }
 
-    return this.http
-      .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
+    return this.http.get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params });
   }
 
   /**

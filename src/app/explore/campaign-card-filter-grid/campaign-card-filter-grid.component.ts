@@ -1,4 +1,17 @@
-import { Component, ElementRef, inject, Input, output, signal, ViewChild, PLATFORM_ID, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  output,
+  signal,
+  ViewChild,
+  PLATFORM_ID,
+  OnDestroy,
+  SimpleChanges,
+  OnChanges,
+  AfterViewInit,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
 import { COUNTRY_CODE } from '../../country-code.token';
@@ -7,10 +20,8 @@ import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/co
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { GeoJSON, Map, TileLayer } from 'leaflet';
-import {Feature, GeoJsonProperties, Geometry} from 'geojson';
-import {getHighlightedFeatures} from '../../regions';
-import {HttpClient} from '@angular/common/http';
-import * as L from 'leaflet';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { HttpClient } from '@angular/common/http';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -29,7 +40,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
   templateUrl: './campaign-card-filter-grid.component.html',
   styleUrl: './campaign-card-filter-grid.component.scss',
 })
-export class CampaignCardFilterGridComponent implements OnDestroy {
+export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   protected sortOptions = this.getSortOptions();
 
@@ -61,7 +72,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
    */
   @Input({ required: true }) fetchingLocation!: boolean;
 
-  @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined
+  @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
@@ -371,6 +382,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
     this.initialSortByOption = this.selectedSortByOption || 'Relevance';
   }
 
+  ngAfterViewInit() {
+    this.initMap();
+  }
+
   private setupMapObserver(element: ElementRef<HTMLDivElement>) {
     this.teardownMap();
 
@@ -452,6 +467,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
     return location === 'United Kingdom';
   }
 
+  ngOnChanges(_changes: SimpleChanges<CampaignCardFilterGridComponent>) {
+    this.initMap();
+  }
+
   /**
    * Copied from campaign-info componnent - consider de-duplicating part or all of implementation if it doesn't diverge
    * quickly.
@@ -460,66 +479,31 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
     // Check again in case it got destroyed while waiting
     if (!this.mapElement || !isPlatformBrowser(this.platformId)) return;
 
-    // placeholder to develop UI - @todo replace with list of areas from backend.
-    this.highlightAreas = await getHighlightedFeatures(Object.getOwnPropertyNames({
-      E12000008: 1000, // South East England
-      E12000009: 1001, // South West England
-      E12000001: 1000, // North East England
-      E12000002: 1002, // North West England
-      E12000003: 1000, // Yorkshire and The Humber
-      E12000004: 1000, // East Midlands
-      E12000005: 1000, // West Midlands
-      E12000006: 1000, // East of England
-      E12000007: 1000, // London
-      S92000003: 1004, // Scotland
-      W92000004: 1005, // Wales
-      N92000002: 1006 // Northern Ireland
-    }), this.http);
-
-    console.log(this.highlightAreas);
-
     const UKBounds: [[number, number], [number, number]] = [
       [49.8, -8.7],
       [60.9, 1.8],
     ];
 
-    this.map = new Map(this.mapElement.nativeElement, {
-      dragging: false,
-      // Setting min + max zoom to the view bounds level alone didn't seem to reliably make controls do nothing.
-      // So switching off every way I could find to zoom (the following 6 lines) seems the only safe way to
-      // achieve this.
-      zoomControl: false,
-      boxZoom: false,
-      doubleClickZoom: false,
-      keyboard: false,
-      scrollWheelZoom: false,
-      touchZoom: false,
-      zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
-    }).fitBounds(UKBounds, { padding: this.boundsPadding });
+    if (!this.map) {
+      this.map = new Map(this.mapElement.nativeElement, {
+        dragging: false,
+        // Setting min + max zoom to the view bounds level alone didn't seem to reliably make controls do nothing.
+        // So switching off every way I could find to zoom (the following 6 lines) seems the only safe way to
+        // achieve this.
+        zoomControl: false,
+        boxZoom: false,
+        doubleClickZoom: false,
+        keyboard: false,
+        scrollWheelZoom: false,
+        touchZoom: false,
+        zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
+      }).fitBounds(UKBounds, { padding: this.boundsPadding });
+    }
 
-    this.highlightAreas.forEach((area) => {
-        // We really want the center of each place to put the marker on showing how many campaigns it has, but
-        // there doesn't seem to be a very easy way to get that, so for now just picking the first point on its outline.
-        // Not really ever going to be suitable since by definition it will be on the border.
-
-        // @ts-expect-error - at runtime I see this currently has coordinates, but it's not shown in the type.
-        const singleCoordinate = area.geometry.coordinates[0][0][0] as [number, number];
-        const latLng = [singleCoordinate[1], singleCoordinate[0]];
-        console.log(latLng[0] + "," + latLng[1]);
-
-
-        const _L = L; // suppressing unused var error on L used in commented out code below.
-
-        // getting error L.marker is not a function. Logging shows that its undefined. Not sure why - trying to follow docs
-        // at https://leafletjs.com/reference.html#marker
-        // const marker = L.marker(latLng).addTo(this.map); // getting error L.marker is not a function
-        // marker.bindToolTip('hello', {
-        //   permanent: true,
-        //   direction: 'right',
-        // });
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.map.eachLayer((layer: any) => {
+      layer.remove();
     });
-
 
     new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 13,
@@ -537,11 +521,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
-        console.log('each feature', {feature});
         if (feature.properties && feature.properties['name']) {
           layer.bindPopup(feature.properties['name']);
         }
-    }
+      },
     }).addTo(this.map);
 
     this.projectBounds = projectLayer.getBounds();
