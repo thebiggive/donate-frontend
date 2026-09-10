@@ -462,7 +462,15 @@ export class CampaignCardFilterGridComponent implements OnDestroy {
 
     // placeholder to develop UI - @todo replace with list of areas from backend.
     this.highlightAreas = await getHighlightedFeatures(Object.getOwnPropertyNames({
-      E92000001: 1003, // England
+      E12000008: 1000, // South East England
+      E12000009: 1001, // South West England
+      E12000001: 1000, // North East England
+      E12000002: 1002, // North West England
+      E12000003: 1000, // Yorkshire and The Humber
+      E12000004: 1000, // East Midlands
+      E12000005: 1000, // West Midlands
+      E12000006: 1000, // East of England
+      E12000007: 1000, // London
       S92000003: 1004, // Scotland
       W92000004: 1005, // Wales
       N92000002: 1006 // Northern Ireland
