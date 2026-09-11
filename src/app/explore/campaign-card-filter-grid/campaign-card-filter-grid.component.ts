@@ -544,14 +544,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
         const markerIcon = new DivIcon({
           className: 'campaign-count-marker-container',
-          html: `<button type="button" class="campaign-count-marker" aria-label="${count} charities in ${areaName}">${count}</button>`,
+          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
           iconSize: [32, 32],
           iconAnchor: [16, 16],
         });
 
         const marker = new Marker(center, {
           icon: markerIcon,
-          title: `${count} charities in ${areaName}`,
+          title: `${count} campaigns in ${areaName}`,
         }).addTo(this.map);
 
         marker.on('click', () => {
