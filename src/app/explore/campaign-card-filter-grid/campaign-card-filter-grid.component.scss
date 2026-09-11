@@ -219,12 +219,12 @@ fa-icon {
   @media #{abstract.$breakpoint-lg} {
     flex-direction: row;
   }
-}
 
-.grid-map-container div {
-  @media #{abstract.$breakpoint-lg} {
-    flex-basis: 0;
-    flex-grow: 1;
+  > div {
+    @media #{abstract.$breakpoint-lg} {
+      flex-basis: 0;
+      flex-grow: 1;
+    }
   }
 }
 
