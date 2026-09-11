@@ -19,9 +19,10 @@ import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { GeoJSON, Map, TileLayer } from 'leaflet';
+import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { HttpClient } from '@angular/common/http';
+import { getPoleOfInaccessibility } from '../../polylabel';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -74,6 +75,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
+  @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
+
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
   protected categoriesPlaceHolderText = 'Select category';
@@ -99,6 +102,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }>();
 
   doGetLocationFromBrowser = output<void>();
+  doSelectLocation = output<GeolocationPosition>();
   protected faMagnifyingGlass = faMagnifyingGlass;
 
   /**
@@ -524,6 +528,48 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         if (feature.properties && feature.properties['name']) {
           layer.bindPopup(feature.properties['name']);
         }
+
+        const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
+        const countObj = this.locationCounts?.find(
+          (lc) =>
+            lc.regionCode ===
+            (feature.properties?.['code'] ??
+              feature.properties?.['RGN25CD'] ??
+              feature.properties?.['CTRY25CD'] ??
+              feature.properties?.['CTYUA25CD'] ??
+              feature.properties?.['LAD25CD']),
+        );
+        const count = countObj !== undefined ? countObj.numCampaigns : 0;
+        const areaName = feature.properties?.['name'] || '';
+
+        const markerIcon = new DivIcon({
+          className: 'campaign-count-marker-container',
+          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+        });
+
+        const marker = new Marker(center, {
+          icon: markerIcon,
+          title: `${count} campaigns in ${areaName}`,
+        }).addTo(this.map);
+
+        marker.on('click', () => {
+          this.doSelectLocation.emit({
+            coords: {
+              latitude: center.lat,
+              longitude: center.lng,
+              accuracy: NaN,
+              altitude: null,
+              altitudeAccuracy: null,
+              heading: null,
+              speed: null,
+              toJSON: () => {},
+            },
+            timestamp: Date.now(),
+            toJSON: () => {},
+          } as GeolocationPosition);
+        });
       },
     }).addTo(this.map);
 

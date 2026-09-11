@@ -170,7 +170,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   /**
    * Counts of how many results there are (including for pages not loaded) in each region of the UK.
    */
-  private locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
+  protected locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
 
   private http = inject(HttpClient);
   protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
@@ -446,6 +446,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
         this.locationCounts = result.locationCounts;
+        console.log(this.locationCounts);
 
         this.loading = false;
 
@@ -509,7 +510,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recentChildrenData = undefined as any; // this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
@@ -696,6 +698,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.setTickerParams(metaCampaign);
       }, 1000);
     }
+  }
+
+  protected onLocationSelected(location: GeolocationPosition) {
+    this.location = location;
+    this.setQueryParams();
   }
 
   protected searchByLocation() {

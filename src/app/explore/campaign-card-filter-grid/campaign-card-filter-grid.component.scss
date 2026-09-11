@@ -237,3 +237,39 @@ fa-icon {
   }
   z-index: 0;
 }
+
+:host ::ng-deep {
+  .campaign-count-marker-container {
+    background: transparent;
+    border: none;
+  }
+
+  .campaign-count-marker {
+    background-color: abstract.$colour-primary;
+    color: abstract.$colour-white;
+    border: 2px solid abstract.$colour-white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+    font-family: inherit;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    user-select: none;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      background-color: abstract.$colour-secondary;
+      color: abstract.$colour-black;
+      transform: scale(1.15);
+      outline: none;
+    }
+  }
+}
