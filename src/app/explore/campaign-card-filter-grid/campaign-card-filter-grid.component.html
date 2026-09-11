@@ -133,7 +133,7 @@
         <ng-content />
       </div>
       @if (ukFilterSelected() && flags.enableMapViewInExplore) {
-        <div class="campaign-map" tabindex="-1" #mapElement></div>
+        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement></div>
       }
     </div>
   </div>

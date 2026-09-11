@@ -23,6 +23,7 @@ import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { HttpClient } from '@angular/common/http';
 import { getPoleOfInaccessibility } from '../../polylabel';
+import { count } from 'rxjs';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -90,6 +91,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
   private http = inject(HttpClient);
+  protected fullScreenMapMode = signal(false);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -530,6 +532,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }
 
         const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
+
         const countObj = this.locationCounts?.find(
           (lc) =>
             lc.regionCode ===
@@ -575,6 +578,38 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         });
       },
     }).addTo(this.map);
+
+    const fullScreenButtonIcon = new DivIcon({
+      className: 'full-screen-map-button-container',
+      html: `<button type="button" class="full-screen-map-button" aria-label="Full screen map">🗖</button>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+
+    const fullScreenMarker = new Marker([60.7, 1.5], {
+      icon: fullScreenButtonIcon,
+      title: 'Full Screen Map',
+    }).addTo(this.map);
+    fullScreenMarker.on('click', () => {
+      this.fullScreenMapMode.set(true);
+      setTimeout(() => this.map.invalidateSize(), 0);
+    });
+
+    const exitFullScreenButtonIcon = new DivIcon({
+      className: 'exit-full-screen-map-button-container',
+      html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close Full screen map">X</button>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+
+    const exitFullScreenMarker = new Marker([60.7, 1.5], {
+      icon: exitFullScreenButtonIcon,
+      title: 'Exit full Screen Map',
+    }).addTo(this.map);
+    exitFullScreenMarker.on('click', () => {
+      this.fullScreenMapMode.set(false);
+      setTimeout(() => this.map.invalidateSize(), 0);
+    });
 
     this.projectBounds = projectLayer.getBounds();
   }

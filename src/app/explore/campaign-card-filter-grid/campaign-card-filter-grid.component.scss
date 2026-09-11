@@ -239,12 +239,16 @@ fa-icon {
 }
 
 :host ::ng-deep {
-  .campaign-count-marker-container {
+  .campaign-count-marker-container,
+  .full-screen-map-button-container,
+  .exit-full-screen-map-button-container {
     background: transparent;
     border: none;
   }
 
-  .campaign-count-marker {
+  .campaign-count-marker,
+  .full-screen-map-button,
+  .exit-full-screen-map-button {
     background-color: abstract.$colour-primary;
     color: abstract.$colour-white;
     border: 2px solid abstract.$colour-white;
@@ -272,6 +276,45 @@ fa-icon {
       color: abstract.$colour-black;
       transform: scale(1.15);
       outline: none;
+    }
+  }
+
+  .full-screen-map-button {
+    border: none;
+    @media #{abstract.$breakpoint-lg} {
+      display: none;
+    }
+  }
+
+  .exit-full-screen-map-button-container {
+    display: none;
+  }
+
+  .exit-full-screen-map-button {
+    border: none;
+    display: none;
+  }
+
+  .fullScreenMap {
+    position: fixed !important; // important to override leaflet's library setting to position: relative
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    max-width: none;
+    z-index: 1000;
+
+    .full-screen-map-button {
+      display: none;
+    }
+    .exit-full-screen-map-button-container {
+      display: block;
+    }
+    .exit-full-screen-map-button {
+      display: block;
     }
   }
 }
