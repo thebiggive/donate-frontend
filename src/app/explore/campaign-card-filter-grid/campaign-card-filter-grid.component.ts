@@ -102,7 +102,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }>();
 
   doGetLocationFromBrowser = output<void>();
-  doSelectLocation = output<GeolocationPosition>();
+  doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
   protected faMagnifyingGlass = faMagnifyingGlass;
 
   /**
@@ -544,31 +544,34 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
         const markerIcon = new DivIcon({
           className: 'campaign-count-marker-container',
-          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
+          html: `<button type="button" class="campaign-count-marker" aria-label="${count} charities in ${areaName}">${count}</button>`,
           iconSize: [32, 32],
           iconAnchor: [16, 16],
         });
 
         const marker = new Marker(center, {
           icon: markerIcon,
-          title: `${count} campaigns in ${areaName}`,
+          title: `${count} charities in ${areaName}`,
         }).addTo(this.map);
 
         marker.on('click', () => {
           this.doSelectLocation.emit({
-            coords: {
-              latitude: center.lat,
-              longitude: center.lng,
-              accuracy: NaN,
-              altitude: null,
-              altitudeAccuracy: null,
-              heading: null,
-              speed: null,
+            regionCode: countObj!.regionCode,
+            position: {
+              coords: {
+                latitude: center.lat,
+                longitude: center.lng,
+                accuracy: NaN,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                speed: null,
+                toJSON: () => {},
+              },
+              timestamp: Date.now(),
               toJSON: () => {},
             },
-            timestamp: Date.now(),
-            toJSON: () => {},
-          } as GeolocationPosition);
+          } as { position: GeolocationPosition; regionCode: string });
         });
       },
     }).addTo(this.map);

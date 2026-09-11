@@ -40,7 +40,7 @@ describe('CampaignCardFilterGridComponent', () => {
   it('should render count markers with correct count and emit doSelectLocation on marker click', async () => {
     let emittedLocation: GeolocationPosition | undefined;
     component.doSelectLocation.subscribe((loc) => {
-      emittedLocation = loc;
+      emittedLocation = loc.position;
     });
 
     component.selectedFilterLocation = 'United Kingdom';

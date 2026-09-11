@@ -262,7 +262,9 @@ fa-icon {
     user-select: none;
     padding: 0;
     margin: 0;
-    transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    transition:
+      transform 0.15s ease-in-out,
+      background-color 0.15s ease-in-out;
 
     &:hover,
     &:focus-visible {
