@@ -446,7 +446,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
         this.locationCounts = result.locationCounts;
-        console.log(this.locationCounts);
 
         this.loading = false;
 
