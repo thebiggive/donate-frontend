@@ -55,7 +55,7 @@
   }
   <biggive-page-section>
     @if (flags.enableSearchByLocation && this.environment.environmentId !== "production") {
-      <div style="outline: dotted green 4px; padding: 1em; margin: 1em">
+      <div style="padding: 1em; margin: 1em">
         <p>
           (Temporary UI for location search - to be integrated into filter grid and/or future map display of campaigns)
         </p>
@@ -98,12 +98,16 @@
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
       [location]="location"
+      [highlightAreas]="highlightAreas"
       [fetchingLocation]="fetchingLocation"
       [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
       (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
       (doGetLocationFromBrowser)="searchByLocation()"
     >
       @if (individualCampaigns) {
+        <!-- Three columns here is really too many when we have a map to the side on a narrow desktop window, so @todo
+          adjust biggive-grid component to use container query instead of media query to internally reduce its column count.
+            -->
         <biggive-grid
           slot="campaign-grid"
           columnCount="3"

@@ -13,6 +13,7 @@ import {
   ViewChild,
   inject,
   InjectionToken,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -31,7 +32,7 @@ import { skip, Subscription } from 'rxjs';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSummary } from '../campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
@@ -51,6 +52,9 @@ import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
 import { COUNTRY_CODE } from '../country-code.token';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
+import { getHighlightedFeatures } from '../regions';
+import { HttpClient } from '@angular/common/http';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -102,6 +106,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
   private timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
   private sessionStorage = inject<StorageService>(SESSION_STORAGE);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
 
@@ -137,7 +142,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v3`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -161,6 +166,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
 
   protected readonly environment = environment;
+
+  /**
+   * Counts of how many results there are (including for pages not loaded) in each region of the UK.
+   */
+  private locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
+
+  private http = inject(HttpClient);
+  protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -428,11 +441,19 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
-      next: (campaignSummaries) => {
+      next: async (result: CampaignSummaryList) => {
         this.individualCampaigns = clearExisting
-          ? campaignSummaries
-          : [...this.individualCampaigns, ...campaignSummaries];
+          ? result.campaignSummaries
+          : [...this.individualCampaigns, ...result.campaignSummaries];
+        this.locationCounts = result.locationCounts;
+
         this.loading = false;
+
+        this.highlightAreas = await getHighlightedFeatures(
+          this.locationCounts?.map((count) => count.regionCode) || [],
+          this.http,
+        );
+        this.changeDetectorRef.detectChanges();
 
         if (isPlatformBrowser(this.platformId)) {
           // Save children so we can go 'back' here in the browser and maintain scroll position.
@@ -441,6 +462,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             query: this.normaliseQueryForRecentChildrenComparison(query),
             offset: this.offset,
             children: this.individualCampaigns,
+            highlightAreas: this.highlightAreas,
+            locationCounts: this.locationCounts,
             time: Date.now(), // ms
           };
 
@@ -498,6 +521,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
+      this.highlightAreas = recentChildrenData.highlightAreas;
+      this.locationCounts = recentChildrenData.locationCounts;
 
       // Auto scrolling without a significant extra wait only works when
       // the child campaigns were quickly loaded from local state from
@@ -674,7 +699,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   protected searchByLocation() {
-    console.log('will get position');
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
@@ -689,7 +713,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       },
     );
     this.fetchingLocation = true;
-    console.log('exiting searchByLocationfunction - wait for callback.');
   }
 
   /**

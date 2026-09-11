@@ -1,6 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Resolve, ResolveFn, Route, Router } from '@angular/router';
 
-import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CampaignStatsResolver } from './campaign-stats-resolver';
@@ -333,7 +332,6 @@ export const routes: (Route & {
     title: undefined, // set from inside component
     pathMatch: 'full',
     resolve: {
-      campaigns: CampaignListResolver,
       highlights: HighlightCardsResolver,
     },
     loadComponent: () => import('./explore/explore.component').then((c) => c.ExploreComponent),

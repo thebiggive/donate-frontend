@@ -6,6 +6,7 @@ type flags = {
   enableWithdrawFunds: boolean;
   enableOrgAccount: boolean;
   enableSearchByLocation: boolean;
+  enableMapViewInExplore: boolean;
 };
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
@@ -16,6 +17,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
+        enableMapViewInExplore: true,
       };
     case 'regression':
       return {
@@ -23,6 +25,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
+        enableMapViewInExplore: false,
       };
     case 'staging':
       return {
@@ -30,6 +33,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
+        enableMapViewInExplore: false,
       };
     case 'production':
       return {
@@ -37,6 +41,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: false,
+        enableMapViewInExplore: false,
       };
   }
 };
