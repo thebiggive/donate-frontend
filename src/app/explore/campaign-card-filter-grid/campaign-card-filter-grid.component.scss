@@ -318,3 +318,19 @@ fa-icon {
     }
   }
 }
+
+.drawOverFullScreenMap {
+  z-index: 2000;
+  outline: 1px solid abstract.$colour-grey-light;
+  padding-top: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  overflow-y: scroll;
+  bottom: 0;
+
+  height: 80px;
+
+  &.open {
+    height: 80%;
+  }
+}
