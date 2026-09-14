@@ -343,6 +343,14 @@ export function getStripeFriendlyError(
   switch (context) {
     case 'method_setup':
       prefix = 'Payment setup failed: ';
+
+      if (error?.message === 'Please fill in your card details.') {
+        // Specifically exiting a wallet (Apple/Google Pay) dialog should have a concise, inoccuous
+        // message since generally the donor has made that choice and already knows they'll need to
+        // pick a new method next.
+        return 'Payment cancelled';
+      }
+
       break;
     case 'card_change':
       prefix = 'Payment method update failed: ';

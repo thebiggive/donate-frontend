@@ -1,12 +1,14 @@
 import {
   AfterViewInit,
   Component,
+  effect,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   signal,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -64,6 +66,7 @@ import { WidgetInstance } from 'friendly-challenge';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { noLongNumberValidator } from '../validators/noLongNumberValidator';
 import { DonorAccountService } from '../donor-account.service';
+import { HttpStatusCode } from '@angular/common/http';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -148,11 +151,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       Validators.required,
       Validators.minLength(6), // temp password is six random digits
     ]),
-    newPassword: new FormControl('', [Validators.minLength(minPasswordLength)]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
   });
 
   protected campaign!: Campaign;
-  @ViewChild('stepper') private stepper!: MatStepper;
+  private stepper = viewChild<MatStepper>('stepper');
   readonly privacyUrl = 'https://biggive.org/privacy';
   protected donor?: Person | null;
 
@@ -187,6 +190,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected submitErrorMessage: string | undefined;
   protected optInTBGEmailError: string | undefined;
   protected optInCharityEmailError: string | undefined;
+  protected newPasswordErrorMessage: string | undefined;
 
   /**
    * Optional home address, used for Gift Aid purposes.
@@ -225,8 +229,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected formattedCampaignSummary!: string;
   private sanitizer = inject(DomSanitizer);
 
-  @ViewChild('frccaptcha', { static: false })
-  protected friendlyCaptcha!: ElementRef<HTMLElement>;
+  protected friendlyCaptcha = viewChild<ElementRef>('frccaptcha');
   private friendlyCaptchaSolution: string | undefined;
   private friendlyCaptchaWidget!: WidgetInstance;
   private platformId = inject(PLATFORM_ID);
@@ -248,8 +251,53 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   protected loggedInToExistingAccount = false;
 
   private loginStatusChangeSubscription: Subscription | undefined;
+  protected intendsToLogInToExistingAccount = false;
 
-  ngOnInit() {
+  constructor() {
+    effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
+      const friendlyCaptcha = this.friendlyCaptcha();
+      if (!friendlyCaptcha) {
+        return;
+      }
+
+      this.friendlyCaptchaWidget = new WidgetInstance(friendlyCaptcha.nativeElement, {
+        doneCallback: (solution) => {
+          this.friendlyCaptchaSolution = solution;
+        },
+        errorCallback: (error: unknown) => {
+          // not sure if this ever really happens, but will show an error message in case it does.
+          console.error(error);
+          this.toast.showError(
+            'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
+          );
+        },
+      });
+      await this.friendlyCaptchaWidget.start();
+    });
+
+    effect(async () => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
+      const stepper = this.stepper();
+      if (!stepper) {
+        return;
+      }
+
+      stepper.steps.forEach((step, stepIndex) => {
+        step.select = () => {
+          this.selectStep(stepIndex);
+        };
+      });
+    });
+  }
+
+  async ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
 
@@ -274,6 +322,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.donorAccount) {
       this.prepareFormForDonor();
       this.donorAccountExistsOnLoad = true;
+      this.updateNewPasswordValidation();
     }
 
     this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
@@ -332,7 +381,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       .createCustomerSessionForRegularGiving({ campaign: this.campaign })
       .then((session) => {
         this.stripeCustomerSession = session;
-        if (!this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+        if (!this.stripeElements && this.stepper()?.selected?.label === this.labelYourPaymentInformation) {
           this.prepareStripeElements();
         }
       })
@@ -359,17 +408,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
 
-    setTimeout(
-      () => {
-        this.stepper.steps.forEach((step, stepIndex) => {
-          step.select = () => {
-            this.selectStep(stepIndex);
-          };
-        });
-      },
-      500, // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
-    );
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -378,20 +416,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.friendlyCaptchaSolution = 'dummy-captcha-code';
       return;
     }
-
-    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
-      doneCallback: (solution) => {
-        this.friendlyCaptchaSolution = solution;
-      },
-      errorCallback: (error: unknown) => {
-        // not sure if this ever really happens, but will show an error message in case it does.
-        console.error(error);
-        this.toast.showError(
-          'Sorry, something went wrong with the CAPTCHA - please try again or contact Big Give support.',
-        );
-      },
-    });
-    await this.friendlyCaptchaWidget.start();
   }
 
   protected get newDonationAmountOverMaxMatchable() {
@@ -408,7 +432,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
-    this.continue();
+    await this.continue();
   }
 
   stepChanged(event: StepperSelectionEvent) {
@@ -431,7 +455,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += 'Monthly donation amount is required';
+      } else if (this.mandateForm.controls.newPassword.invalid) {
+        this.validateNewPasswordStep();
+        return;
       } else {
+        const validationErrorSummary = this.getFormValidationErrorSummary();
+        console.error('Unexpected regular giving form error', validationErrorSummary);
+        this.matomoTracker.trackEvent('donate_error', 'regular_giving_unexpected_form_error', validationErrorSummary);
         errorMessage =
           'Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance.';
       }
@@ -548,6 +578,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           this.submitting = false;
         },
       });
+  }
+
+  private getFormValidationErrorSummary(): string {
+    return Object.entries(this.mandateForm.controls)
+      .filter(([, control]) => control.invalid)
+      .map(([controlName, control]) => `${controlName}: ${Object.keys(control.errors ?? {}).join(', ')}`)
+      .join('; ');
   }
 
   protected get unmatched(): boolean {
@@ -667,17 +704,56 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // intending to edit something else in the `payment` step; let them click Next.
 
     if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      if (this.stepper.selectedIndex > paymentStepIndex + this.newDonorAdditionalStepCount) {
-        this.stepper.selectedIndex = paymentStepIndex + this.newDonorAdditionalStepCount;
+      if (this.stepper()!.selectedIndex > paymentStepIndex + this.newDonorAdditionalStepCount) {
+        this.stepper()!.selectedIndex = paymentStepIndex + this.newDonorAdditionalStepCount;
       }
 
       return;
     }
   }
 
+  protected async alreadyHaveAccountClicked() {
+    this.intendsToLogInToExistingAccount = true;
+    await this.continue();
+  }
+
+  protected async sendEmailToContinue() {
+    if (!this.friendlyCaptchaSolution && !this.donor) {
+      this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
+      return;
+    }
+
+    if (this.donor) {
+      this.toast.showError('Sorry, something went wrong.');
+      throw new Error('Send email button should not be available if we have a donor logged in');
+    }
+
+    this.intendsToLogInToExistingAccount = false;
+
+    this.processingTempPasswordRequest = true;
+    try {
+      await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
+        captcha_code: this.friendlyCaptchaSolution!,
+        regularGiving: true,
+      });
+      // this.verificationLinkSentToEmail = emailAddress;
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (error: any) {
+      this.extractErrorMessage(error);
+      return;
+    } finally {
+      this.friendlyCaptchaWidget?.reset();
+      await this.friendlyCaptchaWidget?.start();
+      this.processingTempPasswordRequest = false;
+    }
+
+    this.stepper()!.selected = this.stepper()!.steps.get(1);
+  }
+
   protected async continue(): Promise<void> {
-    const nextStepIndex = this.stepper.selectedIndex + 1;
-    if (nextStepIndex > this.stepper.steps.length - 1) {
+    console.log(this.stepper());
+    const nextStepIndex = this.stepper()!.selectedIndex + 1;
+    if (nextStepIndex > this.stepper()!.steps.length - 1) {
       throw new Error('Cannot continue past last step');
     }
 
@@ -688,8 +764,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
-    // 1 is new password which doesn't yet have validation code here.
-    // 2 is about you which doesn't yet have validation code here.
+    if (stepIndex > 1 + this.newDonorAdditionalStepCount && this.validateNewPasswordStep()) {
+      return;
+    }
 
     if (stepIndex > 2 + this.newDonorAdditionalStepCount && this.validateGiftAidStep()) {
       return;
@@ -709,40 +786,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       });
     }
 
-    if (stepIndex === 1) {
-      // this is the Send email button so let's send an email unless there's already a logged in donor.
-
-      if (!this.friendlyCaptchaSolution && !this.donor) {
-        this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
-        return;
-      }
-
-      if (!this.donor) {
-        this.processingTempPasswordRequest = true;
-        try {
-          // @todo-DON-1195: CHeck the friendlyCaptchaSolution is provided, don't just assume its truthy - show the donor an error message if its missing e.g. because they clicked send email too quickly.
-          // @todo-DON-1195: Request an email with different copy from the idenity service that's specific to the fact that they're in the process of setting up a regular giving mandate, and refers to "temporary password"
-          // @todo-DON-1195: instead of a verification code (once we've adjust the login function to accept a verification code typed instead of a password).
-          // @todo-DON-1195: work out how/where we're going to be collecting the donor's first and last name, which we should only need to ask for if its a new account. May be a challenge to the idea of using the same input box to accept either
-          // @todo-DON-1195: a password for an existing account or a verification code aka temporary password for a new account.
-          await this.identityService.requestEmailAuthToken(this.mandateForm.controls.emailAddress.value!, {
-            captcha_code: this.friendlyCaptchaSolution!,
-            regularGiving: true,
-          });
-          // this.verificationLinkSentToEmail = emailAddress;
-          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        } catch (error: any) {
-          this.extractErrorMessage(error);
-          return;
-        } finally {
-          this.friendlyCaptchaWidget?.reset();
-          await this.friendlyCaptchaWidget?.start();
-          this.processingTempPasswordRequest = false;
-        }
-      }
-    }
-
-    this.stepper.selected = this.stepper.steps.get(stepIndex);
+    this.stepper()!.selected = this.stepper()!.steps.get(stepIndex);
   }
 
   private get newDonorAdditionalStepCount() {
@@ -862,6 +906,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     return errorFound;
   }
 
+  private validateNewPasswordStep(): boolean {
+    const newPasswordControl = this.mandateForm.controls.newPassword;
+    this.newPasswordErrorMessage = undefined;
+
+    if (newPasswordControl.hasError('required')) {
+      this.newPasswordErrorMessage = 'Please enter a password for your new donor account.';
+    } else if (newPasswordControl.hasError('minlength')) {
+      this.newPasswordErrorMessage = `Please enter a password of at least ${minPasswordLength} characters.`;
+    }
+
+    if (this.newPasswordErrorMessage) {
+      newPasswordControl.markAsTouched();
+      this.toast.showError(this.newPasswordErrorMessage);
+    }
+
+    return !!this.newPasswordErrorMessage;
+  }
+
   /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
@@ -968,13 +1030,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   protected async continueFromAuthentication() {
-    const captchaCode = this.friendlyCaptchaSolution;
-    if (!captchaCode) {
-      this.toast.showError('Captcha code missing - cannot continue');
+    if (this.donor || this.emailTokenValid) {
+      this.stepper()!.next();
       return;
     }
 
-    const emailAddress = this.mandateForm.controls.emailAddress.value;
+    const captchaCode = this.friendlyCaptchaSolution;
+    if (!captchaCode) {
+      this.toast.showError('Captcha code missing - please wait a moment and try again');
+      return;
+    }
+
+    const emailAddress = this.formEmailAddress;
     if (!emailAddress) {
       this.toast.showError('Email address missing - cannot continue');
       return;
@@ -995,24 +1062,57 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     let response;
     try {
       response = await firstValueFrom(response$);
-    } catch (error: unknown) {
-      const backendError = error as BackendError;
+    } catch (e: unknown) {
+      const backendError = e as BackendError;
+      if (backendError?.status === HttpStatusCode.Unauthorized) {
+        // we might also signpost the "forgot password" feature here, but I think the below is about the limit of
+        // length we want in a toast.
+        this.toast.showError(
+          'Your email or password is incorrect. Please try typing your password again, or go back and check the email address.',
+        );
+        this.friendlyCaptchaSolution = undefined;
+        this.friendlyCaptchaWidget.reset();
+        return;
+      }
+
+      // will happen e.g. if Identity server is down:
       this.toast.showError(backendError.message);
       return;
     }
 
     if (response.type === 'jwt') {
       this.loggedInToExistingAccount = true;
+      this.updateNewPasswordValidation();
     } else if (response.type === 'emailVerificationToken') {
       this.emailTokenValid = true;
     }
-    this.stepper.next();
+    this.stepper()!.next();
+  }
+
+  protected get formEmailAddress() {
+    return this.mandateForm.controls.emailAddress.value;
+  }
+
+  private updateNewPasswordValidation(): void {
+    const newPasswordControl = this.mandateForm.controls.newPassword;
+
+    if (!this.donorAccountExistsOnLoad && !this.loggedInToExistingAccount) {
+      newPasswordControl.setValidators([Validators.required, Validators.minLength(minPasswordLength)]);
+    } else {
+      newPasswordControl.clearValidators();
+    }
+
+    newPasswordControl.updateValueAndValidity({ emitEvent: false });
   }
 
   protected async continueFromAboutYou() {
     if (this.donor) {
       // already logged in, no need to do anything.
-      this.stepper.next();
+      this.stepper()!.next();
+      return;
+    }
+
+    if (this.validateNewPasswordStep()) {
       return;
     }
 
@@ -1041,9 +1141,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
             this.prepareFormForDonor();
           }
           console.log('set donor and donor account', this.donor, this.donorAccount);
-          this.stepper.next();
+          this.stepper()!.next();
+          this.newPasswordErrorMessage = undefined;
         },
         error: async (error) => {
+          const message = errorDescription(error as BackendError);
+          this.newPasswordErrorMessage = message;
+          this.toast.showError(message);
           this.extractErrorMessage(error);
           this.friendlyCaptchaWidget?.reset();
           await this.friendlyCaptchaWidget?.start();

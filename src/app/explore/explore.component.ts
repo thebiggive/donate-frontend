@@ -295,7 +295,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.pageMeta.setCommon(
         this.title,
         metaCampaign.summary || 'A match funded campaign with Big Give',
-        metaCampaign.bannerUri,
+        metaCampaign.banner?.uri ?? metaCampaign.bannerUri,
         noIndex,
       );
     } else {
@@ -764,7 +764,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * of a quick fix here.
    */
   private setFallbackBanner(metaCampaign: MetaCampaign) {
-    if (metaCampaign.bannerUri) {
+    if (metaCampaign.banner?.uri ?? metaCampaign.bannerUri) {
       return;
     }
 

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { getHighlightedFeatures } from './regions';
+import { addEnglandToNameWhereNeeded, getHighlightedFeatures } from './regions';
 
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
@@ -115,6 +115,7 @@ export async function listImpactRegionNames(campaign: Campaign, http: HttpClient
 
   const areaNames = highlightAreas
     .map((feature) => feature.properties && feature.properties['name'])
+    .map(addEnglandToNameWhereNeeded)
     .filter((name): name is string => !!name)
     .sort((a, b) => a.localeCompare(b));
 

@@ -13,6 +13,10 @@ export type MetaCampaign = {
   hidden: boolean;
   summary: string;
   bannerUri: string | null;
+  banner: {
+    uri: string;
+    altText: string | null;
+  } | null;
   amountRaised: number;
   charity: undefined; // used to allow narrowing a type from Campaign|MetaCampaign to just Campaign.
 
