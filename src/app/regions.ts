@@ -41,6 +41,7 @@ export async function getHighlightedFeatures(
       .map((feature: Feature<Geometry, GeoJsonProperties>) => {
         if (feature.properties) {
           feature.properties['name'] = addEnglandToNameWhereNeeded(feature.properties[layer.nameField]);
+          feature.properties['code'] = feature.properties[layer.codeField];
         }
         return feature;
       });

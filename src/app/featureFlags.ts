@@ -25,7 +25,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
-        enableMapViewInExplore: false,
+        enableMapViewInExplore: true,
       };
     case 'staging':
       return {
@@ -33,7 +33,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
-        enableMapViewInExplore: false,
+        enableMapViewInExplore: true,
       };
     case 'production':
       return {

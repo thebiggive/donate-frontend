@@ -237,3 +237,84 @@ fa-icon {
   }
   z-index: 0;
 }
+
+:host ::ng-deep {
+  .campaign-count-marker-container,
+  .full-screen-map-button-container,
+  .exit-full-screen-map-button-container {
+    background: transparent;
+    border: none;
+  }
+
+  .campaign-count-marker,
+  .full-screen-map-button,
+  .exit-full-screen-map-button {
+    background-color: abstract.$colour-primary;
+    color: abstract.$colour-white;
+    border: 2px solid abstract.$colour-white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+    font-family: inherit;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    user-select: none;
+    padding: 0;
+    margin: 0;
+    transition:
+      transform 0.15s ease-in-out,
+      background-color 0.15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      background-color: abstract.$colour-secondary;
+      color: abstract.$colour-black;
+      transform: scale(1.15);
+      outline: none;
+    }
+  }
+
+  .full-screen-map-button {
+    border: none;
+    @media #{abstract.$breakpoint-lg} {
+      display: none;
+    }
+  }
+
+  .exit-full-screen-map-button-container {
+    display: none;
+  }
+
+  .exit-full-screen-map-button {
+    border: none;
+    display: none;
+  }
+
+  .fullScreenMap {
+    position: fixed !important; // important to override leaflet's library setting to position: relative
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    max-width: none;
+    z-index: 1000;
+
+    .full-screen-map-button {
+      display: none;
+    }
+    .exit-full-screen-map-button-container {
+      display: block;
+    }
+    .exit-full-screen-map-button {
+      display: block;
+    }
+  }
+}

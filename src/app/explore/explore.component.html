@@ -99,10 +99,12 @@
       [locationOptions]="locationOptions"
       [location]="location"
       [highlightAreas]="highlightAreas"
+      [locationCounts]="locationCounts"
       [fetchingLocation]="fetchingLocation"
       [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
       (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
       (doGetLocationFromBrowser)="searchByLocation()"
+      (doSelectLocation)="onLocationSelected($event)"
     >
       @if (individualCampaigns) {
         <!-- Three columns here is really too many when we have a map to the side on a narrow desktop window, so @todo
