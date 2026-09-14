@@ -589,8 +589,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       icon: fullScreenButtonIcon,
       title: 'Full Screen Map',
     }).addTo(this.map);
-    fullScreenMarker.on('click', () => {
+    fullScreenMarker.on('click', async () => {
       this.fullScreenMapMode.set(true);
+      if (document.fullscreenEnabled) {
+        await this._mapElement?.nativeElement.requestFullscreen();
+      }
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
@@ -605,8 +608,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       icon: exitFullScreenButtonIcon,
       title: 'Exit full Screen Map',
     }).addTo(this.map);
-    exitFullScreenMarker.on('click', () => {
+    exitFullScreenMarker.on('click', async () => {
       this.fullScreenMapMode.set(false);
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      }
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
