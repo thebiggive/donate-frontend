@@ -55,6 +55,7 @@ import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/cam
 import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -86,6 +87,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveHeadingBanner,
     BiggiveButton,
     CampaignCardFilterGridComponent,
+    CampaignSummaryGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
