@@ -12,6 +12,7 @@ describe('CampaignCardFilterGridComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(CampaignCardFilterGridComponent);
+    fixture.componentRef.setInput('individualCampaigns', []);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -130,7 +130,14 @@
     </div>
     <div class="grid-map-container">
       <div class="campaign-grid">
-        <ng-content />
+        @if (individualCampaigns()) {
+          <app-campaign-summary-grid
+            (scrolled)="emitOnScroll()"
+            [individualCampaigns]="individualCampaigns()"
+            [columnCount]="ukFilterSelected() && flags.enableMapViewInExplore ? 2 : 3"
+          >
+          </app-campaign-summary-grid>
+        }
       </div>
       @if (ukFilterSelected() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement></div>
@@ -147,7 +154,11 @@
               </a>
             </div>
             <div style="clear: both"></div>
-            <app-campaign-summary-grid (scrolled)="emitOnScroll()" [individualCampaigns]="individualCampaigns()">
+            <app-campaign-summary-grid
+              (scrolled)="emitOnScroll()"
+              [individualCampaigns]="individualCampaigns()"
+              [columnCount]="2"
+            >
             </app-campaign-summary-grid>
           </div>
         }

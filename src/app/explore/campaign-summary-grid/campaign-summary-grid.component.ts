@@ -14,6 +14,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   imports: [OptimisedImagePipe, AsyncPipe, BiggiveCampaignCard, CurrencyPipe, BiggiveGrid, InfiniteScrollDirective],
   templateUrl: './campaign-summary-grid.component.html',
   styleUrl: './campaign-summary-grid.component.scss',
+  providers: [DatePipe],
 })
 export class CampaignSummaryGridComponent {
   protected isInFuture = CampaignService.isInFuture;
@@ -21,6 +22,12 @@ export class CampaignSummaryGridComponent {
 
   scrolled = output<void>();
   individualCampaigns = input.required<CampaignSummary[]>();
+
+  /**
+   * Max number of columns to use in grid. Ideally this might be controlled via a CSS container
+   * query but that isn't supported by Safari 15.6
+   */
+  readonly columnCount = input.required<number>();
 
   async emitOnScroll() {
     this.scrolled.emit();
