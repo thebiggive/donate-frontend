@@ -107,10 +107,6 @@
       (doGetLocationFromBrowser)="searchByLocation()"
       (doSelectLocation)="onLocationSelected($event)"
     >
-      @if (individualCampaigns) {
-        <app-campaign-summary-grid (scrolled)="onScroll()" [individualCampaigns]="individualCampaigns">
-        </app-campaign-summary-grid>
-      }
     </app-campaign-card-filter-grid>
 
     @if (loading) {
