@@ -1,11 +1,4 @@
-import {
-  BiggiveButton,
-  BiggiveCampaignCard,
-  BiggiveFormFieldSelect,
-  BiggiveGrid,
-  BiggivePopup,
-} from '@biggive/components-angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { BiggiveCampaignCard, BiggiveGrid } from '@biggive/components-angular';
 import { Component, inject, input, output } from '@angular/core';
 import { CampaignSummary } from '../../campaign-summary.model';
 import { CampaignService } from '../../campaign.service';
