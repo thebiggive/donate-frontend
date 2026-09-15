@@ -603,6 +603,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }).addTo(this.map);
     fullScreenMarker.on('click', () => {
       this.fullScreenMapMode.set(true);
+      this.map.attributionControl.setPosition('topright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
@@ -619,6 +620,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }).addTo(this.map);
     exitFullScreenMarker.on('click', () => {
       this.fullScreenMapMode.set(false);
+      this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
