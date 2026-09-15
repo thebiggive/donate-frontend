@@ -21,8 +21,6 @@ import {
   BiggiveTotalizer,
   BiggiveTotalizerTickerItem,
   BiggivePageSection,
-  BiggiveGrid,
-  BiggiveCampaignCard,
   BiggiveHeadingBanner,
   BiggiveButton,
 } from '@biggive/components-angular';
@@ -44,7 +42,6 @@ import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
@@ -75,14 +72,10 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    BiggiveGrid,
-    InfiniteScrollDirective,
-    BiggiveCampaignCard,
     MatProgressSpinner,
     HighlightCardsComponent,
     RouterLink,
     AsyncPipe,
-    CurrencyPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
     BiggiveButton,
@@ -94,7 +87,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   flags = flags;
   private campaignService = inject(CampaignService);
   private currencyPipe = inject(CurrencyPipe);
-  private datePipe = inject(DatePipe);
   private fundService = inject(FundService);
   private matomoTracker = inject(MatomoTracker);
   private navigationService = inject(NavigationService);
@@ -119,7 +111,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected metaCampaign: MetaCampaign | undefined;
 
   individualCampaigns: CampaignSummary[] = [];
-  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
@@ -155,11 +146,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private routeChangeListener?: Subscription;
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
-
-  protected isInFuture = CampaignService.isInFuture;
-
-  protected isInPast = CampaignService.isInPast;
-
   protected fetchingLocation = false;
   protected location: GeolocationPosition | undefined;
   protected toaster = inject(Toast);
@@ -360,11 +346,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     await this.router.navigateByUrl(customEvent.detail.url);
   }
 
-  getRelevantDateAsStr(campaign: CampaignSummary) {
-    const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
-  }
-
   /**
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
@@ -407,17 +388,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   clear(event: Event) {
     event.preventDefault();
     this.searchService.reset(this.defaultSort, false);
-  }
-
-  getPercentageRaised(childCampaign: CampaignSummary) {
-    // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
-    // childCampaign.parentUsesSharedFunds set when appropriate.
-    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
-      // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
-      return null;
-    }
-
-    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 
   private moreMightExist(): boolean {

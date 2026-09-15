@@ -18,18 +18,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-campaign-summary-grid',
-  imports: [
-    BiggiveButton,
-    BiggivePopup,
-    BiggiveFormFieldSelect,
-    FaIconComponent,
-    OptimisedImagePipe,
-    AsyncPipe,
-    BiggiveCampaignCard,
-    CurrencyPipe,
-    BiggiveGrid,
-    InfiniteScrollDirective,
-  ],
+  imports: [OptimisedImagePipe, AsyncPipe, BiggiveCampaignCard, CurrencyPipe, BiggiveGrid, InfiniteScrollDirective],
   templateUrl: './campaign-summary-grid.component.html',
   styleUrl: './campaign-summary-grid.component.scss',
 })
