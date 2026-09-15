@@ -56,13 +56,8 @@ export class CampaignSummaryGridComponent {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
-    // childCampaign.parentUsesSharedFunds set when appropriate.
-    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
-      // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
-      return null;
-    }
-
-    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
+    return childCampaign.parentUsesSharedFunds
+      ? null
+      : CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 }
