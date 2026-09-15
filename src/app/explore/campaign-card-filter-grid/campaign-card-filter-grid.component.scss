@@ -318,3 +318,22 @@ fa-icon {
     }
   }
 }
+
+.drawOverFullScreenMap {
+  // The full screen map has a z-index of 1,000, acting as near as possible to a true full screen
+  // element on iphone (which doesn't support actually making an element full screen). This sits on top
+  // of the map so has an even higher z-index.
+  z-index: 2000;
+  outline: 1px solid abstract.$colour-grey-light;
+  padding-top: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  overflow-y: scroll;
+  bottom: 0;
+
+  height: 80px;
+
+  &.open {
+    height: 80%;
+  }
+}

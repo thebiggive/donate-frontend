@@ -11,6 +11,7 @@ import {
   SimpleChanges,
   OnChanges,
   AfterViewInit,
+  input,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -23,6 +24,8 @@ import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { HttpClient } from '@angular/common/http';
 import { getPoleOfInaccessibility } from '../../polylabel';
+import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
+import { CampaignSummary } from '../../campaign-summary.model';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -37,7 +40,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 
 @Component({
   selector: 'app-campaign-card-filter-grid',
-  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent],
+  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
   templateUrl: './campaign-card-filter-grid.component.html',
   styleUrl: './campaign-card-filter-grid.component.scss',
 })
@@ -159,6 +162,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
   @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
+
+  scrolled = output<void>();
+
+  async emitOnScroll() {
+    this.scrolled.emit();
+  }
+
+  individualCampaigns = input.required<CampaignSummary[]>();
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
@@ -467,6 +478,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected readonly faExclamationTriangle = faExclamationTriangle;
+  protected readonly campaignDrawerOpen = signal(false);
 
   private locationFilterIsUK(location: string | null) {
     return location === 'United Kingdom';
@@ -591,6 +603,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }).addTo(this.map);
     fullScreenMarker.on('click', () => {
       this.fullScreenMapMode.set(true);
+      this.map.attributionControl.setPosition('topright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
@@ -607,6 +620,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }).addTo(this.map);
     exitFullScreenMarker.on('click', () => {
       this.fullScreenMapMode.set(false);
+      this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
 
