@@ -1,6 +1,7 @@
 import { firstValueFrom } from 'rxjs';
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 export function addEnglandToNameWhereNeeded(basename: string) {
   // These specific region names are parts of England, but the name doesn't make that clear. If we used the name as
@@ -24,14 +25,30 @@ export async function getHighlightedFeatures(
   http: HttpClient,
 ): Promise<Array<Feature<Geometry, GeoJsonProperties>>> {
   const layers = [
-    { path: '../../assets/map/localAuthorities.geojson', codeField: 'LAD25CD', nameField: 'LAD25NM' },
-    { path: '../../assets/map/counties.geojson', codeField: 'CTYUA25CD', nameField: 'CTYUA25NM' },
-    { path: '../../assets/map/englandRegions.geojson', codeField: 'RGN25CD', nameField: 'RGN25NM' },
-    { path: '../../assets/map/nations.geojson', codeField: 'CTRY25CD', nameField: 'CTRY25NM' },
+    {
+      path: new URL('/assets/map/localAuthorities.geojson', environment.donateUriPrefix),
+      codeField: 'LAD25CD',
+      nameField: 'LAD25NM',
+    },
+    {
+      path: new URL('/assets/map/counties.geojson', environment.donateUriPrefix),
+      codeField: 'CTYUA25CD',
+      nameField: 'CTYUA25NM',
+    },
+    {
+      path: new URL('/assets/map/englandRegions.geojson', environment.donateUriPrefix),
+      codeField: 'RGN25CD',
+      nameField: 'RGN25NM',
+    },
+    {
+      path: new URL('/assets/map/nations.geojson', environment.donateUriPrefix),
+      codeField: 'CTRY25CD',
+      nameField: 'CTRY25NM',
+    },
   ];
 
   const fetchPromises = layers.map(async (layer) => {
-    const data = await firstValueFrom(http.get<FeatureCollection>(layer.path));
+    const data = await firstValueFrom(http.get<FeatureCollection>(layer.path.toString()));
 
     return data.features
       .filter(

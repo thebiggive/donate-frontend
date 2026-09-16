@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 import { getHighlightedFeatures } from './regions';
 
 describe('getHighlightedFeatures', () => {
@@ -25,13 +26,13 @@ describe('getHighlightedFeatures', () => {
 
     const promise = getHighlightedFeatures(regionCodes, httpClient);
 
-    const reqLA = httpTestingController.expectOne('../../assets/map/localAuthorities.geojson');
+    const reqLA = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/localAuthorities.geojson`);
     reqLA.flush({ type: 'FeatureCollection', features: [] });
 
-    const reqCounties = httpTestingController.expectOne('../../assets/map/counties.geojson');
+    const reqCounties = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/counties.geojson`);
     reqCounties.flush({ type: 'FeatureCollection', features: [] });
 
-    const reqEng = httpTestingController.expectOne('../../assets/map/englandRegions.geojson');
+    const reqEng = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/englandRegions.geojson`);
     reqEng.flush({
       type: 'FeatureCollection',
       features: [
@@ -60,7 +61,7 @@ describe('getHighlightedFeatures', () => {
       ],
     });
 
-    const reqNations = httpTestingController.expectOne('../../assets/map/nations.geojson');
+    const reqNations = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/nations.geojson`);
     reqNations.flush({ type: 'FeatureCollection', features: [] });
 
     const results = await promise;
