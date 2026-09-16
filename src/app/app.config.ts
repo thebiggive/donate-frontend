@@ -34,8 +34,9 @@ import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
   const token = inject(SSR_CLOUDFLARE_TOKEN, { optional: true });
+  const allowedHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
 
-  if (isPlatformServer(platformId) && token) {
+  if (isPlatformServer(platformId) && token && allowedHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       setHeaders: {
         'X-TBG-Donate-SSR-Token': token,
