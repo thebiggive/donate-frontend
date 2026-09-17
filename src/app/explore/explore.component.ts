@@ -13,6 +13,7 @@ import {
   ViewChild,
   inject,
   InjectionToken,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -20,8 +21,6 @@ import {
   BiggiveTotalizer,
   BiggiveTotalizerTickerItem,
   BiggivePageSection,
-  BiggiveGrid,
-  BiggiveCampaignCard,
   BiggiveHeadingBanner,
   BiggiveButton,
 } from '@biggive/components-angular';
@@ -31,7 +30,7 @@ import { skip, Subscription } from 'rxjs';
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSummary } from '../campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { HighlightCard } from '../highlight-cards/HighlightCard';
@@ -43,7 +42,6 @@ import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
@@ -51,6 +49,10 @@ import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
 import { COUNTRY_CODE } from '../country-code.token';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
+import { getHighlightedFeatures } from '../regions';
+import { HttpClient } from '@angular/common/http';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -70,25 +72,21 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    BiggiveGrid,
-    InfiniteScrollDirective,
-    BiggiveCampaignCard,
     MatProgressSpinner,
     HighlightCardsComponent,
     RouterLink,
     AsyncPipe,
-    CurrencyPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
     BiggiveButton,
     CampaignCardFilterGridComponent,
+    CampaignSummaryGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   flags = flags;
   private campaignService = inject(CampaignService);
   private currencyPipe = inject(CurrencyPipe);
-  private datePipe = inject(DatePipe);
   private fundService = inject(FundService);
   private matomoTracker = inject(MatomoTracker);
   private navigationService = inject(NavigationService);
@@ -102,6 +100,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private timeLeftToOpenPipe = inject<TimeLeftPipe>(openPipeToken);
   private timeLeftToEndPipe = inject<TimeLeftPipe>(endPipeToken);
   private sessionStorage = inject<StorageService>(SESSION_STORAGE);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
 
@@ -112,7 +111,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected metaCampaign: MetaCampaign | undefined;
 
   individualCampaigns: CampaignSummary[] = [];
-  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
@@ -137,7 +135,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v3`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -148,11 +146,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private routeChangeListener?: Subscription;
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
-
-  protected isInFuture = CampaignService.isInFuture;
-
-  protected isInPast = CampaignService.isInPast;
-
   protected fetchingLocation = false;
   protected location: GeolocationPosition | undefined;
   protected toaster = inject(Toast);
@@ -161,6 +154,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
 
   protected readonly environment = environment;
+
+  /**
+   * Counts of how many results there are (including for pages not loaded) in each region of the UK.
+   */
+  protected locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
+
+  private http = inject(HttpClient);
+  protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -345,11 +346,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     await this.router.navigateByUrl(customEvent.detail.url);
   }
 
-  getRelevantDateAsStr(campaign: CampaignSummary) {
-    const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
-  }
-
   /**
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
@@ -394,17 +390,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searchService.reset(this.defaultSort, false);
   }
 
-  getPercentageRaised(childCampaign: CampaignSummary) {
-    // second part of || condition below can be deleted when new matchbot is deployed to ensure we always have
-    // childCampaign.parentUsesSharedFunds set when appropriate.
-    if (childCampaign.parentUsesSharedFunds || this.metaCampaign?.usesSharedFunds) {
-      // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
-      return null;
-    }
-
-    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
-  }
-
   private moreMightExist(): boolean {
     return this.individualCampaigns.length === CampaignService.perPage + this.offset;
   }
@@ -428,11 +413,19 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
-      next: (campaignSummaries) => {
+      next: async (result: CampaignSummaryList) => {
         this.individualCampaigns = clearExisting
-          ? campaignSummaries
-          : [...this.individualCampaigns, ...campaignSummaries];
+          ? result.campaignSummaries
+          : [...this.individualCampaigns, ...result.campaignSummaries];
+        this.locationCounts = result.locationCounts;
+
         this.loading = false;
+
+        this.highlightAreas = await getHighlightedFeatures(
+          this.locationCounts?.map((count) => count.regionCode) || [],
+          this.http,
+        );
+        this.changeDetectorRef.detectChanges();
 
         if (isPlatformBrowser(this.platformId)) {
           // Save children so we can go 'back' here in the browser and maintain scroll position.
@@ -441,6 +434,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             query: this.normaliseQueryForRecentChildrenComparison(query),
             offset: this.offset,
             children: this.individualCampaigns,
+            highlightAreas: this.highlightAreas,
+            locationCounts: this.locationCounts,
             time: Date.now(), // ms
           };
 
@@ -486,7 +481,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recentChildrenData = undefined as any; // this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
@@ -498,6 +494,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
+      this.highlightAreas = recentChildrenData.highlightAreas;
+      this.locationCounts = recentChildrenData.locationCounts;
 
       // Auto scrolling without a significant extra wait only works when
       // the child campaigns were quickly loaded from local state from
@@ -673,8 +671,20 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
   }
 
+  protected onLocationSelected({
+    regionCode,
+    position: _position,
+  }: {
+    regionCode: string;
+    position: GeolocationPosition;
+  }) {
+    // the GeolocationPosition was included here by the AI code generation, leaving in for now in case it's useful.
+    window.alert(
+      `Will filter search to only campaigns for region ${regionCode} or its subregions, and zoom in map. To implement in future ticket DON-1221`,
+    );
+  }
+
   protected searchByLocation() {
-    console.log('will get position');
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
@@ -689,7 +699,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       },
     );
     this.fetchingLocation = true;
-    console.log('exiting searchByLocationfunction - wait for callback.');
   }
 
   /**

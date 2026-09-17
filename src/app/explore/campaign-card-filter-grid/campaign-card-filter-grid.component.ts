@@ -1,11 +1,31 @@
-import { Component, ElementRef, inject, Input, output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  output,
+  signal,
+  ViewChild,
+  PLATFORM_ID,
+  OnDestroy,
+  SimpleChanges,
+  OnChanges,
+  AfterViewInit,
+  input,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
 import { COUNTRY_CODE } from '../../country-code.token';
 import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-// import {options} from 'axios' - was used in Stencil component, may not be needed now.;
+import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { HttpClient } from '@angular/common/http';
+import { getPoleOfInaccessibility } from '../../polylabel';
+import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
+import { CampaignSummary } from '../../campaign-summary.model';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -20,11 +40,12 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 
 @Component({
   selector: 'app-campaign-card-filter-grid',
-  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent],
+  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
   templateUrl: './campaign-card-filter-grid.component.html',
   styleUrl: './campaign-card-filter-grid.component.scss',
 })
-export class CampaignCardFilterGridComponent {
+export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private platformId = inject(PLATFORM_ID);
   protected sortOptions = this.getSortOptions();
 
   /**
@@ -55,6 +76,10 @@ export class CampaignCardFilterGridComponent {
    */
   @Input({ required: true }) fetchingLocation!: boolean;
 
+  @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
+
+  @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
+
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
   protected categoriesPlaceHolderText = 'Select category';
@@ -67,6 +92,8 @@ export class CampaignCardFilterGridComponent {
   private newSelectedFilterCategory: string | null = null;
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
+  private http = inject(HttpClient);
+  protected fullScreenMapMode = signal(false);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -79,6 +106,7 @@ export class CampaignCardFilterGridComponent {
   }>();
 
   doGetLocationFromBrowser = output<void>();
+  doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
   protected faMagnifyingGlass = faMagnifyingGlass;
 
   /**
@@ -135,10 +163,37 @@ export class CampaignCardFilterGridComponent {
    */
   @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
 
+  scrolled = output<void>();
+
+  async emitOnScroll() {
+    this.scrolled.emit();
+  }
+
+  individualCampaigns = input.required<CampaignSummary[]>();
+
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Input({ required: true }) selectedFilterLocation: string | null = null;
+  @Input({ required: true }) set selectedFilterLocation(value: string | null) {
+    this._selectedFilterLocation = value;
+    this.ukFilterSelected.set(this.locationFilterIsUK(value));
+  }
+  get selectedFilterLocation(): string | null {
+    return this._selectedFilterLocation;
+  }
+  private _selectedFilterLocation: string | null = null;
+
+  ukFilterSelected = signal(false);
+
+  // Implemented as in campaign-info componenent.
+  // Typescript has trouble distinguishing JS built-in Map vs Leaflet's Map since we are using a loose typings file for leaflet v2.
+  // We explicitly use 'any' here since the actual typings for Leaflet Map aren't strictly available in this declaration.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private map?: any;
+
+  private readonly boundsPadding = [8, 8];
+  private projectBounds?: DOMRect;
+  private resizeObserver?: ResizeObserver;
 
   /**
    * Allow donors to select campaigns near to themselves.
@@ -148,6 +203,19 @@ export class CampaignCardFilterGridComponent {
   @Input({ required: true }) offerNearMeOption!: boolean;
 
   protected filtersApplied: boolean;
+
+  @ViewChild('mapElement') set mapElement(element: ElementRef<HTMLDivElement> | undefined) {
+    this._mapElement = element;
+    if (element && isPlatformBrowser(this.platformId)) {
+      this.setupMapObserver(element);
+    } else {
+      this.teardownMap();
+    }
+  }
+  get mapElement(): ElementRef<HTMLDivElement> | undefined {
+    return this._mapElement;
+  }
+  private _mapElement: ElementRef<HTMLDivElement> | undefined;
 
   protected categoryFilterSelectionChanged = (value: string) => {
     this.newSelectedFilterCategory = value;
@@ -194,6 +262,8 @@ export class CampaignCardFilterGridComponent {
       typeof searchAndFilterObj.filterBeneficiary === 'string' ||
       typeof searchAndFilterObj.filterCategory === 'string' ||
       typeof searchAndFilterObj.filterLocation === 'string';
+
+    this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
   };
 
   protected removeFilter(filterKey: 'locations' | 'categories' | 'beneficiaries') {
@@ -206,6 +276,7 @@ export class CampaignCardFilterGridComponent {
         break;
       case 'locations':
         this.selectedFilterLocation = null;
+        this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
         break;
       default:
         // This asks the compiler to check that we are in dead code, i.e. we covered all the possible filter keys
@@ -263,6 +334,8 @@ export class CampaignCardFilterGridComponent {
     if (filterPopup) {
       filterPopup.openFromOutside();
     }
+
+    this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
   };
 
   protected handleClearAll = () => {
@@ -304,6 +377,8 @@ export class CampaignCardFilterGridComponent {
       filterBeneficiary: null,
       filterLocation: null,
     });
+
+    this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
   };
 
   /**
@@ -321,6 +396,46 @@ export class CampaignCardFilterGridComponent {
       this.selectedFilterBeneficiary !== null ||
       this.selectedFilterLocation !== null;
     this.initialSortByOption = this.selectedSortByOption || 'Relevance';
+  }
+
+  ngAfterViewInit() {
+    this.initMap();
+  }
+
+  private setupMapObserver(element: ElementRef<HTMLDivElement>) {
+    this.teardownMap();
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+          requestAnimationFrame(() => {
+            if (!this.map) {
+              this.initMap();
+            } else {
+              this.map.invalidateSize();
+              const UKBounds: [[number, number], [number, number]] = [
+                [49.8, -8.7],
+                [60.9, 1.8],
+              ];
+              this.map.fitBounds(UKBounds, { padding: this.boundsPadding });
+            }
+          });
+        }
+      }
+    });
+
+    this.resizeObserver.observe(element.nativeElement);
+  }
+
+  private teardownMap() {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
+    this.map?.remove();
+    this.map = undefined;
+  }
+
+  ngOnDestroy() {
+    this.teardownMap();
   }
 
   public getSelectedValue(): undefined | string {
@@ -363,4 +478,152 @@ export class CampaignCardFilterGridComponent {
   }
 
   protected readonly faExclamationTriangle = faExclamationTriangle;
+  protected readonly campaignDrawerOpen = signal(false);
+
+  private locationFilterIsUK(location: string | null) {
+    return location === 'United Kingdom';
+  }
+
+  ngOnChanges(_changes: SimpleChanges<CampaignCardFilterGridComponent>) {
+    this.initMap();
+  }
+
+  /**
+   * Copied from campaign-info componnent - consider de-duplicating part or all of implementation if it doesn't diverge
+   * quickly.
+   */
+  private async initMap() {
+    // Check again in case it got destroyed while waiting
+    if (!this.mapElement || !isPlatformBrowser(this.platformId)) return;
+
+    const UKBounds: [[number, number], [number, number]] = [
+      [49.8, -8.7],
+      [60.9, 1.8],
+    ];
+
+    if (!this.map) {
+      this.map = new Map(this.mapElement.nativeElement, {
+        dragging: false,
+        // Setting min + max zoom to the view bounds level alone didn't seem to reliably make controls do nothing.
+        // So switching off every way I could find to zoom (the following 6 lines) seems the only safe way to
+        // achieve this.
+        zoomControl: false,
+        boxZoom: false,
+        doubleClickZoom: false,
+        keyboard: false,
+        scrollWheelZoom: false,
+        touchZoom: false,
+        zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
+      }).fitBounds(UKBounds, { padding: this.boundsPadding });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.map.eachLayer((layer: any) => {
+      layer.remove();
+    });
+
+    new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 13,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(this.map);
+
+    const projectLayer = new GeoJSON(this.highlightAreas, {
+      attribution:
+        'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
+      style: () => ({
+        fillColor: '#2c089b',
+        fillOpacity: 0.2,
+        color: '#2c089b',
+        weight: 1.5,
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
+        if (feature.properties && feature.properties['name']) {
+          layer.bindPopup(feature.properties['name']);
+        }
+
+        const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
+
+        const countObj = this.locationCounts?.find(
+          (lc) =>
+            lc.regionCode ===
+            (feature.properties?.['code'] ??
+              feature.properties?.['RGN25CD'] ??
+              feature.properties?.['CTRY25CD'] ??
+              feature.properties?.['CTYUA25CD'] ??
+              feature.properties?.['LAD25CD']),
+        );
+        const count = countObj !== undefined ? countObj.numCampaigns : 0;
+        const areaName = feature.properties?.['name'] || '';
+
+        const markerIcon = new DivIcon({
+          className: 'campaign-count-marker-container',
+          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+        });
+
+        const marker = new Marker(center, {
+          icon: markerIcon,
+          title: `${count} campaigns in ${areaName}`,
+        }).addTo(this.map);
+
+        marker.on('click', () => {
+          this.doSelectLocation.emit({
+            regionCode: countObj!.regionCode,
+            position: {
+              coords: {
+                latitude: center.lat,
+                longitude: center.lng,
+                accuracy: NaN,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                speed: null,
+                toJSON: () => {},
+              },
+              timestamp: Date.now(),
+              toJSON: () => {},
+            },
+          } as { position: GeolocationPosition; regionCode: string });
+        });
+      },
+    }).addTo(this.map);
+
+    const fullScreenButtonIcon = new DivIcon({
+      className: 'full-screen-map-button-container',
+      html: `<button type="button" class="full-screen-map-button" aria-label="Full screen map">🗖</button>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+
+    const fullScreenMarker = new Marker([60.7, 1.5], {
+      icon: fullScreenButtonIcon,
+      title: 'Full Screen Map',
+    }).addTo(this.map);
+    fullScreenMarker.on('click', () => {
+      this.fullScreenMapMode.set(true);
+      this.map.attributionControl.setPosition('topright');
+      setTimeout(() => this.map.invalidateSize(), 0);
+    });
+
+    const exitFullScreenButtonIcon = new DivIcon({
+      className: 'exit-full-screen-map-button-container',
+      html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close Full screen map">X</button>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+
+    const exitFullScreenMarker = new Marker([60.7, 1.5], {
+      icon: exitFullScreenButtonIcon,
+      title: 'Exit full Screen Map',
+    }).addTo(this.map);
+    exitFullScreenMarker.on('click', () => {
+      this.fullScreenMapMode.set(false);
+      this.map.attributionControl.setPosition('bottomright');
+      setTimeout(() => this.map.invalidateSize(), 0);
+    });
+
+    this.projectBounds = projectLayer.getBounds();
+  }
 }

@@ -34,6 +34,7 @@
           class="filter"
           colourScheme="primary"
           (doButtonClick)="handleFilterButtonClick()"
+          Filter
           label="Filter"
           [fullWidth]="true"
           space-below="0"
@@ -127,8 +128,41 @@
         <a (click)="handleClearAll()">Clear all</a>
       </div>
     </div>
-    <div class="campaign-grid">
-      <ng-content />
+    <div class="grid-map-container">
+      <div class="campaign-grid">
+        @if (individualCampaigns()) {
+          <app-campaign-summary-grid
+            (scrolled)="emitOnScroll()"
+            [individualCampaigns]="individualCampaigns()"
+            [columnCount]="ukFilterSelected() && flags.enableMapViewInExplore ? 2 : 3"
+          >
+          </app-campaign-summary-grid>
+        }
+      </div>
+      @if (ukFilterSelected() && flags.enableMapViewInExplore) {
+        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement></div>
+
+        @if (fullScreenMapMode()) {
+          <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
+            <div style="float: right; padding-right: 15px">
+              <!-- linting disabled below because we should have the a focusable, but giving it an href makes it
+               navigate away
+                 when clicked. May need to replace it with a button -->
+              <!-- eslint-disable-next-line -->
+              <a (click)="campaignDrawerOpen.set(!campaignDrawerOpen())">
+                {{ campaignDrawerOpen() ? "Close" : "Open" }}
+              </a>
+            </div>
+            <div style="clear: both"></div>
+            <app-campaign-summary-grid
+              (scrolled)="emitOnScroll()"
+              [individualCampaigns]="individualCampaigns()"
+              [columnCount]="2"
+            >
+            </app-campaign-summary-grid>
+          </div>
+        }
+      }
     </div>
   </div>
 </div>

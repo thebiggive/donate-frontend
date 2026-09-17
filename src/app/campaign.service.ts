@@ -161,7 +161,7 @@ export class CampaignService {
     }>(`${environment.matchbotApiPrefix}/charities/${charityId}/campaigns`);
   }
 
-  search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
+  search(searchQuery: SearchQuery): Observable<CampaignSummaryList> {
     let params = new HttpParams();
 
     if (searchQuery.limit) {
@@ -216,9 +216,7 @@ export class CampaignService {
       params = params.set('sortField', 'location');
     }
 
-    return this.http
-      .get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params })
-      .pipe(map((response) => response.campaignSummaries));
+    return this.http.get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params });
   }
 
   /**
