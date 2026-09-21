@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './delete-account.component.html',
   styleUrl: './delete-account.component.scss',
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [BiggivePageSection, BiggiveHeading, BiggiveButton, ReactiveFormsModule, BiggiveTextInput],
 })
 export class DeleteAccount implements OnInit {

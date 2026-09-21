@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -17,6 +17,7 @@ import { MoneyPipe } from '../../money.pipe';
   selector: 'app-my-mandates',
   imports: [BiggiveButton, BiggiveContainerCard, BiggiveGrid, BiggiveHeading, BiggivePageSection, DatePipe, MoneyPipe],
   templateUrl: './my-regular-giving.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './my-regular-giving.component.scss',
 })
 export class MyRegularGivingComponent implements OnInit {

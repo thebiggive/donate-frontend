@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,6 +39,7 @@ import { flags } from '../featureFlags';
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
   styleUrl: './transfer-funds.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     ReactiveFormsModule,

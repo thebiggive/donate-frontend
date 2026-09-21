@@ -10,6 +10,7 @@ import {
   ViewChild,
   WritableSignal,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
@@ -37,6 +38,7 @@ import { detect } from 'detect-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AsyncPipe, BiggiveCookieBanner, BiggiveFooter, BiggiveMainMenu, RouterOutlet],
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {

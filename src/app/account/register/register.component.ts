@@ -9,6 +9,7 @@ import {
   inject,
   ChangeDetectorRef,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -60,6 +61,7 @@ import { minPasswordLength } from '../../../environments/common';
     BiggiveFormFieldSelect,
   ],
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: 'register.component.scss',
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {

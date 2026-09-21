@@ -8,6 +8,7 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
@@ -27,6 +28,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './mailing-list.component.html',
   styleUrl: './mailing-list.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ReactiveFormsModule, BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput],
 })
 export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {

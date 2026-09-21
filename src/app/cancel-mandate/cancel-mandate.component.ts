@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
 import { Mandate } from '../mandate.model';
@@ -32,6 +32,7 @@ import { Observable, Subscription } from 'rxjs';
     AsyncPipe,
   ],
   templateUrl: './cancel-mandate.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './cancel-mandate.component.scss',
 })
 export class CancelMandateComponent implements OnInit, OnDestroy {

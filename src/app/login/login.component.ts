@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
@@ -50,6 +51,7 @@ export type LoginNavigationState = {
     ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: 'login.component.scss',
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {

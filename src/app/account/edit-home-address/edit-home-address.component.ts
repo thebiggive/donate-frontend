@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -21,6 +21,7 @@ import { countryOptions } from '../../countries';
   templateUrl: './edit-home-address.component.html',
   styleUrl: './edit-home-address.component.scss',
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     BiggivePageSection,
     BiggiveHeading,

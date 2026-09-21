@@ -13,6 +13,7 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -98,6 +99,7 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
   providers: [ExactCurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatStepper,

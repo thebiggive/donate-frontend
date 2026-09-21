@@ -185,7 +185,7 @@
                 wide="true"
               ></biggive-social-icon>
             </div>
-            <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
+            <a [routerLink]="'/campaign/' + $safeNavigationMigration(campaign?.id)">Back to campaign page</a>
           </div>
         </div>
       }

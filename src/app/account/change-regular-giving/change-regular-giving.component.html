@@ -24,7 +24,7 @@
                 )?.toUpperCase()
               }}
             </div>
-            @if (paymentMethods.regularGivingPaymentMethod?.card !== undefined) {
+            @if ($safeNavigationMigration(paymentMethods.regularGivingPaymentMethod?.card) !== undefined) {
               <div>Card Ending: {{ paymentMethods.regularGivingPaymentMethod?.card?.last4 }}</div>
             }
             @if (paymentMethods.regularGivingPaymentMethod?.card) {

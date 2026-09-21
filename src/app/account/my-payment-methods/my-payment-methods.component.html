@@ -111,10 +111,10 @@
                   )?.toUpperCase()
                 }}
               </div>
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              @if ($safeNavigationMigration(paymentMethods?.regularGivingPaymentMethod?.card) !== undefined) {
                 <div>Card Ending: {{ paymentMethods?.regularGivingPaymentMethod?.card?.last4 }}</div>
               }
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              @if ($safeNavigationMigration(paymentMethods?.regularGivingPaymentMethod?.card) !== undefined) {
                 <div class="cardExpiry">
                   Expiry Date:
                   {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{
@@ -124,7 +124,7 @@
               }
             </td>
             <td class="cardExpiry">
-              @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              @if ($safeNavigationMigration(paymentMethods?.regularGivingPaymentMethod?.card) !== undefined) {
                 <div>
                   Expiry Date:
                   {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}/{{

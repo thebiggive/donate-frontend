@@ -12,6 +12,7 @@ import {
   OnChanges,
   AfterViewInit,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -42,6 +43,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
   selector: 'app-campaign-card-filter-grid',
   imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
   templateUrl: './campaign-card-filter-grid.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './campaign-card-filter-grid.component.scss',
 })
 export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, AfterViewInit {

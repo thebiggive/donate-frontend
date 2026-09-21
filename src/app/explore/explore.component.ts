@@ -13,6 +13,7 @@ import {
   inject,
   InjectionToken,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -66,6 +67,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     { provide: endPipeToken, useClass: TimeLeftPipe },
     DatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
