@@ -163,8 +163,6 @@ import { SADMDADomainVerificationFile } from './stripe-apple-developer-merchanti
         `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
         '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
         'js.stripe.com',
-        // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
-        'https://player.vimeo.com',
         `'wasm-unsafe-eval'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
         `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
         'https://*.js.stripe.com',

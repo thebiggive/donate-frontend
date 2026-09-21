@@ -10,14 +10,12 @@ import {
   PLATFORM_ID,
   StateKey,
   TransferState,
-  ViewChild,
   inject,
   InjectionToken,
   ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
-  BiggiveCampaignCardFilterGrid,
   BiggiveTotalizer,
   BiggiveTotalizerTickerItem,
   BiggivePageSection,
@@ -102,8 +100,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private sessionStorage = inject<StorageService>(SESSION_STORAGE);
   private changeDetectorRef = inject(ChangeDetectorRef);
 
-  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
-
   /**
    * This component is used both for pages about specific meta-campagins, and for the general 'explore' page.
    * This will be undefined in the latter case.
@@ -120,7 +116,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   // Passed only on the fund-filtered view of this page.
   @Input({ required: false }) private fundSlug?: string;
 
-  private blurredSinceLastMajorScroll = false;
   private offset = 0;
   private routeParamSubscription?: Subscription;
   private searchServiceSubscription?: Subscription;
@@ -361,21 +356,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   async onScroll() {
     const scrollPositionY = this.scroller.getScrollPosition()[1];
     if (scrollPositionY < this.smallestSignificantScrollPx) {
-      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
-      this.blurredSinceLastMajorScroll = false;
-
       // On return with internal app nav, automatic position seems to be [0,59]
       // or so as of Nov '22. So we want only larger scrolls to be picked up as
       // donor intervention and to turn off auto-scroll + trigger loading of
       // additional campaigns.
       return;
-    }
-
-    if (!this.blurredSinceLastMajorScroll) {
-      if (this.cardGrid) {
-        await this.cardGrid.unfocusInputs();
-      }
-      this.blurredSinceLastMajorScroll = true;
     }
 
     this.shouldAutoScroll = false;
