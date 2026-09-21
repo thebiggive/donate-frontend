@@ -41,7 +41,7 @@
     "@angular/ssr": "^22.1.8",
     "@biggive/components": "^202609210653.0.0",
     "@biggive/components-angular": "^202609210653.0.0",
-    "@fortawesome/angular-fontawesome": "^4.0.0",
+    "@fortawesome/angular-fontawesome": "^5.1.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/pro-duotone-svg-icons": "^6.6.0",
