@@ -1,5 +1,16 @@
 import { DatePipe, isPlatformBrowser, Location, AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation, inject, input, effect } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  ViewEncapsulation,
+  inject,
+  input,
+  effect,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
@@ -80,6 +91,24 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private timer: number | NodeJS.Timeout | undefined; // State update setTimeout reference, for client side when donations open soon
   protected formattedCampaignSummary!: string;
   protected impactRegionNames: string[] = [];
+  private vimeoPlayer?: import('@vimeo/player').default;
+  private vimeoIframe?: HTMLIFrameElement;
+  private destroyed = false;
+
+  @ViewChild('videoIframe')
+  set videoIframe(element: ElementRef<HTMLIFrameElement> | undefined) {
+    if (
+      !element ||
+      !isPlatformBrowser(this.platformId) ||
+      this.campaign?.video?.provider !== 'vimeo' ||
+      this.vimeoPlayer
+    ) {
+      return;
+    }
+
+    this.vimeoIframe = element.nativeElement;
+    void this.initialiseVimeoPlayer(element.nativeElement).catch(console.error);
+  }
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -125,10 +154,22 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (isPlatformBrowser(this.platformId) && this.timer) {
       window.clearTimeout(this.timer);
       this.timer = undefined;
     }
+    void this.vimeoPlayer?.destroy().catch(console.error);
+  }
+
+  private async initialiseVimeoPlayer(iframe: HTMLIFrameElement) {
+    const { default: Player } = await import('@vimeo/player');
+
+    if (this.destroyed || this.vimeoIframe !== iframe || this.vimeoPlayer) {
+      return;
+    }
+
+    this.vimeoPlayer = new Player(iframe);
   }
 
   async goBackToMetacampaign(event: Event) {
