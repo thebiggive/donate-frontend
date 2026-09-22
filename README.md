@@ -158,7 +158,10 @@ CloudFront is configured to route requests to the right place based on these pre
 
 The ECS app we deploy runs on Express with `@angular/ssr`, the typical (since Angular 17) way to serve
 SSR apps. There are a few configuration tweaks and middleware additions for our use case,
-which all live in [`server.ts`](./server.ts).
+which live in [`server.ts`](./server.ts) and [`app.config.server.ts`](./app/app.config.server.ts).
+
+Since 2026 we use the Node-aware wrapper `AngularNodeAppEngine`, even when rewriting paths to ES5
+bundle versions for [legacy browsers](./docs/browser-support.md);
 
 #### Writing safe polymorphic code
 
