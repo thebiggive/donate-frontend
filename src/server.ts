@@ -93,7 +93,7 @@ const angularApp = new AngularNodeAppEngine({
 });
 
 // Make sure ECS meta task info, if available, is processed before any requests are handled.
-app.use(async (req, res, next) => {
+app.use(async (_req, _res, next) => {
   await taskMetadataInit;
   next();
 });
