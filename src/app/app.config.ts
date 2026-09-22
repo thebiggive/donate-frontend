@@ -1,11 +1,4 @@
-import {
-  ApplicationConfig,
-  ErrorHandler,
-  inject,
-  PLATFORM_ID,
-  provideAppInitializer,
-  provideZoneChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, ErrorHandler, inject, PLATFORM_ID, provideAppInitializer } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -83,6 +76,5 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: TitleStrategy, useClass: BigGiveTitleStrategy },
     { provide: ErrorHandler, useClass: BrowserErrorHandler },
-    provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };

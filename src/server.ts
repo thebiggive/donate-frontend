@@ -69,22 +69,33 @@ async function getTaskMetadata() {
 
 const allowedHosts = [donateHost, ...donateExtraHosts];
 
-// Should be set for any ECS task.
-// @ts-expect-error Not sure what else we can do but `await` here.
-const taskMetaData = await getTaskMetadata();
-if (taskMetaData) {
-  // IPv6 addresses need brackets to match the Host format used by ALB health check client.
-  const taskIps = [
-    taskMetaData.privateIP,
-    ...taskMetaData.ipv6Addresses.map((ip: string) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
-  ].filter(Boolean);
-  allowedHosts.push(...taskIps);
-  console.log('Task network info:', taskMetaData);
-  console.log('Complete allowedHosts:', allowedHosts);
-}
+const taskMetadataInit = (async () => {
+  try {
+    // Should be set for any ECS task.
+    const taskMetaData = await getTaskMetadata();
+    if (taskMetaData) {
+      // IPv6 addresses need brackets to match the Host format used by ALB health check client.
+      const taskIps = [
+        taskMetaData.privateIP,
+        ...taskMetaData.ipv6Addresses.map((ip: string) => (ip && ip.includes(':') ? `[${ip}]` : ip)),
+      ].filter(Boolean);
+      allowedHosts.push(...taskIps);
+      console.log('Task network info:', taskMetaData);
+      console.log('Complete allowedHosts:', allowedHosts);
+    }
+  } catch (error) {
+    console.error('Failed to load task metadata:', error);
+  }
+})();
 
 const angularApp = new AngularNodeAppEngine({
   allowedHosts,
+});
+
+// Make sure ECS meta task info, if available, is processed before any requests are handled.
+app.use(async (req, res, next) => {
+  await taskMetadataInit;
+  next();
 });
 
 app.use(compression());
