@@ -705,12 +705,14 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
-    setTimeout(() => {
-      const activeStepLabel = document.querySelector('.mat-step-label-active');
-      if (activeStepLabel) {
-        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 200);
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const activeStepLabel = document.querySelector('.mat-step-label-active');
+        if (activeStepLabel) {
+          activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 200);
+    }
 
     // If the original donation amount was updated, cancel that donation and
     // then (sequentially so any match funds are freed up first) create a new
@@ -901,7 +903,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.donationService
       .update(this.donation)
-      .pipe(retry({ count: 3, delay: getDelay() }))
+      // .pipe(retry({ count: 3, delay: getDelay() }))
       .subscribe({
         next: async (donation: Donation) => {
           this.donationService.updateLocalDonation(donation);

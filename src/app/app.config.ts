@@ -42,10 +42,12 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       registerSwiper();
       setAssetPath(`${environment.donateUriPrefix}/assets`);
-      defineCustomElements();
+      if (globalThis.window) {
+        await defineCustomElements();
+      }
     }),
     provideRouter(
       routes,
