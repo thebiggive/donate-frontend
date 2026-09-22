@@ -24,6 +24,9 @@ describe('ChangeRegularGivingComponent', () => {
                   adHocMethods: [],
                   regularGivingPaymentMethod: {},
                 },
+                setupIntent: {
+                  client_secret: 'seti_000aaa_secret_testFakeSecret00000',
+                },
               },
             },
           },
