@@ -24,7 +24,8 @@ const serverConfig: ApplicationConfig = {
       provide: COUNTRY_CODE,
       useFactory: () => {
         const req = inject(REQUEST);
-        return req.header('CloudFront-Viewer-Country') || undefined;
+        // Prefer Cloudflare, then CloudFront header values.
+        return req.header('CF-IPCountry') || req.header('CloudFront-Viewer-Country') || undefined;
       },
     },
     {
