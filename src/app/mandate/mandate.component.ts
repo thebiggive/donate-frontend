@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,6 +12,7 @@ import { PageMetaService } from '../page-meta.service';
   selector: 'app-mandate',
   imports: [DatePipe, MoneyPipe, MatProgressSpinner, RouterLink],
   templateUrl: './mandate.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mandate.component.scss',
 })
 export class MandateComponent implements OnInit {

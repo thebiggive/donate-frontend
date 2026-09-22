@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BiggiveButton, BiggiveTextInput } from '@biggive/components-angular';
 import { MatInput } from '@angular/material/input';
@@ -11,6 +11,7 @@ const codeLength = 6;
   selector: 'app-verify-email',
   imports: [BiggiveButton, BiggiveTextInput, MatInput, MatProgressSpinner, ReactiveFormsModule],
   templateUrl: './verify-email.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './verify-email.component.scss',
 })
 export class VerifyEmailComponent {

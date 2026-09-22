@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { ActivatedRoute } from '@angular/router';
@@ -22,6 +22,7 @@ import { flags } from '../../featureFlags';
   selector: 'app-my-payment-methods',
   imports: [BiggiveButton, BiggiveHeading, BiggivePageSection, ExactCurrencyPipe, FaIconComponent, MatProgressSpinner],
   templateUrl: './my-payment-methods.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './my-payment-methods.component.scss',
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy {

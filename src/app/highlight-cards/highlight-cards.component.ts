@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HighlightCard } from './HighlightCard';
 import { BiggiveBasicCard, BiggiveGrid } from '@biggive/components-angular';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-highlight-cards',
   imports: [BiggiveBasicCard, BiggiveGrid],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './highlight-cards.component.html',
 })
 export class HighlightCardsComponent implements OnInit {

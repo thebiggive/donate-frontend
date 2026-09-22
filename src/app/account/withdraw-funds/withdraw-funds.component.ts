@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +12,7 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
   selector: 'app-register',
   imports: [BiggiveButton, BiggiveHeading, BiggivePageSection, MatProgressSpinnerModule, ExactCurrencyPipe],
   templateUrl: './withdraw-funds.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: 'withdraw-funds.component.scss',
 })
 export class WithdrawFundsComponent implements OnInit {

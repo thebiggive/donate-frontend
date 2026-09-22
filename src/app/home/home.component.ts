@@ -1,5 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  PLATFORM_ID,
+  inject,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ViewChild,
+  ElementRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RESPONSE } from '../../express.tokens';
 import { Response } from 'express';
@@ -33,6 +42,7 @@ import { flags } from '../featureFlags';
     BiggiveVideoFeature,
     BiggiveHeadingBanner,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // for swiper
 })
 export class HomeComponent implements OnInit {

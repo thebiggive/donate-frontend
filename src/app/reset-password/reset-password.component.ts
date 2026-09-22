@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     BiggiveHeading,
     MatProgressSpinner,

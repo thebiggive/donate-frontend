@@ -10,6 +10,7 @@ import {
   signal,
   viewChild,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Campaign, formattedCampaignSummary } from '../campaign.model';
@@ -108,6 +109,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
   ],
   providers: [],
   templateUrl: './regular-giving.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './regular-giving.component.scss',
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy {

@@ -1,5 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -28,6 +38,7 @@ import { Toast } from '../toast.service';
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
   styleUrl: './donation-thanks.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatProgressSpinner, BiggivePageSection, BiggiveSocialIcon, RouterLink, DatePipe, ExactCurrencyPipe],
 })
 export class DonationThanksComponent implements OnDestroy, OnInit {

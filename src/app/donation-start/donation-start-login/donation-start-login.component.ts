@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Campaign } from '../../campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
@@ -10,6 +10,7 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
   selector: 'app-donation-start-login',
   templateUrl: './donation-start-login.component.html',
   styleUrl: './donation-start-login.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButton, RouterLink, ExactCurrencyPipe],
 })
 export class DonationStartLoginComponent {

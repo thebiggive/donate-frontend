@@ -1,6 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -23,6 +23,7 @@ import { MatomoModule } from 'ngx-matomo-client';
       useClass: DonationStartFormStubComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatDialogModule, RouterLink],
 })
 class DonationStartFormStubComponent {

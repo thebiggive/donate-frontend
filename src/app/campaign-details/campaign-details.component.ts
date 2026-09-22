@@ -10,6 +10,7 @@ import {
   inject,
   input,
   effect,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -45,6 +46,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     BiggivePageSection,
     BiggiveCallToAction,
