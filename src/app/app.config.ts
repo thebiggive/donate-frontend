@@ -2,7 +2,6 @@ import { ApplicationConfig, ErrorHandler, inject, PLATFORM_ID, provideAppInitial
 import {
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
   TitleStrategy,
@@ -23,6 +22,7 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
@@ -49,11 +49,10 @@ export const appConfig: ApplicationConfig = {
         await defineCustomElements();
       }
     }),
+    provideClientHydration(),
     provideRouter(
       routes,
       withComponentInputBinding(),
-      // "This value should be set in case you use server-side rendering, but do not enable hydration for your application."
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
       // Allows Explore & home logo links to clear search filters in ExploreComponent
       withRouterConfig({ onSameUrlNavigation: 'reload' }),

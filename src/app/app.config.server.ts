@@ -1,14 +1,15 @@
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
 import { mergeApplicationConfig, ApplicationConfig, ErrorHandler, inject, PLATFORM_ID } from '@angular/core';
-import { provideServerRendering } from '@angular/ssr';
+import { provideServerRendering, withRoutes } from '@angular/ssr';
 
 import { appConfig } from './app.config';
 import { environment } from '../environments/environment';
+import { serverRoutes } from './app.routes.server';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering(),
+    provideServerRendering(withRoutes(serverRoutes)),
     // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
     // base reported by CDNs when talking to the origin.
     { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },

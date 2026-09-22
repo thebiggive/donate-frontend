@@ -903,7 +903,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
     this.donationService
       .update(this.donation)
-      // .pipe(retry({ count: 3, delay: getDelay() }))
+      .pipe(retry({ count: 3, delay: getDelay() }))
       .subscribe({
         next: async (donation: Donation) => {
           this.donationService.updateLocalDonation(donation);
