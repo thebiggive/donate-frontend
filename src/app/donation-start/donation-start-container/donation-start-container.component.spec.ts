@@ -1,4 +1,4 @@
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -51,7 +51,7 @@ describe('DonationStartContainer', () => {
         InMemoryStorageService,
         { provide: MatomoModule, useClass: MatomoTestingModule },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
       ],
     }).compileComponents();

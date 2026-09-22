@@ -1,4 +1,4 @@
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
@@ -25,7 +25,7 @@ describe('IdentityService', () => {
       providers: [
         IdentityService,
         InMemoryStorageService,
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],

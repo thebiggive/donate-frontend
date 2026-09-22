@@ -4,13 +4,13 @@ import { TestBed } from '@angular/core/testing';
 import { environment } from '../environments/environment';
 import { Fund } from './fund.model';
 import { FundService } from './fund.service';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('FundService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [],
-      providers: [FundService, provideHttpClient(withFetch()), provideHttpClientTesting()],
+      providers: [FundService, provideHttpClient(), provideHttpClientTesting()],
     }),
   );
 

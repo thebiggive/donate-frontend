@@ -8,7 +8,7 @@ import {
   TitleStrategy,
 } from '@angular/router';
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
-import { HttpInterceptorFn, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { defineCustomElements } from '@biggive/components/loader';
@@ -56,10 +56,8 @@ export const appConfig: ApplicationConfig = {
       // Allows Explore & home logo links to clear search filters in ExploreComponent
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
-    provideHttpClient(
-      withFetch(), // For route resolvers etc.
-      withInterceptors([donateSsrHeaderInterceptor]),
-    ),
+    // For route resolvers etc.
+    provideHttpClient(withInterceptors([donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',

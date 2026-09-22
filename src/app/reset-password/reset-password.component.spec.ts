@@ -1,5 +1,5 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -49,7 +49,7 @@ describe('ResetPasswordComponent', () => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [],
-      providers: [provideHttpClient(withFetch()), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 
     fixture = TestBed.createComponent(ResetPasswordComponent);

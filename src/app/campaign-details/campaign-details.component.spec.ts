@@ -1,6 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -9,7 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -17,7 +17,7 @@ describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
   let fixture: ComponentFixture<CampaignDetailsComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -30,9 +30,9 @@ describe('CampaignDetailsComponent', () => {
         RouterModule.forRoot([]),
         CampaignDetailsComponent,
       ],
-      providers: [TimeLeftPipe, provideHttpClient(withFetch()), provideHttpClientTesting()],
+      providers: [TimeLeftPipe, provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CampaignDetailsComponent);

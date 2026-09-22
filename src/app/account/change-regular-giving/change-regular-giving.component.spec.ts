@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
@@ -30,7 +30,7 @@ describe('ChangeRegularGivingComponent', () => {
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     }).compileComponents();
