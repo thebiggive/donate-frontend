@@ -10,6 +10,7 @@ import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
 import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import { provideClientHydration } from '@angular/platform-browser';
 import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
@@ -22,7 +23,6 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
-import { provideClientHydration } from '@angular/platform-browser';
 
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
