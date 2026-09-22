@@ -1,16 +1,10 @@
-import { APP_BASE_HREF } from '@angular/common';
-import { mergeApplicationConfig, ApplicationConfig, ErrorHandler } from '@angular/core';
+import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
+import { mergeApplicationConfig, ApplicationConfig, ErrorHandler, inject, PLATFORM_ID } from '@angular/core';
 import { provideServerRendering } from '@angular/ssr';
 
 import { appConfig } from './app.config';
 import { environment } from '../environments/environment';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
-
-const token = process.env['DONATE_CLOUDFLARE_SSR_TOKEN'];
-
-if (environment.productionLike && !token) {
-  throw new Error('DONATE_CLOUDFLARE_SSR_TOKEN is not configured');
-}
 
 const serverConfig: ApplicationConfig = {
   providers: [
@@ -20,7 +14,13 @@ const serverConfig: ApplicationConfig = {
     { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
     {
       provide: SSR_CLOUDFLARE_TOKEN,
-      useValue: token,
+      useFactory: () => {
+        const platformId = inject(PLATFORM_ID);
+        if (isPlatformServer(platformId) && typeof process !== 'undefined') {
+          return process.env['DONATE_CLOUDFLARE_SSR_TOKEN'] ?? undefined;
+        }
+        return undefined;
+      },
     },
     {
       // overriding custom error handler used on browser to toastify errors and send them to Matomo - on server
