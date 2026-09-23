@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
-import { DatePipe, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MoneyPipe } from '../money.pipe';
@@ -20,7 +20,6 @@ export class MandateComponent implements OnInit {
   private regularGivingService = inject(RegularGivingService);
   private router = inject(Router);
   private readonly pageMeta = inject(PageMetaService);
-  private platformId = inject(PLATFORM_ID);
 
   protected mandate!: Mandate;
   protected readonly cancelPath;
@@ -42,7 +41,7 @@ export class MandateComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    if (this.mandate.status === 'pending' && isPlatformBrowser(this.platformId)) {
+    if (this.mandate.status === 'pending') {
       this.pollForMandateUpdate();
     }
     if (this.isThanksPage && this.mandateIsOld()) {
