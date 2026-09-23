@@ -1,6 +1,6 @@
 @let preExistingActiveMandate = preExistingActiveMandate$ | async;
 
-<main class="b-container">
+<main class="b-container" ngSkipHydration>
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
