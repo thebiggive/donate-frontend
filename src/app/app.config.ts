@@ -1,23 +1,16 @@
-import {
-  ApplicationConfig,
-  ErrorHandler,
-  inject,
-  PLATFORM_ID,
-  provideAppInitializer,
-  provideZoneChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, ErrorHandler, inject, PLATFORM_ID, provideAppInitializer } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
   TitleStrategy,
 } from '@angular/router';
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
-import { HttpInterceptorFn, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import { provideClientHydration } from '@angular/platform-browser';
 import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
@@ -49,24 +42,23 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       registerSwiper();
       setAssetPath(`${environment.donateUriPrefix}/assets`);
-      defineCustomElements();
+      if (globalThis.window) {
+        await defineCustomElements();
+      }
     }),
+    provideClientHydration(),
     provideRouter(
       routes,
       withComponentInputBinding(),
-      // "This value should be set in case you use server-side rendering, but do not enable hydration for your application."
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
       // Allows Explore & home logo links to clear search filters in ExploreComponent
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
-    provideHttpClient(
-      withFetch(), // For route resolvers etc.
-      withInterceptors([donateSsrHeaderInterceptor]),
-    ),
+    // For route resolvers etc.
+    provideHttpClient(withInterceptors([donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',
@@ -83,6 +75,5 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: TitleStrategy, useClass: BigGiveTitleStrategy },
     { provide: ErrorHandler, useClass: BrowserErrorHandler },
-    provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };

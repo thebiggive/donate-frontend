@@ -1,6 +1,6 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
@@ -53,7 +53,7 @@ describe('DonationService', () => {
         { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
         DonationService,
         InMemoryStorageService,
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],

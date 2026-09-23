@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,7 +24,7 @@ import { TimeLeftPipe } from '../../time-left.pipe';
 import { DonationStartFormComponent } from './donation-start-form.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Donation } from '../../donation.model';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('DonationStartForm', () => {
   let component: DonationStartFormComponent;
@@ -131,7 +131,7 @@ describe('DonationStartForm', () => {
         TimeLeftPipe,
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
@@ -393,9 +393,7 @@ describe('DonationStartForm', () => {
 
     // Ensure form groups are ready, otherwise we get lots of errors from validation updates
     // etc. on undefined elements.
-    await waitForAsync(() => {
-      component.loadPerson({ cash_balance: { gbp: 0 } }, 'jwt');
-    });
+    component.loadPerson({ cash_balance: { gbp: 0 } }, 'jwt');
 
     await component.payWithStripe();
 

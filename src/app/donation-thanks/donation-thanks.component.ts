@@ -251,7 +251,9 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       if (donation.pspMethodType === 'customer_balance') {
         // the donation will have affected the person's customer balance so wait to re-load the person before updating it:
         const oneSecond = 1_000;
-        setTimeout(this.loadPerson, oneSecond);
+        if (isPlatformBrowser(this.platformId)) {
+          setTimeout(this.loadPerson, oneSecond);
+        }
       } else {
         this.loadPerson();
       }
@@ -279,12 +281,13 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
 
     if (this.tries <= this.maxTries) {
       // Use an anonymous function so `this` context works inside the callback.
-
-      setTimeout(
-        () => this.checkDonation(),
-        // Exponential back-off from e.g. 2s to 32s.
-        this.calculateExponentialBackoffMs(this.tries),
-      );
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(
+          () => this.checkDonation(),
+          // Exponential back-off from e.g. 2s to 32s.
+          this.calculateExponentialBackoffMs(this.tries),
+        );
+      }
       return;
     }
 

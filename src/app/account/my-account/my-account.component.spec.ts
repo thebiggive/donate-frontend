@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatomoModule } from 'ngx-matomo-client';
@@ -24,7 +24,7 @@ describe('MyAccountComponent', () => {
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],
     });

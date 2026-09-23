@@ -1,5 +1,5 @@
 import { APP_BASE_HREF, AsyncPipe } from '@angular/common';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -38,7 +38,7 @@ describe('AppComponent', () => {
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
       ],
     });

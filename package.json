@@ -97,7 +97,7 @@
     "babel-loader": "^10.0.0",
     "babel-plugin-polyfill-corejs3": "^1.0.0",
     "browser-sync": "^3.0.0",
-    "cypress": "^15.15.0",
+    "cypress": "^16.1.0",
     "eslint": "^10.11.0",
     "eslint-plugin-no-floating-promise": "^2.0.0",
     "istanbul-lib-instrument": "^6.0.3",

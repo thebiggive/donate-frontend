@@ -1,38 +1,43 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.production.ts` unless a `--configuration` is also provided.
 // The list of file replacements can be found in `angular.json`.
-
-// The `regression` environment targets RegTest1 and is intended exclusively for automated regression testing.
-
+//
 // see also src/app/featureFlags.ts
 
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ',
-  environmentId: 'regression',
+  environmentId: 'development',
   production: false,
-  productionLike: true,
-  creditTipsCampaign: 'a053O00000J1ROLQA3',
-  sfApiUriPrefix: 'https://sf-api-regression.thebiggivetest.org.uk',
+  productionLike: false,
+  creditTipsCampaign: '000000000000000003',
+  sfApiUriPrefix: 'https://dummy-salesforce.example.org',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateEcsIntermediateHost: 'donate-ecs-regression.thebiggivetest.org.uk',
-  donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
-  sharedCookieDomain: '.thebiggivetest.org.uk',
-  blogUriPrefix: 'https://biggive.org',
-  experienceUriPrefix: 'https://thebiggive--regtest1.sandbox.my.site.com',
-  matchbotApiOrigin: 'https://matchbot-regression.thebiggivetest.org.uk',
-  matchbotApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
+  donateEcsIntermediateHost: null,
+  donateUriPrefix: 'http://localhost:4200',
+  blogUriPrefix: 'http://localhost:30003',
+  sharedCookieDomain: 'localhost',
+  experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
+  matchbotApiOrigin: 'http://localhost:30030',
+  matchbotApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
-  identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
+  identityApiPrefix: 'http://localhost:30050/v1',
   imageHosts: [
     'images-regression.thebiggivetest.org.uk',
     'images-staging.thebiggivetest.org.uk',
     'images-production.thebiggive.org.uk',
+    'picsum.photos',
   ],
-  matomoPayByBankGoalId: 4,
   matomoSiteId: 4,
-  matomoNonZeroTipGoalId: null,
+  matomoNonZeroTipGoalId: 1,
+  matomoPayByBankGoalId: 4,
+  matomoAbTest: {
+    name: 'payment_method_order_2026_test',
+    variantName: 'B',
+    startDate: '2026/03/12 15:00:00 UTC',
+    endDate: undefined,
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   psps: {
@@ -44,5 +49,5 @@ export const environment: Environment = {
       publicKey: 'pk_sandbox_xUO+D9iWyM2C1TLkEcaKejCRDum2ij1xx3Y/4NBdCOpzJtkrgv4Mj4py4itFNhAz',
     },
   },
-  showDebugInfo: false,
+  showDebugInfo: true,
 };
