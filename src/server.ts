@@ -167,7 +167,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       `'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp – and very possibly others
       'https://*.js.stripe.com',
       'https://js.stripe.com',
-      `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script.
+      `'nonce-${externalScriptNonce}'`, // Support e.g. Cloudflare injected script, Angular event replay snippet.
     ],
     'worker-src': [
       'blob:', // friendly-captcha
@@ -253,7 +253,10 @@ app.use('**', async (req, res, next) => {
   const useLegacy = legacyRequested || isLegacyBrowser(ua);
 
   const engine = await enginePromise;
-  const response = await engine.handle(req);
+  const response = await engine.handle(req, {
+    inlineCriticalCss: false, // TODO review whether this is still more performant and/or safer with the new engine
+    cspNonce: res.locals['cspScriptNonce'],
+  });
   if (!response) {
     return next();
   }
