@@ -309,8 +309,8 @@
 
     position: relative;
 
-    ::ng-deep label {
-      padding-left: 40px;
+    ::ng-deep .mat-mdc-radio-button .mdc-label {
+      margin-left: 40px;
     }
 
     ::ng-deep .mdc-radio {
