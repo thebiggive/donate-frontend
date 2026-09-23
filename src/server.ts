@@ -67,9 +67,9 @@ async function getTaskMetadata() {
   }
 }
 
-const allowedHosts = [donateHost, ...donateExtraHosts];
+const enginePromise = (async () => {
+  const allowedHosts = [donateHost, ...donateExtraHosts];
 
-const taskMetadataInit = (async () => {
   try {
     // Should be set for any ECS task.
     const taskMetaData = await getTaskMetadata();
@@ -86,17 +86,9 @@ const taskMetadataInit = (async () => {
   } catch (error) {
     console.error('Failed to load task metadata:', error);
   }
+
+  return new AngularNodeAppEngine({ allowedHosts });
 })();
-
-const angularApp = new AngularNodeAppEngine({
-  allowedHosts,
-});
-
-// Make sure ECS meta task info, if available, is processed before any requests are handled.
-app.use(async (_req, _res, next) => {
-  await taskMetadataInit;
-  next();
-});
 
 app.use(compression());
 
@@ -260,7 +252,8 @@ app.use('**', async (req, res, next) => {
   const legacyRequested = query.legacy === '1';
   const useLegacy = legacyRequested || isLegacyBrowser(ua);
 
-  const response = await angularApp.handle(req);
+  const engine = await enginePromise;
+  const response = await engine.handle(req);
   if (!response) {
     return next();
   }
