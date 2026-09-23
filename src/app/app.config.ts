@@ -10,7 +10,7 @@ import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
 import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
@@ -49,7 +49,7 @@ export const appConfig: ApplicationConfig = {
         await defineCustomElements();
       }
     }),
-    provideClientHydration(),
+    provideClientHydration(withNoIncrementalHydration()), // @todo DON-1189 Possibly bring back incremental once we fix inlince script CSP nonces
     provideRouter(
       routes,
       withComponentInputBinding(),
