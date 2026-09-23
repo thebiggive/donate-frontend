@@ -9,6 +9,7 @@ import {
   ViewChild,
   inject,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -43,6 +44,7 @@ import { Toast } from '../toast.service';
 })
 export class DonationThanksComponent implements OnDestroy, OnInit {
   private campaignService = inject(CampaignService);
+  private cdr = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
   private donationService = inject(DonationService);
   private identityService = inject(IdentityService);
@@ -247,6 +249,8 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       // Re-save the donation with its new status so we don't offer to resume it if the donor
       // goes back to the same campaign.
       this.donationService.updateLocalDonation(donation);
+
+      this.cdr.markForCheck(); // TODO replace with signals and get component ready for OnPush detection.
 
       if (donation.pspMethodType === 'customer_balance') {
         // the donation will have affected the person's customer balance so wait to re-load the person before updating it:
