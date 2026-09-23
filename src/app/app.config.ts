@@ -69,7 +69,7 @@ export const appConfig: ApplicationConfig = {
       withRouter(),
       withRouteData(),
     ),
-    { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+    { provide: APP_BASE_HREF, useValue: '/' },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
