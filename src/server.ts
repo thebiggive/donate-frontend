@@ -255,7 +255,10 @@ app.use('**', async (req, res, next) => {
   const engine = await enginePromise;
   const response = await engine.handle(req, {
     inlineCriticalCss: false, // TODO review whether this is still more performant and/or safer with the new engine
-    cspNonce: res.locals['cspScriptNonce'],
+    serverContext: {
+      nonce: res.locals['cspScriptNonce'], // Used in app.config.server.ts factory for CSP_NONCE.
+    },
+    cspNonce: res.locals['cspScriptNonce'], // Possibly used in the render itself? Less sure on this.
   });
   if (!response) {
     return next();
