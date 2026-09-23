@@ -87,7 +87,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     password: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
   });
 
-  private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string | undefined;
   protected readonly flags = flags;
