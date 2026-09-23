@@ -119,6 +119,8 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       }
 
       this.isDataLoaded = true;
+
+      this.cdr.markForCheck();
     });
   };
 
@@ -137,19 +139,20 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       return;
     }
 
-    this.donationService.get(donationLocalCopy).subscribe(
-      (donation) => this.setDonation(donation),
+    this.donationService.get(donationLocalCopy).subscribe({
+      next: (donation) => this.setDonation(donation),
       // Get error may occur e.g. after a DB reset; unlikely recoverable within the
       // page view so treat it like a timeout. Error message encourages donors to
       // refresh to try loading again when any server problem's resolved.
-      (error: HttpErrorResponse) => {
+      error: (error: HttpErrorResponse) => {
         if (error.status == 401) {
           this.noAccess = true;
         } else {
           this.timedOut = true;
         }
+        this.cdr.markForCheck();
       },
-    );
+    });
   }
 
   /**
@@ -217,6 +220,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     if (donation === undefined || !donation.lastName || !donation.emailAddress) {
       this.matomoTracker.trackEvent('donate', 'thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
+      this.cdr.markForCheck();
       return;
     }
 
@@ -226,6 +230,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       this.campaign = campaign;
       this.pageMeta.setCommon(`Thank you for donating to the "${campaign.title}" campaign`, ``, campaign.banner?.uri);
       this.setSocialShares(campaign);
+      this.cdr.markForCheck();
     });
 
     if (donation && this.donationService.isComplete(donation)) {
@@ -250,8 +255,6 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       // goes back to the same campaign.
       this.donationService.updateLocalDonation(donation);
 
-      this.cdr.markForCheck(); // TODO replace with signals and get component ready for OnPush detection.
-
       if (donation.pspMethodType === 'customer_balance') {
         // the donation will have affected the person's customer balance so wait to re-load the person before updating it:
         const oneSecond = 1_000;
@@ -259,6 +262,8 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       } else {
         this.loadPerson();
       }
+
+      this.cdr.markForCheck(); // TODO replace with signals and get component ready for OnPush detection.
 
       return;
     }
@@ -298,6 +303,8 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       `Donation to campaign ${donation.projectId}`,
     );
     this.timedOut = true;
+
+    this.cdr.markForCheck(); // TODO replace with signals and get component ready for OnPush detection.
   }
 
   calculateExponentialBackoffMs(tries: number) {
