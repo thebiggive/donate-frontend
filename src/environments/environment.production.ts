@@ -2,6 +2,7 @@ import { Environment } from './environment.interface';
 // // see also src/app/featureFlags.ts
 export const environment: Environment = {
   friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ',
+  turnstileSiteKey: '0x4AAAAAAFCLQxaSU_opvJed',
   environmentId: 'production',
   production: true,
   productionLike: true,

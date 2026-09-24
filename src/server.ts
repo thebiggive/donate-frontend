@@ -27,6 +27,7 @@ const donateExtraHosts = [
   ...(donateHost === 'donate.biggive.org' ? ['donate-production.thebiggive.org.uk'] : []),
 ];
 const imageHosts = environment.imageHosts;
+const cloudflareChallengeBase = 'https://challenges.cloudflare.com';
 const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -117,6 +118,7 @@ function buildCspDirectives(externalScriptNonce: string) {
       new URL(environment.sfApiUriPrefix).host,
       new URL(environment.matchbotApiPrefix).host,
       new URL(environment.identityApiPrefix).host,
+      cloudflareChallengeBase,
       matomoUriBase,
       'api.friendlycaptcha.com',
       'https://api.stripe.com',
@@ -155,6 +157,7 @@ function buildCspDirectives(externalScriptNonce: string) {
     ],
     'script-src': [
       `'self'`,
+      cloudflareChallengeBase,
       matomoUriBase,
       // See index.html for the following 3.
       `'sha256-6ujEsJG/tOHYHv4tR719xOmWBHvakweTgiTKCrqxTmo='`, // globalThis support check

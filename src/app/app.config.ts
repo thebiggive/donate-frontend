@@ -24,16 +24,29 @@ import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
+const internalApiHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
+
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
   const token = inject(SSR_CLOUDFLARE_TOKEN, { optional: true });
-  const allowedHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
 
-  if (isPlatformServer(platformId) && token && allowedHosts.includes(new URL(req.url).host)) {
+  if (isPlatformServer(platformId) && token && internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       setHeaders: {
         'X-TBG-Donate-SSR-Token': token,
       },
+    });
+  }
+
+  return next(req);
+};
+
+// Current purpose is to ensure Cloudflare clearance cookies can be sent on to MatchBot & Identity. Unlike the above
+// this can happen regardless of whether the request is server or client side.
+export const apiAuthInterceptor: HttpInterceptorFn = (req, next) => {
+  if (internalApiHosts.includes(new URL(req.url).host)) {
+    req = req.clone({
+      withCredentials: true,
     });
   }
 
@@ -58,7 +71,7 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
     // For route resolvers etc.
-    provideHttpClient(withInterceptors([donateSsrHeaderInterceptor])),
+    provideHttpClient(withInterceptors([apiAuthInterceptor, donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',

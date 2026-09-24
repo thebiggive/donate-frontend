@@ -6,6 +6,10 @@
   </div>
 }
 
+@if (turnstileSiteKey) {
+  <div class="cf-turnstile" [attr.data-sitekey]="turnstileSiteKey"></div>
+}
+
 <header>
   @if (currentUrlWithoutHash$ | async; as currentUrl) {
     <div class="skip-to-content-link">
