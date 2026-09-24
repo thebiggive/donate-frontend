@@ -51,6 +51,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private platformId = inject(PLATFORM_ID);
   private matomoTracker = inject(MatomoTracker);
   private router = inject(Router);
+  protected turnstileSiteKey = environment.turnstileSiteKey;
 
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
