@@ -37,7 +37,7 @@
           Filter
           label="Filter"
           [fullWidth]="true"
-          space-below="0"
+          space-below="1"
         ></biggive-button>
         <biggive-popup id="filter-popup">
           <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
@@ -140,20 +140,36 @@
         }
       </div>
       @if (ukFilterSelected() && flags.enableMapViewInExplore) {
-        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement></div>
+        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement>
+          <div class="full-screen-map-button-container">
+            <fa-icon
+              tabindex="0"
+              [icon]="faExpandArrows"
+              (click)="makeMapFullScreen()"
+              class="full-screen-map-button"
+            ></fa-icon>
+          </div>
+        </div>
 
         @if (fullScreenMapMode()) {
+          <div
+            tabindex="0"
+            class="drawer-control"
+            [class.open]="campaignDrawerOpen()"
+            (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+          >
+            <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
+            <span class="label">Campaign Results</span>
+            @if (campaignDrawerOpen()) {
+              <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
+            } @else {
+              <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
+            }
+          </div>
+
           <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
-            <div style="float: right; padding-right: 15px">
-              <!-- linting disabled below because we should have the a focusable, but giving it an href makes it
-               navigate away
-                 when clicked. May need to replace it with a button -->
-              <!-- eslint-disable-next-line -->
-              <a (click)="campaignDrawerOpen.set(!campaignDrawerOpen())">
-                {{ campaignDrawerOpen() ? "Close" : "Open" }}
-              </a>
-            </div>
-            <div style="clear: both"></div>
             <app-campaign-summary-grid
               (scrolled)="emitOnScroll()"
               [individualCampaigns]="individualCampaigns()"

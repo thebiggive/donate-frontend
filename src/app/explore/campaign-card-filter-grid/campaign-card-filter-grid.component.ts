@@ -13,6 +13,7 @@ import {
   AfterViewInit,
   input,
   ChangeDetectionStrategy,
+  computed,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -20,10 +21,15 @@ import { COUNTRY_CODE } from '../../country-code.token';
 import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faExclamationTriangle, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleChevronUp,
+  faCircleChevronDown,
+  faMagnifyingGlass,
+  faTableList,
+} from '@fortawesome/free-solid-svg-icons';
+import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { HttpClient } from '@angular/common/http';
 import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
 import { CampaignSummary } from '../../campaign-summary.model';
@@ -94,7 +100,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private newSelectedFilterCategory: string | null = null;
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
-  private http = inject(HttpClient);
   protected fullScreenMapMode = signal(false);
 
   @ViewChild('root') el!: ElementRef;
@@ -109,7 +114,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   doGetLocationFromBrowser = output<void>();
   doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
+  protected faCircleChevronDown = faCircleChevronDown;
+  protected faCircleChevronUp = faCircleChevronUp;
+  protected faExpandArrows = faExpandArrows;
   protected faMagnifyingGlass = faMagnifyingGlass;
+  protected faTableList = faTableList;
 
   /**
    * Typically on non-negligible scroll away from the search area.
@@ -193,8 +202,17 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private map?: any;
 
-  private readonly boundsPadding = [8, 8];
-  private projectBounds?: DOMRect;
+  /**
+   * Sets bounds options which allow a modest space around the relevant area (currently always whole of UK), plus an extra
+   * space for the controls drawer when in full sceen mode.
+   */
+  private readonly boundsOptions = computed(() => {
+    return {
+      paddingTopLeft: [8, 8],
+      paddingBottomRight: [8, this.fullScreenMapMode() ? 100 : 8],
+    };
+  });
+
   private resizeObserver?: ResizeObserver;
 
   /**
@@ -419,7 +437,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
                 [49.8, -8.7],
                 [60.9, 1.8],
               ];
-              this.map.fitBounds(UKBounds, { padding: this.boundsPadding });
+              this.map.fitBounds(UKBounds, this.boundsOptions());
             }
           });
         }
@@ -479,7 +497,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     return Object.entries(options).map((entry) => ({ value: entry[0], label: entry[1] }));
   }
 
-  protected readonly faExclamationTriangle = faExclamationTriangle;
   protected readonly campaignDrawerOpen = signal(false);
 
   private locationFilterIsUK(location: string | null) {
@@ -488,6 +505,12 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   ngOnChanges(_changes: SimpleChanges<CampaignCardFilterGridComponent>) {
     this.initMap();
+  }
+
+  protected makeMapFullScreen() {
+    this.fullScreenMapMode.set(true);
+    this.map.attributionControl.setPosition('topright');
+    setTimeout(() => this.map.invalidateSize(), 0);
   }
 
   /**
@@ -514,9 +537,9 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         doubleClickZoom: false,
         keyboard: false,
         scrollWheelZoom: false,
-        touchZoom: false,
+        pinchZoom: false,
         zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
-      }).fitBounds(UKBounds, { padding: this.boundsPadding });
+      }).fitBounds(UKBounds, this.boundsOptions());
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -529,7 +552,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(this.map);
 
-    const projectLayer = new GeoJSON(this.highlightAreas, {
+    new GeoJSON(this.highlightAreas, {
       attribution:
         'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
       style: () => ({
@@ -592,23 +615,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       },
     }).addTo(this.map);
 
-    const fullScreenButtonIcon = new DivIcon({
-      className: 'full-screen-map-button-container',
-      html: `<button type="button" class="full-screen-map-button" aria-label="Full screen map">🗖</button>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-    });
-
-    const fullScreenMarker = new Marker([60.7, 1.5], {
-      icon: fullScreenButtonIcon,
-      title: 'Full Screen Map',
-    }).addTo(this.map);
-    fullScreenMarker.on('click', () => {
-      this.fullScreenMapMode.set(true);
-      this.map.attributionControl.setPosition('topright');
-      setTimeout(() => this.map.invalidateSize(), 0);
-    });
-
     const exitFullScreenButtonIcon = new DivIcon({
       className: 'exit-full-screen-map-button-container',
       html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close Full screen map">X</button>`,
@@ -625,7 +631,5 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
-
-    this.projectBounds = projectLayer.getBounds();
   }
 }
