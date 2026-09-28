@@ -7,6 +7,9 @@ $colour-white: #fff;
 $colour-black-contrast: #fff; // Suitable for legible text on `$colour-black` backgrounds
 $colour-highlight: #2af135;
 $colour-card-background: #fff;
+// Translucent for use in e.g. map overlays, on card surrounds or behind controls with high enough contrast that they
+// can be legible on this, e.g. using $colour-primary.
+$colour-card-overlay-background: rgba(255, 255, 255, 0.7);
 
 $colour-primary: #2c089b;
 $colour-secondary: #ff7272;
@@ -18,6 +21,7 @@ $md: 600px;
 $lg: 968px;
 $xl: 1280px;
 $full-copy-max-width: $md;
+$full-screen-border: 5px;
 
 $breakpoint-sm: "(min-width: " + $sm + " )";
 $breakpoint-smallish: "(min-width: " + $smallish + ")";

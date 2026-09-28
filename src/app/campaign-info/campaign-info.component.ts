@@ -143,7 +143,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       doubleClickZoom: false,
       keyboard: false,
       scrollWheelZoom: false,
-      touchZoom: false,
+      pinchZoom: false,
       zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
     }).setView([51.505, -0.09], 4); // Replaced later when we fit project highlight bounds.
 
