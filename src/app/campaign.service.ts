@@ -201,7 +201,7 @@ export class CampaignService {
     }
 
     if (searchQuery.sortField) {
-      params = params.append('sortField', searchQuery.sortField); // go back here
+      params = params.append('sortField', searchQuery.sortField);
     }
 
     if (searchQuery.term) {
