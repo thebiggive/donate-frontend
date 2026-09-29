@@ -215,11 +215,9 @@ export class CampaignService {
 
       params = params.set('filterByLatLong', true);
 
-      // previously we also had the following line here but we now don't want it, as sorting by location
-      // will be the default when filtering by location but not always selected, so that default will have to be set in
-      // the UI layer.
-
-      // params = params.set('sortField', 'location');
+      // previously we set the sortField to 'location' here but for now we are just filterin not sorting. We will
+      // likely want to sort at the same time but wil lbe handled from the UI layer so the user can choose to change
+      // sort order.
     }
 
     return this.http.get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params });
