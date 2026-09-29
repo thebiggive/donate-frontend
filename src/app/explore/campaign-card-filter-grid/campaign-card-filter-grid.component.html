@@ -134,12 +134,12 @@
           <app-campaign-summary-grid
             (scrolled)="emitOnScroll()"
             [individualCampaigns]="individualCampaigns()"
-            [columnCount]="ukFilterSelected() && flags.enableMapViewInExplore ? 2 : 3"
+            [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
           >
           </app-campaign-summary-grid>
         }
       </div>
-      @if (ukFilterSelected() && flags.enableMapViewInExplore) {
+      @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" tabindex="-1" #mapElement>
           <div class="full-screen-map-button-container">
             <fa-icon

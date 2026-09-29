@@ -205,4 +205,8 @@ export class SearchService {
     this.selected['sortField'] = selectedSort;
     this.changed.emit(true);
   }
+
+  hasGeoLocationSet(): boolean {
+    return this.selected['filterByLatLong'] === 'true';
+  }
 }
