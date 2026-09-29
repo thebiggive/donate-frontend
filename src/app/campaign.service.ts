@@ -213,7 +213,11 @@ export class CampaignService {
         .append('latitude', this.geoLocationPosition.coords.latitude)
         .append('longitude', this.geoLocationPosition.coords.longitude);
 
-      params = params.set('sortField', 'location');
+      params = params.set('filterByLatLong', true);
+
+      // previously we set the sortField to 'location' here but for now we are just filterin not sorting. We will
+      // likely want to sort at the same time but wil lbe handled from the UI layer so the user can choose to change
+      // sort order.
     }
 
     return this.http.get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params });

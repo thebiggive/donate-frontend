@@ -632,4 +632,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       setTimeout(() => this.map.invalidateSize(), 0);
     });
   }
+
+  protected showUkMap(): boolean {
+    return this.ukFilterSelected() || this.searchService.hasGeoLocationSet();
+  }
 }
