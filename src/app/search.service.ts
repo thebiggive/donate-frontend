@@ -54,7 +54,6 @@ export class SearchService {
       filterCategory: string | null;
       filterBeneficiary: string | null;
       filterLocation: string | null;
-      filterLocationLatLong: [number, number] | null;
     },
     defaultSort: camelCaseSortOption,
   ) {

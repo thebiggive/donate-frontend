@@ -333,7 +333,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     filterCategory: string | null;
     filterBeneficiary: string | null;
     filterLocation: string | null;
-    filterLocationLatLong: [number, number] | null;
   }) {
     this.searchService.doSearchAndFilterAndSort(event, this.defaultSort);
   }
