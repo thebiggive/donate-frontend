@@ -110,6 +110,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     filterCategory: string | null;
     filterBeneficiary: string | null;
     filterLocation: string | null;
+    filterLocationLatLong: [number, number] | null;
   }>();
 
   doGetLocationFromBrowser = output<void>();
@@ -262,6 +263,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       filterCategory: this.selectedFilterCategory,
       filterBeneficiary: this.selectedFilterBeneficiary,
       filterLocation: this.selectedFilterLocation,
+      filterLocationLatLong: null,
     };
   }
 
@@ -396,6 +398,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       filterCategory: null,
       filterBeneficiary: null,
       filterLocation: null,
+      filterLocationLatLong: null,
     });
 
     this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));

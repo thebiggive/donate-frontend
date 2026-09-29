@@ -54,6 +54,7 @@ export class SearchService {
       filterCategory: string | null;
       filterBeneficiary: string | null;
       filterLocation: string | null;
+      filterLocationLatLong: [number, number] | null
     },
     defaultSort: camelCaseSortOption,
   ) {
@@ -149,10 +150,10 @@ export class SearchService {
     }
 
     if (location) {
-      queryParams['sortField'] = 'location';
+      queryParams['filterByLatLong'] = 'true';
 
       // we don't put the actual location for privacy, put a random number to make sure the query string changes every time and the change can be picked up by event listeners.
-      queryParams['r'] = Math.random().toString();
+      queryParams['r'] = Math.random().toString(); // here
     }
 
     return queryParams;
