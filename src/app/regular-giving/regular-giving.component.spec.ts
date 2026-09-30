@@ -6,7 +6,7 @@ import { Money } from '../Money';
 import { TestBed } from '@angular/core/testing';
 import { NEVER, of } from 'rxjs';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
@@ -23,7 +23,7 @@ beforeEach(() => {
       InMemoryStorageService,
       { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       RegularGivingComponent,
-      provideHttpClient(withFetch()),
+      provideHttpClient(),
       { provide: ActivatedRoute, useValue: stubRoute },
       RegularGivingService,
     ],

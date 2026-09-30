@@ -1,7 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.production.ts`.
+// `ng build --prod` replaces `environment.ts` with `environment.production.ts` unless a `--configuration` is also provided.
 // The list of file replacements can be found in `angular.json`.
-
+//
 // see also src/app/featureFlags.ts
 
 import { Environment } from './environment.interface';
@@ -13,7 +13,7 @@ export const environment: Environment = {
   production: false,
   productionLike: false,
   creditTipsCampaign: '000000000000000003',
-  sfApiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
+  sfApiUriPrefix: 'https://dummy-salesforce.example.org',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateEcsIntermediateHost: null,
   donateUriPrefix: 'http://localhost:4200',

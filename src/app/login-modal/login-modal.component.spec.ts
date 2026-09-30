@@ -1,4 +1,4 @@
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -26,7 +26,7 @@ describe('LoginModalComponent', () => {
         InMemoryStorageService,
         { provide: MatDialogRef, useValue: {} },
         { provide: MatomoModule, useClass: MatomoTestingModule },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
       ],
     }).compileComponents();

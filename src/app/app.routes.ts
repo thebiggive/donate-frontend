@@ -40,13 +40,6 @@ export const transferFundsPath = 'transfer-funds';
 export const myRegularGivingPath = 'my-account/regular-giving';
 
 const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapshot) => {
-  if (isPlatformServer(inject(PLATFORM_ID))) {
-    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
-    // Returning false should defer the decision about in-browser rendering to the client.
-    // https://medium.com/@nijotigajo/handling-local-storage-in-angular-with-server-side-rendering-ssr-eaa6a0f11717
-    return false;
-  }
-
   const router = inject(Router);
   const requestedRedirect = snapshot.queryParams.r;
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();

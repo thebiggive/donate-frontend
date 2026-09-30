@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -22,6 +30,7 @@ import { TimeLeftPipe } from '../../time-left.pipe';
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrl: './donation-start-container.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatIconButton,
     RouterLink,

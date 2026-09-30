@@ -149,7 +149,7 @@ export class SearchService {
     }
 
     if (location) {
-      queryParams['sortField'] = 'location';
+      queryParams['filterByLatLong'] = 'true';
 
       // we don't put the actual location for privacy, put a random number to make sure the query string changes every time and the change can be picked up by event listeners.
       queryParams['r'] = Math.random().toString();
@@ -204,5 +204,9 @@ export class SearchService {
   sort(selectedSort: string) {
     this.selected['sortField'] = selectedSort;
     this.changed.emit(true);
+  }
+
+  hasGeoLocationSet(): boolean {
+    return this.selected['filterByLatLong'] === 'true';
   }
 }

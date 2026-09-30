@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -17,6 +17,7 @@ import { codeToCountryName } from '../../countries';
   templateUrl: './my-account.component.html',
   styleUrl: './my-account.component.scss',
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [BiggivePageSection, BiggiveHeading, HighlightCardsComponent, RouterLink],
 })
 export class MyAccountComponent implements OnInit {

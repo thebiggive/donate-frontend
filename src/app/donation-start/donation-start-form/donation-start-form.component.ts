@@ -13,6 +13,7 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -98,6 +99,7 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
   templateUrl: './donation-start-form.component.html',
   styleUrl: './donation-start-form.component.scss',
   providers: [ExactCurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatStepper,
@@ -2507,12 +2509,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       this.updateAllValidities();
     });
 
-    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe((homePostcode: string | null) => {
-      if (homePostcode !== null) {
+    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe((homePostcode: string | null | undefined) => {
+      if ((homePostcode ?? '').length > 0) {
         const homePostcodeAsIs = homePostcode;
 
         // Uppercase it in-place, then we can use patterns that assume upper case.
-        homePostcode = homePostcode.toUpperCase();
+        homePostcode = (homePostcode ?? '').toUpperCase();
         const parts = homePostcode.match(postcodeFormatHelpRegExp);
         if (parts === null) {
           // If the input doesn't even match the much looser pattern here, it's going to fail

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -9,6 +9,7 @@ import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.c
 @Component({
   selector: 'app-donation-start-offer-reuse-dialog',
   templateUrl: 'donation-start-offer-reuse-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ExactCurrencyPipe, MatButtonModule, MatDialogModule, PopupStandaloneComponent],
 })
 export class DonationStartOfferReuseDialogComponent {

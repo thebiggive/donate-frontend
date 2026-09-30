@@ -18,12 +18,20 @@
           "builder": "@angular/build:application",
           "options": {
             "allowedCommonJsDependencies": ["@biggive/components/hydrate", "compression", "morgan"],
+            "outputMode": "server",
             "outputPath": "dist/donate-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["src/polyfills.ts", "zone.js"],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "optimization": {
+              "scripts": true,
+              "styles": {
+                "minify": true,
+                "inlineCritical": false
+              }
+            },
             "assets": [
               {
                 "glob": "**/*",
@@ -51,6 +59,16 @@
             }
           },
           "configurations": {
+            "e2e": {
+              "outputMode": "static",
+              "ssr": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -193,6 +211,9 @@
             },
             "development": {
               "buildTarget": "donate-frontend:build:development"
+            },
+            "e2e": {
+              "buildTarget": "donate-frontend:build:e2e"
             }
           },
           "defaultConfiguration": "development"
@@ -203,7 +224,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -226,7 +247,7 @@
         "e2e": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "donate-frontend:serve",
+            "devServerTarget": "donate-frontend:serve:e2e",
             "watch": false,
             "headless": true
           },

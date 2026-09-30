@@ -1,45 +1,35 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import * as angular from "angular-eslint";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { defineConfig } from "eslint/config";
 import browserCompat from "eslint-plugin-compat";
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+import * as tseslint from "typescript-eslint";
 
-export default [
+export default defineConfig(
+  // 1. Global Ignores
   {
     ignores: ["projects/**/*", "src/assets/custom-libs/modernizr.d.ts"],
   },
+  // 2. TypeScript / JavaScript
   {
     files: ["src/**/*.ts", "src/**/*.js"],
+    extends: [
+      // Apply the recommended core rules
+      js.configs.recommended,
+      // Apply recommended & stylistic TypeScript rules
+      ...tseslint.configs.recommended, // TODO DON-1214 Add 'TypeChecked' for rule type info
+      // ...tseslint.configs.stylistic, // TODO Maybe consider later to help make style more consistent.
+      // Apply recommended Angular TypeScript rules
+      ...angular.configs.tsRecommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        // projectService: true, // TODO DON-1214 Uncomment for rule type info
+      },
+    },
+    processor: angular.processInlineTemplates,
     ...browserCompat.configs["flat/recommended"],
     settings: {
       lintAllEsApis: true,
-    },
-  },
-  ...compat
-    .extends(
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@angular-eslint/recommended",
-      "plugin:@angular-eslint/template/process-inline-templates",
-    )
-    .map((config) => ({
-      ...config,
-      files: ["**/*.ts"],
-    })),
-  {
-    files: ["**/*.ts"],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
     },
     rules: {
       "@angular-eslint/directive-selector": [
@@ -74,21 +64,20 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      "@typescript-eslint/no-base-to-string": "error",
-      "@typescript-eslint/restrict-plus-operands": ["error", { allowNullish: false }],
+      // DON-1214 To-maybe-do. Not migrating away from eager detection en masse yet.
+      "@angular-eslint/prefer-on-push-component-change-detection": "off",
+
+      // TODO DON-1214 Bring back these rules when fixing rule type info
+      // "@typescript-eslint/no-base-to-string": "error",
+      // "@typescript-eslint/restrict-plus-operands": ["error", { allowNullish: false }],
     },
   },
-  ...compat
-    .extends("plugin:@angular-eslint/template/recommended", "plugin:@angular-eslint/template/accessibility")
-    .map((config) => ({
-      ...config,
-      files: ["**/*.html"],
-    })),
+  // 3. Angular HTML templates
   {
-    files: ["**/*.html"],
-
+    files: ["src/**/*.html"],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       "@angular-eslint/template/no-positive-tabindex": ["error"],
     },
   },
-];
+);

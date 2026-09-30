@@ -1,5 +1,5 @@
 import { BiggiveCampaignCard, BiggiveGrid } from '@biggive/components-angular';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CampaignSummary } from '../../campaign-summary.model';
 import { CampaignService } from '../../campaign.service';
 import { OptimisedImagePipe } from '../../optimised-image.pipe';
@@ -14,6 +14,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   imports: [OptimisedImagePipe, AsyncPipe, BiggiveCampaignCard, CurrencyPipe, BiggiveGrid, InfiniteScrollDirective],
   templateUrl: './campaign-summary-grid.component.html',
   styleUrl: './campaign-summary-grid.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [DatePipe],
 })
 export class CampaignSummaryGridComponent {

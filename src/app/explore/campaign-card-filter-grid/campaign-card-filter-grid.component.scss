@@ -115,7 +115,6 @@
     margin-bottom: auto;
   }
 
-  display: flex;
   .sort-wrap {
     margin-left: 15px;
   }
@@ -238,7 +237,58 @@ fa-icon {
   z-index: 0;
 }
 
+.drawer-control {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+
+  position: fixed;
+
+  left: 0;
+  min-height: 24px;
+  padding: 5px;
+
+  // These 2 replaced below, when map is .open
+  bottom: 0;
+  margin-bottom: 0;
+
+  z-index: 2001;
+
+  background: abstract.$colour-card-overlay-background;
+  color: abstract.$colour-primary;
+  text-decoration: underline;
+
+  .label {
+    padding-left: 2rem;
+  }
+
+  .icon {
+    vertical-align: super;
+    margin-top: -4px;
+    position: absolute;
+
+    &.action {
+      right: 5px;
+    }
+  }
+
+  &.open {
+    bottom: 80%;
+    margin-bottom: 20px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid abstract.$colour-highlight;
+  }
+}
+
 :host ::ng-deep {
+  .full-screen-map-button-container {
+    position: absolute;
+    right: 16px;
+    z-index: 999; // Less than full screen map, more than small one / most layers.
+  }
+
   .campaign-count-marker-container,
   .full-screen-map-button-container,
   .exit-full-screen-map-button-container {
@@ -324,16 +374,19 @@ fa-icon {
   // element on iphone (which doesn't support actually making an element full screen). This sits on top
   // of the map so has an even higher z-index.
   z-index: 2000;
-  outline: 1px solid abstract.$colour-grey-light;
-  padding-top: 15px;
-  background: rgba(255, 255, 255, 0.7);
   position: fixed;
   overflow-y: scroll;
-  bottom: 0;
-
+  left: abstract.$full-screen-border;
+  right: abstract.$full-screen-border;
+  bottom: 34px; // Space for .drawer-control to show more tidily without appearing to have extra translucent background.
   height: 80px;
+
+  outline: 1px solid abstract.$colour-grey-light;
+  padding-top: 15px;
+  background: abstract.$colour-card-overlay-background;
 
   &.open {
     height: 80%;
+    bottom: 0;
   }
 }

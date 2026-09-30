@@ -1,5 +1,5 @@
 import { DatePipe, AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';
@@ -14,6 +14,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
   templateUrl: './charity.component.html',
   styleUrl: 'charity.component.scss',
   imports: [RouterLink, BiggiveGrid, BiggiveCampaignCard, AsyncPipe, CurrencyPipe, OptimisedImagePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [DatePipe],
 })
 export class CharityComponent implements OnInit {

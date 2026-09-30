@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   PaymentIntentOrSetupIntentResult,
@@ -34,6 +34,7 @@ import {
     ReactiveFormsModule,
   ],
   templateUrl: './change-regular-giving.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './change-regular-giving.component.scss',
 })
 export class ChangeRegularGivingComponent implements OnInit {

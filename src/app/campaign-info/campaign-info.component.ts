@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit, inject, InjectionToken } from '@angular/core';
+import { Component, Input, OnInit, inject, InjectionToken, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BiggiveCampaignHighlights } from '@biggive/components-angular';
@@ -25,6 +25,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
   templateUrl: './campaign-info.component.html',
   styleUrl: './campaign-info.component.scss',
   imports: [BiggiveCampaignHighlights, FontAwesomeModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     CurrencyPipe,
     DatePipe,
@@ -142,7 +143,7 @@ export class CampaignInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       doubleClickZoom: false,
       keyboard: false,
       scrollWheelZoom: false,
-      touchZoom: false,
+      pinchZoom: false,
       zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
     }).setView([51.505, -0.09], 4); // Replaced later when we fit project highlight bounds.
 

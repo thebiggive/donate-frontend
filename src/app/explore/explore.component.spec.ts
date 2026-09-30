@@ -14,7 +14,7 @@ import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { NEVER, of } from 'rxjs';
 
 import { ExploreComponent } from './explore.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Campaign } from '../campaign.model';
 
@@ -54,7 +54,7 @@ describe('ExploreComponent', () => {
             queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
           },
         },
-        provideHttpClient(withFetch()),
+        provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MatomoModule, useClass: MatomoTestingModule },
       ],

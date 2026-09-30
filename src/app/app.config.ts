@@ -1,23 +1,16 @@
-import {
-  ApplicationConfig,
-  ErrorHandler,
-  inject,
-  PLATFORM_ID,
-  provideAppInitializer,
-  provideZoneChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, ErrorHandler, inject, PLATFORM_ID, provideAppInitializer } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
   TitleStrategy,
 } from '@angular/router';
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
-import { HttpInterceptorFn, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
@@ -31,12 +24,13 @@ import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
+const internalApiHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
+
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
   const token = inject(SSR_CLOUDFLARE_TOKEN, { optional: true });
-  const allowedHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
 
-  if (isPlatformServer(platformId) && token && allowedHosts.includes(new URL(req.url).host)) {
+  if (isPlatformServer(platformId) && token && internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       setHeaders: {
         'X-TBG-Donate-SSR-Token': token,
@@ -47,26 +41,37 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req);
 };
 
+// Current purpose is to ensure Cloudflare clearance cookies can be sent on to MatchBot & Identity. Unlike the above
+// this can happen regardless of whether the request is server or client side.
+export const apiAuthInterceptor: HttpInterceptorFn = (req, next) => {
+  if (internalApiHosts.includes(new URL(req.url).host)) {
+    req = req.clone({
+      withCredentials: true,
+    });
+  }
+
+  return next(req);
+};
+
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       registerSwiper();
       setAssetPath(`${environment.donateUriPrefix}/assets`);
-      defineCustomElements();
+      if (globalThis.window) {
+        await defineCustomElements();
+      }
     }),
+    provideClientHydration(withNoIncrementalHydration()), // @todo DON-1189 Possibly bring back incremental once we fix inlince script CSP nonces
     provideRouter(
       routes,
       withComponentInputBinding(),
-      // "This value should be set in case you use server-side rendering, but do not enable hydration for your application."
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
       // Allows Explore & home logo links to clear search filters in ExploreComponent
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
-    provideHttpClient(
-      withFetch(), // For route resolvers etc.
-      withInterceptors([donateSsrHeaderInterceptor]),
-    ),
+    // For route resolvers etc.
+    provideHttpClient(withInterceptors([apiAuthInterceptor, donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',
@@ -77,12 +82,11 @@ export const appConfig: ApplicationConfig = {
       withRouter(),
       withRouteData(),
     ),
-    { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+    { provide: APP_BASE_HREF, useValue: '/' },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: TitleStrategy, useClass: BigGiveTitleStrategy },
     { provide: ErrorHandler, useClass: BrowserErrorHandler },
-    provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };

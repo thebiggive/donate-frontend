@@ -7,7 +7,6 @@ describe('TimeLeftPipe', () => {
   let pipe: TimeLeftPipe;
 
   const cdRefMock: ChangeDetectorRef = {
-    checkNoChanges: () => null,
     detach: () => null,
     detectChanges: () => null,
     markForCheck: () => null,
