@@ -86,29 +86,38 @@
       <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
     }
 
-    @if (individualCampaigns.length === 0 && !loading && this.searched) {
+    @if (cfService.isBlocked()) {
       <div>
-        <p class="error" aria-live="polite">
-          We can't find any campaigns matching this search but there are lots more to choose from.
-          <a href (click)="clear($event)">View all campaigns here</a>.
-        </p>
+        <p class="error" aria-live="polite">Security Check Required: Your action was paused.</p>
+        <p>Please complete the verification box in the bottom-right corner of your screen to continue.</p>
       </div>
-    }
+    } @else {
+      @if (individualCampaigns.length === 0 && !loading && this.searched) {
+        <div>
+          <p class="error" aria-live="polite">
+            We can't find any campaigns matching this search but there are lots more to choose from.
+            <a href (click)="clear($event)">View all campaigns here</a>.
+          </p>
+        </div>
+      }
 
-    @if (individualCampaigns.length <= 6 && !this.searched && !loading && highlightCards && highlightCards.length > 0) {
-      <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
-      <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
-    }
+      @if (
+        individualCampaigns.length <= 6 && !this.searched && !loading && highlightCards && highlightCards.length > 0
+      ) {
+        <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
+        <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
+      }
 
-    @if (filterError) {
-      <div tabindex="0">
-        <!--  We want this error to happen as part of route resolving.    -->
-        <p class="error" aria-live="assertive">
-          Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
-          Not to worry, you can
-          <a routerLink="/">browse all active campaigns here</a>!
-        </p>
-      </div>
+      @if (filterError) {
+        <div tabindex="0">
+          <!--  We want this error to happen as part of route resolving.    -->
+          <p class="error" aria-live="assertive">
+            Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
+            Not to worry, you can
+            <a routerLink="/">browse all active campaigns here</a>!
+          </p>
+        </div>
+      }
     }
   </biggive-page-section>
 </main>
