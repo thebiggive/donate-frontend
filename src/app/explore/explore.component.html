@@ -58,20 +58,6 @@
     />
   }
   <biggive-page-section>
-    @if (flags.enableSearchByLocation && this.environment.environmentId !== "production") {
-      <div style="padding: 1em; margin: 1em">
-        @if (this.clientCountryCode === "GB" || !this.clientCountryCode) {
-          <!-- We only support searching by geolocation coordinates within the UK.
-        Dev environments don't have this header so we also need to support it there. -->
-          <biggive-button
-            (doButtonClick)="promptForFakeLocation()"
-            [label]="'Enter coordinates manually for test'"
-            size="medium"
-            colour-scheme="primary"
-          ></biggive-button>
-        }
-      </div>
-    }
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
     <app-campaign-card-filter-grid
