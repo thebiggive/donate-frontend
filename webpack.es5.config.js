@@ -58,7 +58,11 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            plugins: [["polyfill-corejs3", { method: "usage-global" }]],
+            plugins: [
+              // `version` is required to not limit polyfills to those in 3.0. That includes `Object.hasOwn()` which we
+              // have found at least one library now requires.
+              ["polyfill-corejs3", { method: "usage-global", version: require("core-js/package.json").version }],
+            ],
             presets: [
               [
                 "@babel/preset-env",
