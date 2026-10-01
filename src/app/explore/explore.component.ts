@@ -159,6 +159,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   protected locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
 
+  protected searchResult: undefined | CampaignSummaryList;
+
   private http = inject(HttpClient);
   protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
@@ -407,6 +409,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
         this.locationCounts = result.locationCounts;
+        this.searchResult = result;
 
         this.loading = false;
 
@@ -470,6 +473,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
+    // setting `recentChildrenData = undefined` has been in the code for a while now but
+    // not sure why, as it would make the following if condition all dead code. Need to check that
+    // and probably either set it to something more useful or remove.
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recentChildrenData = undefined as any; // this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
@@ -485,6 +492,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.offset = recentChildrenData.offset;
       this.highlightAreas = recentChildrenData.highlightAreas;
       this.locationCounts = recentChildrenData.locationCounts;
+      this.searchResult = recentChildrenData;
 
       // Auto scrolling without a significant extra wait only works when
       // the child campaigns were quickly loaded from local state from

@@ -30,9 +30,11 @@ import {
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { getPoleOfInaccessibility } from '../../polylabel';
+import {getBoundingBox, getPoleOfInaccessibility} from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
-import { CampaignSummary } from '../../campaign-summary.model';
+import {CampaignSummary, CampaignSummaryList} from '../../campaign-summary.model';
+import {getHighlightedFeatures} from '../../regions';
+import {HttpClient} from '@angular/common/http';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -88,7 +90,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
+  /** deprecated - remove and use searchResult instead */
   @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
+
+  @Input() searchResult?: CampaignSummaryList | undefined;
 
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
@@ -103,6 +108,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
   protected fullScreenMapMode = signal(false);
+  private httpClient = inject(HttpClient);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -206,7 +212,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private map?: any;
 
   /**
-   * Sets bounds options which allow a modest space around the relevant area (currently always whole of UK), plus an extra
+   * Sets bounds options which allow a modest space around the relevant area (either whole of UK, one of the major
+   * subdivisions of England, or Wales, Scotland or Nothern Ireland), plus an extra
    * space for the controls drawer when in full sceen mode.
    */
   private readonly boundsOptions = computed(() => {
@@ -432,17 +439,28 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
-          requestAnimationFrame(() => {
+          requestAnimationFrame(async () => {
             if (!this.map) {
               this.initMap();
             } else {
               this.map.invalidateSize();
               // In case where it's filtered to a specific region in the UK then we want to zoom map to said region
-              const UKBounds: [[number, number], [number, number]] = [
-                [49.8, -8.7],
-                [60.9, 1.8],
-              ];
-              this.map.fitBounds(UKBounds, this.boundsOptions());
+              if (this.searchResult?.ukFilterRegions) {
+                const widestRegion = this.searchResult?.ukFilterRegions[this.searchResult?.ukFilterRegions.length - 1];
+                console.log(`The widest region is ${widestRegion}, will fit map to that!`)
+                const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient)
+                const bounds = getBoundingBox(regionFeature.geometry);
+                this.map.fitBounds(bounds, this.boundsOptions());
+                console.log('also fitted bounds to region');
+              } else {
+                const UKBounds: [[number, number], [number, number]] = [
+                  [49.8, -8.7],
+                  [60.9, 1.8],
+                ];
+                this.map.fitBounds(UKBounds, this.boundsOptions());
+                console.log(this.searchResult); // <-- this seems to be always logging undefined which may explain why zoom to region isn't working.
+                console.log('also fitted bounds to uk');
+              }
             }
           });
         }
@@ -544,7 +562,20 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         scrollWheelZoom: false,
         pinchZoom: false,
         zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
-      }).fitBounds(UKBounds, this.boundsOptions());
+      });
+
+      if (this.searchResult?.ukFilterRegions) {
+        // todo remove duplication of lines below.
+        const widestRegion = this.searchResult?.ukFilterRegions[this.searchResult?.ukFilterRegions.length - 1];
+        console.log(`The widest region is ${widestRegion}, will fit map to that!`)
+        const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient)
+        const bounds = getBoundingBox(regionFeature.geometry);
+        this.map.fitBounds(bounds, this.boundsOptions());
+        console.log('fitted boudns to region');
+      } else {
+        this.map.fitBounds(UKBounds, this.boundsOptions());
+        console.log('fitted bounds to UK');
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -571,7 +602,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         if (feature.properties && feature.properties['name']) {
           layer.bindPopup(feature.properties['name']);
         }
-
         const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
 
         const countObj = this.locationCounts?.find(
