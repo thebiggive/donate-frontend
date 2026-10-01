@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 
 @Service()
 export class CloudflareService {
+  private challengePassVersion = 0;
+
   /** Whether any API request is currently blocked */
   readonly isBlocked = signal(false);
 
@@ -14,7 +16,16 @@ export class CloudflareService {
   }
 
   notifyPassed() {
+    this.challengePassVersion++;
     this.isBlocked.set(false);
     this.challengePassed$.next();
+  }
+
+  getChallengePassVersion(): number {
+    return this.challengePassVersion;
+  }
+
+  hasChallengePassedSince(version: number): boolean {
+    return this.challengePassVersion > version;
   }
 }
