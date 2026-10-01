@@ -88,7 +88,10 @@ const enginePromise = (async () => {
     console.error('Failed to load task metadata:', error);
   }
 
-  return new AngularNodeAppEngine({ allowedHosts });
+  return new AngularNodeAppEngine({
+    allowedHosts,
+    trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-port', 'x-forwarded-proto'],
+  });
 })();
 
 app.use(compression());

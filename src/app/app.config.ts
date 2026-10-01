@@ -6,7 +6,7 @@ import {
   withRouterConfig,
   TitleStrategy,
 } from '@angular/router';
-import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpErrorResponse, HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
@@ -27,12 +27,13 @@ import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
 const internalApiHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
+const ssrTrustedHosts = [...internalApiHosts, new URL(environment.donateUriPrefix).host];
 
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
   const token = inject(SSR_CLOUDFLARE_TOKEN, { optional: true });
 
-  if (isPlatformServer(platformId) && token && internalApiHosts.includes(new URL(req.url).host)) {
+  if (isPlatformServer(platformId) && token && ssrTrustedHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       setHeaders: {
         'X-TBG-Donate-SSR-Token': token,
@@ -49,6 +50,7 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
 // improve Turnstile UX.
 export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
   const cfService = inject(CloudflareService);
+  const platformId = inject(PLATFORM_ID);
 
   if (internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
@@ -58,7 +60,7 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 403 || error.status === 503) {
+      if (isPlatformBrowser(platformId) && (error.status === 403 || error.status === 503)) {
         cfService.notifyBlocked();
 
         // Pause request until Turnstile emits, then retry with cf_clearance cookie
