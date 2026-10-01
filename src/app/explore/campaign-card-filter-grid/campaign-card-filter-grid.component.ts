@@ -112,7 +112,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     filterLocation: string | null;
   }>();
 
-  doGetLocationFromBrowser = output<void>();
+  doGetGeoLocationFromBrowser = output<void>();
+  doClearGeoLocation = output<void>();
   doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
@@ -328,7 +329,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   protected handleNearMeButtonPressed = () => {
     this.unfocusTextInput();
-    this.doGetLocationFromBrowser.emit();
+    this.doGetGeoLocationFromBrowser.emit();
   };
 
   protected handleSearchTextChanged = (event: Event) => {
@@ -370,6 +371,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
     this.selectedFilterLocation = null;
+    this.doClearGeoLocation.emit();
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
     ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {

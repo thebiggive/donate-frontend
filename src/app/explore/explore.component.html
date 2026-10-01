@@ -76,7 +76,8 @@
       [fetchingLocation]="fetchingLocation"
       [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
       (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
-      (doGetLocationFromBrowser)="searchByLocation()"
+      (doGetGeoLocationFromBrowser)="searchByGeoLocation()"
+      (doClearGeoLocation)="clearGeoLocation()"
       (scrolled)="onScroll()"
       (doSelectLocation)="onLocationSelected($event)"
     >
