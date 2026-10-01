@@ -11,6 +11,7 @@ import {
   WritableSignal,
   inject,
   ChangeDetectionStrategy,
+  afterNextRender,
 } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
@@ -30,9 +31,17 @@ import {
   CookiePreferences,
   CookiePreferenceService,
 } from './cookiePreference.service';
+import { CloudflareService } from './cloudflare.service';
 import { Observable, Subscription } from 'rxjs';
 import { supportedBrowsers } from '../supportedBrowsers';
 import { detect } from 'detect-browser';
+
+declare global {
+  interface Window {
+    onTurnstileSuccess?: (token: string) => void;
+    onTurnstileExpired?: () => void;
+  }
+}
 
 @Component({
   selector: 'app-root',
@@ -43,6 +52,7 @@ import { detect } from 'detect-browser';
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private baseHref = inject(APP_BASE_HREF);
+  protected cfService = inject(CloudflareService);
   private identityService = inject(IdentityService);
   private donationService = inject(DonationService);
   private getSiteControlService = inject(GetSiteControlService);
@@ -52,6 +62,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private matomoTracker = inject(MatomoTracker);
   private router = inject(Router);
   protected turnstileSiteKey = environment.turnstileSiteKey;
+  isWidgetVisible = signal(true);
 
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
@@ -89,6 +100,12 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
   constructor() {
+    // Modern way to make this browser-only.
+    afterNextRender(() => {
+      window.onTurnstileSuccess = this.onTurnstileSuccess.bind(this);
+      window.onTurnstileExpired = this.onTurnstileExpired.bind(this);
+    });
+
     const navigationService = this.navigationService;
     const router = this.router;
 
@@ -119,6 +136,18 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         return url;
       }),
     );
+  }
+
+  onTurnstileSuccess(_token: string) {
+    this.cfService.notifyPassed();
+
+    setTimeout(() => {
+      this.isWidgetVisible.set(false);
+    }, 1500);
+  }
+
+  onTurnstileExpired() {
+    this.isWidgetVisible.set(true);
   }
 
   /**
