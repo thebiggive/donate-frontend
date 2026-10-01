@@ -52,6 +52,7 @@ import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
+import { CloudflareService } from '../cloudflare.service';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -86,6 +87,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   flags = flags;
   private campaignService = inject(CampaignService);
+  protected cfService = inject(CloudflareService);
   private currencyPipe = inject(CurrencyPipe);
   private fundService = inject(FundService);
   private matomoTracker = inject(MatomoTracker);
@@ -522,7 +524,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort, this.location);
+    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort, this.location); //
     if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
       // Don't navigate at all if no change in query params. This saves us from inconsistencies
       // later such as scroll adjustment kicking in only when the router params actually changed,
@@ -671,7 +673,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     );
   }
 
-  protected searchByLocation() {
+  protected searchByGeoLocation() {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
@@ -686,37 +688,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       },
     );
     this.fetchingLocation = true;
-  }
-
-  /**
-   * Intended for QA test use only, so testers can pretend to be in other locations around the UK and check they get appropriate search results.
-   * If/when we do something a bit like this for real donors we will ask them for a postcode, not a lat/lon pair.
-   */
-  protected promptForFakeLocation() {
-    const locationPair = window.prompt(
-      "Enter coordinates of any location in the UK to test search, as a lat/long pair, e.g '51.5164566,-0.12182341'.",
-    );
-    if (!locationPair) {
-      return;
-    }
-    const [latitude, longitude] = locationPair.split(',');
-
-    this.location = {
-      coords: {
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-        accuracy: NaN,
-        altitude: NaN,
-        altitudeAccuracy: NaN,
-        heading: NaN,
-        speed: NaN,
-        toJSON: () => {},
-      },
-      timestamp: Date.now(),
-      toJSON: () => {},
-    };
-
-    this.setQueryParams();
   }
 
   /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
@@ -737,5 +708,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       default:
       // no-op
     }
+  }
+
+  protected clearGeoLocation() {
+    this.location = undefined;
+    this.setQueryParams();
   }
 }

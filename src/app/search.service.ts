@@ -153,6 +153,9 @@ export class SearchService {
 
       // we don't put the actual location for privacy, put a random number to make sure the query string changes every time and the change can be picked up by event listeners.
       queryParams['r'] = Math.random().toString();
+    } else {
+      delete queryParams['filterByLatLong'];
+      delete queryParams['r'];
     }
 
     return queryParams;
