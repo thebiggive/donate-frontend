@@ -74,6 +74,7 @@
       [highlightAreas]="highlightAreas"
       [locationCounts]="locationCounts"
       [fetchingLocation]="fetchingLocation"
+      [geoLocation]="location"
       [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
       (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
       (doGetGeoLocationFromBrowser)="searchByGeoLocation()"

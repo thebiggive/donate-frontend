@@ -84,6 +84,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    */
   @Input({ required: true }) fetchingLocation!: boolean;
 
+  @Input() geoLocation!: GeolocationPosition | undefined;
+
   @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
   @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
