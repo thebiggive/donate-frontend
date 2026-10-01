@@ -7,7 +7,7 @@ import {
   TitleStrategy,
 } from '@angular/router';
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
-import { HttpErrorResponse, HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
@@ -15,12 +15,10 @@ import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
-import { catchError, switchMap, take, throwError } from 'rxjs';
 import { register as registerSwiper } from 'swiper/element/bundle';
 
 import { routes } from './app.routes';
 import { BigGiveTitleStrategy } from '../BigGiveTitleStrategy';
-import { CloudflareService } from './cloudflare.service';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
@@ -43,34 +41,16 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req);
 };
 
-// Ensure Cloudflare clearance cookies can be sent on to MatchBot & Identity. Unlike the above
-// this can happen regardless of whether the request is server or client side. Also handles certain
-// response errors that suggest bot interception (& later Turnstile success) from Cloudflare, to
-// improve Turnstile UX.
-export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
-  const cfService = inject(CloudflareService);
-
+// Current purpose is to ensure Cloudflare clearance cookies can be sent on to MatchBot & Identity. Unlike the above
+// this can happen regardless of whether the request is server or client side.
+export const apiAuthInterceptor: HttpInterceptorFn = (req, next) => {
   if (internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       withCredentials: true,
     });
   }
 
-  return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 403 || error.status === 503) {
-        cfService.notifyBlocked();
-
-        // Pause request until Turnstile emits, then retry with cf_clearance cookie
-        return cfService.challengePassed$.pipe(
-          take(1),
-          switchMap(() => next(req)),
-        );
-      }
-
-      return throwError(() => error);
-    }),
-  );
+  return next(req);
 };
 
 export const appConfig: ApplicationConfig = {
@@ -91,7 +71,7 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
     // For route resolvers etc.
-    provideHttpClient(withInterceptors([cloudflareInterceptor, donateSsrHeaderInterceptor])),
+    provideHttpClient(withInterceptors([apiAuthInterceptor, donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',
