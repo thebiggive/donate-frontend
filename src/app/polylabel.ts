@@ -179,9 +179,10 @@ export function getPoleOfInaccessibility(
 export function getBoundingBox(
   geometry: Geometry
 ): [Position, Position] {
-  if (!geometry) {
-    return null;
-  }
+  let northMostPointFound = -180;
+  let southMostPointFound = 180;
+  let eastMostPointFound = -180;
+  let westMostPointFound = 180;
 
-
+  // for(geometry)
   }
