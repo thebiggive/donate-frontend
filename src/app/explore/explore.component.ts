@@ -52,7 +52,6 @@ import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
-import { CloudflareService } from '../cloudflare.service';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -87,7 +86,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   flags = flags;
   private campaignService = inject(CampaignService);
-  protected cfService = inject(CloudflareService);
   private currencyPipe = inject(CurrencyPipe);
   private fundService = inject(FundService);
   private matomoTracker = inject(MatomoTracker);
@@ -688,6 +686,37 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       },
     );
     this.fetchingLocation = true;
+  }
+
+  /**
+   * Intended for QA test use only, so testers can pretend to be in other locations around the UK and check they get appropriate search results.
+   * If/when we do something a bit like this for real donors we will ask them for a postcode, not a lat/lon pair.
+   */
+  protected promptForFakeLocation() {
+    const locationPair = window.prompt(
+      "Enter coordinates of any location in the UK to test search, as a lat/long pair, e.g '51.5164566,-0.12182341'.",
+    );
+    if (!locationPair) {
+      return;
+    }
+    const [latitude, longitude] = locationPair.split(',');
+
+    this.location = {
+      coords: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+        accuracy: NaN,
+        altitude: NaN,
+        altitudeAccuracy: NaN,
+        heading: NaN,
+        speed: NaN,
+        toJSON: () => {},
+      },
+      timestamp: Date.now(),
+      toJSON: () => {},
+    };
+
+    this.setQueryParams();
   }
 
   /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
