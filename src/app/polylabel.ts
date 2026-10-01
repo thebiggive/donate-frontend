@@ -173,16 +173,37 @@ export function getPoleOfInaccessibility(
   }
 
   return null;
-
 }
 
-export function getBoundingBox(
-  geometry: Geometry
-): [Position, Position] {
-  let northMostPointFound = -180;
-  let southMostPointFound = 180;
-  let eastMostPointFound = -180;
-  let westMostPointFound = 180;
+export function getBoundingBox(geometry: Geometry): [Position, Position] {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
 
-  // for(geometry)
+  let coordinates: Position[];
+
+  if (geometry.type === 'Polygon') {
+    const rings = (geometry as Polygon).coordinates;
+    // a polygon can have multiple 'rings', we only care about the outer one.
+    // see https://www.rfc-editor.org/info/rfc7946/#section-3.1.6
+    coordinates = rings[0];
+  } else if (geometry.type === 'MultiPolygon') {
+    coordinates = (geometry as MultiPolygon).coordinates.flat()[0];
+  } else {
+    throw new Error('Unexpected Geometry type ' + geometry.type);
   }
+
+  coordinates.forEach((position) => {
+    minX = Math.min(minX, position[0]);
+    minY = Math.min(minX, position[1]);
+
+    maxX = Math.max(minX, position[0]);
+    maxY = Math.max(minX, position[1]);
+  });
+
+  return [
+    [minX, minY],
+    [maxX, maxY],
+  ];
+}
