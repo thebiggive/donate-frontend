@@ -27,12 +27,13 @@ import { BrowserErrorHandler } from './BrowserErrorHandler';
 import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
 const internalApiHosts = [new URL(environment.matchbotApiOrigin).host, new URL(environment.identityApiPrefix).host];
+const ssrTrustedHosts = [...internalApiHosts, new URL(environment.donateUriPrefix).host];
 
 export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
   const token = inject(SSR_CLOUDFLARE_TOKEN, { optional: true });
 
-  if (isPlatformServer(platformId) && token && internalApiHosts.includes(new URL(req.url).host)) {
+  if (isPlatformServer(platformId) && token && ssrTrustedHosts.includes(new URL(req.url).host)) {
     req = req.clone({
       setHeaders: {
         'X-TBG-Donate-SSR-Token': token,

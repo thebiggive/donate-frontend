@@ -5,7 +5,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { environment } from '../environments/environment';
 import { CloudflareService } from './cloudflare.service';
-import { cloudflareInterceptor } from './app.config';
+import { cloudflareInterceptor, donateSsrHeaderInterceptor } from './app.config';
+import { SSR_CLOUDFLARE_TOKEN } from './ssr-token';
 
 const jasmineExpect = expect as unknown as (actual: unknown) => {
   toBe(expected: unknown): void;
@@ -23,7 +24,8 @@ describe('cloudflareInterceptor', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: platformId },
-        provideHttpClient(withInterceptors([cloudflareInterceptor])),
+        { provide: SSR_CLOUDFLARE_TOKEN, useValue: 'test-ssr-token' },
+        provideHttpClient(withInterceptors([cloudflareInterceptor, donateSsrHeaderInterceptor])),
         provideHttpClientTesting(),
       ],
     });
@@ -40,7 +42,9 @@ describe('cloudflareInterceptor', () => {
     configure('server');
     let receivedStatus: number | undefined;
 
-    TestBed.inject(HttpClient).get(apiUrl).subscribe({ error: (error) => (receivedStatus = error.status) });
+    TestBed.inject(HttpClient)
+      .get(apiUrl)
+      .subscribe({ error: (error) => (receivedStatus = error.status) });
 
     httpTestingController.expectOne(apiUrl).flush('blocked', {
       status: 403,
@@ -51,13 +55,37 @@ describe('cloudflareInterceptor', () => {
     jasmineExpect(cloudflareService.isBlocked()).toBeFalse();
   });
 
+  it('adds the SSR bypass token to requests back to Donate', () => {
+    configure('server');
+    const assetUrl = new URL('/assets/map/counties.geojson', environment.donateUriPrefix).toString();
+
+    TestBed.inject(HttpClient).get(assetUrl).subscribe();
+
+    const request = httpTestingController.expectOne(assetUrl);
+    jasmineExpect(request.request.headers.get('X-TBG-Donate-SSR-Token')).toBe('test-ssr-token');
+    request.flush({ type: 'FeatureCollection', features: [] });
+  });
+
+  it('does not expose the SSR bypass token to browser requests', () => {
+    configure('browser');
+    const assetUrl = new URL('/assets/map/counties.geojson', environment.donateUriPrefix).toString();
+
+    TestBed.inject(HttpClient).get(assetUrl).subscribe();
+
+    const request = httpTestingController.expectOne(assetUrl);
+    jasmineExpect(request.request.headers.has('X-TBG-Donate-SSR-Token')).toBeFalse();
+    request.flush({ type: 'FeatureCollection', features: [] });
+  });
+
   it('retries a blocked browser request after Turnstile passes', () => {
     configure('browser');
     let receivedBody: unknown;
 
-    TestBed.inject(HttpClient).get(apiUrl).subscribe((body) => {
-      receivedBody = body;
-    });
+    TestBed.inject(HttpClient)
+      .get(apiUrl)
+      .subscribe((body) => {
+        receivedBody = body;
+      });
 
     httpTestingController.expectOne(apiUrl).flush('blocked', {
       status: 403,
