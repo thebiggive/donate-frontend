@@ -522,7 +522,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort, this.location);
+    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort, this.location); //
     if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
       // Don't navigate at all if no change in query params. This saves us from inconsistencies
       // later such as scroll adjustment kicking in only when the router params actually changed,
@@ -671,7 +671,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     );
   }
 
-  protected searchByLocation() {
+  protected searchByGeoLocation() {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
@@ -737,5 +737,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       default:
       // no-op
     }
+  }
+
+  protected clearGeoLocation() {
+    this.location = undefined;
+    this.setQueryParams();
   }
 }

@@ -88,9 +88,11 @@
       [highlightAreas]="highlightAreas"
       [locationCounts]="locationCounts"
       [fetchingLocation]="fetchingLocation"
+      [geoLocation]="location"
       [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
       (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
-      (doGetLocationFromBrowser)="searchByLocation()"
+      (doGetGeoLocationFromBrowser)="searchByGeoLocation()"
+      (doClearGeoLocation)="clearGeoLocation()"
       (scrolled)="onScroll()"
       (doSelectLocation)="onLocationSelected($event)"
     >
