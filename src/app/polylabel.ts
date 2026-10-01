@@ -173,4 +173,15 @@ export function getPoleOfInaccessibility(
   }
 
   return null;
+
 }
+
+export function getBoundingBox(
+  geometry: Geometry
+): [Position, Position] {
+  if (!geometry) {
+    return null;
+  }
+
+
+  }

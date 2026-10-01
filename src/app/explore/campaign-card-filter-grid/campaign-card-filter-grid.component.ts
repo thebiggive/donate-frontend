@@ -437,6 +437,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
               this.initMap();
             } else {
               this.map.invalidateSize();
+              // In case where it's filtered to a specific region in the UK then we want to zoom map to said region
               const UKBounds: [[number, number], [number, number]] = [
                 [49.8, -8.7],
                 [60.9, 1.8],
