@@ -12,6 +12,7 @@ import {
   inject,
   ChangeDetectionStrategy,
   afterNextRender,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
@@ -52,6 +53,7 @@ declare global {
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private baseHref = inject(APP_BASE_HREF);
+  private cdr = inject(ChangeDetectorRef);
   protected cfService = inject(CloudflareService);
   private identityService = inject(IdentityService);
   private donationService = inject(DonationService);
@@ -139,10 +141,16 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   onTurnstileSuccess(_token: string) {
+    console.log('onTurnstileSuccess starting');
     this.cfService.notifyPassed();
 
+    console.log('onTurnstileSuccess scheduling');
+
     setTimeout(() => {
+      console.log('onTurnstileSuccess delayed callback running');
       this.isWidgetVisible.set(false);
+
+      this.cdr.markForCheck();
     }, 1500);
   }
 
