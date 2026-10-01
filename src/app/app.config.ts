@@ -15,12 +15,10 @@ import { defineCustomElements } from '@biggive/components/loader';
 import { setAssetPath } from '@biggive/components/dist/components';
 import { provideMatomo, withRouteData, withRouter } from 'ngx-matomo-client';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
-import { catchError, switchMap, take, throwError } from 'rxjs';
 import { register as registerSwiper } from 'swiper/element/bundle';
 
 import { routes } from './app.routes';
 import { BigGiveTitleStrategy } from '../BigGiveTitleStrategy';
-import { CloudflareService } from './cloudflare.service';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { BrowserErrorHandler } from './BrowserErrorHandler';
@@ -93,7 +91,7 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
     // For route resolvers etc.
-    provideHttpClient(withInterceptors([cloudflareInterceptor, donateSsrHeaderInterceptor])),
+    provideHttpClient(withInterceptors([apiAuthInterceptor, donateSsrHeaderInterceptor])),
     provideMatomo(
       {
         siteId: environment.matomoSiteId?.toString() || '',
