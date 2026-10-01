@@ -6,7 +6,7 @@ import {
   withRouterConfig,
   TitleStrategy,
 } from '@angular/router';
-import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpErrorResponse, HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
@@ -49,6 +49,7 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
 // improve Turnstile UX.
 export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
   const cfService = inject(CloudflareService);
+  const platformId = inject(PLATFORM_ID);
 
   if (internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
@@ -58,7 +59,7 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 403 || error.status === 503) {
+      if (isPlatformBrowser(platformId) && (error.status === 403 || error.status === 503)) {
         cfService.notifyBlocked();
 
         // Pause request until Turnstile emits, then retry with cf_clearance cookie

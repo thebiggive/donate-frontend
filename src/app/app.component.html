@@ -7,7 +7,14 @@
 }
 
 @if (turnstileSiteKey) {
-  <div class="cf-turnstile" [attr.data-sitekey]="turnstileSiteKey" data-appearance="interaction-only"></div>
+  <div
+    class="cf-turnstile"
+    [attr.data-sitekey]="turnstileSiteKey"
+    data-appearance="interaction-only"
+    data-callback="onTurnstileSuccess"
+    data-expired-callback="onTurnstileExpired"
+    [hidden]="!isWidgetVisible()"
+  ></div>
 }
 
 <header>
