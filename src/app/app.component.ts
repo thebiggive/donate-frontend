@@ -106,6 +106,13 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     afterNextRender(() => {
       window.onTurnstileSuccess = this.onTurnstileSuccess.bind(this);
       window.onTurnstileExpired = this.onTurnstileExpired.bind(this);
+
+      if (this.turnstileSiteKey) {
+        const turnstileScript = document.createElement('script');
+        turnstileScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        turnstileScript.async = true;
+        document.head.appendChild(turnstileScript);
+      }
     });
 
     const navigationService = this.navigationService;
