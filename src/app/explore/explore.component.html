@@ -104,7 +104,12 @@
       }
 
       @if (
-        individualCampaigns.length <= 6 && !this.searched && !loading && highlightCards && highlightCards.length > 0
+        !filterError &&
+        individualCampaigns.length <= 6 &&
+        !this.searched &&
+        !loading &&
+        highlightCards &&
+        highlightCards.length > 0
       ) {
         <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
         <app-highlight-cards [highlightCards]="highlightCards"> </app-highlight-cards>
@@ -115,7 +120,7 @@
           <!--  We want this error to happen as part of route resolving.    -->
           <p class="error" aria-live="assertive">
             Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
-            Not to worry, you can
+            Not to worry, you can <a href (click)="retryCampaignSearch($event)">try again</a> or
             <a routerLink="/">browse all active campaigns here</a>!
           </p>
         </div>

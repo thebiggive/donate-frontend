@@ -100,4 +100,27 @@ describe('cloudflareInterceptor', () => {
 
     jasmineExpect(receivedBody).toEqual({ campaigns: [] });
   });
+
+  it('retries when Turnstile passes before an in-flight request returns blocked', () => {
+    configure('browser');
+    let receivedBody: unknown;
+
+    TestBed.inject(HttpClient)
+      .get(apiUrl)
+      .subscribe((body) => {
+        receivedBody = body;
+      });
+
+    cloudflareService.notifyPassed();
+    httpTestingController.expectOne(apiUrl).flush('blocked', {
+      status: 403,
+      statusText: 'Forbidden',
+    });
+
+    const retry = httpTestingController.expectOne(apiUrl);
+    jasmineExpect(cloudflareService.isBlocked()).toBeFalse();
+    retry.flush({ campaigns: [] });
+
+    jasmineExpect(receivedBody).toEqual({ campaigns: [] });
+  });
 });
