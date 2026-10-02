@@ -449,10 +449,29 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
               const UKFilterRegions = searchResult?.UKFilterRegions;
               if (UKFilterRegions) {
-                const widestRegion = UKFilterRegions[UKFilterRegions.length - 1];
-                const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient);
-                const bounds = getBoundingBox(regionFeature.geometry);
-                this.map.fitBounds(bounds, this.boundsOptions());
+                const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
+
+                const allFeaturesLatLng: { lat: number; lng: number }[] = [];
+                console.log('using these features', regionsGeo);
+                for (const feature of regionsGeo.filter(
+                  (f) => f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon',
+                )) {
+                  if ('coordinates' in feature.geometry) {
+                    console.log('feature geom', feature.geometry.coordinates[0]);
+                    const coords = feature.geometry.coordinates[0];
+
+                    if (coords && Array.isArray(coords)) {
+                      for (const point of coords) {
+                        if (Array.isArray(point) && point.length >= 2) {
+                          const latLng = { lat: point[1], lng: point[0] };
+                          // @ts-expect-error – Polygon etc. theoretically could be Position but in practice are number.
+                          allFeaturesLatLng.push(latLng);
+                        }
+                      }
+                    }
+                  }
+                }
+                this.map.fitBounds(allFeaturesLatLng, this.boundsOptions());
               } else {
                 const UKBounds: [[number, number], [number, number]] = [
                   [49.8, -8.7],
