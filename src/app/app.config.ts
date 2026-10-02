@@ -51,6 +51,7 @@ export const donateSsrHeaderInterceptor: HttpInterceptorFn = (req, next) => {
 export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
   const cfService = inject(CloudflareService);
   const platformId = inject(PLATFORM_ID);
+  const challengePassVersion = cfService.getChallengePassVersion();
 
   if (internalApiHosts.includes(new URL(req.url).host)) {
     req = req.clone({
@@ -61,6 +62,10 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (isPlatformBrowser(platformId) && (error.status === 403 || error.status === 503)) {
+        if (cfService.hasChallengePassedSince(challengePassVersion)) {
+          return next(req);
+        }
+
         cfService.notifyBlocked();
 
         // Pause request until Turnstile emits, then retry with cf_clearance cookie

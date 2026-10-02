@@ -145,6 +145,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private routeChangeListener?: Subscription;
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
+  private lastFailedCampaignSearch?: { query: SearchQuery; clearExisting: boolean };
   protected fetchingLocation = false;
   protected location: GeolocationPosition | undefined;
   protected toaster = inject(Toast);
@@ -403,6 +404,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
       next: async (result: CampaignSummaryList) => {
+        this.lastFailedCampaignSearch = undefined;
+        this.filterError = false;
         this.individualCampaigns = clearExisting
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
@@ -432,6 +435,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         }
       },
       error: (error) => {
+        this.lastFailedCampaignSearch = { query, clearExisting };
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
           `ExploreComponent.doCampaignSearch: ${error?.message ?? error ?? 'Unknown error'}`,
@@ -442,6 +446,18 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.loading = false;
       },
     });
+  }
+
+  retryCampaignSearch(event: Event) {
+    event.preventDefault();
+    const lastFailedSearch = this.lastFailedCampaignSearch;
+    if (!lastFailedSearch) {
+      return;
+    }
+
+    this.filterError = false;
+    this.loading = true;
+    this.doCampaignSearch(lastFailedSearch.query, lastFailedSearch.clearExisting);
   }
 
   private normaliseQueryForRecentChildrenComparison(query: SearchQuery): string {
