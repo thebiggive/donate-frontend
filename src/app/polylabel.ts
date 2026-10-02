@@ -189,21 +189,21 @@ export function getBoundingBox(geometry: Geometry): [Position, Position] {
     // see https://www.rfc-editor.org/info/rfc7946/#section-3.1.6
     coordinates = rings[0];
   } else if (geometry.type === 'MultiPolygon') {
-    coordinates = (geometry as MultiPolygon).coordinates.flat()[0];
+    coordinates = (geometry as MultiPolygon).coordinates.flat().flat();
   } else {
     throw new Error('Unexpected Geometry type ' + geometry.type);
   }
 
   coordinates.forEach((position) => {
     minX = Math.min(minX, position[0]);
-    minY = Math.min(minX, position[1]);
+    minY = Math.min(minY, position[1]);
 
     maxX = Math.max(minX, position[0]);
-    maxY = Math.max(minX, position[1]);
+    maxY = Math.max(maxY, position[1]);
   });
 
   return [
-    [minX, minY],
-    [maxX, maxY],
+    [minY, minX],
+    [maxY, maxX],
   ];
 }

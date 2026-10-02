@@ -30,11 +30,11 @@ import {
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import {getBoundingBox, getPoleOfInaccessibility} from '../../polylabel';
+import { getBoundingBox, getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
-import {CampaignSummary, CampaignSummaryList} from '../../campaign-summary.model';
-import {getHighlightedFeatures} from '../../regions';
-import {HttpClient} from '@angular/common/http';
+import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
+import { getHighlightedFeatures } from '../../regions';
+import { HttpClient } from '@angular/common/http';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -93,7 +93,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   /** deprecated - remove and use searchResult instead */
   @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
 
-  @Input() searchResult?: CampaignSummaryList | undefined;
+  public searchResult = input<CampaignSummaryList | undefined>();
 
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
@@ -445,21 +445,20 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
             } else {
               this.map.invalidateSize();
               // In case where it's filtered to a specific region in the UK then we want to zoom map to said region
-              if (this.searchResult?.ukFilterRegions) {
-                const widestRegion = this.searchResult?.ukFilterRegions[this.searchResult?.ukFilterRegions.length - 1];
-                console.log(`The widest region is ${widestRegion}, will fit map to that!`)
-                const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient)
+              const searchResult = this.searchResult();
+
+              const UKFilterRegions = searchResult?.UKFilterRegions;
+              if (UKFilterRegions) {
+                const widestRegion = UKFilterRegions[UKFilterRegions.length - 1];
+                const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient);
                 const bounds = getBoundingBox(regionFeature.geometry);
                 this.map.fitBounds(bounds, this.boundsOptions());
-                console.log('also fitted bounds to region');
               } else {
                 const UKBounds: [[number, number], [number, number]] = [
                   [49.8, -8.7],
                   [60.9, 1.8],
                 ];
                 this.map.fitBounds(UKBounds, this.boundsOptions());
-                console.log(this.searchResult); // <-- this seems to be always logging undefined which may explain why zoom to region isn't working.
-                console.log('also fitted bounds to uk');
               }
             }
           });
@@ -564,17 +563,15 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
       });
 
-      if (this.searchResult?.ukFilterRegions) {
+      const UKFilterRegions = this.searchResult()?.UKFilterRegions;
+      if (UKFilterRegions) {
         // todo remove duplication of lines below.
-        const widestRegion = this.searchResult?.ukFilterRegions[this.searchResult?.ukFilterRegions.length - 1];
-        console.log(`The widest region is ${widestRegion}, will fit map to that!`)
-        const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient)
+        const widestRegion = UKFilterRegions[UKFilterRegions.length - 1];
+        const [regionFeature] = await getHighlightedFeatures([widestRegion], this.httpClient);
         const bounds = getBoundingBox(regionFeature.geometry);
         this.map.fitBounds(bounds, this.boundsOptions());
-        console.log('fitted boudns to region');
       } else {
         this.map.fitBounds(UKBounds, this.boundsOptions());
-        console.log('fitted bounds to UK');
       }
     }
 
