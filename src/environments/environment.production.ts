@@ -7,7 +7,6 @@ export const environment: Environment = {
   production: true,
   productionLike: true,
   creditTipsCampaign: 'a056900002LDXWgAAP',
-  sfApiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateEcsIntermediateHost: 'donate-ecs-production.thebiggive.org.uk',
   donateUriPrefix: 'https://donate.biggive.org',

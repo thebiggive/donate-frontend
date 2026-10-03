@@ -38,7 +38,7 @@ describe('FundService', () => {
     );
 
     const request = httpMock.expectOne(
-      `${environment.sfApiUriPrefix}/funds/services/apexrest/v1.0/funds/slug/champion-fund-test-slug`,
+      `${environment.matchbotApiOrigin}/sf/funds/services/apexrest/v1.0/funds/slug/champion-fund-test-slug`,
     );
     expect(request.request.method).toBe('GET');
     request.flush(dummyFund);
