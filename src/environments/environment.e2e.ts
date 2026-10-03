@@ -13,15 +13,14 @@ export const environment: Environment = {
   production: false,
   productionLike: false,
   creditTipsCampaign: '000000000000000003',
-  sfApiUriPrefix: 'https://dummy-salesforce.example.org',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateEcsIntermediateHost: null,
   donateUriPrefix: 'http://localhost:4200',
   blogUriPrefix: 'http://localhost:30003',
   sharedCookieDomain: 'localhost',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
-  matchbotApiOrigin: 'http://localhost:30030',
-  matchbotApiPrefix: 'http://localhost:30030/v1',
+  matchbotApiOrigin: 'https://dummy-matchbot.example.org',
+  matchbotApiPrefix: 'https://dummy-matchbot.example.org/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'http://localhost:30050/v1',
   imageHosts: [

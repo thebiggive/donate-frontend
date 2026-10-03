@@ -14,6 +14,6 @@ export class FundService {
   private apiPath = '/funds/services/apexrest/v1.0/funds';
 
   getOneBySlug(fundSlug: string): Observable<Fund> {
-    return this.http.get<Fund>(`${environment.sfApiUriPrefix}${this.apiPath}/slug/${fundSlug}`);
+    return this.http.get<Fund>(`${environment.matchbotApiOrigin}/sf${this.apiPath}/slug/${fundSlug}`);
   }
 }

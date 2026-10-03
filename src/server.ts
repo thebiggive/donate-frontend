@@ -118,7 +118,6 @@ function buildCspDirectives(externalScriptNonce: string) {
     ...helmet.contentSecurityPolicy.getDefaultDirectives(),
     'connect-src': [
       'wss://*.getsitecontrol.com', // GetSiteControl secure WebSocket connections.
-      new URL(environment.sfApiUriPrefix).host,
       new URL(environment.matchbotApiPrefix).host,
       new URL(environment.identityApiPrefix).host,
       cloudflareChallengeBase,

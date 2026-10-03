@@ -15,7 +15,6 @@ export const environment: Environment = {
   production: false,
   productionLike: true,
   creditTipsCampaign: 'a053O00000J1ROLQA3',
-  sfApiUriPrefix: 'https://sf-api-regression.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateEcsIntermediateHost: 'donate-ecs-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',

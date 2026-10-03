@@ -13,7 +13,6 @@ export const environment: Environment = {
   production: false,
   productionLike: true,
   creditTipsCampaign: 'a056900002LDXWgAAP',
-  sfApiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateEcsIntermediateHost: 'donate-ecs-staging.thebiggivetest.org.uk',
   // For staging-like SSR testing local builds
