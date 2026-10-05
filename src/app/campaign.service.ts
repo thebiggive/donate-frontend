@@ -251,13 +251,13 @@ export class CampaignService {
 
   getCampaignImpactStats() {
     return this.http
-      .get<CampaignStats>(`${environment.sfApiUriPrefix}${this.apiPath}/campaigns/stats`)
+      .get<CampaignStats>(`${environment.matchbotApiOrigin}/sf${this.apiPath}/campaigns/stats`)
       .pipe(map(formatCampaignStats));
   }
 
   getHomePageHighlightCards(): Observable<HighlightCard[]> {
     return this.http
-      .get<SfApiHighlightCard[]>(`${environment.sfApiUriPrefix}${this.apiPath}/highlight-service`)
+      .get<SfApiHighlightCard[]>(`${environment.matchbotApiOrigin}/sf${this.apiPath}/highlight-service`)
       .pipe(map(SFHighlightCardsToFEHighlightCards));
   }
 

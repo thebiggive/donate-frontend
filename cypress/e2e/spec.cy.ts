@@ -3,7 +3,7 @@ import { CampaignStats } from '../../src/app/campaign-stats.model';
 describe('App boot fundamentals', () => {
   beforeEach(() => {
     cy.intercept(
-      { url: 'https://dummy-salesforce.example.org/campaigns/services/apexrest/v1.0/campaigns/stats' },
+      { url: 'https://dummy-matchbot.example.org/sf/campaigns/services/apexrest/v1.0/campaigns/stats' },
       {
         body: { totalRaised: 500_000, totalCampaignCount: 123_456 } as CampaignStats,
       },
