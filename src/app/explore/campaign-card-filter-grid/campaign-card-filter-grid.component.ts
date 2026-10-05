@@ -452,12 +452,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
                 const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
 
                 const allFeaturesLatLng: { lat: number; lng: number }[] = [];
-                console.log('using these features', regionsGeo);
                 for (const feature of regionsGeo.filter(
                   (f) => f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon',
                 )) {
                   if ('coordinates' in feature.geometry) {
-                    console.log('feature geom', feature.geometry.coordinates[0]);
                     const coords = feature.geometry.coordinates[0];
 
                     if (coords && Array.isArray(coords)) {
