@@ -54,6 +54,7 @@ import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 import { CloudflareService } from '../cloudflare.service';
+import { DonationService } from '../donation.service';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -152,7 +153,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected toaster = inject(Toast);
 
   /** country code of client, based on header from cloudfront */
-  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
+  protected clientCountryCode: string | undefined;
+
+  /** We're not really handling donations here but using DonationService as it has access to the clientCountryCode
+   *  transferred from server in TransferState
+   */
+  protected donationService = inject(DonationService);
 
   protected readonly environment = environment;
 
@@ -231,6 +237,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.setTickerParams(this.metaCampaign);
       this.setFallbackBanner(this.metaCampaign);
     }
+
+    this.clientCountryCode = this.donationService.getDefaultCounty();
   }
 
   private setFundSpecificProps(fund: Fund, metaCampaign: MetaCampaign) {
