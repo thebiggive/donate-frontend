@@ -14,6 +14,7 @@ import {
   InjectionToken,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -134,7 +135,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v3`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v4`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -159,6 +160,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Counts of how many results there are (including for pages not loaded) in each region of the UK.
    */
   protected locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
+
+  protected searchResult = signal<undefined | CampaignSummaryList>(undefined);
 
   private http = inject(HttpClient);
   protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
@@ -410,6 +413,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
         this.locationCounts = result.locationCounts;
+        this.searchResult.set(result);
 
         this.loading = false;
 
@@ -428,6 +432,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             children: this.individualCampaigns,
             highlightAreas: this.highlightAreas,
             locationCounts: this.locationCounts,
+            UKFilterRegions: this.searchResult()?.UKFilterRegions,
             time: Date.now(), // ms
           };
 
@@ -486,8 +491,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const recentChildrenData = undefined as any; // this.sessionStorage.get(this.recentChildrenKey);
+    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
@@ -501,6 +505,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.offset = recentChildrenData.offset;
       this.highlightAreas = recentChildrenData.highlightAreas;
       this.locationCounts = recentChildrenData.locationCounts;
+      this.searchResult.set(recentChildrenData);
 
       // Auto scrolling without a significant extra wait only works when
       // the child campaigns were quickly loaded from local state from
