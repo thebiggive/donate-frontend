@@ -47,7 +47,6 @@ import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.comp
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
-import { COUNTRY_CODE } from '../country-code.token';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
 import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
@@ -413,6 +412,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Also saves results for imminent future navigation to the same meta-campaign + filters.
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
+    console.log('will call campaignService.search with query', query);
     this.campaignService.search(query as SearchQuery).subscribe({
       next: async (result: CampaignSummaryList) => {
         this.lastFailedCampaignSearch = undefined;
@@ -448,6 +448,21 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         }
       },
       error: (error) => {
+        if (this.location) {
+          // the error may be because Find That Postcode says they are more than 10km away from any known UK postcode,
+          // which assuming they're not in the middle of a moor or something probably means they're outside the UK. Shouldn't
+          // happen because we try not to show the "Near me" button if the proxy detects that they're outside the UK
+          // but it is possible. Definitely possible to cause this to happen if you use a browser plugin to spoof a location outside the UK.
+          this.toaster.showError(
+            'Sorry, precise location search is only supported for locations in the United Kingdom - it looks like you are connected from another ' +
+              'country. To find campaigns for your country select the "Filter" button and choose from the Location drop-down',
+          );
+
+          this.location = undefined;
+          this.searchService.reset(this.defaultSort, false);
+          this.loadQueryParamsAndRun();
+        }
+
         this.lastFailedCampaignSearch = { query, clearExisting };
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
