@@ -475,7 +475,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-
     const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
