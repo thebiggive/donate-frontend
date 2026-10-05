@@ -713,7 +713,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }) {
     // the GeolocationPosition was included here by the AI code generation, leaving in for now in case it's useful.
     window.alert(
-      `Will filter search to only campaigns for region ${regionCode} or its subregions, and zoom in map. To implement in future ticket DON-1221`,
+      `Will filter search to only campaigns for region ${regionCode} or its subregions, and zoom in map. To implement current ticket DON-1218`,
     );
   }
 
