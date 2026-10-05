@@ -174,36 +174,3 @@ export function getPoleOfInaccessibility(
 
   return null;
 }
-
-export function getBoundingBox(geometry: Geometry): [Position, Position] {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-
-  let coordinates: Position[];
-
-  if (geometry.type === 'Polygon') {
-    const rings = (geometry as Polygon).coordinates;
-    // a polygon can have multiple 'rings', we only care about the outer one.
-    // see https://www.rfc-editor.org/info/rfc7946/#section-3.1.6
-    coordinates = rings[0];
-  } else if (geometry.type === 'MultiPolygon') {
-    coordinates = (geometry as MultiPolygon).coordinates.flat().flat();
-  } else {
-    throw new Error('Unexpected Geometry type ' + geometry.type);
-  }
-
-  coordinates.forEach((position) => {
-    minX = Math.min(minX, position[0]);
-    minY = Math.min(minY, position[1]);
-
-    maxX = Math.max(minX, position[0]);
-    maxY = Math.max(maxY, position[1]);
-  });
-
-  return [
-    [minY, minX],
-    [maxY, maxX],
-  ];
-}

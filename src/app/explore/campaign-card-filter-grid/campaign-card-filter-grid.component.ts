@@ -14,6 +14,7 @@ import {
   input,
   ChangeDetectionStrategy,
   computed,
+  effect,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -30,7 +31,7 @@ import {
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { getBoundingBox, getPoleOfInaccessibility } from '../../polylabel';
+import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
@@ -427,6 +428,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.selectedFilterBeneficiary !== null ||
       this.selectedFilterLocation !== null;
     this.initialSortByOption = this.selectedSortByOption || 'Relevance';
+
+    effect(() => {
+      this.searchResult();
+      this.updateMapBounds();
+    });
   }
 
   ngAfterViewInit() {
@@ -469,25 +475,16 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private async fitMapToFilteredUKRegions(UKFilterRegions: string[]) {
     const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
 
-    const allFeaturesLatLng: { lat: number; lng: number }[] = [];
-    for (const feature of regionsGeo.filter(
-      (f) => f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon',
-    )) {
-      if ('coordinates' in feature.geometry) {
-        const coords = feature.geometry.coordinates[0];
-
-        if (coords && Array.isArray(coords)) {
-          for (const point of coords) {
-            if (Array.isArray(point) && point.length >= 2) {
-              const latLng = {lat: point[1], lng: point[0]};
-              // @ts-expect-error – Polygon etc. theoretically could be Position but in practice are number.
-              allFeaturesLatLng.push(latLng);
-            }
-          }
-        }
-      }
+    if (regionsGeo.length === 0) {
+      return;
     }
-    this.map.fitBounds(allFeaturesLatLng, this.boundsOptions());
+
+    const geoJsonLayer = new GeoJSON(regionsGeo);
+    const bounds = geoJsonLayer.getBounds();
+
+    if (bounds.isValid()) {
+      this.map.fitBounds(bounds, this.boundsOptions());
+    }
   }
 
   private teardownMap() {
@@ -548,6 +545,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   ngOnChanges(_changes: SimpleChanges<CampaignCardFilterGridComponent>) {
     this.initMap();
+    this.updateMapBounds();
   }
 
   protected makeMapFullScreen() {
@@ -680,6 +678,21 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
+  }
+
+  private async updateMapBounds() {
+    if (!this.map) return;
+
+    const UKFilterRegions = this.searchResult()?.UKFilterRegions;
+    if (UKFilterRegions && UKFilterRegions.length > 0) {
+      await this.fitMapToFilteredUKRegions(UKFilterRegions);
+    } else {
+      const UKBounds: [[number, number], [number, number]] = [
+        [49.8, -8.7],
+        [60.9, 1.8],
+      ];
+      this.map.fitBounds(UKBounds, this.boundsOptions());
+    }
   }
 
   protected showUkMap(): boolean {
