@@ -208,6 +208,10 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
+    if (searchQuery.ukRegion) {
+      params = params.append('ukRegion', searchQuery.ukRegion);
+    }
+
     if (this.geoLocationPosition) {
       params = params
         .append('latitude', this.geoLocationPosition.coords.latitude)
@@ -305,4 +309,5 @@ export class SearchQuery implements SearchQueryInterface {
   public sortDirection?: string;
   public sortField?: string;
   public term?: string;
+  public ukRegion?: string;
 }

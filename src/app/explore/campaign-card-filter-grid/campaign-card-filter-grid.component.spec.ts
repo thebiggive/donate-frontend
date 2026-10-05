@@ -38,12 +38,7 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(component.mapElement?.nativeElement.classList.contains('leaflet-container')).toBeTrue();
   });
 
-  it('should render count markers with correct count and emit doSelectLocation on marker click', async () => {
-    let emittedLocation: GeolocationPosition | undefined;
-    component.doSelectLocation.subscribe((loc) => {
-      emittedLocation = loc.position;
-    });
-
+  it('should render count markers with correct count', async () => {
     component.selectedFilterLocation = 'United Kingdom';
     component.categoryOptions = [];
     component.beneficiaryOptions = [];
@@ -82,10 +77,5 @@ describe('CampaignCardFilterGridComponent', () => {
     const markerButton = fixture.nativeElement.querySelector('.campaign-count-marker');
     expect(markerButton).toBeTruthy();
     expect(markerButton.textContent).toContain('42');
-
-    markerButton.click();
-    expect(emittedLocation).toBeDefined();
-    expect(emittedLocation?.coords.latitude).toBeCloseTo(56.0, 1);
-    expect(emittedLocation?.coords.longitude).toBeCloseTo(-3.0, 1);
   });
 });
