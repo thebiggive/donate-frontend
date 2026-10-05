@@ -212,7 +212,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private readonly boundsOptions = computed(() => {
     return {
       paddingTopLeft: [8, 8],
-      paddingBottomRight: [8, this.fullScreenMapMode() ? 100 : 8],
+      // Campaign Results bar is approx. 34px including padding. Add that much to 8px in full screen.
+      paddingBottomRight: [8, this.fullScreenMapMode() ? 42 : 8],
     };
   });
 
