@@ -378,8 +378,8 @@ fa-icon {
   overflow-y: scroll;
   left: abstract.$full-screen-border;
   right: abstract.$full-screen-border;
-  bottom: 34px; // Space for .drawer-control to show more tidily without appearing to have extra translucent background.
-  height: 80px;
+  bottom: 0;
+  height: 0;
 
   outline: 1px solid abstract.$colour-grey-light;
   padding-top: 15px;

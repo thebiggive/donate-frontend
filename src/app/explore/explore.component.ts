@@ -14,6 +14,7 @@ import {
   InjectionToken,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -46,13 +47,13 @@ import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.comp
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
-import { COUNTRY_CODE } from '../country-code.token';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
 import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 import { CloudflareService } from '../cloudflare.service';
+import { DonationService } from '../donation.service';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -134,7 +135,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v3`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v4`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -151,7 +152,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected toaster = inject(Toast);
 
   /** country code of client, based on header from cloudfront */
-  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
+  protected clientCountryCode: string | undefined;
+
+  /** We're not really handling donations here but using DonationService as it has access to the clientCountryCode
+   *  transferred from server in TransferState
+   */
+  protected donationService = inject(DonationService);
 
   protected readonly environment = environment;
 
@@ -159,6 +165,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Counts of how many results there are (including for pages not loaded) in each region of the UK.
    */
   protected locationCounts: { regionCode: string; numCampaigns: number }[] | undefined;
+
+  protected searchResult = signal<undefined | CampaignSummaryList>(undefined);
 
   private http = inject(HttpClient);
   protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
@@ -228,6 +236,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.setTickerParams(this.metaCampaign);
       this.setFallbackBanner(this.metaCampaign);
     }
+
+    this.clientCountryCode = this.donationService.getDefaultCounty();
   }
 
   private setFundSpecificProps(fund: Fund, metaCampaign: MetaCampaign) {
@@ -336,6 +346,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     filterCategory: string | null;
     filterBeneficiary: string | null;
     filterLocation: string | null;
+    filterUKRegion?: string | null;
   }) {
     this.searchService.doSearchAndFilterAndSort(event, this.defaultSort);
   }
@@ -402,6 +413,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Also saves results for imminent future navigation to the same meta-campaign + filters.
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
+    console.log('will call campaignService.search with query', query);
     this.campaignService.search(query as SearchQuery).subscribe({
       next: async (result: CampaignSummaryList) => {
         this.lastFailedCampaignSearch = undefined;
@@ -410,6 +422,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           ? result.campaignSummaries
           : [...this.individualCampaigns, ...result.campaignSummaries];
         this.locationCounts = result.locationCounts;
+        this.searchResult.set(result);
 
         this.loading = false;
 
@@ -428,6 +441,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             children: this.individualCampaigns,
             highlightAreas: this.highlightAreas,
             locationCounts: this.locationCounts,
+            UKFilterRegions: this.searchResult()?.UKFilterRegions,
             time: Date.now(), // ms
           };
 
@@ -435,6 +449,21 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         }
       },
       error: (error) => {
+        if (this.location) {
+          // the error may be because Find That Postcode says they are more than 10km away from any known UK postcode,
+          // which assuming they're not in the middle of a moor or something probably means they're outside the UK. Shouldn't
+          // happen because we try not to show the "Near me" button if the proxy detects that they're outside the UK
+          // but it is possible. Definitely possible to cause this to happen if you use a browser plugin to spoof a location outside the UK.
+          this.toaster.showError(
+            'Sorry, precise location search is only supported for locations in the United Kingdom - it looks like you are connected from another ' +
+              'country. To find campaigns for your country select the "Filter" button and choose from the Location drop-down',
+          );
+
+          this.location = undefined;
+          this.searchService.reset(this.defaultSort, false);
+          this.loadQueryParamsAndRun();
+        }
+
         this.lastFailedCampaignSearch = { query, clearExisting };
         logCampaignCalloutError(
           isPlatformBrowser(this.platformId),
@@ -486,8 +515,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const recentChildrenData = undefined as any; // this.sessionStorage.get(this.recentChildrenKey);
+    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
@@ -501,6 +529,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.offset = recentChildrenData.offset;
       this.highlightAreas = recentChildrenData.highlightAreas;
       this.locationCounts = recentChildrenData.locationCounts;
+      this.searchResult.set(recentChildrenData);
 
       // Auto scrolling without a significant extra wait only works when
       // the child campaigns were quickly loaded from local state from
@@ -674,19 +703,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.setTickerParams(metaCampaign);
       }, 1000);
     }
-  }
-
-  protected onLocationSelected({
-    regionCode,
-    position: _position,
-  }: {
-    regionCode: string;
-    position: GeolocationPosition;
-  }) {
-    // the GeolocationPosition was included here by the AI code generation, leaving in for now in case it's useful.
-    window.alert(
-      `Will filter search to only campaigns for region ${regionCode} or its subregions, and zoom in map. To implement in future ticket DON-1221`,
-    );
   }
 
   protected searchByGeoLocation() {

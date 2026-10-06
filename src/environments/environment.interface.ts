@@ -17,7 +17,6 @@ export interface Environment {
   production: boolean;
   productionLike: boolean;
   creditTipsCampaign: string;
-  sfApiUriPrefix: string;
   creditDonationsEnabled: boolean;
 
   donateEcsIntermediateHost: string | null;

@@ -14,6 +14,7 @@ import {
   input,
   ChangeDetectionStrategy,
   computed,
+  effect,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -32,7 +33,9 @@ import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
-import { CampaignSummary } from '../../campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
+import { getHighlightedFeatures } from '../../regions';
+import { HttpClient } from '@angular/common/http';
 
 const sortOptionLabels = {
   relevance: 'Relevance',
@@ -88,7 +91,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
+  /** deprecated - remove and use searchResult instead */
   @Input() locationCounts?: { regionCode: string; numCampaigns: number }[];
+
+  public searchResult = input<CampaignSummaryList | undefined>();
 
   protected sortByPlaceholderText = 'Sort by';
   protected beneficiariesPlaceHolderText = 'Select beneficiary';
@@ -103,6 +109,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private newSelectedFilterBeneficiary: string | null = null;
   private newSelectedFilterLocation: string | null = null;
   protected fullScreenMapMode = signal(false);
+  private httpClient = inject(HttpClient);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -112,11 +119,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     filterCategory: string | null;
     filterBeneficiary: string | null;
     filterLocation: string | null;
+    filterUKRegion?: string | null;
   }>();
 
   doGetGeoLocationFromBrowser = output<void>();
   doClearGeoLocation = output<void>();
-  doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
@@ -177,6 +184,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    */
   @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
 
+  /**
+   * ONS code for a region of the UK that the user has selected to search within,
+   * using, e.g. `E12000001` for North East England or `E09000014` for Haringey. In the latter
+   * case results may also include campaigns with impact on Greater London as a whole.
+   */
+  protected selectedFilterUKRegion: string | undefined;
+
   scrolled = output<void>();
 
   async emitOnScroll() {
@@ -206,13 +220,15 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private map?: any;
 
   /**
-   * Sets bounds options which allow a modest space around the relevant area (currently always whole of UK), plus an extra
+   * Sets bounds options which allow a modest space around the relevant area (either whole of UK, one of the major
+   * subdivisions of England, or Wales, Scotland or Nothern Ireland), plus an extra
    * space for the controls drawer when in full sceen mode.
    */
   private readonly boundsOptions = computed(() => {
     return {
       paddingTopLeft: [8, 8],
-      paddingBottomRight: [8, this.fullScreenMapMode() ? 100 : 8],
+      // Campaign Results bar is approx. 34px including padding. Add that much to 8px in full screen.
+      paddingBottomRight: [8, this.fullScreenMapMode() ? 42 : 8],
     };
   });
 
@@ -265,6 +281,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       filterCategory: this.selectedFilterCategory,
       filterBeneficiary: this.selectedFilterBeneficiary,
       filterLocation: this.selectedFilterLocation,
+      filterUKRegion: this.selectedFilterUKRegion,
     };
   }
 
@@ -420,6 +437,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.selectedFilterBeneficiary !== null ||
       this.selectedFilterLocation !== null;
     this.initialSortByOption = this.selectedSortByOption || 'Relevance';
+
+    effect(() => {
+      this.searchResult();
+      this.updateMapBounds();
+    });
   }
 
   ngAfterViewInit() {
@@ -432,16 +454,24 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
-          requestAnimationFrame(() => {
+          requestAnimationFrame(async () => {
             if (!this.map) {
               this.initMap();
             } else {
               this.map.invalidateSize();
-              const UKBounds: [[number, number], [number, number]] = [
-                [49.8, -8.7],
-                [60.9, 1.8],
-              ];
-              this.map.fitBounds(UKBounds, this.boundsOptions());
+              // In case where it's filtered to a specific region in the UK then we want to zoom map to said region
+              const searchResult = this.searchResult();
+
+              const UKFilterRegions = searchResult?.UKFilterRegions;
+              if (UKFilterRegions) {
+                await this.fitMapToFilteredUKRegions(UKFilterRegions);
+              } else {
+                const UKBounds: [[number, number], [number, number]] = [
+                  [49.8, -8.7],
+                  [60.9, 1.8],
+                ];
+                this.map.fitBounds(UKBounds, this.boundsOptions());
+              }
             }
           });
         }
@@ -449,6 +479,21 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     });
 
     this.resizeObserver.observe(element.nativeElement);
+  }
+
+  private async fitMapToFilteredUKRegions(UKFilterRegions: string[]) {
+    const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
+
+    if (regionsGeo.length === 0) {
+      return;
+    }
+
+    const geoJsonLayer = new GeoJSON(regionsGeo);
+    const bounds = geoJsonLayer.getBounds();
+
+    if (bounds.isValid()) {
+      this.map.fitBounds(bounds, this.boundsOptions());
+    }
   }
 
   private teardownMap() {
@@ -509,6 +554,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   ngOnChanges(_changes: SimpleChanges<CampaignCardFilterGridComponent>) {
     this.initMap();
+    this.updateMapBounds();
   }
 
   protected makeMapFullScreen() {
@@ -543,7 +589,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         scrollWheelZoom: false,
         pinchZoom: false,
         zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
-      }).fitBounds(UKBounds, this.boundsOptions());
+      });
+
+      const UKFilterRegions = this.searchResult()?.UKFilterRegions;
+      if (UKFilterRegions) {
+        await this.fitMapToFilteredUKRegions(UKFilterRegions);
+      } else {
+        this.map.fitBounds(UKBounds, this.boundsOptions());
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -570,7 +623,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         if (feature.properties && feature.properties['name']) {
           layer.bindPopup(feature.properties['name']);
         }
-
         const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
 
         const countObj = this.locationCounts?.find(
@@ -598,23 +650,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }).addTo(this.map);
 
         marker.on('click', () => {
-          this.doSelectLocation.emit({
-            regionCode: countObj!.regionCode,
-            position: {
-              coords: {
-                latitude: center.lat,
-                longitude: center.lng,
-                accuracy: NaN,
-                altitude: null,
-                altitudeAccuracy: null,
-                heading: null,
-                speed: null,
-                toJSON: () => {},
-              },
-              timestamp: Date.now(),
-              toJSON: () => {},
-            },
-          } as { position: GeolocationPosition; regionCode: string });
+          this.selectedFilterUKRegion = countObj!.regionCode;
+          this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
         });
       },
     }).addTo(this.map);
@@ -635,6 +672,21 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
     });
+  }
+
+  private async updateMapBounds() {
+    if (!this.map) return;
+
+    const UKFilterRegions = this.searchResult()?.UKFilterRegions;
+    if (UKFilterRegions && UKFilterRegions.length > 0) {
+      await this.fitMapToFilteredUKRegions(UKFilterRegions);
+    } else {
+      const UKBounds: [[number, number], [number, number]] = [
+        [49.8, -8.7],
+        [60.9, 1.8],
+      ];
+      this.map.fitBounds(UKBounds, this.boundsOptions());
+    }
   }
 
   protected showUkMap(): boolean {

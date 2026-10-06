@@ -31,4 +31,5 @@ export type CampaignSummary = {
 export type CampaignSummaryList = {
   campaignSummaries: CampaignSummary[];
   locationCounts?: { regionCode: string; numCampaigns: number }[];
+  UKFilterRegions?: string[] | undefined;
 };
