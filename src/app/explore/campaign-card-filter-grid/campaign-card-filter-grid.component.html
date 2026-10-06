@@ -141,6 +141,12 @@
       </div>
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+          @if (!!getSearchAndFilterObject().filterUKRegion) {
+            <div class="full-screen-map-button-container">
+              <biggive-button (doButtonClick)="onZoomOutClicked()" label="Back to UK" />
+            </div>
+          }
+
           <div class="full-screen-map-button-container">
             <fa-icon
               tabindex="0"

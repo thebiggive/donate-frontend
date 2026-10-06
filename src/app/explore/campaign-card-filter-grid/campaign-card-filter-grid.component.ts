@@ -1,20 +1,20 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
+  computed,
+  effect,
   ElementRef,
   inject,
   Input,
-  output,
-  signal,
-  ViewChild,
-  PLATFORM_ID,
-  OnDestroy,
-  SimpleChanges,
-  OnChanges,
-  AfterViewInit,
   input,
-  ChangeDetectionStrategy,
-  computed,
-  effect,
+  OnChanges,
+  OnDestroy,
+  output,
+  PLATFORM_ID,
+  signal,
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
@@ -23,13 +23,13 @@ import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  faCircleChevronUp,
   faCircleChevronDown,
+  faCircleChevronUp,
   faMagnifyingGlass,
   faTableList,
 } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
-import { DivIcon, GeoJSON, Map, TileLayer, Marker } from 'leaflet';
+import { DivIcon, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
@@ -189,7 +189,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    * using, e.g. `E12000001` for North East England or `E09000014` for Haringey. In the latter
    * case results may also include campaigns with impact on Greater London as a whole.
    */
-  protected selectedFilterUKRegion: string | undefined;
+  @Input({ required: true }) set selectedFilterUKRegion(value: string | null) {
+    this._selectedFilterUKRegion = value;
+  }
+  get selectedFilterUKRegion(): string | null {
+    return this._selectedFilterUKRegion;
+  }
+  private _selectedFilterUKRegion: string | null = null;
 
   scrolled = output<void>();
 
@@ -274,7 +280,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
 
-  private getSearchAndFilterObject() {
+  protected getSearchAndFilterObject() {
     return {
       searchText: this.searchText,
       sortBy: this.selectedSortByOption,
@@ -690,6 +696,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected showUkMap(): boolean {
-    return this.ukFilterSelected() || this.searchService.hasGeoLocationSet();
+    return (
+      this.ukFilterSelected() || this.searchService.hasGeoLocationSet() || !!this.searchService.selected['ukRegion']
+    );
+  }
+
+  protected onZoomOutClicked(): void {
+    this.selectedFilterUKRegion = null;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 }
