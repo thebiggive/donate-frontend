@@ -119,11 +119,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     filterCategory: string | null;
     filterBeneficiary: string | null;
     filterLocation: string | null;
+    filterUKRegion?: string | null;
   }>();
 
   doGetGeoLocationFromBrowser = output<void>();
   doClearGeoLocation = output<void>();
-  doSelectLocation = output<{ position: GeolocationPosition; regionCode: string }>();
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
@@ -183,6 +183,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
   @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
+
+  /**
+   * ONS code for a region of the UK that the user has selected to search within,
+   * using, e.g. `E12000001` for North East England or `E09000014` for Haringey. In the latter
+   * case results may also include campaigns with impact on Greater London as a whole.
+   */
+  protected selectedFilterUKRegion: string | undefined;
 
   scrolled = output<void>();
 
@@ -274,6 +281,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       filterCategory: this.selectedFilterCategory,
       filterBeneficiary: this.selectedFilterBeneficiary,
       filterLocation: this.selectedFilterLocation,
+      filterUKRegion: this.selectedFilterUKRegion,
     };
   }
 
@@ -642,23 +650,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }).addTo(this.map);
 
         marker.on('click', () => {
-          this.doSelectLocation.emit({
-            regionCode: countObj!.regionCode,
-            position: {
-              coords: {
-                latitude: center.lat,
-                longitude: center.lng,
-                accuracy: NaN,
-                altitude: null,
-                altitudeAccuracy: null,
-                heading: null,
-                speed: null,
-                toJSON: () => {},
-              },
-              timestamp: Date.now(),
-              toJSON: () => {},
-            },
-          } as { position: GeolocationPosition; regionCode: string });
+          this.selectedFilterUKRegion = countObj!.regionCode;
+          this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
         });
       },
     }).addTo(this.map);

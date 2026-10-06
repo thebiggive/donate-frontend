@@ -7,6 +7,7 @@ export type SelectedType = {
   country?: string;
   sortField?: string;
   term?: string;
+  ukRegion?: string;
 };
 
 const sortOptions = {
@@ -44,6 +45,7 @@ export class SearchService {
       country: '',
       sortField: defaultSort,
       term: '',
+      ukRegion: '',
     };
   }
 
@@ -54,6 +56,7 @@ export class SearchService {
       filterCategory: string | null;
       filterBeneficiary: string | null;
       filterLocation: string | null;
+      filterUKRegion?: string | null;
     },
     defaultSort: camelCaseSortOption,
   ) {
@@ -61,6 +64,7 @@ export class SearchService {
     this.selected['beneficiary'] = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
     this.selected['category'] = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
     this.selected['country'] = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
+    this.selected['ukRegion'] = customSearchEvent.filterUKRegion ? customSearchEvent.filterUKRegion : '';
 
     const blankSearchText = !customSearchEvent.searchText || customSearchEvent.searchText.trim() === '';
 
