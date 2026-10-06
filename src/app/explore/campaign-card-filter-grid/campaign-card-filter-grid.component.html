@@ -139,7 +139,6 @@
           </app-campaign-summary-grid>
         }
       </div>
-      <!--  Add a button similar to below for "Back to UK" or something...    -->
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
           @if (!!getSearchAndFilterObject().filterUKRegion) {
