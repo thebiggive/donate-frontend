@@ -258,13 +258,25 @@ app.use('**', async (req, res, next) => {
   const useLegacy = legacyRequested || isLegacyBrowser(ua);
 
   const engine = await enginePromise;
-  const response = await engine.handle(req, {
-    inlineCriticalCss: false, // TODO review whether this is still more performant and/or safer with the new engine
-    serverContext: {
-      nonce: res.locals['cspScriptNonce'], // Used in app.config.server.ts factory for CSP_NONCE.
-    },
-    cspNonce: res.locals['cspScriptNonce'], // Possibly used in the render itself? Less sure on this.
-  });
+  let response;
+  try {
+    response = await engine.handle(req, {
+      inlineCriticalCss: false, // TODO review whether this is still more performant and/or safer with the new engine
+      serverContext: {
+        nonce: res.locals['cspScriptNonce'], // Used in app.config.server.ts factory for CSP_NONCE.
+      },
+      cspNonce: res.locals['cspScriptNonce'], // Possibly used in the render itself? Less sure on this.
+    });
+  } catch (error: unknown) {
+    // @ts-expect-error Logging `.message` if set seems least bad concise way to deal with the fact error type's unknown.
+    console.error('Engine bailed on request for ' + req.path + ': ' + error?.message);
+    res.statusCode = 500;
+    res.type('text/plain');
+    res.send('Donate server error'); // Don't reveal details but allow us to tell it exited here.
+
+    return res;
+  }
+
   if (!response) {
     return next();
   }
@@ -302,6 +314,7 @@ if (isMainModule(import.meta.url)) {
    */
   server.keepAliveTimeout = 65 * 1_000;
   server.timeout = 70 * 1_000;
+  // server.requestTimeout = 12_000; // TODO consider reducing ALB timeouts referenced above and all these.
 }
 
 export const reqHandler = createNodeRequestHandler(app);
