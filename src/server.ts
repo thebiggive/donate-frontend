@@ -269,8 +269,16 @@ app.use('**', async (req, res, next) => {
     });
   } catch (error: unknown) {
     // @ts-expect-error Logging `.message` if set seems least bad concise way to deal with the fact error type's unknown.
-    console.error('Engine bailed on request for ' + req.path + ': ' + error?.message);
-    res.statusCode = 500;
+    const errorMessage: string | undefined = error?.message;
+
+    console.error('Engine bailed on request for ' + req.path + ': ' + errorMessage);
+
+    if (errorMessage?.startsWith('NG05702:')) {
+      res.statusCode = 404; // Relative path Angular security feature blocking these is a known issue. Not re-writing for now.
+    } else {
+      res.statusCode = 500; // Anything else is an unexpected crash and we'd like an alarm.
+    }
+
     res.type('text/plain');
     res.send('Donate server error'); // Don't reveal details but allow us to tell it exited here.
 
