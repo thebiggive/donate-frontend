@@ -135,7 +135,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v4`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v5`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -427,9 +427,17 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.loading = false;
 
         this.highlightAreas = await getHighlightedFeatures(
-          this.locationCounts?.map((count) => count.regionCode) || [],
+          // the change here shouldn't be necassary now that we separately add a GeoJSON based on the childRegions
+          // to the map inside campaign-card-filter-grid component, but in manual testing it seems to be required
+          // otherwise I don't see the child regions at all. Not sure why yet.
+          [
+            ...(this.searchService.selected['ukRegion']
+              ? [this.searchService.selected['ukRegion']]
+              : this.locationCounts?.map((count) => count.regionCode) || []),
+          ],
           this.http,
         );
+
         this.changeDetectorRef.detectChanges();
 
         if (isPlatformBrowser(this.platformId)) {
@@ -442,6 +450,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             highlightAreas: this.highlightAreas,
             locationCounts: this.locationCounts,
             UKFilterRegions: this.searchResult()?.UKFilterRegions,
+            childRegions: this.searchResult()?.childRegions,
+            siblingRegions: this.searchResult()?.siblingRegions,
+            parentRegion: this.searchResult()?.parentRegion,
+            parentRegionName: this.searchResult()?.parentRegionName,
             time: Date.now(), // ms
           };
 

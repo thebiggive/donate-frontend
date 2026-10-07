@@ -615,12 +615,19 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(this.map);
 
+    const searchResult = this.searchResult();
+    const childRegions = searchResult?.childRegions;
+    const hasChildRegions = childRegions && childRegions.length > 0;
+
+    const siblingRegions = searchResult?.parentRegion && searchResult?.siblingRegions;
+    const hasSiblingRegions = siblingRegions && siblingRegions.length > 0;
+
     new GeoJSON(this.highlightAreas, {
       attribution:
         'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
       style: () => ({
         fillColor: '#2c089b',
-        fillOpacity: 0.2,
+        fillOpacity: hasChildRegions ? 0 : 0.2,
         color: '#2c089b',
         weight: 1.5,
       }),
@@ -662,6 +669,107 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       },
     }).addTo(this.map);
 
+    if (hasChildRegions) {
+      new GeoJSON(await getHighlightedFeatures(childRegions, this.httpClient), {
+        attribution:
+          'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
+        style: () => ({
+          fillOpacity: 0.1,
+          color: '#2c089b',
+          weight: 1.5,
+        }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
+          if (feature.properties && feature.properties['name']) {
+            layer.bindPopup(feature.properties['name']);
+          }
+          const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
+
+          const childCountObj = this.locationCounts?.find(
+            (lc) =>
+              lc.regionCode ===
+              (feature.properties?.['code'] ??
+                feature.properties?.['RGN25CD'] ??
+                feature.properties?.['CTRY25CD'] ??
+                feature.properties?.['CTYUA25CD'] ??
+                feature.properties?.['LAD25CD']),
+          );
+
+          const count = childCountObj!.numCampaigns;
+          const areaName = feature.properties?.['name'] || '';
+
+          // todo - show counts for child regions as well. Currently not sent from matchbot.
+          const markerIcon = new DivIcon({
+            className: 'campaign-count-marker-container',
+            html: `<button type="button" class="campaign-count-marker" aria-label="${areaName}">${count}</button>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+          });
+
+          const marker = new Marker(center, {
+            icon: markerIcon,
+            title: `${count} campaigns in ${areaName}`,
+          }).addTo(this.map);
+
+          marker.on('click', () => {
+            this.selectedFilterUKRegion = childCountObj!.regionCode;
+            this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+          });
+        },
+      }).addTo(this.map);
+    }
+
+    if (hasSiblingRegions) {
+      new GeoJSON(await getHighlightedFeatures(siblingRegions, this.httpClient), {
+        attribution:
+          'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
+        style: () => ({
+          fillColor: '#2AF135', // placeholder colour
+          fillOpacity: 0.1,
+          color: '#2c089b',
+          weight: 1.5,
+        }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onEachFeature: (feature: Feature<Geometry, GeoJsonProperties>, layer: any) => {
+          if (feature.properties && feature.properties['name']) {
+            layer.bindPopup(feature.properties['name']);
+          }
+          const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
+
+          const countObj = this.locationCounts?.find(
+            (lc) =>
+              lc.regionCode ===
+              (feature.properties?.['code'] ??
+                feature.properties?.['RGN25CD'] ??
+                feature.properties?.['CTRY25CD'] ??
+                feature.properties?.['CTYUA25CD'] ??
+                feature.properties?.['LAD25CD']),
+          );
+
+          const areaName = feature.properties?.['name'] || '';
+          const count = countObj?.numCampaigns || 0;
+
+          // todo - show counts for child regions as well. Currently not sent from matchbot.
+          const markerIcon = new DivIcon({
+            className: 'campaign-count-marker-container',
+            html: `<button type="button" class="campaign-count-marker" aria-label="${areaName}">${count}</button>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+          });
+
+          const marker = new Marker(center, {
+            icon: markerIcon,
+            title: `${count} campaigns in ${areaName}`,
+          }).addTo(this.map);
+
+          marker.on('click', () => {
+            this.selectedFilterUKRegion = countObj!.regionCode;
+            this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+          });
+        },
+      }).addTo(this.map);
+    }
+
     const exitFullScreenButtonIcon = new DivIcon({
       className: 'exit-full-screen-map-button-container',
       html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close Full screen map">X</button>`,
@@ -702,7 +810,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected onZoomOutClicked(): void {
-    this.selectedFilterUKRegion = null;
+    this.selectedFilterUKRegion = this.searchResult()?.parentRegion ?? null;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  protected get zoomOutLabel(): string {
+    const parentRegionName = this.searchResult()?.parentRegionName;
+
+    return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
   }
 }
