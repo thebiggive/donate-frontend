@@ -15,6 +15,7 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
@@ -170,6 +171,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private http = inject(HttpClient);
   protected highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
+
+  @ViewChild(CampaignCardFilterGridComponent)
+  protected campaignCardFilterGrid!: CampaignCardFilterGridComponent;
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
@@ -590,6 +594,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     void this.router.navigate([], { queryParams: nextQueryParams });
+
+    this.campaignCardFilterGrid.changeDetectorRef.detectChanges();
   }
 
   private listenForRouteChanges() {
