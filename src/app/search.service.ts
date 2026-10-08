@@ -15,7 +15,8 @@ const sortOptions = {
   leastRaised: 'Least raised',
   matchFundsRemaining: 'Most funds remaining',
   closeToTarget: 'Nearest target',
-  relevance: 'Relevance',
+  relevance: 'Most relevant',
+  location: 'Closest',
 } as const;
 
 type camelCaseSortOption = keyof typeof sortOptions;
@@ -81,7 +82,7 @@ export class SearchService {
         this.reset(defaultSort, false);
       }
 
-      // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
+      // If search text changed and new search text is not blank, we want to re-sort by relevance. DON-558.
       this.selected['sortField'] = 'relevance';
     }
 
@@ -116,8 +117,10 @@ export class SearchService {
         this.selectedSortLabel = sortOptions.leastRaised;
         break;
       case 'relevance':
-      case 'Relevance': // historically we set this with a capital R.
         this.selectedSortLabel = sortOptions.relevance;
+        break;
+      case 'location':
+        this.selectedSortLabel = sortOptions.location;
         break;
       default:
         console.log('No active sort field name match');
@@ -142,7 +145,7 @@ export class SearchService {
     for (const key in this.selected) {
       // Non-default selections should go to the page's query params. The "global default" sort
       // order should too iff there is a search term active, since the default sort in that
-      // specific scenario is Relevance.
+      // specific scenario is 'relevance'.
       if (this.selected[key] !== defaults[key] || (key === 'sortField' && length > 0)) {
         queryParams[key] = String(this.selected[key]);
       }
@@ -200,12 +203,6 @@ export class SearchService {
     this.selected.term = term;
     this.selected['sortField'] = term.length > 0 ? '' : defaultSort;
     this.changed.emit(true);
-  }
-
-  showClearFilters(): boolean {
-    return Boolean(
-      this.selected['beneficiary'] || this.selected['category'] || this.selected['country'] || this.selected.term,
-    );
   }
 
   sort(selectedSort: string) {

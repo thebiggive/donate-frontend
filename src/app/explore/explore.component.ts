@@ -22,7 +22,6 @@ import {
   BiggiveTotalizerTickerItem,
   BiggivePageSection,
   BiggiveHeadingBanner,
-  BiggiveButton,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
@@ -51,7 +50,6 @@ import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/cam
 import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 import { CloudflareService } from '../cloudflare.service';
 import { DonationService } from '../donation.service';
 
@@ -80,9 +78,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     AsyncPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
-    BiggiveButton,
     CampaignCardFilterGridComponent,
-    CampaignSummaryGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -600,7 +596,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   /**
-   * Default sort when not in relevance mode because there's a search term.
+   * Default sort when not in relevance mode because there's a search term, or location mode having used geolocate/map.
    */
   get defaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     const isCompletedMetaCampaign = this.metaCampaign && new Date(this.metaCampaign.endDate) < new Date();
@@ -744,6 +740,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected clearGeoLocation() {
     this.location = undefined;
+    this.searchService.sort(this.defaultSort);
     this.setQueryParams();
   }
 }
