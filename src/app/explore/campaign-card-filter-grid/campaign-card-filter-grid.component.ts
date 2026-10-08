@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   effect,
@@ -110,6 +111,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   private newSelectedFilterLocation: string | null = null;
   protected fullScreenMapMode = signal(false);
   private httpClient = inject(HttpClient);
+  public changeDetectorRef = inject(ChangeDetectorRef);
 
   @ViewChild('root') el!: ElementRef;
 
@@ -694,6 +696,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
                 feature.properties?.['CTYUA25CD'] ??
                 feature.properties?.['LAD25CD']),
           );
+          if (!childCountObj) {
+            console.log('Skipping map display for this feature, not found in locationCounts', feature);
+            return;
+          }
 
           const count = childCountObj!.numCampaigns;
           const areaName = feature.properties?.['name'] || '';
