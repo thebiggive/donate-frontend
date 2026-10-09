@@ -1,15 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid.component';
+import {HttpClient} from '@angular/common/http';
+import {of} from 'rxjs';
 
 describe('CampaignCardFilterGridComponent', () => {
   let component: CampaignCardFilterGridComponent;
   let fixture: ComponentFixture<CampaignCardFilterGridComponent>;
+  let httpClient: HttpClient;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CampaignCardFilterGridComponent],
     }).compileComponents();
+
+    httpClient = TestBed.inject(HttpClient);
+    spyOn(httpClient, 'get').and.returnValue(
+      of({type: 'FeatureCollection', features: []})
+    );
 
     fixture = TestBed.createComponent(CampaignCardFilterGridComponent);
     fixture.componentRef.setInput('individualCampaigns', []);
