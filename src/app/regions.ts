@@ -47,23 +47,27 @@ export async function getHighlightedFeatures(
     },
   ];
 
-  const fetchPromises = layers.map(async (layer) => {
+  // some codes appear more than once, e.g. London boroughs are in both localAuthorities.geojson and
+  // counties.geojson, in some cases with subtly varying geometry. To avoid double markers and confusion we
+  // make a set of codes we've processed and only allow each one to go in once.
+  const seenCodes = new Set<string>();
+  const allFeatures: Array<Feature<Geometry, GeoJsonProperties>> = [];
+
+  for (const layer of layers) {
     const data = await firstValueFrom(http.get<FeatureCollection>(layer.path.toString()));
 
-    return data.features
-      .filter(
-        (feature: Feature<Geometry, GeoJsonProperties>) =>
-          feature.properties && regionCodes.includes(feature.properties[layer.codeField]),
-      )
-      .map((feature: Feature<Geometry, GeoJsonProperties>) => {
+    for (const feature of data.features) {
+      const code = feature.properties?.[layer.codeField];
+      if (code && regionCodes.includes(code) && !seenCodes.has(code)) {
+        seenCodes.add(code);
         if (feature.properties) {
           feature.properties['name'] = addEnglandToNameWhereNeeded(feature.properties[layer.nameField]);
-          feature.properties['code'] = feature.properties[layer.codeField];
+          feature.properties['code'] = code;
         }
-        return feature;
-      });
-  });
+        allFeatures.push(feature);
+      }
+    }
+  }
 
-  const results = await Promise.all(fetchPromises);
-  return results.flat();
+  return allFeatures;
 }

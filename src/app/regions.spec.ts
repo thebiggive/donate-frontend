@@ -28,9 +28,11 @@ describe('getHighlightedFeatures', () => {
 
     const reqLA = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/localAuthorities.geojson`);
     reqLA.flush({ type: 'FeatureCollection', features: [] });
+    await Promise.resolve();
 
     const reqCounties = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/counties.geojson`);
     reqCounties.flush({ type: 'FeatureCollection', features: [] });
+    await Promise.resolve();
 
     const reqEng = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/englandRegions.geojson`);
     reqEng.flush({
@@ -60,9 +62,11 @@ describe('getHighlightedFeatures', () => {
         },
       ],
     });
+    await Promise.resolve();
 
     const reqNations = httpTestingController.expectOne(`${environment.donateUriPrefix}/assets/map/nations.geojson`);
     reqNations.flush({ type: 'FeatureCollection', features: [] });
+    await Promise.resolve();
 
     const results = await promise;
 

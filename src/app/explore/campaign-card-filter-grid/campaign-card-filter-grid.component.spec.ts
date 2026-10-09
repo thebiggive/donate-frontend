@@ -98,7 +98,7 @@ describe('CampaignCardFilterGridComponent', () => {
     fixture.componentRef.setInput('searchResult', undefined);
     fixture.detectChanges();
     await fixture.whenStable();
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await Promise.resolve();
 
     // Map bounds should reflect UK bounds without throwing or reverting to region bounds
     expect(component.mapElement?.nativeElement.classList.contains('leaflet-container')).toBeTrue();
