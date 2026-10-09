@@ -18,7 +18,6 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SearchService } from '../../search.service';
-import { COUNTRY_CODE } from '../../country-code.token';
 import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -38,7 +37,8 @@ import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 
 const sortOptionLabels = {
-  relevance: 'Relevance',
+  relevance: 'Most relevant',
+  location: 'Closest',
   amountRaised: 'Most raised',
   leastRaised: 'Least raised',
   closeToTarget: 'Nearest target',
@@ -57,7 +57,18 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 })
 export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
-  protected sortOptions = this.getSortOptions();
+  protected sortOptions = computed(() => {
+    // @ts-expect-error  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
+    const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
+    const relevantOptionKeys = sortOptionKeys
+      .filter((key) => key !== 'relevance' || this.hasSearchTerm())
+      .filter((key) => key !== 'location' || this.ukFilterSelected());
+
+    console.log('should be using new option keys', relevantOptionKeys);
+
+    return relevantOptionKeys.map((key: sortOptionKey) => ({ value: key, label: sortOptionLabels[key] }));
+  });
+  protected hasSearchTerm = signal(false);
 
   /**
    * JSON array of category key/values
@@ -75,7 +86,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
-  protected clientCountryCode = inject(COUNTRY_CODE, { optional: true });
 
   /**
    * Selected location around which donor is looking for campaigns
@@ -129,13 +139,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   protected faExpandArrows = faExpandArrows;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
-
-  /**
-   * Typically on non-negligible scroll away from the search area.
-   */
-  async unfocusInputs() {
-    this.unfocusTextInput();
-  }
 
   /**
    * Space below component
@@ -346,9 +349,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   protected handleSearchButtonPressed = () => {
     this.unfocusTextInput();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    this.hasSearchTerm.set(!!this.searchText && this.searchText.length > 0);
 
     if (this.hasSearchTerm()) {
-      this.selectedSortByOption = 'Relevance';
+      this.selectedSortByOption = 'Most relevant';
     }
   };
 
@@ -360,6 +364,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   protected handleSearchTextChanged = (event: Event) => {
     // @ts-expect-error - we know it will be from an input element so will have a value.
     this.searchText = event.target.value;
+    this.hasSearchTerm.set(true);
   };
 
   protected handleEnterPressed = (ev: Event) => {
@@ -382,6 +387,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }
 
     this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
+    if (this.ukFilterSelected()) {
+      // Option only gets included in the list once signal is updated.
+      this.selectedSortByOption = 'Closest';
+      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    }
   };
 
   protected handleClearAll = () => {
@@ -392,6 +402,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
     // Clear all
     this.searchText = null;
+    this.hasSearchTerm.set(false);
     this.selectedSortByOption = this.initialSortByOption;
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
@@ -442,7 +453,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.selectedFilterCategory !== null ||
       this.selectedFilterBeneficiary !== null ||
       this.selectedFilterLocation !== null;
-    this.initialSortByOption = this.selectedSortByOption || 'Relevance';
+    this.initialSortByOption = this.selectedSortByOption || 'Most relevant';
 
     effect(() => {
       this.searchResult();
@@ -518,27 +529,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     if (!sortByOption) {
       return undefined;
     }
-    const sortOptions = this.getSortOptions();
-    const selected = sortOptions.filter((option) => {
+    const selected = this.sortOptions().filter((option) => {
       return option.label.toLowerCase() === sortByOption.toLowerCase();
     })[0];
 
     return selected?.value;
-  }
-
-  private getSortOptions(): {
-    label: sortOptionLabel;
-    value: sortOptionKey;
-  }[] {
-    // @ts-expect-error  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
-    const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
-    const relevantOptionKeys = sortOptionKeys.filter((key) => key !== 'relevance' || this.hasSearchTerm());
-
-    return relevantOptionKeys.map((key: sortOptionKey) => ({ value: key, label: sortOptionLabels[key] }));
-  }
-
-  private hasSearchTerm() {
-    return typeof this.searchText === 'string' && this.searchText.length > 0;
   }
 
   protected optionsToArray(options: string | string[] | Record<string, string>): { label: string; value: string }[] {

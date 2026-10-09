@@ -1,5 +1,6 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
@@ -16,6 +17,7 @@ import { MetaCampaign } from './metaCampaign.model';
 })
 export class CampaignService {
   private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
 
   static perPage = 6;
 
@@ -141,7 +143,15 @@ export class CampaignService {
       query.fundSlug = fundSlug;
     }
 
-    this.sortForMatchbot(query, selected);
+    if (isPlatformServer(this.platformId) && selected.sortField === 'location') {
+      console.log('Sorting on server with matchFundsRemaining');
+      // SSR override to deal with the fact that lat/lng are removed from the URL hash for privacy.
+      const selectedForServerCall = selected;
+      selectedForServerCall.sortField = 'matchFundsRemaining';
+      this.sortForMatchbot(query, selectedForServerCall);
+    } else {
+      this.sortForMatchbot(query, selected);
+    }
 
     this.geoLocationPosition = geoLocationPosition;
 
@@ -219,6 +229,11 @@ export class CampaignService {
 
       params = params.set('filterByLatLong', true);
 
+      // If the donor hasn't sorted explicitly, prefer location matches starting with the most granular areas.
+      if (!params.has('sortField')) {
+        params.set('sortField', 'location');
+      }
+
       // previously we set the sortField to 'location' here but for now we are just filterin not sorting. We will
       // likely want to sort at the same time but wil lbe handled from the UI layer so the user can choose to change
       // sort order.
@@ -269,6 +284,10 @@ export class CampaignService {
     switch (selected.sortField) {
       case 'relevance':
         query.sortField = 'relevance';
+        query.sortDirection = 'desc';
+        break;
+      case 'location':
+        query.sortField = 'location';
         query.sortDirection = 'desc';
         break;
       case 'amountRaised':
