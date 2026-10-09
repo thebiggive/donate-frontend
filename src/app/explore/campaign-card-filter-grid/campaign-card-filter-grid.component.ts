@@ -35,6 +35,7 @@ import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
+import {count} from 'rxjs';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -597,15 +598,36 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }
         const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
 
+        let regionCode: string|undefined = undefined;
+
         const countObj = this.locationCounts?.find(
-          (lc) =>
-            lc.regionCode ===
-            (feature.properties?.['code'] ??
-              feature.properties?.['RGN25CD'] ??
-              feature.properties?.['CTRY25CD'] ??
-              feature.properties?.['CTYUA25CD'] ??
-              feature.properties?.['LAD25CD']),
+          (lc) => {
+            const isMatch = lc.regionCode ===
+              (feature.properties?.['code'] ??
+                feature.properties?.['RGN25CD'] ??
+                feature.properties?.['CTRY25CD'] ??
+                feature.properties?.['CTYUA25CD'] ??
+                feature.properties?.['LAD25CD']);
+
+            if (isMatch) {
+              regionCode = lc.regionCode;
+            }
+
+            return isMatch;
+          },
         );
+
+        if (regionCode === this.selectedFilterUKRegion) {
+          // no marker for the region that's already selected because:
+          // it's useless to click again
+          // the marker on the map can obscure the shape of the region underneath for small regions displayed alongside
+          // large ones (e.g. Aberdeen City in the map Scotland)
+          // making the region disappear by returning here will make it more obvious that the region is selected
+          // especially in cases like Aberdeen City where the colour of the region beneeth changing would otherwise be
+          // invisible.
+          return
+        }
+
         const count = countObj !== undefined ? countObj.numCampaigns : 0;
         const areaName = feature.properties?.['name'] || '';
 
