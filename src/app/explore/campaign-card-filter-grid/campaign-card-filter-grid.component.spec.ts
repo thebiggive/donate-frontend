@@ -91,7 +91,7 @@ describe('CampaignCardFilterGridComponent', () => {
     await fixture.whenStable();
 
     // Trigger updateMapBounds with a filter region, then immediately reset to simulate quick zoom-out
-    fixture.componentRef.setInput('searchResult', { UKFilterRegions: ['E12000001'] } as any);
+    fixture.componentRef.setInput('searchResult', { UKFilterRegions: ['E12000001'] } as unknown);
     fixture.detectChanges();
 
     // Immediately clear searchResult to simulate "Back to UK"
