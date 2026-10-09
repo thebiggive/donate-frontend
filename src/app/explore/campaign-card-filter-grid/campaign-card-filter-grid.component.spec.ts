@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid.component';
-import {HttpClient} from '@angular/common/http';
-import {of} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 describe('CampaignCardFilterGridComponent', () => {
   let component: CampaignCardFilterGridComponent;
@@ -15,9 +15,7 @@ describe('CampaignCardFilterGridComponent', () => {
     }).compileComponents();
 
     httpClient = TestBed.inject(HttpClient);
-    spyOn(httpClient, 'get').and.returnValue(
-      of({type: 'FeatureCollection', features: []})
-    );
+    spyOn(httpClient, 'get').and.returnValue(of({ type: 'FeatureCollection', features: [] }));
 
     fixture = TestBed.createComponent(CampaignCardFilterGridComponent);
     fixture.componentRef.setInput('individualCampaigns', []);
