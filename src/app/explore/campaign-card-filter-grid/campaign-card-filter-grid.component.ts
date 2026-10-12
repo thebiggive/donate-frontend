@@ -597,15 +597,35 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }
         const center = getPoleOfInaccessibility(feature.geometry) ?? layer.getBounds().getCenter();
 
-        const countObj = this.locationCounts?.find(
-          (lc) =>
+        let regionCode: string | undefined = undefined;
+
+        const countObj = this.locationCounts?.find((lc) => {
+          const isMatch =
             lc.regionCode ===
             (feature.properties?.['code'] ??
               feature.properties?.['RGN25CD'] ??
               feature.properties?.['CTRY25CD'] ??
               feature.properties?.['CTYUA25CD'] ??
-              feature.properties?.['LAD25CD']),
-        );
+              feature.properties?.['LAD25CD']);
+
+          if (isMatch) {
+            regionCode = lc.regionCode;
+          }
+
+          return isMatch;
+        });
+
+        if (regionCode === this.selectedFilterUKRegion) {
+          // no marker for the region that's already selected because:
+          // it's useless to click again
+          // the marker on the map can obscure the shape of the region underneath for small regions displayed alongside
+          // large ones (e.g. Aberdeen City in the map Scotland)
+          // making the region disappear by returning here will make it more obvious that the region is selected
+          // especially in cases like Aberdeen City where the colour of the region beneeth changing would otherwise be
+          // invisible.
+          return;
+        }
+
         const count = countObj !== undefined ? countObj.numCampaigns : 0;
         const areaName = feature.properties?.['name'] || '';
 
