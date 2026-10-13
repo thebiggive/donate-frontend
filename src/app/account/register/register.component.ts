@@ -277,6 +277,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         regularGiving: false,
       });
       this.verificationLinkSentToEmail = emailAddress;
+      this.changeDetectorRef.markForCheck();
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
@@ -325,12 +326,14 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       this.error =
         "Sorry, we couldn't confirm that code. Please try again, or refresh the page and re-enter your email address to generate a new code.";
       this.processing = false;
+      this.changeDetectorRef.markForCheck();
       return;
     }
 
     this.error = undefined;
     this.verificationCodeSupplied = verificationCode;
     this.processing = false;
+    this.changeDetectorRef.markForCheck();
   }
 
   get readyToTakeAccountDetails(): boolean {
