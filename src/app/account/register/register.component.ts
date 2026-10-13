@@ -117,7 +117,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.registrationForm = this.formBuilder.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.min(minPasswordLength)]],
+      password: [null, [Validators.required, Validators.minLength(minPasswordLength)]],
       emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
     });
 
@@ -196,8 +196,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
 
-      if (passwordErrors?.['min']) {
-        this.error = `Password must be at least ${passwordErrors!['min'].min} characters`;
+      if (passwordErrors?.['minlength']) {
+        this.error = `Password must be at least ${passwordErrors!['minlength'].requiredLength} characters`;
         return;
       }
 
