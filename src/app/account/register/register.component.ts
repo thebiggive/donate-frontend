@@ -117,7 +117,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.registrationForm = this.formBuilder.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      password: [null, [Validators.required]],
+      password: [null, [Validators.required, Validators.minLength(minPasswordLength)]],
       emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
     });
 
@@ -193,6 +193,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (emailErrors?.['pattern']) {
         this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
+        return;
+      }
+
+      if (passwordErrors?.['minlength']) {
+        this.error = `Password must be at least ${passwordErrors!['minlength'].requiredLength} characters`;
         return;
       }
 
@@ -272,6 +277,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         regularGiving: false,
       });
       this.verificationLinkSentToEmail = emailAddress;
+      this.changeDetectorRef.markForCheck();
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
@@ -320,12 +326,14 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       this.error =
         "Sorry, we couldn't confirm that code. Please try again, or refresh the page and re-enter your email address to generate a new code.";
       this.processing = false;
+      this.changeDetectorRef.markForCheck();
       return;
     }
 
     this.error = undefined;
     this.verificationCodeSupplied = verificationCode;
     this.processing = false;
+    this.changeDetectorRef.markForCheck();
   }
 
   get readyToTakeAccountDetails(): boolean {

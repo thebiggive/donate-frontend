@@ -91,7 +91,7 @@
 
       <div class="sort-wrap" style="">
         <biggive-form-field-select
-          [options]="sortOptions"
+          [options]="sortOptions()"
           [prompt]="null"
           select-style="underlined"
           [placeholder]="sortByPlaceholderText"
@@ -141,6 +141,12 @@
       </div>
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+          @if (!!getSearchAndFilterObject().filterUKRegion) {
+            <div class="full-screen-map-button-container">
+              <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
+            </div>
+          }
+
           <div class="full-screen-map-button-container">
             <fa-icon
               tabindex="0"

@@ -22,7 +22,6 @@ import {
   BiggiveTotalizerTickerItem,
   BiggivePageSection,
   BiggiveHeadingBanner,
-  BiggiveButton,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { skip, Subscription } from 'rxjs';
@@ -51,7 +50,6 @@ import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/cam
 import { getHighlightedFeatures } from '../regions';
 import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { CampaignSummaryGridComponent } from './campaign-summary-grid/campaign-summary-grid.component';
 import { CloudflareService } from '../cloudflare.service';
 import { DonationService } from '../donation.service';
 
@@ -80,9 +78,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     AsyncPipe,
     OptimisedImagePipe,
     BiggiveHeadingBanner,
-    BiggiveButton,
     CampaignCardFilterGridComponent,
-    CampaignSummaryGridComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -135,7 +131,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private queryParamsSubscription?: Subscription;
   public fund?: Fund;
-  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v4`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v5`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
@@ -427,9 +423,17 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.loading = false;
 
         this.highlightAreas = await getHighlightedFeatures(
-          this.locationCounts?.map((count) => count.regionCode) || [],
+          // the change here shouldn't be necassary now that we separately add a GeoJSON based on the childRegions
+          // to the map inside campaign-card-filter-grid component, but in manual testing it seems to be required
+          // otherwise I don't see the child regions at all. Not sure why yet.
+          [
+            ...(this.searchService.selected['ukRegion']
+              ? [this.searchService.selected['ukRegion']]
+              : this.locationCounts?.map((count) => count.regionCode) || []),
+          ],
           this.http,
         );
+
         this.changeDetectorRef.detectChanges();
 
         if (isPlatformBrowser(this.platformId)) {
@@ -442,6 +446,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             highlightAreas: this.highlightAreas,
             locationCounts: this.locationCounts,
             UKFilterRegions: this.searchResult()?.UKFilterRegions,
+            childRegions: this.searchResult()?.childRegions,
+            siblingRegions: this.searchResult()?.siblingRegions,
+            parentRegion: this.searchResult()?.parentRegion,
+            parentRegionName: this.searchResult()?.parentRegionName,
             time: Date.now(), // ms
           };
 
@@ -600,7 +608,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   /**
-   * Default sort when not in relevance mode because there's a search term.
+   * Default sort when not in relevance mode because there's a search term, or location mode having used geolocate/map.
    */
   get defaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     const isCompletedMetaCampaign = this.metaCampaign && new Date(this.metaCampaign.endDate) < new Date();
@@ -744,6 +752,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected clearGeoLocation() {
     this.location = undefined;
+    this.searchService.sort(this.defaultSort);
     this.setQueryParams();
   }
 }

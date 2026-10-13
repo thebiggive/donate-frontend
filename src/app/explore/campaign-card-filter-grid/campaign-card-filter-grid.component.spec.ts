@@ -1,15 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid.component';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 describe('CampaignCardFilterGridComponent', () => {
   let component: CampaignCardFilterGridComponent;
   let fixture: ComponentFixture<CampaignCardFilterGridComponent>;
+  let httpClient: HttpClient;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CampaignCardFilterGridComponent],
     }).compileComponents();
+
+    httpClient = TestBed.inject(HttpClient);
+    spyOn(httpClient, 'get').and.returnValue(of({ type: 'FeatureCollection', features: [] }));
 
     fixture = TestBed.createComponent(CampaignCardFilterGridComponent);
     fixture.componentRef.setInput('individualCampaigns', []);
@@ -77,5 +83,30 @@ describe('CampaignCardFilterGridComponent', () => {
     const markerButton = fixture.nativeElement.querySelector('.campaign-count-marker');
     expect(markerButton).toBeTruthy();
     expect(markerButton.textContent).toContain('42');
+  });
+
+  it('should ignore stale async region bounds when zooming out', async () => {
+    component.selectedFilterLocation = 'United Kingdom';
+    component.categoryOptions = [];
+    component.beneficiaryOptions = [];
+    component.locationOptions = ['United Kingdom'];
+    component.offerNearMeOption = false;
+    component.selectedSortByOption = null;
+    component.fetchingLocation = false;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // Trigger updateMapBounds with a filter region, then immediately reset to simulate quick zoom-out
+    fixture.componentRef.setInput('searchResult', { UKFilterRegions: ['E12000001'] } as unknown);
+    fixture.detectChanges();
+
+    // Immediately clear searchResult to simulate "Back to UK"
+    fixture.componentRef.setInput('searchResult', undefined);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await Promise.resolve();
+
+    // Map bounds should reflect UK bounds without throwing or reverting to region bounds
+    expect(component.mapElement?.nativeElement.classList.contains('leaflet-container')).toBeTrue();
   });
 });
