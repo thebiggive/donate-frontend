@@ -117,7 +117,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.registrationForm = this.formBuilder.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      password: [null, [Validators.required]],
+      password: [null, [Validators.required, Validators.minLength(minPasswordLength)]],
       emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
     });
 
@@ -193,6 +193,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (emailErrors?.['pattern']) {
         this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
+        return;
+      }
+
+      if (passwordErrors?.['minlength']) {
+        this.error = `Password must be at least ${passwordErrors!['minlength'].requiredLength} characters`;
         return;
       }
 
