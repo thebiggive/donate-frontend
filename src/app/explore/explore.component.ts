@@ -716,11 +716,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   protected searchByGeoLocation() {
+    this.fetchingLocation = true;
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
         this.location = position;
-        this.setQueryParams();
+        this.searchService.sort('location');
         this.changeDetectorRef.markForCheck();
       },
       (error: GeolocationPositionError) => {
@@ -731,7 +732,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         // as the browser refuse to prompt them more than once, so them just clicking the button and running searchByLocation again won't work.
       },
     );
-    this.fetchingLocation = true;
   }
 
   /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
@@ -757,6 +757,5 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clearGeoLocation() {
     this.location = undefined;
     this.searchService.sort(this.defaultSort);
-    this.setQueryParams();
   }
 }

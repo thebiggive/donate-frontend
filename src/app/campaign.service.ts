@@ -144,10 +144,8 @@ export class CampaignService {
     }
 
     if (isPlatformServer(this.platformId) && selected.sortField === 'location') {
-      console.log('Sorting on server with matchFundsRemaining');
       // SSR override to deal with the fact that lat/lng are removed from the URL hash for privacy.
-      const selectedForServerCall = selected;
-      selectedForServerCall.sortField = 'matchFundsRemaining';
+      const selectedForServerCall = { ...selected, sortField: 'matchFundsRemaining' };
       this.sortForMatchbot(query, selectedForServerCall);
     } else {
       this.sortForMatchbot(query, selected);
@@ -231,7 +229,7 @@ export class CampaignService {
 
       // If the donor hasn't sorted explicitly, prefer location matches starting with the most granular areas.
       if (!params.has('sortField')) {
-        params.set('sortField', 'location');
+        params = params.set('sortField', 'location');
       }
 
       // previously we set the sortField to 'location' here but for now we are just filterin not sorting. We will
@@ -242,9 +240,6 @@ export class CampaignService {
     return this.http.get<CampaignSummaryList>(`${environment.matchbotApiPrefix}/campaigns`, { params });
   }
 
-  /**
-   * Gets details of a campaign from a backend system - currently SF in prod but changing over to matchbot
-   */
   getCharityCampaignById(campaignId: string): Observable<Campaign> {
     return this.http.get<Campaign>(`${environment.matchbotApiPrefix}/campaigns/${campaignId}`);
   }

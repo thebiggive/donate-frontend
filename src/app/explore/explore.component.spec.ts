@@ -111,6 +111,52 @@ describe('ExploreComponent', () => {
     expect(sut.tickerMainMessage).toBe('Opens in 2 days');
   });
 
+  it('should switch sort to location and store position when searchByGeoLocation succeeds', () => {
+    fixture = TestBed.createComponent(ExploreComponent);
+    component = fixture.componentInstance;
+    const dummyPosition = {
+      coords: { latitude: 51.5, longitude: -0.1 },
+    } as GeolocationPosition;
+
+    spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake((success: PositionCallback) => {
+      success(dummyPosition);
+    });
+
+    const sortSpy = spyOn(component.searchService, 'sort').and.callThrough();
+
+    const componentAccessor = component as unknown as {
+      searchByGeoLocation: () => void;
+      location: GeolocationPosition | undefined;
+      fetchingLocation: boolean;
+    };
+
+    componentAccessor.searchByGeoLocation();
+
+    expect(componentAccessor.location).toBe(dummyPosition);
+    expect(componentAccessor.fetchingLocation).toBeFalse();
+    expect(sortSpy).toHaveBeenCalledWith('location');
+    expect(component.searchService.selected['sortField']).toBe('location');
+    expect(component.searchService.selectedSortLabel).toBe('Closest');
+  });
+
+  it('should clear position and revert sort to default when clearGeoLocation is called', () => {
+    fixture = TestBed.createComponent(ExploreComponent);
+    component = fixture.componentInstance;
+    const componentAccessor = component as unknown as {
+      clearGeoLocation: () => void;
+      location: GeolocationPosition | undefined;
+    };
+    componentAccessor.location = {
+      coords: { latitude: 51.5, longitude: -0.1 },
+    } as GeolocationPosition;
+    component.searchService.sort('location');
+
+    componentAccessor.clearGeoLocation();
+
+    expect(componentAccessor.location).toBeUndefined();
+    expect(component.searchService.selected['sortField']).toBe(component.defaultSort);
+  });
+
   function makeComponentWithCampaign(campaign: Campaign) {
     const stubRoute = { queryParams: NEVER } as unknown as ActivatedRoute;
     stubRoute.params = of({});

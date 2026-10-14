@@ -1,10 +1,12 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { Campaign } from './campaign.model';
 import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
+import { SelectedType } from './search.service';
 
 describe('CampaignService', () => {
   const getDummyCampaign = (): Campaign => {
@@ -167,5 +169,36 @@ describe('CampaignService', () => {
     campaign.target = 200;
 
     expect(CampaignService.percentRaisedOfCampaign(campaign)).toBe(undefined);
+  });
+
+  it('should build query with location sort on client', () => {
+    const service: CampaignService = TestBed.inject(CampaignService);
+    const selected: SelectedType = {
+      sortField: 'location',
+    };
+    const query = service.buildQuery({ selected, offset: 0 });
+    expect(query.sortField).toBe('location');
+    expect(query.sortDirection).toBe('desc');
+  });
+
+  it('should fallback to match funds remaining on server without mutating original selected sortField', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        CampaignService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: PLATFORM_ID, useValue: 'server' },
+      ],
+    });
+
+    const service: CampaignService = TestBed.inject(CampaignService);
+    const selected: SelectedType = {
+      sortField: 'location',
+    };
+    const query = service.buildQuery({ selected, offset: 0 });
+    expect(query.sortField).toBe('distanceToTarget');
+    expect(query.sortDirection).toBe('desc');
+    expect(selected.sortField).toBe('location');
   });
 });
