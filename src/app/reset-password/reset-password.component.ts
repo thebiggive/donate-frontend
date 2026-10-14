@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class ResetPasswordComponent implements OnInit {
   private identityService = inject(IdentityService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   minPasswordLength: number;
   passwordForm!: FormGroup;
@@ -57,9 +58,11 @@ export class ResetPasswordComponent implements OnInit {
         // @ts-expect-error: Not sure how to make subscribe() happy with the type narrowing
         next: (response: { valid: boolean }) => {
           this.tokenValid = response.valid;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.tokenValid = false;
+          this.cdr.markForCheck();
         },
       });
       if (!this.token) {
@@ -78,20 +81,24 @@ export class ResetPasswordComponent implements OnInit {
   saveNewPassword = async () => {
     if (this.showPassword()) {
       this.showPassword.set(false);
+      this.cdr.markForCheck();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
     this.savingNewPassword = true;
+    this.cdr.markForCheck();
     this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe({
       next: (_) => {
         this.savingNewPassword = false;
         this.errorMessageHtml = undefined;
         this.saveSuccessful = true;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.savingNewPassword = false;
         this.saveSuccessful = false;
         this.errorMessageHtml = error.error?.error?.description;
+        this.cdr.markForCheck();
       },
     });
   };

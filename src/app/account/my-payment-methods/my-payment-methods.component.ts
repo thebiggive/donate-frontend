@@ -1,4 +1,12 @@
-import { Component, OnInit, PLATFORM_ID, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  PLATFORM_ID,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection } from '@biggive/components-angular';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { ActivatedRoute } from '@angular/router';
@@ -33,6 +41,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
   private toaster = inject(Toast);
   private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
 
   protected paymentMethods:
     | {
@@ -70,14 +79,17 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
     }
 
     this.paymentMethods = await this.donationService.getPaymentMethods({ cacheBust: true });
+    this.cdr.markForCheck();
   };
 
   async loadPaymentMethods() {
     this.paymentMethods = await this.donationService.getPaymentMethods({ cacheBust: true });
+    this.cdr.markForCheck();
   }
 
   deleteMethod(method: PaymentMethod) {
     this.paymentMethods = undefined;
+    this.cdr.markForCheck();
 
     this.donationService
       .deleteStripePaymentMethod(this.person, method, this.jwtAsString())
@@ -99,6 +111,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
 
       const paymentMethodsBeforeUpdate = this.paymentMethods;
       this.paymentMethods = undefined;
+      this.cdr.markForCheck();
       this.donationService
         .updatePaymentMethod(this.person, this.jwtAsString(), methodId, {
           expiry: this.parseExpiryDate(formValue.expiryDate),
@@ -117,6 +130,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
               ? `Could not update card ending ${card.last4}. ${resp.error.error}`
               : 'Sorry, update failed for card ending ' + card.last4;
             this.paymentMethods = paymentMethodsBeforeUpdate;
+            this.cdr.markForCheck();
           },
         });
     });
@@ -164,6 +178,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy {
     }
 
     this.paymentMethods = await this.donationService.getPaymentMethods();
+    this.cdr.markForCheck();
 
     this.toaster.showSuccess('Payment method removed');
   }

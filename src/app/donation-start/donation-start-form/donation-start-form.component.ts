@@ -593,10 +593,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.stepper.next();
           this.stepChangeBlockedByCaptcha = false;
         }
+        this.cd.markForCheck();
       },
       errorCallback: (error: unknown) => {
         this.toast.showError('Sorry, there was an error with the anti-spam captcha check.');
         console.error(error);
+        this.cd.markForCheck();
       },
     });
 
@@ -2177,6 +2179,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         console.error('Error in handleMatchingExpiry:', error);
         this.matomoTracker.trackEvent('matching_expiry', 'error', `Error: ${error}`);
       });
+      this.cd.markForCheck();
     }, msUntilExpiryTime);
   }
 

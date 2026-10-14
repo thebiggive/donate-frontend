@@ -99,6 +99,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.slowLoadTimeout = setTimeout(() => {
         this.beenLoadingForALittleWhile = true;
+        this.cdr.markForCheck();
       }, 3_000);
     }
   }
@@ -136,6 +137,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     if (donationLocalCopy === undefined) {
       this.matomoTracker.trackEvent('donate', 'thank_you_no_local_copy', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
+      this.cdr.markForCheck();
       return;
     }
 

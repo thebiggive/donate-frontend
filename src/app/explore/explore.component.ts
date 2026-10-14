@@ -700,6 +700,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.tickerItems = tickerItems;
     }
 
+    this.changeDetectorRef.markForCheck();
+
     if (this.tickerUpdateTimer) {
       window.clearTimeout(this.tickerUpdateTimer);
     }
@@ -719,10 +721,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.fetchingLocation = false;
         this.location = position;
         this.setQueryParams();
+        this.changeDetectorRef.markForCheck();
       },
       (error: GeolocationPositionError) => {
         this.fetchingLocation = false;
         this.toaster.showError('Error getting your location: ' + error.message);
+        this.changeDetectorRef.markForCheck();
         // todo - if the use denies the prompt show them a message explaining how they can manaully give the permission from their browser,
         // as the browser refuse to prompt them more than once, so them just clicking the button and running searchByLocation again won't work.
       },
