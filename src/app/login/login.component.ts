@@ -9,6 +9,7 @@ import {
   inject,
   signal,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BiggiveButton, BiggiveHeading, BiggivePageSection, BiggiveTextInput } from '@biggive/components-angular';
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
@@ -140,10 +142,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
+        this.cdr.markForCheck();
       },
       errorCallback: (error: unknown) => {
         this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
         console.error(error);
+        this.cdr.markForCheck();
       },
     });
 
@@ -159,6 +163,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       // when the request is submitted.
 
       // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
+      this.cdr.markForCheck();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
@@ -182,12 +187,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         default:
           this.loginError = 'Unknown Error - please try again or contact us if this error persists';
       }
+      this.cdr.markForCheck();
       return;
     }
 
     if (!this.captchaCode) {
       this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
       this.loggingIn = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -207,6 +214,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.captchaCode = undefined;
           this.friendlyCaptchaWidget.reset();
+          this.cdr.markForCheck();
           await this.friendlyCaptchaWidget.start();
         },
       });
@@ -228,18 +236,26 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         default:
           this.passwordResetError = 'Unknown Error - please try again or contact us if this error persists';
       }
+      this.cdr.markForCheck();
       return;
     }
 
     if (!this.captchaCode) {
       this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
+      this.cdr.markForCheck();
       return;
     }
 
     this.userAskedForResetLink = true;
     this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, this.captchaCode).subscribe({
-      next: (_) => (this.resetPasswordSuccess = true),
-      error: (_) => (this.resetPasswordSuccess = false),
+      next: (_) => {
+        this.resetPasswordSuccess = true;
+        this.cdr.markForCheck();
+      },
+      error: (_) => {
+        this.resetPasswordSuccess = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 

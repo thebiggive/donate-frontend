@@ -232,6 +232,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
         // that's a no-op.
         this.updatePersonInfo();
+        this.cdr.markForCheck();
       },
     });
 

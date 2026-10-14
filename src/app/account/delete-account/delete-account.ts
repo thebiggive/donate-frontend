@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -23,6 +23,7 @@ export class DeleteAccount implements OnInit {
   private identityService = inject(IdentityService);
   private router = inject(Router);
   private toast = inject(Toast);
+  private cdr = inject(ChangeDetectorRef);
   protected environment = environment;
 
   public person!: Person;
@@ -52,6 +53,7 @@ export class DeleteAccount implements OnInit {
 
       this.person = person;
       this.fullName = this.normaliseName([person.first_name, person.last_name].filter(Boolean).join(' '));
+      this.cdr.markForCheck();
     });
   }
 
@@ -65,6 +67,7 @@ export class DeleteAccount implements OnInit {
 
     if (this.showPassword()) {
       this.showPassword.set(false);
+      this.cdr.markForCheck();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
@@ -77,6 +80,7 @@ export class DeleteAccount implements OnInit {
     try {
       await this.identityService.deleteAccount(this.person, { password });
       this.deleted = true;
+      this.cdr.markForCheck();
       // @ts-expect-error - treating the error as BackendError instead of unknown.
     } catch (e: BackendError) {
       const description: string = e.error.error.description;
