@@ -403,6 +403,7 @@ export class TransferFundsComponent implements OnInit {
       currencyCode: this.campaign.currencyCode || 'GBP',
       // IMPORTANT: donationAmount set as the tip value
       donationAmount: donationAmount,
+      donationGiftAidAmount: 0, // set on server side only.
       donationMatched: this.campaign.isMatched, // this should always be false
       giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Tips are always unmatched
@@ -413,6 +414,7 @@ export class TransferFundsComponent implements OnInit {
       projectId: this.campaign.id,
       psp: 'stripe',
       tipAmount: 0,
+      tipGiftAidAmount: 0,
       tipGiftAid: false,
     };
 

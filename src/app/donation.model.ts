@@ -1,5 +1,4 @@
 import { completeStatuses, DonationStatus } from './donation-status.type';
-import { GIFT_AID_FACTOR } from './Money';
 
 export function maximumDonationAmount(currencyCode: string, creditPenceToUse: number): number {
   if (currencyCode !== 'GBP') {
@@ -52,6 +51,11 @@ export interface Donation {
    * Counted in major units of the relevant currency. Should be whole number.
    */
   readonly donationAmount: number;
+
+  /**
+   * Counted in major units of the relevant currency. Should be whole number.
+   */
+  readonly donationGiftAidAmount: number;
 
   /**
    * Indicates whether donation was expected to be eligible for either full or partial matching
@@ -157,6 +161,12 @@ export interface Donation {
   tipAmount: number;
 
   /**
+   * Counted in major units of the relevant currency - may be fractional. Currently expected to always be 25% of the
+   * tipAmount or zero, depending on whether gift aid was applied.
+   */
+  tipGiftAidAmount: number;
+
+  /**
    * Reference code for the donor to quote to us when they want to discuss this donation. For a complete donation
    * paid through stripe will currently be the stripe PI ID, for other donations is the UUID set in matchbot. Undefined
    * only in case of a new donation generated within frontend, not retrieved from matchbot.
@@ -183,13 +193,12 @@ export interface CompleteDonation extends Donation {
 }
 
 /**
- * A complete donation with some additional properties that for now are computed in browser rather than sent from
+ * A complete donation with an additional property that for now is computed in browser rather than sent from
  * matchbot. May be removed soon if calculations are moved to matchbot, where results can be saved to db.
  */
 export interface EnrichedDonation extends CompleteDonation {
   /** How much the charity will (or did) receive in total */
   totalValue: number;
-  giftAidAmount: number;
 }
 
 export function isLargeDonation(donation: Donation) {
@@ -198,10 +207,8 @@ export function isLargeDonation(donation: Donation) {
 
 export function withComputedProperties(donation: CompleteDonation): EnrichedDonation {
   // calculations here duplicate those in thanks page. Consider moving to matchbot soon.
-  const giftAidAmount = donation.giftAid ? GIFT_AID_FACTOR * donation.donationAmount : 0;
   return {
     ...donation,
-    giftAidAmount: giftAidAmount,
-    totalValue: donation.donationAmount + giftAidAmount + donation.matchedAmount,
+    totalValue: donation.donationAmount + donation.donationGiftAidAmount + donation.matchedAmount,
   };
 }

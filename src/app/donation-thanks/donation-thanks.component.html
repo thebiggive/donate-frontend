@@ -134,16 +134,22 @@
                     <td>{{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
-                @if (giftAidAmount > 0) {
+                @if (donation.donationGiftAidAmount > 0) {
                   <tr>
                     <td>Gift Aid Amount</td>
-                    <td>{{ giftAidAmount | exactCurrency: donation.currencyCode }}</td>
+                    <td>{{ donation.donationGiftAidAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
                 @if (donation.tipAmount > 0) {
                   <tr>
                     <td>Tip Amount</td>
                     <td>{{ donation.tipAmount | exactCurrency: donation.currencyCode }}</td>
+                  </tr>
+                }
+                @if (donation.tipGiftAidAmount > 0) {
+                  <tr>
+                    <td>Gift Aid Amount for tip</td>
+                    <td>{{ donation.tipGiftAidAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
                 <tr>
