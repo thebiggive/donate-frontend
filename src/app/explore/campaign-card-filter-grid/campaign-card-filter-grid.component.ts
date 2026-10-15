@@ -779,14 +779,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
     const exitFullScreenButtonIcon = new DivIcon({
       className: 'exit-full-screen-map-button-container',
-      html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close Full screen map">X</button>`,
+      html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close full screen map">X</button>`,
       iconSize: [32, 32],
       iconAnchor: [16, 16],
     });
 
     const exitFullScreenMarker = new Marker([60.7, 1.5], {
       icon: exitFullScreenButtonIcon,
-      title: 'Exit full Screen Map',
+      title: 'Exit full screen map',
     }).addTo(this.map);
     exitFullScreenMarker.on('click', () => {
       this.fullScreenMapMode.set(false);

@@ -139,7 +139,7 @@ export class MandateComponent implements OnInit, OnDestroy {
         return false;
 
       case 'cancelled':
-        return 'Regular Donations Cancelled';
+        return 'Regular donations cancelled';
       case 'pending':
         return 'Regular Giving agreement pending'; // should never actually be seen
       case 'campaign-ended':

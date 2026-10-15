@@ -7,12 +7,12 @@
           colour="tertiary"
           size="1"
           align="center"
-          text="Change Regular Giving Payment Method"
+          text="Change Regular Giving payment method"
         ></biggive-heading>
       </div>
     </biggive-page-section>
     <biggive-page-section>
-      <p>Your current payment method for regular giving:</p>
+      <p>Your current payment method for Regular Giving:</p>
       <table id="regularGivingPaymentMethod" class="paymentMethods">
         <tr>
           <td class="cardBrand">
@@ -25,11 +25,11 @@
               }}
             </div>
             @if ($safeNavigationMigration(paymentMethods.regularGivingPaymentMethod?.card) !== undefined) {
-              <div>Card Ending: {{ paymentMethods.regularGivingPaymentMethod?.card?.last4 }}</div>
+              <div>Card ending: {{ paymentMethods.regularGivingPaymentMethod?.card?.last4 }}</div>
             }
             @if (paymentMethods.regularGivingPaymentMethod?.card) {
               <div class="cardExpiry">
-                Expiry Date:
+                Expiry date:
                 {{ paymentMethods.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }} /{{
                   paymentMethods.regularGivingPaymentMethod?.card?.exp_year
                 }}
@@ -46,7 +46,7 @@
     <biggive-page-section>
       <div id="change-form-container">
         <form class="c-regular-giving-form" [formGroup]="paymentMethodForm">
-          <h3>New Payment Method for Regular Giving</h3>
+          <h3>New payment method for regular giving</h3>
           <div class="sr-input sr-card-element" id="card-info" #cardInfo>Loading payment card form...</div>
           <div class="u-margin-top-2em">
             <biggive-form-field-select

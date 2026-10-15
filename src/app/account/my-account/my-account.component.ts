@@ -42,7 +42,7 @@ export class MyAccountComponent implements OnInit {
           color: 'brand-mhf-turquoise',
           image: new URL(environment.donateUriPrefix + '/assets/images/turquoise-texture.jpg'),
         },
-        headerText: 'Payment Methods',
+        headerText: 'Payment methods',
         bodyText: 'View and manage your payment methods',
         button: {
           text: '',
