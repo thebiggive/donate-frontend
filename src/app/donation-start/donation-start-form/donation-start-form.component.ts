@@ -1937,6 +1937,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       donationMatched: this.campaign.isMatched,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
+      donationGiftAidAmount: 0, // Only set >0 after initial donation create API response
+      tipGiftAidAmount: 0, // Only set >0 after initial donation create API response
       pspMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,

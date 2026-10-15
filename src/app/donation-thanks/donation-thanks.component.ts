@@ -27,7 +27,6 @@ import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
-import { GIFT_AID_FACTOR } from '../Money';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -248,8 +247,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       );
 
       this.totalPaid = donation.totalPaid;
-      this.giftAidAmount = donation.giftAid ? GIFT_AID_FACTOR * donation.donationAmount : 0;
-      this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
+      this.totalValue = donation.donationAmount + donation.donationGiftAidAmount + donation.matchedAmount;
       this.donationIsLarge = isLargeDonation(donation);
       this.complete = true;
 
