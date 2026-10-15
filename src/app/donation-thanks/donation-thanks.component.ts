@@ -61,7 +61,6 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   complete = false;
   donation?: Donation;
   encodedShareUrl?: string;
-  giftAidAmount?: number;
   loggedIn = false;
   minPasswordLength!: number;
   noAccess = false;
