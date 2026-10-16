@@ -57,14 +57,26 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 })
 export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
+  protected hasGeoLocation = signal(false);
+  protected ukRegionFilterSelected = signal(false);
+  protected currentSortByOption = signal<sortOptionLabel | null>(null);
+
+  protected locationSortAvailable = computed(() => {
+    return (
+      this.ukFilterSelected() ||
+      this.hasGeoLocation() ||
+      this.ukRegionFilterSelected() ||
+      this.currentSortByOption() === sortOptionLabels.location ||
+      this.searchService.hasGeoLocationSet()
+    );
+  });
+
   protected sortOptions = computed(() => {
     // @ts-expect-error  - see https://github.com/microsoft/TypeScript/pull/12253#issuecomment-263132208
     const sortOptionKeys: sortOptionKey[] = Object.getOwnPropertyNames(sortOptionLabels);
     const relevantOptionKeys = sortOptionKeys
       .filter((key) => key !== 'relevance' || this.hasSearchTerm())
-      .filter((key) => key !== 'location' || this.ukFilterSelected());
-
-    console.log('should be using new option keys', relevantOptionKeys);
+      .filter((key) => key !== 'location' || this.locationSortAvailable());
 
     return relevantOptionKeys.map((key: sortOptionKey) => ({ value: key, label: sortOptionLabels[key] }));
   });
@@ -90,14 +102,28 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   /**
    * Selected location around which donor is looking for campaigns
    */
-  @Input({ required: true }) location: GeolocationPosition | undefined;
+  @Input({ required: true }) set location(value: GeolocationPosition | undefined) {
+    this._location = value;
+    this.hasGeoLocation.set(!!value || !!this._geoLocation || this.searchService.hasGeoLocationSet());
+  }
+  get location(): GeolocationPosition | undefined {
+    return this._location;
+  }
+  private _location: GeolocationPosition | undefined;
 
   /**
    * Indicates that the component is currently fetching the browser location
    */
   @Input({ required: true }) fetchingLocation!: boolean;
 
-  @Input() geoLocation!: GeolocationPosition | undefined;
+  @Input() set geoLocation(value: GeolocationPosition | undefined) {
+    this._geoLocation = value;
+    this.hasGeoLocation.set(!!value || !!this._location || this.searchService.hasGeoLocationSet());
+  }
+  get geoLocation(): GeolocationPosition | undefined {
+    return this._geoLocation;
+  }
+  private _geoLocation: GeolocationPosition | undefined;
 
   @Input() highlightAreas: Array<Feature<Geometry, GeoJsonProperties>> | undefined;
 
@@ -175,7 +201,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Input({ required: true }) selectedSortByOption!: sortOptionLabel | null;
+  @Input({ required: true }) set selectedSortByOption(value: sortOptionLabel | null) {
+    this._selectedSortByOption = value;
+    this.currentSortByOption.set(value);
+  }
+  get selectedSortByOption(): sortOptionLabel | null {
+    return this._selectedSortByOption;
+  }
+  private _selectedSortByOption: sortOptionLabel | null = null;
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
@@ -194,6 +227,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    */
   @Input({ required: true }) set selectedFilterUKRegion(value: string | null) {
     this._selectedFilterUKRegion = value;
+    this.ukRegionFilterSelected.set(!!value);
   }
   get selectedFilterUKRegion(): string | null {
     return this._selectedFilterUKRegion;
@@ -382,17 +416,9 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.newSelectedFilterCategory = this.selectedFilterCategory;
     this.newSelectedFilterLocation = this.selectedFilterLocation;
 
-    console.log([this.el, this.el.nativeElement]);
     const filterPopup = this.el.nativeElement.querySelector('#filter-popup') as HTMLBiggivePopupElement | undefined;
     if (filterPopup) {
       filterPopup.openFromOutside();
-    }
-
-    this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
-    if (this.ukFilterSelected()) {
-      // Option only gets included in the list once signal is updated.
-      this.selectedSortByOption = 'Closest';
-      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
   };
 
@@ -409,6 +435,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
     this.selectedFilterLocation = null;
+    this.hasGeoLocation.set(false);
+    this.ukRegionFilterSelected.set(false);
     this.doClearGeoLocation.emit();
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
@@ -802,7 +830,11 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   protected showUkMap(): boolean {
     return (
-      this.ukFilterSelected() || this.searchService.hasGeoLocationSet() || !!this.searchService.selected['ukRegion']
+      this.ukFilterSelected() ||
+      this.hasGeoLocation() ||
+      this.searchService.hasGeoLocationSet() ||
+      !!this.selectedFilterUKRegion ||
+      !!this.searchService.selected['ukRegion']
     );
   }
 

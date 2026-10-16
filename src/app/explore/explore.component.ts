@@ -700,6 +700,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.tickerItems = tickerItems;
     }
 
+    this.changeDetectorRef.markForCheck();
+
     if (this.tickerUpdateTimer) {
       window.clearTimeout(this.tickerUpdateTimer);
     }
@@ -714,20 +716,22 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   protected searchByGeoLocation() {
+    this.fetchingLocation = true;
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
         this.location = position;
-        this.setQueryParams();
+        this.searchService.sort('location');
+        this.changeDetectorRef.markForCheck();
       },
       (error: GeolocationPositionError) => {
         this.fetchingLocation = false;
         this.toaster.showError('Error getting your location: ' + error.message);
+        this.changeDetectorRef.markForCheck();
         // todo - if the use denies the prompt show them a message explaining how they can manaully give the permission from their browser,
         // as the browser refuse to prompt them more than once, so them just clicking the button and running searchByLocation again won't work.
       },
     );
-    this.fetchingLocation = true;
   }
 
   /** Some metacamaigns are missing banners - think this may be a bug in our SF code, but its cheaper to do a deploy
@@ -753,6 +757,5 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clearGeoLocation() {
     this.location = undefined;
     this.searchService.sort(this.defaultSort);
-    this.setQueryParams();
   }
 }

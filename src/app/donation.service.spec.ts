@@ -23,6 +23,7 @@ describe('DonationService', () => {
       currencyCode: 'GBP',
       donationId: '01I400000009Sds3e2',
       donationAmount: 1234.56,
+      donationGiftAidAmount: 1234.56 * 0.25,
       donationMatched: true,
       emailAddress: 'test@example.com',
       firstName: 'Louis',
@@ -37,6 +38,7 @@ describe('DonationService', () => {
       psp: 'stripe',
       status,
       tipAmount: 2.75,
+      tipGiftAidAmount: 2.75 * 0.25,
       referenceCode: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
       updatedTime: new Date().toISOString(),
     };

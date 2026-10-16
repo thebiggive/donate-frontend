@@ -11,6 +11,7 @@ import {
   input,
   effect,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -81,6 +82,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private toast = inject(Toast);
   private snackBar = inject(MatSnackBar);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   campaign!: Campaign;
   campaignInPast = false;
@@ -196,6 +198,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       if (msToLaunch > 0 && msToLaunch < 86400000) {
         this.timer = setTimeout(() => {
           this.donateEnabled = true;
+          this.changeDetectorRef.markForCheck();
         }, msToLaunch);
       }
     }
@@ -216,6 +219,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.impactRegionNames = await this.getImpactRegionNames();
+    this.changeDetectorRef.markForCheck();
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {

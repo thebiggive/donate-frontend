@@ -20,11 +20,14 @@ import { of } from 'rxjs';
 import { Campaign } from '../../campaign.model';
 import { DonationService, TBG_DONATE_STORAGE } from '../../donation.service';
 import { IdentityService } from '../../identity.service';
+import { CloudflareService } from '../../cloudflare.service';
 import { TimeLeftPipe } from '../../time-left.pipe';
 import { DonationStartFormComponent } from './donation-start-form.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Donation } from '../../donation.model';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, HttpErrorResponse } from '@angular/common/http';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { throwError } from 'rxjs';
 
 describe('DonationStartForm', () => {
   let component: DonationStartFormComponent;
@@ -584,5 +587,66 @@ describe('DonationStartForm', () => {
     expect(emailAddressErrors!.required).toBe(true);
 
     expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+  });
+
+  it('shows the Cloudflare security verification error message when Cloudflare is blocked', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    const cfService = TestBed.inject(CloudflareService);
+    cfService.notifyBlocked();
+    component.donationCreateError = true;
+    component.campaignOpenOnLoad = true;
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const errorEl = element.querySelector('.error');
+    expect(errorEl?.textContent).toContain('Security Verification Required');
+    expect(errorEl?.textContent).toContain('Please complete the Cloudflare verification check');
+  });
+
+  it('logs 403 to Matomo on identity create 403 error', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    const identityService = TestBed.inject(IdentityService);
+    const matomoTracker = TestBed.inject(MatomoTracker);
+    const trackSpy = spyOn(matomoTracker, 'trackEvent');
+    spyOn(identityService, 'create').and.returnValue(
+      throwError(() => new HttpErrorResponse({ status: 403, statusText: 'Forbidden' })),
+    );
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (component as any).idCaptchaCode = 'test-captcha';
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (component as any).createDonationAndMaybePerson();
+
+    expect(trackSpy).toHaveBeenCalled();
+    const lastCall = trackSpy.calls.mostRecent();
+    expect(lastCall.args[0]).toBe('identity_error');
+    expect(lastCall.args[1]).toBe('person_create_failed');
+    expect(lastCall.args[2]).toContain('403:');
+    expect(component.donationCreateError).toBe(true);
+  });
+
+  it('automatically retries donation creation on Turnstile challenge pass if identity create failed', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    const cfService = TestBed.inject(CloudflareService);
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const spy = spyOn(component as any, 'createDonationAndMaybePerson');
+
+    component.donationCreateError = true;
+    component.donor = undefined;
+
+    cfService.notifyPassed();
+
+    expect(component.donationCreateError).toBe(false);
+    expect(spy).toHaveBeenCalled();
   });
 });

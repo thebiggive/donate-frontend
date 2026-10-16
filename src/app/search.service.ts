@@ -207,6 +207,7 @@ export class SearchService {
 
   sort(selectedSort: string) {
     this.selected['sortField'] = selectedSort;
+    this.updateSelectedSortLabel();
     this.changed.emit(true);
   }
 

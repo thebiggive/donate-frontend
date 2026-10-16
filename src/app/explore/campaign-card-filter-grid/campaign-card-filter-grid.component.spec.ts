@@ -109,4 +109,27 @@ describe('CampaignCardFilterGridComponent', () => {
     // Map bounds should reflect UK bounds without throwing or reverting to region bounds
     expect(component.mapElement?.nativeElement.classList.contains('leaflet-container')).toBeTrue();
   });
+
+  it('should include location in sortOptions and resolve selected value when location is set', () => {
+    component.location = {
+      coords: { latitude: 51.5, longitude: -0.1 },
+    } as GeolocationPosition;
+    component.selectedSortByOption = 'Closest';
+    fixture.detectChanges();
+
+    const options = (component as unknown as { sortOptions: () => { value: string; label: string }[] }).sortOptions();
+    expect(
+      options.some((opt: { value: string; label: string }) => opt.value === 'location' && opt.label === 'Closest'),
+    ).toBeTrue();
+    expect(component.getSelectedValue()).toBe('location');
+  });
+
+  it('should include location in sortOptions when selectedSortByOption is Closest even before location object is passed', () => {
+    component.selectedSortByOption = 'Closest';
+    fixture.detectChanges();
+
+    const options = (component as unknown as { sortOptions: () => { value: string; label: string }[] }).sortOptions();
+    expect(options.some((opt: { value: string; label: string }) => opt.value === 'location')).toBeTrue();
+    expect(component.getSelectedValue()).toBe('location');
+  });
 });
