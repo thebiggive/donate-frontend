@@ -605,7 +605,7 @@ describe('DonationStartForm', () => {
     expect(errorEl?.textContent).toContain('Please complete the Cloudflare verification check');
   });
 
-  it('logs 403_cloudflare_blocked to Matomo on identity create 403 error', () => {
+  it('logs 403 to Matomo on identity create 403 error', () => {
     fixture = TestBed.createComponent(DonationStartFormComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
@@ -627,7 +627,7 @@ describe('DonationStartForm', () => {
     const lastCall = trackSpy.calls.mostRecent();
     expect(lastCall.args[0]).toBe('identity_error');
     expect(lastCall.args[1]).toBe('person_create_failed');
-    expect(lastCall.args[2]).toContain('403_cloudflare_blocked:');
+    expect(lastCall.args[2]).toContain('403:');
     expect(component.donationCreateError).toBe(true);
   });
 

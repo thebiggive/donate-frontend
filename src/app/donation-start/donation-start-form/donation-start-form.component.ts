@@ -1979,8 +1979,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         },
         (error: HttpErrorResponse) => {
           // In ID-on mode, we can't proceed without the Person/Stripe Customer.
-          const isCloudflare403 = error.status === 403 || (error.status === 0 && this.cfService.isBlocked());
-          const logCode = isCloudflare403 ? '403_cloudflare_blocked' : `${error.status}`;
+          // 0 happened prior to 16/10/26 with Cloudflare error responses blocked by CORS. Not expected any more but if it
+          // does happen, mark it 403_cloudflare_cors_blocked in logs. If CORS is working, Cloudflare blocks will log as
+          // normal 403.
+          const isProbablyCloudflare403 = error.status === 0 && this.cfService.isBlocked();
+          const logCode = isProbablyCloudflare403 ? '403_cloudflare_cors_blocked' : `${error.status}`;
 
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${logCode}: ${error.message}`);
           this.creatingDonation = false;
