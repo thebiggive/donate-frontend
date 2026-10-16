@@ -119,7 +119,7 @@
               <div class="large-donation-spacer"></div>
             }
             <div class="receipt">
-              <p><strong>Your Receipt</strong></p>
+              <p><strong>Your receipt</strong></p>
               <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
               <p>{{ donation.createdTime | date: "mediumDate" }}, {{ donation.createdTime | date: "shortTime" }}</p>
               <br />
@@ -130,25 +130,25 @@
                 </tr>
                 @if (donation.matchedAmount > 0) {
                   <tr>
-                    <td>Matched Amount</td>
+                    <td>Matched amount</td>
                     <td>{{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
                 @if (donation.donationGiftAidAmount > 0) {
                   <tr>
-                    <td>Gift Aid Amount</td>
+                    <td>Gift Aid amount</td>
                     <td>{{ donation.donationGiftAidAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
                 @if (donation.tipAmount > 0) {
                   <tr>
-                    <td>Tip Amount</td>
+                    <td>Tip amount</td>
                     <td>{{ donation.tipAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
                 @if (donation.tipGiftAidAmount > 0) {
                   <tr>
-                    <td>Gift Aid Amount for tip</td>
+                    <td>Gift Aid amount for tip</td>
                     <td>{{ donation.tipGiftAidAmount | exactCurrency: donation.currencyCode }}</td>
                   </tr>
                 }
@@ -156,7 +156,7 @@
                   <td colspan="2"><hr aria-hidden="true" /></td>
                 </tr>
                 <tr class="receives">
-                  <td>Charity Receives</td>
+                  <td>Charity receives</td>
                   <td>{{ totalValue | exactCurrency: donation.currencyCode }}</td>
                 </tr>
                 <tr class="total">
