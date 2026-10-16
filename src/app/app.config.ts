@@ -63,6 +63,7 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       // Could in theory be a later 403 from the API, but showing an extra Turnstile is relatively harmless and that should be rare.
       const isProbablyCloudflareBlock =
+        Boolean(environment.turnstileSiteKey) &&
         isPlatformBrowser(platformId) &&
         (error.status === 403 ||
           error.status === 503 ||
