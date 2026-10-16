@@ -1,7 +1,7 @@
 <app-popup-standalone>
   @if (forgotPassword) {
   <div>
-    <h2 mat-dialog-title>Reset Password</h2>
+    <h2 mat-dialog-title>Reset password</h2>
     @if (!userAskedForResetLink) {
     <div>
       <mat-dialog-content class="mat-typography">
@@ -21,7 +21,7 @@
           (click)="resetPasswordClicked()"
           color="primary"
         >
-          Reset Password
+          Reset password
         </button>
         <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
       </mat-dialog-actions>
@@ -76,7 +76,7 @@
     </form>
   </mat-dialog-content>
   <mat-dialog-actions class="u-justify-space-between">
-    <a href (click)="forgotPasswordClicked($event)">Forgot Password?</a>
+    <a href (click)="forgotPasswordClicked($event)">Forgot password?</a>
     &nbsp;
     <div>
       <button
