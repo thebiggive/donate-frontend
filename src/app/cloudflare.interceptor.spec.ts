@@ -123,4 +123,28 @@ describe('cloudflareInterceptor', () => {
 
     jasmineExpect(receivedBody).toEqual({ campaigns: [] });
   });
+
+  it('retries a CORS-blocked (status 0) browser request to internal API after Turnstile passes', () => {
+    configure('browser');
+    let receivedBody: unknown;
+
+    TestBed.inject(HttpClient)
+      .get(apiUrl)
+      .subscribe((body) => {
+        receivedBody = body;
+      });
+
+    httpTestingController.expectOne(apiUrl).error(new ProgressEvent('error'), {
+      status: 0,
+      statusText: 'Unknown Error',
+    });
+    jasmineExpect(cloudflareService.isBlocked()).toBeTrue();
+
+    cloudflareService.notifyPassed();
+    const retry = httpTestingController.expectOne(apiUrl);
+    jasmineExpect(retry.request.withCredentials).toBeTrue();
+    retry.flush({ campaigns: [] });
+
+    jasmineExpect(receivedBody).toEqual({ campaigns: [] });
+  });
 });

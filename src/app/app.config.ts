@@ -61,7 +61,13 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (isPlatformBrowser(platformId) && (error.status === 403 || error.status === 503)) {
+      const isCloudflareBlock =
+        isPlatformBrowser(platformId) &&
+        (error.status === 403 ||
+          error.status === 503 ||
+          (error.status === 0 && internalApiHosts.includes(new URL(req.url, environment.donateUriPrefix).host)));
+
+      if (isCloudflareBlock) {
         if (cfService.hasChallengePassedSince(challengePassVersion)) {
           return next(req);
         }

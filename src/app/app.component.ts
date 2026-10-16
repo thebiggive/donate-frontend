@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   PLATFORM_ID,
+  computed,
   signal,
   ViewChild,
   WritableSignal,
@@ -64,7 +65,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private matomoTracker = inject(MatomoTracker);
   private router = inject(Router);
   protected turnstileSiteKey = environment.turnstileSiteKey;
-  isWidgetVisible = signal(true);
+  protected turnstileWidgetVisible = signal(true);
+  isWidgetVisible = computed(() => this.cfService.isBlocked() || this.turnstileWidgetVisible());
 
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
@@ -149,20 +151,21 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   onTurnstileSuccess(_token: string) {
     console.log('onTurnstileSuccess starting');
+    this.turnstileWidgetVisible.set(true);
     this.cfService.notifyPassed();
 
     console.log('onTurnstileSuccess scheduling');
 
     setTimeout(() => {
       console.log('onTurnstileSuccess delayed callback running');
-      this.isWidgetVisible.set(false);
+      this.turnstileWidgetVisible.set(false);
 
       this.cdr.markForCheck();
     }, 1500);
   }
 
   onTurnstileExpired() {
-    this.isWidgetVisible.set(true);
+    this.turnstileWidgetVisible.set(true);
   }
 
   /**

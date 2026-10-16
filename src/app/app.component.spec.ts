@@ -15,6 +15,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
+import { CloudflareService } from './cloudflare.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
@@ -48,5 +49,16 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('makes the Turnstile widget visible when Cloudflare blocks a request', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    const cfService = TestBed.inject(CloudflareService);
+
+    expect(app.isWidgetVisible()).toBe(true);
+
+    cfService.notifyBlocked();
+    expect(app.isWidgetVisible()).toBe(true);
   });
 });
