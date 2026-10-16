@@ -61,7 +61,15 @@ export const cloudflareInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (isPlatformBrowser(platformId) && (error.status === 403 || error.status === 503)) {
+      // Could in theory be a later 403 from the API, but showing an extra Turnstile is relatively harmless and that should be rare.
+      const isProbablyCloudflareBlock =
+        Boolean(environment.turnstileSiteKey) &&
+        isPlatformBrowser(platformId) &&
+        (error.status === 403 ||
+          error.status === 503 ||
+          (error.status === 0 && internalApiHosts.includes(new URL(req.url, environment.donateUriPrefix).host)));
+
+      if (isProbablyCloudflareBlock) {
         if (cfService.hasChallengePassedSince(challengePassVersion)) {
           return next(req);
         }

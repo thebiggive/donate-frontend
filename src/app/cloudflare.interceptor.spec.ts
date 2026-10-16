@@ -19,6 +19,18 @@ describe('cloudflareInterceptor', () => {
   const apiUrl = `${environment.matchbotApiOrigin}/v1/campaigns`;
   let httpTestingController: HttpTestingController;
   let cloudflareService: CloudflareService;
+  const originalTurnstileSiteKey = environment.turnstileSiteKey;
+
+  beforeEach(() => {
+    // Provide a non-null site key so we can see interception doing something without changing the general
+    // value which would make e2e's hang unless we also do more cypress interception.
+    environment.turnstileSiteKey = 'test-site-key';
+  });
+
+  afterEach(() => {
+    environment.turnstileSiteKey = originalTurnstileSiteKey;
+    httpTestingController.verify();
+  });
 
   function configure(platformId: string) {
     TestBed.configureTestingModule({
@@ -33,10 +45,6 @@ describe('cloudflareInterceptor', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     cloudflareService = TestBed.inject(CloudflareService);
   }
-
-  afterEach(() => {
-    httpTestingController.verify();
-  });
 
   it('does not wait for a Turnstile event during SSR', () => {
     configure('server');
@@ -119,6 +127,30 @@ describe('cloudflareInterceptor', () => {
 
     const retry = httpTestingController.expectOne(apiUrl);
     jasmineExpect(cloudflareService.isBlocked()).toBeFalse();
+    retry.flush({ campaigns: [] });
+
+    jasmineExpect(receivedBody).toEqual({ campaigns: [] });
+  });
+
+  it('retries a CORS-blocked (status 0) browser request to internal API after Turnstile passes', () => {
+    configure('browser');
+    let receivedBody: unknown;
+
+    TestBed.inject(HttpClient)
+      .get(apiUrl)
+      .subscribe((body) => {
+        receivedBody = body;
+      });
+
+    httpTestingController.expectOne(apiUrl).error(new ProgressEvent('error'), {
+      status: 0,
+      statusText: 'Unknown Error',
+    });
+    jasmineExpect(cloudflareService.isBlocked()).toBeTrue();
+
+    cloudflareService.notifyPassed();
+    const retry = httpTestingController.expectOne(apiUrl);
+    jasmineExpect(retry.request.withCredentials).toBeTrue();
     retry.flush({ campaigns: [] });
 
     jasmineExpect(receivedBody).toEqual({ campaigns: [] });
