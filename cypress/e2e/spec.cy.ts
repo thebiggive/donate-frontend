@@ -8,6 +8,10 @@ describe('App boot fundamentals', () => {
         body: { totalRaised: 500_000, totalCampaignCount: 123_456 } as CampaignStats,
       },
     );
+    cy.intercept(
+      { url: 'https://dummy-matchbot.example.org/sf/campaigns/services/apexrest/v1.0/highlight-service' },
+      { body: [] },
+    );
   });
 
   it('Shows our copy on the Donate home page', () => {

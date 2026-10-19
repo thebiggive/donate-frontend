@@ -7,6 +7,7 @@ import {
   inject,
   signal,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,6 +44,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   private dialogRef = inject<MatDialogRef<LoginModalComponent>>(MatDialogRef);
   private formBuilder = inject(FormBuilder);
   private identityService = inject(IdentityService);
+  private cdr = inject(ChangeDetectorRef);
 
   loginForm!: FormGroup;
   loggingIn = false;
@@ -73,10 +75,12 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
+        this.cdr.markForCheck();
       },
       errorCallback: () => {
         this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
         this.loggingIn = false;
+        this.cdr.markForCheck();
       },
     });
 
@@ -91,6 +95,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       // when the request is submitted.
 
       // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
+      this.cdr.markForCheck();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
@@ -108,9 +113,10 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       },
       async (error: BackendError) => {
         this.friendlyCaptchaWidget?.reset();
-        await this.friendlyCaptchaWidget?.start();
         this.loginError = errorDescription(error);
         this.loggingIn = false;
+        this.cdr.markForCheck();
+        await this.friendlyCaptchaWidget?.start();
       },
     );
   }
@@ -120,12 +126,19 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     if (!this.captchaCode) {
       this.loginError = 'Sorry, there was an error with the anti-spam captcha check.';
       this.loggingIn = false;
+      this.cdr.markForCheck();
       return;
     }
 
     this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, this.captchaCode).subscribe({
-      next: (_) => (this.resetPasswordSuccess = true),
-      error: (_) => (this.resetPasswordSuccess = false),
+      next: (_) => {
+        this.resetPasswordSuccess = true;
+        this.cdr.markForCheck();
+      },
+      error: (_) => {
+        this.resetPasswordSuccess = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 

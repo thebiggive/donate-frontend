@@ -27,7 +27,6 @@ import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { myAccountPath } from '../app.routes';
 import { flags } from '../featureFlags';
-import { GIFT_AID_FACTOR } from '../Money';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { BiggivePageSection, BiggiveSocialIcon } from '@biggive/components-angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -62,7 +61,6 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   complete = false;
   donation?: Donation;
   encodedShareUrl?: string;
-  giftAidAmount?: number;
   loggedIn = false;
   minPasswordLength!: number;
   noAccess = false;
@@ -99,6 +97,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.slowLoadTimeout = setTimeout(() => {
         this.beenLoadingForALittleWhile = true;
+        this.cdr.markForCheck();
       }, 3_000);
     }
   }
@@ -136,6 +135,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     if (donationLocalCopy === undefined) {
       this.matomoTracker.trackEvent('donate', 'thank_you_no_local_copy', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
+      this.cdr.markForCheck();
       return;
     }
 
@@ -246,8 +246,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
       );
 
       this.totalPaid = donation.totalPaid;
-      this.giftAidAmount = donation.giftAid ? GIFT_AID_FACTOR * donation.donationAmount : 0;
-      this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
+      this.totalValue = donation.donationAmount + donation.donationGiftAidAmount + donation.matchedAmount;
       this.donationIsLarge = isLargeDonation(donation);
       this.complete = true;
 

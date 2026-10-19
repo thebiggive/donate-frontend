@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Mandate } from '../mandate.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -7,6 +7,7 @@ import { myRegularGivingPath } from '../app.routes';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RegularGivingService } from '../regularGiving.service';
 import { PageMetaService } from '../page-meta.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-mandate',
@@ -15,11 +16,12 @@ import { PageMetaService } from '../page-meta.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mandate.component.scss',
 })
-export class MandateComponent implements OnInit {
+export class MandateComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private regularGivingService = inject(RegularGivingService);
   private router = inject(Router);
   private readonly pageMeta = inject(PageMetaService);
+  private cdr = inject(ChangeDetectorRef);
 
   protected mandate!: Mandate;
   protected readonly cancelPath;
@@ -82,17 +84,25 @@ export class MandateComponent implements OnInit {
 
   private pollForMandateUpdate() {
     this.mandateRefreshTimer = window.setInterval(async () => {
-      const updatedMandate = await this.regularGivingService.getActiveMandate(this.mandate.id).toPromise();
+      const updatedMandate = await firstValueFrom(this.regularGivingService.getActiveMandate(this.mandate.id));
 
       if (updatedMandate && updatedMandate.status !== 'pending') {
         this.mandate = updatedMandate;
         window.clearInterval(this.mandateRefreshTimer);
+        this.cdr.markForCheck();
       }
 
       if (this.timedOut) {
         window.clearInterval(this.mandateRefreshTimer);
+        this.cdr.markForCheck();
       }
     }, 2_000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.mandateRefreshTimer) {
+      window.clearInterval(this.mandateRefreshTimer);
+    }
   }
 
   get timedOut(): boolean {

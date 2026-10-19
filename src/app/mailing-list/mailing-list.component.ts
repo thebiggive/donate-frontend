@@ -9,6 +9,7 @@ import {
   PLATFORM_ID,
   ViewChild,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
@@ -49,6 +50,7 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
   submitted = false;
   showThankYouMessage = false;
   private toast = inject(Toast);
+  private cdr = inject(ChangeDetectorRef);
 
   constructor() {
     this.mailingListForm = this.formBuilder.group({
@@ -82,8 +84,11 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.friendlyCaptchaSolution = solution;
+        this.cdr.markForCheck();
       },
-      errorCallback: () => {},
+      errorCallback: () => {
+        this.cdr.markForCheck();
+      },
     });
     await this.friendlyCaptchaWidget.start();
   }
@@ -97,11 +102,13 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.mailingListForm.invalid) {
       this.toast.showError('Please fill in all required fields and try again');
+      this.cdr.markForCheck();
       return;
     }
 
     if (!this.friendlyCaptchaSolution) {
       this.toast.showError('Please complete the Captcha check');
+      this.cdr.markForCheck();
       return;
     }
 
@@ -126,9 +133,11 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     } catch (_error) {
       this.toast.showError('Sorry, there was an error trying to add your details to the mailing list.');
+      this.cdr.markForCheck();
       return;
     }
 
     this.showThankYouMessage = true;
+    this.cdr.markForCheck();
   }
 }

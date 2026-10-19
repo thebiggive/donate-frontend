@@ -15,6 +15,7 @@ import {
   ViewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStep, MatStepper } from '@angular/material/stepper';
@@ -34,6 +35,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { campaignHiddenMessage, donorGiftAidTermsUrl, donorTermsUrl } from '../../../environments/common';
+import { CloudflareService } from '../../cloudflare.service';
 import { countryOptions } from '../../countries';
 import { Donation, maximumDonationAmount, PaymentMethodType } from '../../donation.model';
 import { DonationCreatedResponse } from '../../donation-created-response.model';
@@ -122,6 +124,7 @@ type StepLabel = (typeof stepLabels)[keyof typeof stepLabels];
 })
 export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewInit {
   private cd = inject(ChangeDetectorRef);
+  protected cfService = inject(CloudflareService);
   private conversionTrackingService = inject(ConversionTrackingService);
   dialog = inject(MatDialog);
   private donationService = inject(DonationService);
@@ -331,6 +334,13 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     if (requestedVariant === 'B') {
       this.paymentMethodOrderVariant = requestedVariant;
     }
+
+    this.cfService.challengePassed$.pipe(takeUntilDestroyed()).subscribe(() => {
+      if (this.donationCreateError && !this.donor?.id) {
+        this.donationCreateError = false;
+        this.createDonationAndMaybePerson();
+      }
+    });
   }
 
   startTipSliderDrag = () => {
@@ -593,10 +603,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.stepper.next();
           this.stepChangeBlockedByCaptcha = false;
         }
+        this.cd.markForCheck();
       },
       errorCallback: (error: unknown) => {
         this.toast.showError('Sorry, there was an error with the anti-spam captcha check.');
         console.error(error);
+        this.cd.markForCheck();
       },
     });
 
@@ -1935,6 +1947,8 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       donationMatched: this.campaign.isMatched,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
+      donationGiftAidAmount: 0, // Only set >0 after initial donation create API response
+      tipGiftAidAmount: 0, // Only set >0 after initial donation create API response
       pspMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
@@ -1965,12 +1979,18 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         },
         (error: HttpErrorResponse) => {
           // In ID-on mode, we can't proceed without the Person/Stripe Customer.
-          this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
+          // 0 happened prior to 16/10/26 with Cloudflare error responses blocked by CORS. Not expected any more but if it
+          // does happen, mark it 403_cloudflare_cors_blocked in logs. If CORS is working, Cloudflare blocks will log as
+          // normal 403.
+          const isProbablyCloudflare403 = error.status === 0 && this.cfService.isBlocked();
+          const logCode = isProbablyCloudflare403 ? '403_cloudflare_cors_blocked' : `${error.status}`;
+
+          this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${logCode}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
           this.friendlyCaptchaWidget?.reset();
           this.showDonationCreateError('identity-create: ' + error.message);
-          this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
+          this.stepper?.previous(); // Go back to step 1 to make the general error for donor visible.
         },
       );
     }
@@ -2177,6 +2197,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
         console.error('Error in handleMatchingExpiry:', error);
         this.matomoTracker.trackEvent('matching_expiry', 'error', `Error: ${error}`);
       });
+      this.cd.markForCheck();
     }, msUntilExpiryTime);
   }
 

@@ -144,8 +144,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.friendlyCaptchaSolution = solution;
+        this.changeDetectorRef.markForCheck();
       },
-      errorCallback: () => {},
+      errorCallback: () => {
+        this.changeDetectorRef.markForCheck();
+      },
     });
     await this.friendlyCaptchaWidget.start();
   }
@@ -155,6 +158,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.showPassword()) {
       this.showPassword.set(false);
+      this.changeDetectorRef.markForCheck();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
@@ -243,8 +247,9 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         error: async (error) => {
           this.extractErrorMessage(error);
           this.friendlyCaptchaWidget?.reset();
-          await this.friendlyCaptchaWidget?.start();
           this.processing = false;
+          this.changeDetectorRef.markForCheck();
+          await this.friendlyCaptchaWidget?.start();
         },
       });
   }
@@ -281,10 +286,12 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
+      this.changeDetectorRef.markForCheck();
     } finally {
       this.friendlyCaptchaWidget?.reset();
-      await this.friendlyCaptchaWidget?.start();
       this.processing = false;
+      this.changeDetectorRef.markForCheck();
+      await this.friendlyCaptchaWidget?.start();
     }
   }
 
@@ -309,6 +316,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
             'Auto login: ' + (error.error.description !== undefined ? error.error.description : error.message) ||
             'Unknown error';
           this.processing = false;
+          this.changeDetectorRef.markForCheck();
         },
       });
   }

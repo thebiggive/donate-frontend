@@ -14,6 +14,7 @@ import { of } from 'rxjs';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationThanksComponent } from './donation-thanks.component';
 import { CompleteDonation } from '../donation.model';
+import { GIFT_AID_FACTOR } from '../Money';
 
 describe('DonationThanksComponent', () => {
   let component: DonationThanksComponent;
@@ -68,6 +69,7 @@ describe('DonationThanksComponent', () => {
       charityId: '',
       currencyCode: currencyCode,
       donationAmount: donationAmount,
+      donationGiftAidAmount: donationAmount * GIFT_AID_FACTOR,
       donationMatched: false,
       matchReservedAmount: 0,
       matchedAmount: 0,
@@ -75,6 +77,7 @@ describe('DonationThanksComponent', () => {
       projectId: '',
       psp: 'stripe',
       tipAmount: 0,
+      tipGiftAidAmount: 0,
       status: 'Paid',
     };
   }

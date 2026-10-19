@@ -48,14 +48,19 @@
                   @if (shouldShowTipForDonation(donation)) {
                     <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency: donation.currencyCode }}</li>
                   }
+                  @if (donation.tipGiftAidAmount > 0) {
+                    <li>Tip Gift Aid Amount: {{ donation.tipGiftAidAmount | exactCurrency: donation.currencyCode }}</li>
+                  }
                   <li>
                     <strong>Total paid: {{ donation.totalPaid | exactCurrency: donation.currencyCode }}</strong>
                   </li>
                   @if (donation.matchedAmount > 0) {
                     <li>Matched Amount: {{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</li>
                   }
-                  @if (donation.giftAidAmount > 0) {
-                    <li>Gift Aid Amount: {{ donation.giftAidAmount | exactCurrency: donation.currencyCode }}</li>
+                  @if (donation.donationGiftAidAmount > 0) {
+                    <li>
+                      Gift Aid Amount: {{ donation.donationGiftAidAmount | exactCurrency: donation.currencyCode }}
+                    </li>
                   }
                   <li>Charity receives: {{ donation.totalValue | exactCurrency: donation.currencyCode }}</li>
                 </ul>
