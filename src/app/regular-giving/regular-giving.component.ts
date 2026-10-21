@@ -170,7 +170,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   donorTermsUrl = donorTermsUrl;
   giftAidTermsUrl = donorGiftAidTermsUrl;
-  public readonly labelYourPaymentInformation = 'Your Payment Information';
+  public readonly labelYourPaymentInformation = 'Your payment information';
 
   @ViewChild('cardInfo') protected cardInfo?: ElementRef;
   protected stripeElementLoading = false;

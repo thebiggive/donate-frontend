@@ -86,7 +86,7 @@
                 @if (customTip()) {
                   <div>
                     <mat-form-field class="form-field b-center size-lg">
-                      <mat-label>Custom Tip amount ({{ currency }})</mat-label>
+                      <mat-label>Custom tip amount ({{ currency }})</mat-label>
                       <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount" />
                     </mat-form-field>
                     @if (
@@ -126,7 +126,7 @@
                 <p><strong>How does Big Give use tips?</strong></p>
                 <p>
                   Big Give is a registered charity, no 1136547. We don't charge charities for using our platform; we
-                  rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our
+                  rely on the generosity of people who donate to leave a voluntary tip, which helps us run our
                   match-funding campaigns.
                   <br />
                   Your tips will be going to:
@@ -206,7 +206,7 @@
           }
           @if (!donor.pending_tip_balance?.["gbp"]) {
             <mat-step formGroupName="marketing" [stepControl]="marketingGroup">
-              <ng-template matStepLabel>Receive Updates</ng-template>
+              <ng-template matStepLabel>Receive updates</ng-template>
               <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">
                 Would you be happy to receive emails from Big Give?
               </p>
@@ -261,14 +261,14 @@
 
     @if (donor && isPurchaseComplete) {
       <div>
-        <h2>Transfer Instructions</h2>
+        <h2>Transfer instructions</h2>
         <p>
           Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account
           using the following details
         </p>
         <p><strong>Recipient</strong> {{ accountHolderName }}</p>
-        <p><strong>Sort Code:</strong> {{ sortCode }}</p>
-        <p><strong>Account Number:</strong> {{ accountNumber }}</p>
+        <p><strong>Sort code:</strong> {{ sortCode }}</p>
+        <p><strong>Account number:</strong> {{ accountNumber }}</p>
       </div>
     }
   </div>

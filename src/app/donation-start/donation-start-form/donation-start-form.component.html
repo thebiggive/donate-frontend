@@ -176,7 +176,7 @@
             <p>
               Donation to {{ campaign.charity.name }}: {{ donationAmount | exactCurrency: campaign.currencyCode }}
               <br />
-              Tip Donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
+              Tip donation to support Big Give: {{ tipAmount() | exactCurrency: campaign.currencyCode }}
               <a role="button" tabindex="0" (click)="showTipExplanation()">(Why&nbsp;tip?)</a>
             </p>
             <p class="total">Total to pay: {{ donationAmount + tipAmount() | exactCurrency: campaign.currencyCode }}</p>
@@ -340,7 +340,7 @@
           @if (!donor?.is_organisation) {
             <div>
               <biggive-text-input>
-                <label slot="label" for="firstName">First Name *</label>
+                <label slot="label" for="firstName">First name *</label>
                 <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
               </biggive-text-input>
               @if (paymentGroup.get("firstName")?.errors?.maxlength) {
@@ -358,7 +358,7 @@
               </biggive-text-input>
             } @else {
               <biggive-text-input>
-                <label slot="label" for="lastName">Last Name *</label>
+                <label slot="label" for="lastName">Last name *</label>
                 <input
                   slot="input"
                   formControlName="lastName"
@@ -381,7 +381,7 @@
           </div>
           <div>
             <biggive-text-input>
-              <label slot="label" for="emailAddress">Email Address *</label>
+              <label slot="label" for="emailAddress">Email address *</label>
               <input
                 slot="input"
                 formControlName="emailAddress"
@@ -418,11 +418,11 @@
               <a
                 target="_blank"
                 href="https://developer.ryftpay.com/documentation/get_started/process_payments/test_cards"
-                >Test Cards</a
+                >Test cards</a
               >
             }
             <biggive-text-input>
-              <span slot="label">Payment Method</span>
+              <span slot="label">Payment method</span>
               <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe/Ryft not us -->
               <div slot="input">
                 @if (stripeElementLoading) {
@@ -662,7 +662,7 @@
               </tr>
               @if (donation.matchedAmount > 0) {
                 <tr>
-                  <td>Matched Amount</td>
+                  <td>Matched amount</td>
                   <td>{{ expectedMatchAmount() | exactCurrency: donation.currencyCode }}</td>
                 </tr>
               }
@@ -677,7 +677,7 @@
                 -->
               @if (!donorHasDonationFunds()) {
                 <tr>
-                  <td>Tip Amount</td>
+                  <td>Tip amount</td>
                   <td>{{ donation.tipAmount | exactCurrency: donation.currencyCode }}</td>
                 </tr>
               }
