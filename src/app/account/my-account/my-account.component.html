@@ -14,7 +14,7 @@
         ></biggive-heading>
       </div>
       <h2>Your details</h2>
-      @if (person) {
+      @if (person(); as person) {
         @if (person.is_organisation) {
           <p><strong>Organisation donor account</strong></p>
         }
@@ -69,7 +69,5 @@
     <biggive-page-section>
       <app-highlight-cards [highlightCards]="actions" space-above="5"> </app-highlight-cards>
     </biggive-page-section>
-
-    @if (person) {}
   </div>
 </main>
