@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -26,7 +26,7 @@ export class MyAccountComponent implements OnInit {
   private identityService = inject(IdentityService);
   private router = inject(Router);
 
-  public person!: Person;
+  public person = signal<Person | undefined>(undefined);
   protected readonly actions: HighlightCard[];
   protected flags = flags;
   protected codeToCountryName = codeToCountryName;
@@ -87,7 +87,7 @@ export class MyAccountComponent implements OnInit {
       if (!person) {
         await this.router.navigate(['']);
       } else {
-        this.person = person;
+        this.person.set(person);
       }
     });
   }
