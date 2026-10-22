@@ -30,7 +30,6 @@ import { EmailVerificationTokenResolver } from './email-verification-token.resol
 import { bigGiveName } from '../environments/common';
 import { MailingListComponent } from './mailing-list/mailing-list.component';
 import { EditHomeAddress } from './account/edit-home-address/edit-home-address.component';
-import { flags } from './featureFlags';
 import { DeleteAccount } from './account/delete-account/delete-account';
 import { WithdrawFundsComponent } from './account/withdraw-funds/withdraw-funds.component';
 
@@ -288,7 +287,7 @@ export const routes: (Route & {
       paymentMethods: PaymentMethodsResolver,
     },
     component: EditHomeAddress,
-    canActivate: [requireLogin, () => flags.enableEditHomeAddress],
+    canActivate: [requireLogin],
   },
   {
     path: 'my-account/delete-account',
@@ -308,7 +307,7 @@ export const routes: (Route & {
       person: LoggedInPersonResolver,
     },
     component: WithdrawFundsComponent,
-    canActivate: [requireLogin, () => flags.enableWithdrawFunds],
+    canActivate: [requireLogin],
   },
   {
     path: ':campaignSlug/:fundSlug',

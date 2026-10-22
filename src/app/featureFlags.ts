@@ -2,9 +2,7 @@ import { environment } from '../environments/environment';
 import { EnvironmentID } from '../environments/environment.interface';
 
 type flags = {
-  enableEditHomeAddress: boolean;
-  enableWithdrawFunds: boolean;
-  enableOrgAccount: boolean;
+  enableOrgAccount: true;
   enableSearchByLocation: boolean;
   enableMapViewInExplore: boolean;
 };
@@ -13,32 +11,24 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
   switch (environmentId) {
     case 'development':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
       };
     case 'regression':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
       };
     case 'staging':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
       };
     case 'production':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: false,
         enableMapViewInExplore: false,
