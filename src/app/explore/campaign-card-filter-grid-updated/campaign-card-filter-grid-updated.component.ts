@@ -171,7 +171,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
    */
   spaceBelow: number = 0;
 
-  intro: string = 'Find a charity or project';
+  intro: string = 'Search by charity, project, or location';
 
   /**
    * Optional search text prop. Useful for pre-populating the search field
