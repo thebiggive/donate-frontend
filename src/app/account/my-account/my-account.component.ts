@@ -66,7 +66,7 @@ export class MyAccountComponent implements OnInit {
           color: 'brand-afa-pink',
           image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg'),
         },
-        headerText: 'Your Regular Giving',
+        headerText: 'Your regular giving',
         bodyText: 'View and manage your regular giving mandates',
         button: {
           text: '',
