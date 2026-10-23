@@ -54,7 +54,7 @@ export class MyAccountComponent implements OnInit {
           color: 'brand-c4c-orange',
           image: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
         },
-        headerText: 'Your\nDonations', // line break because other headers in group are longer and take two lines
+        headerText: 'Your\ndonations', // line break because other headers in group are longer and take two lines
         bodyText: "View all the donations you've made while logged in",
         button: {
           text: '',
