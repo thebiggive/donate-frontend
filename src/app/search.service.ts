@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Params } from '@angular/router';
+import { CampaignGroupsService } from './campaign-groups.service';
 
 export type SelectedType = {
   beneficiary?: string;
@@ -54,16 +55,35 @@ export class SearchService {
     customSearchEvent: {
       searchText: string | null;
       sortBy: string | null;
-      filterCategory: string | null;
-      filterBeneficiary: string | null;
+      filterTheme?: string | null;
+      filterCategory?: string | null;
+      filterBeneficiary?: string | null;
       filterLocation: string | null;
       filterUKRegion?: string | null;
     },
     defaultSort: camelCaseSortOption,
   ) {
     this.nonDefaultsActive = true;
-    this.selected['beneficiary'] = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
-    this.selected['category'] = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
+    const beneficiaryFromTheme = this.beneficiaryFromTheme(customSearchEvent.filterTheme);
+    const categoryFromTheme = this.categoryFromTheme(customSearchEvent.filterTheme);
+    if (beneficiaryFromTheme) {
+      this.selected['beneficiary'] = beneficiaryFromTheme;
+    } else if (customSearchEvent.filterBeneficiary) {
+      this.selected['beneficiary'] = customSearchEvent.filterBeneficiary;
+    } else {
+      this.selected['beneficiary'] = '';
+    }
+
+    if (categoryFromTheme) {
+      this.selected['category'] = categoryFromTheme;
+    } else if (customSearchEvent.filterCategory) {
+      this.selected['category'] = customSearchEvent.filterCategory;
+    } else {
+      this.selected['category'] = '';
+    }
+
+    this.selected['theme'] = customSearchEvent.filterTheme ? customSearchEvent.filterTheme : '';
+
     this.selected['country'] = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
     this.selected['ukRegion'] = customSearchEvent.filterUKRegion ? customSearchEvent.filterUKRegion : '';
 
@@ -87,6 +107,22 @@ export class SearchService {
     }
 
     this.changed.emit(true);
+  }
+
+  private beneficiaryFromTheme(theme: string | undefined | null): string | undefined {
+    if (theme && CampaignGroupsService.getBeneficiaryNames().includes(theme)) {
+      return theme;
+    }
+
+    return undefined;
+  }
+
+  private categoryFromTheme(theme: string | undefined | null): string | undefined {
+    if (theme && CampaignGroupsService.getCategoryNames().includes(theme)) {
+      return theme;
+    }
+
+    return undefined;
   }
 
   private static sortFieldToCamelCase(sortBy: string | null, defaultSort: camelCaseSortOption): camelCaseSortOption {

@@ -30,6 +30,16 @@
 .container {
   //@include standard-font();
   position: relative;
+  .search-filter-wrap {
+    background-color: abstract.$colour-white;
+    margin-left: abstract.$spacer-2;
+    margin-right: abstract.$spacer-2;
+    padding-right: abstract.$spacer-2;
+    padding-left: abstract.$spacer-2;
+    padding-bottom: abstract.$spacer-3;
+    margin-bottom: abstract.$spacer-3;
+  }
+
   .search-wrap {
     // @include lower-shadow(); <-- commented out because content of lower-shadow mixin in stencil is commented out
     background-color: abstract.$colour-white;
@@ -169,25 +179,25 @@
 }
 
 @media screen and (max-width: abstract.$smallish) {
-  .sort-filter-wrap {
-    flex-direction: column-reverse;
-    .sort-wrap {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
+  .sort-wrap {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 
 @media screen and (max-width: 350px) {
-  .sort-filter-wrap {
-    justify-content: space-between;
-    .sort-wrap {
-      margin-left: 0;
-    }
-    .filter-wrap {
-      margin-left: 3px;
-    }
+  .sort-wrap {
+    margin-left: 0;
   }
+  .filter-wrap {
+    margin-left: 3px;
+  }
+}
+
+.sort-wrap {
+  float: right;
+  width: 19em;
+  padding-right: abstract.$spacer-2;
 }
 
 .align-right {
@@ -225,6 +235,13 @@ fa-icon {
       flex-grow: 1;
     }
   }
+}
+
+.grid-map-container-rule {
+  border-top: abstract.$colour-grey-three-quarter-light 1px solid;
+  margin-left: abstract.$spacer-2;
+  margin-right: abstract.$spacer-2;
+  height: abstract.$spacer-2;
 }
 
 .campaign-map {
