@@ -180,7 +180,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   protected get title() {
     if (!this.metaCampaign) {
-      return 'Explore Campaigns - Big Give';
+      return 'Explore campaigns - Big Give';
     }
 
     if (!this.fund) {

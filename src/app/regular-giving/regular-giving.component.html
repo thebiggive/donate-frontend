@@ -28,7 +28,7 @@
 
     <biggive-button
       colour-scheme="primary"
-      label="View Mandate"
+      label="View mandate"
       size="medium"
       url="/my-account/regular-giving/{{ preExistingActiveMandate[0].id }}"
     />
@@ -76,7 +76,7 @@
                 @if (!donorAccountExistsOnLoad) {
                   <div>
                     <biggive-text-input>
-                      <label slot="label" for="emailAddress">Email Address *</label>
+                      <label slot="label" for="emailAddress">Email address *</label>
                       <input
                         slot="input"
                         formControlName="emailAddress"
@@ -255,25 +255,25 @@
                 </div>
               </mat-step>
             }
-            <mat-step label="About You">
+            <mat-step label="About you">
               <div class="donation-input">
                 @if (donor) {
                   <table style="margin: auto">
                     <tr>
-                      <td>First Name:</td>
+                      <td>First name:</td>
                       <td>
                         {{ donor.first_name }}
                       </td>
                     </tr>
                     <tr>
-                      <td>Last Name:</td>
+                      <td>Last name:</td>
                       <td>
                         {{ donor.last_name }}
                       </td>
                     </tr>
                     @if (!donorAccountExistsOnLoad && !loggedInToExistingAccount) {
                       <tr>
-                        <td>New Password:</td>
+                        <td>New password:</td>
                         <td>············</td>
                       </tr>
                     }
@@ -281,11 +281,11 @@
                 } @else {
                   <p>Please provide your details to create a donor account.</p>
                   <biggive-text-input>
-                    <label slot="label" for="firstName">First Name *</label>
+                    <label slot="label" for="firstName">First name *</label>
                     <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name" matInput />
                   </biggive-text-input>
                   <biggive-text-input>
-                    <label slot="label" for="lastName">Last Name *</label>
+                    <label slot="label" for="lastName">Last name *</label>
                     <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput />
                   </biggive-text-input>
 
@@ -458,7 +458,7 @@
                   </p>
                 } @else {
                   <biggive-text-input>
-                    <span slot="label">Payment Method</span>
+                    <span slot="label">Payment method</span>
                     <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
                     <div slot="input">
                       @if (stripeElementLoading) {
@@ -519,7 +519,7 @@
                 </button>
               </div>
             </mat-step>
-            <mat-step label="Receive Updates">
+            <mat-step label="Receive updates">
               <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">
                 Would you be happy to receive email updates from
                 <span class="colour-primary">{{ campaign.charity.name }}</span

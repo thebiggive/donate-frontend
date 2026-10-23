@@ -3,7 +3,7 @@
   <div>
     <biggive-page-section>
       <div class="heading-wrapper">
-        <biggive-heading colour="tertiary" size="1" align="center" text="Your Donation History"></biggive-heading>
+        <biggive-heading colour="tertiary" size="1" align="center" text="Your donation history"></biggive-heading>
       </div>
     </biggive-page-section>
     <biggive-page-section>
@@ -49,17 +49,17 @@
                     <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency: donation.currencyCode }}</li>
                   }
                   @if (donation.tipGiftAidAmount > 0) {
-                    <li>Tip Gift Aid Amount: {{ donation.tipGiftAidAmount | exactCurrency: donation.currencyCode }}</li>
+                    <li>Tip Gift Aid amount: {{ donation.tipGiftAidAmount | exactCurrency: donation.currencyCode }}</li>
                   }
                   <li>
                     <strong>Total paid: {{ donation.totalPaid | exactCurrency: donation.currencyCode }}</strong>
                   </li>
                   @if (donation.matchedAmount > 0) {
-                    <li>Matched Amount: {{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</li>
+                    <li>Matched amount: {{ donation.matchedAmount | exactCurrency: donation.currencyCode }}</li>
                   }
                   @if (donation.donationGiftAidAmount > 0) {
                     <li>
-                      Gift Aid Amount: {{ donation.donationGiftAidAmount | exactCurrency: donation.currencyCode }}
+                      Gift Aid amount: {{ donation.donationGiftAidAmount | exactCurrency: donation.currencyCode }}
                     </li>
                   }
                   <li>Charity receives: {{ donation.totalValue | exactCurrency: donation.currencyCode }}</li>
@@ -67,13 +67,13 @@
                 <ul>
                   <li>Date: {{ donation.collectedTime | date: "mediumDate" }}</li>
                   <li>
-                    Payment Reference: <span class="reference">{{ donation.referenceCode }}</span>
+                    Payment reference: <span class="reference">{{ donation.referenceCode }}</span>
                   </li>
                 </ul>
               </div>
               @if (donation.mandate) {
                 <div class="mandate">
-                  <a href="{{ '/' + myRegularGivingPath + '/' + donation.mandate.uuid }}">See Mandate</a>
+                  <a href="{{ '/' + myRegularGivingPath + '/' + donation.mandate.uuid }}">See mandate</a>
                 </div>
               }
             </biggive-container-card>

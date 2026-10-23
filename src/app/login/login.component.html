@@ -11,7 +11,7 @@
             html-element="h1"
             size="1"
             align="center"
-            text="Donor Login"
+            text="Donor login"
           ></biggive-heading>
         </div>
         @if (isNewRegistration) {
@@ -21,7 +21,7 @@
         }
         @if (forgotPassword) {
           <div>
-            <h2 mat-dialog-title>Reset Password</h2>
+            <h2 mat-dialog-title>Reset password</h2>
             @if (!userAskedForResetLink) {
               <div>
                 <form [formGroup]="resetPasswordForm">
@@ -48,7 +48,7 @@
                   <div>
                     <!-- Href attribute below is needed to make this act like a link for keyboard users, i.e focusable and-->
                     <!-- clickable using keyboard. Using # not a no-op JS because we're blocking line JS -->
-                    <a href="#" class="no-op-link" (click)="this.forgotPassword = false">Return to Login page</a>
+                    <a href="#" class="no-op-link" (click)="this.forgotPassword = false">Return to login page</a>
                   </div>
                   <div id="reset-password-button">
                     @if (!userAskedForResetLink) {
@@ -62,7 +62,7 @@
                     }
                   </div>
                   <div>
-                    <!-- Empty placeholder to mirror div for "Return to Login page" on other side and keep button centred. -->
+                    <!-- Empty placeholder to mirror div for "Return to login page" on other side and keep button centred. -->
                   </div>
                 </div>
               </div>
@@ -140,7 +140,7 @@
           </form>
           <div class="actions">
             <div>
-              <a href="#" class="no-op-link" (click)="this.forgotPassword = true">Forgot Password?</a>
+              <a href="#" class="no-op-link" (click)="this.forgotPassword = true">Forgot password?</a>
             </div>
             <div id="login-button">
               <div aria-live="polite">
