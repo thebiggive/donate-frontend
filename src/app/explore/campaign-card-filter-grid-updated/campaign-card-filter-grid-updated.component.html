@@ -43,29 +43,16 @@
           <biggive-popup id="filter-popup">
             <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
             <div class="select-wrapper-1">
+              <!--    here - combine categories with beneficiaries -->
               <biggive-form-field-select
                 backgroundColour="white"
-                prompt="Category"
-                [placeholder]="categoriesPlaceHolderText"
-                [selectedLabel]="selectedFilterCategory"
-                [selectedValue]="selectedFilterCategory"
-                [options]="optionsToArray(this.categoryOptions || [])"
-                [selectionChanged]="categoryFilterSelectionChanged"
+                prompt="Theme"
+                [placeholder]="themesPlaceHolderText"
+                [selectedLabel]="selectedFilterTheme"
+                [selectedValue]="selectedFilterTheme"
+                [options]="optionsToArray(this.themeOptions)"
+                [selectionChanged]="themeFilterSelectionChanged"
                 id="categories"
-                space-below="2"
-              ></biggive-form-field-select>
-            </div>
-
-            <div class="select-wrapper-2">
-              <biggive-form-field-select
-                backgroundColour="white"
-                prompt="Beneficiary"
-                [placeholder]="beneficiariesPlaceHolderText"
-                [selectedLabel]="selectedFilterBeneficiary"
-                [selectedValue]="selectedFilterBeneficiary"
-                [options]="optionsToArray(this.beneficiaryOptions || [])"
-                [selectionChanged]="beneficiarySelectionChanged"
-                id="beneficiaries"
                 space-below="2"
               ></biggive-form-field-select>
             </div>
@@ -92,16 +79,10 @@
       </div>
       <div class="selected-filter-wrap">
         <div class="selected-filters">
-          @if (selectedFilterCategory) {
+          @if (selectedFilterTheme) {
             <!-- eslint-disable-next-line -->
-            <span class="button" (click)="removeFilter('categories')">
-              {{ selectedFilterCategory }}
-            </span>
-          }
-          @if (selectedFilterBeneficiary) {
-            <!-- eslint-disable-next-line -->
-            <span class="button" (click)="removeFilter('beneficiaries')">
-              {{ selectedFilterBeneficiary }}
+            <span class="button" (click)="removeFilter('themes')">
+              {{ selectedFilterTheme }}
             </span>
           }
           @if (selectedFilterLocation) {

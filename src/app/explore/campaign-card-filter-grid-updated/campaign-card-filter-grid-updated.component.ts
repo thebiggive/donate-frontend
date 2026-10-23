@@ -35,6 +35,7 @@ import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
+import { CampaignGroupsService } from '../../campaign-groups.service';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -92,6 +93,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
    */
   @Input({ required: true }) beneficiaryOptions!: string[];
 
+  protected themeOptions = CampaignGroupsService.getThemeNames();
+
   /**
    * JSON array of location key/values
    */
@@ -133,16 +136,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   public searchResult = input<CampaignSummaryList | undefined>();
 
   protected sortByPlaceholderText = 'Sort by';
-  protected beneficiariesPlaceHolderText = 'Select beneficiary';
-  protected categoriesPlaceHolderText = 'Select category';
+  protected themesPlaceHolderText = 'Select theme';
   protected locationsPlaceHolderText = 'Select location';
   private initialSortByOption: sortOptionLabel;
 
   /**
    * This and similar properties represent selections made in the popup but not yet applied.
    */
-  private newSelectedFilterCategory: string | null = null;
-  private newSelectedFilterBeneficiary: string | null = null;
+  private newSelectedFilterTheme: string | null = null;
   private newSelectedFilterLocation: string | null = null;
   protected fullScreenMapMode = signal(false);
   private httpClient = inject(HttpClient);
@@ -152,8 +153,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   doSearchAndFilterUpdate = output<{
     searchText: string | null;
     sortBy: string | null;
-    filterCategory: string | null;
-    filterBeneficiary: string | null;
+    filterTheme: string | null;
     filterLocation: string | null;
     filterUKRegion?: string | null;
   }>();
@@ -211,12 +211,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Input({ required: true }) selectedFilterCategory: string | null = null;
-
-  /**
-   * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
-   */
-  @Input({ required: true }) selectedFilterBeneficiary: string | null = null;
+  @Input({ required: true }) selectedFilterTheme: string | null = null;
 
   /**
    * ONS code for a region of the UK that the user has selected to search within,
@@ -299,12 +294,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
   private _mapElement: ElementRef<HTMLDivElement> | undefined;
 
-  protected categoryFilterSelectionChanged = (value: string) => {
-    this.newSelectedFilterCategory = value;
-  };
-
-  protected beneficiarySelectionChanged = (value: string) => {
-    this.newSelectedFilterBeneficiary = value;
+  protected themeFilterSelectionChanged = (value: string) => {
+    this.newSelectedFilterTheme = value;
   };
 
   protected locationSelectionChanged = (value: string) => {
@@ -321,16 +312,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     return {
       searchText: this.searchText,
       sortBy: this.selectedSortByOption,
-      filterCategory: this.selectedFilterCategory,
-      filterBeneficiary: this.selectedFilterBeneficiary,
+      filterTheme: this.selectedFilterTheme,
       filterLocation: this.selectedFilterLocation,
       filterUKRegion: this.selectedFilterUKRegion,
     };
   }
 
   protected handleApplyFilterButtonClick = () => {
-    this.selectedFilterCategory = this.newSelectedFilterCategory ?? this.selectedFilterCategory;
-    this.selectedFilterBeneficiary = this.newSelectedFilterBeneficiary ?? this.selectedFilterBeneficiary;
+    this.selectedFilterTheme = this.newSelectedFilterTheme ?? this.selectedFilterTheme;
     this.selectedFilterLocation = this.newSelectedFilterLocation ?? this.selectedFilterLocation;
 
     const searchAndFilterObj = this.getSearchAndFilterObject();
@@ -342,20 +331,15 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     }
 
     this.filtersApplied =
-      typeof searchAndFilterObj.filterBeneficiary === 'string' ||
-      typeof searchAndFilterObj.filterCategory === 'string' ||
-      typeof searchAndFilterObj.filterLocation === 'string';
+      typeof searchAndFilterObj.filterTheme === 'string' || typeof searchAndFilterObj.filterLocation === 'string';
 
     this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
   };
 
-  protected removeFilter(filterKey: 'locations' | 'categories' | 'beneficiaries') {
+  protected removeFilter(filterKey: 'locations' | 'themes') {
     switch (filterKey) {
-      case 'beneficiaries':
-        this.selectedFilterBeneficiary = null;
-        break;
-      case 'categories':
-        this.selectedFilterCategory = null;
+      case 'themes':
+        this.selectedFilterTheme = null;
         break;
       case 'locations':
         this.selectedFilterLocation = null;
@@ -410,8 +394,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleFilterButtonClick = () => {
-    this.newSelectedFilterBeneficiary = this.selectedFilterBeneficiary;
-    this.newSelectedFilterCategory = this.selectedFilterCategory;
+    this.newSelectedFilterTheme = this.selectedFilterTheme;
     this.newSelectedFilterLocation = this.selectedFilterLocation;
 
     const filterPopup = this.el.nativeElement.querySelector('#filter-popup') as HTMLBiggivePopupElement | undefined;
@@ -430,8 +413,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.searchText = null;
     this.hasSearchTerm.set(false);
     this.selectedSortByOption = this.initialSortByOption;
-    this.selectedFilterBeneficiary = null;
-    this.selectedFilterCategory = null;
+    this.selectedFilterTheme = null;
     this.selectedFilterLocation = null;
     this.hasGeoLocation.set(false);
     this.ukRegionFilterSelected.set(false);
@@ -459,8 +441,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.doSearchAndFilterUpdate.emit({
       searchText: null,
       sortBy: null,
-      filterCategory: null,
-      filterBeneficiary: null,
+      filterTheme: null,
       filterLocation: null,
     });
 
@@ -477,10 +458,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   constructor() {
-    this.filtersApplied =
-      this.selectedFilterCategory !== null ||
-      this.selectedFilterBeneficiary !== null ||
-      this.selectedFilterLocation !== null;
+    this.filtersApplied = this.selectedFilterTheme !== null || this.selectedFilterLocation !== null;
     this.initialSortByOption = this.selectedSortByOption || 'Most relevant';
 
     effect(() => {

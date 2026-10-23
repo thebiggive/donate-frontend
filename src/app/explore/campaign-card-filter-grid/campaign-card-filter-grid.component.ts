@@ -152,8 +152,9 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   doSearchAndFilterUpdate = output<{
     searchText: string | null;
     sortBy: string | null;
-    filterCategory: string | null;
-    filterBeneficiary: string | null;
+    filterTheme?: string | null | undefined;
+    filterCategory?: string | null | undefined;
+    filterBeneficiary?: string | null | undefined;
     filterLocation: string | null;
     filterUKRegion?: string | null;
   }>();
@@ -461,7 +462,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.doSearchAndFilterUpdate.emit({
       searchText: null,
       sortBy: null,
-      filterCategory: null,
+      filterTheme: null,
       filterBeneficiary: null,
       filterLocation: null,
     });
