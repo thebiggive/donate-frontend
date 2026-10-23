@@ -1,0 +1,190 @@
+<div #root [class]="'container space-below-' + this.spaceBelow">
+  <div class="sleeve">
+    <div class="search-wrap">
+      <h4>{{ intro }}</h4>
+      <div class="field-wrap">
+        <div class="input-wrap">
+          <fa-icon [icon]="faMagnifyingGlass" />
+          <input
+            type="text"
+            [value]="searchText ?? ''"
+            class="input-text"
+            [placeholder]="placeholderText"
+            (input)="handleSearchTextChanged($event)"
+            (keydown)="handleEnterPressed($event)"
+          />
+        </div>
+        <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
+      </div>
+    </div>
+    <div class="sort-filter-wrap">
+      @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleNearMeButtonPressed()"
+          [label]="this.fetchingLocation ? 'Fetching location...' : 'Near me'"
+          [disabled]="this.fetchingLocation"
+          [fullWidth]="true"
+          space-below="0"
+        ></biggive-button>
+      }
+      <div class="filter-wrap">
+        <biggive-button
+          class="filter"
+          colourScheme="primary"
+          (doButtonClick)="handleFilterButtonClick()"
+          Filter
+          label="Filter"
+          [fullWidth]="true"
+          space-below="1"
+        ></biggive-button>
+        <biggive-popup id="filter-popup">
+          <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
+          <div class="select-wrapper-1">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Category"
+              [placeholder]="categoriesPlaceHolderText"
+              [selectedLabel]="selectedFilterCategory"
+              [selectedValue]="selectedFilterCategory"
+              [options]="optionsToArray(this.categoryOptions || [])"
+              [selectionChanged]="categoryFilterSelectionChanged"
+              id="categories"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="select-wrapper-2">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Beneficiary"
+              [placeholder]="beneficiariesPlaceHolderText"
+              [selectedLabel]="selectedFilterBeneficiary"
+              [selectedValue]="selectedFilterBeneficiary"
+              [options]="optionsToArray(this.beneficiaryOptions || [])"
+              [selectionChanged]="beneficiarySelectionChanged"
+              id="beneficiaries"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="select-wrapper-3">
+            <biggive-form-field-select
+              backgroundColour="white"
+              prompt="Location"
+              [placeholder]="locationsPlaceHolderText"
+              [selectedLabel]="selectedFilterLocation"
+              [selectedValue]="selectedFilterLocation"
+              [options]="optionsToArray(this.locationOptions || [])"
+              [selectionChanged]="locationSelectionChanged"
+              id="locations"
+              space-below="2"
+            ></biggive-form-field-select>
+          </div>
+
+          <div class="align-right">
+            <biggive-button label="Apply filters" (doButtonClick)="handleApplyFilterButtonClick()" />
+          </div>
+        </biggive-popup>
+      </div>
+
+      <div class="sort-wrap" style="">
+        <biggive-form-field-select
+          [options]="sortOptions()"
+          [prompt]="null"
+          select-style="underlined"
+          [placeholder]="sortByPlaceholderText"
+          [selectedLabel]="selectedSortByOption"
+          [selectedValue]="getSelectedValue() || null"
+          [selectionChanged]="sortBySelectionChanged"
+          id="sort-by"
+        />
+      </div>
+    </div>
+    <div class="selected-filter-wrap">
+      <div class="selected-filters">
+        @if (selectedFilterCategory) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('categories')">
+            {{ selectedFilterCategory }}
+          </span>
+        }
+        @if (selectedFilterBeneficiary) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('beneficiaries')">
+            {{ selectedFilterBeneficiary }}
+          </span>
+        }
+        @if (selectedFilterLocation) {
+          <!-- eslint-disable-next-line -->
+          <span class="button" (click)="removeFilter('locations')">
+            {{ selectedFilterLocation }}
+          </span>
+        }
+      </div>
+      <div class="clear-all">
+        <!-- eslint-disable-next-line -->
+        <a (click)="handleClearAll()">Clear all</a>
+      </div>
+    </div>
+    <div class="grid-map-container">
+      <div class="campaign-grid">
+        @if (individualCampaigns()) {
+          <app-campaign-summary-grid
+            (scrolled)="emitOnScroll()"
+            [individualCampaigns]="individualCampaigns()"
+            [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
+          >
+          </app-campaign-summary-grid>
+        }
+      </div>
+      @if (showUkMap() && flags.enableMapViewInExplore) {
+        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+          @if (!!getSearchAndFilterObject().filterUKRegion) {
+            <div class="full-screen-map-button-container">
+              <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
+            </div>
+          }
+
+          <div class="full-screen-map-button-container">
+            <fa-icon
+              tabindex="0"
+              [icon]="faExpandArrows"
+              (click)="makeMapFullScreen()"
+              class="full-screen-map-button"
+            ></fa-icon>
+          </div>
+        </div>
+
+        @if (fullScreenMapMode()) {
+          <div
+            tabindex="0"
+            class="drawer-control"
+            [class.open]="campaignDrawerOpen()"
+            (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+          >
+            <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
+            <span class="label">Campaign results</span>
+            @if (campaignDrawerOpen()) {
+              <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
+            } @else {
+              <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
+            }
+          </div>
+
+          <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
+            <app-campaign-summary-grid
+              (scrolled)="emitOnScroll()"
+              [individualCampaigns]="individualCampaigns()"
+              [columnCount]="2"
+            >
+            </app-campaign-summary-grid>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
