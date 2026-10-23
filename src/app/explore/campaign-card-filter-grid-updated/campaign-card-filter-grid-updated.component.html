@@ -89,19 +89,6 @@
             </div>
           </biggive-popup>
         </div>
-
-        <div class="sort-wrap" style="">
-          <biggive-form-field-select
-            [options]="sortOptions()"
-            [prompt]="null"
-            select-style="underlined"
-            [placeholder]="sortByPlaceholderText"
-            [selectedLabel]="selectedSortByOption"
-            [selectedValue]="getSelectedValue() || null"
-            [selectionChanged]="sortBySelectionChanged"
-            id="sort-by"
-          />
-        </div>
       </div>
       <div class="selected-filter-wrap">
         <div class="selected-filters">
@@ -130,6 +117,21 @@
         </div>
       </div>
     </div>
+    <div class="sort-wrap" style="">
+      <biggive-form-field-select
+        [options]="sortOptions()"
+        [prompt]="null"
+        select-style="underlined"
+        [placeholder]="sortByPlaceholderText"
+        [selectedLabel]="selectedSortByOption"
+        [selectedValue]="getSelectedValue() || null"
+        [selectionChanged]="sortBySelectionChanged"
+        backgroundColour="grey"
+        id="sort-by"
+      />
+    </div>
+    <div style="clear: both; margin-bottom: 20px"></div>
+    <div class="grid-map-container-rule"></div>
     <div class="grid-map-container">
       <div class="campaign-grid">
         @if (individualCampaigns()) {
