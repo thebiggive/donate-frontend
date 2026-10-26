@@ -63,10 +63,7 @@
     @if (flags.enableUpdatedCampaignCardFilter) {
       <app-campaign-card-filter-grid-updated
         [searchText]="searchService.selected.term || null"
-        [selectedFilterBeneficiary]="
-          searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null
-        "
-        [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
+        [selectedFilterTheme]="searchService.selected['theme'] ? searchService.selected['theme'] : null"
         [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
         [selectedFilterUKRegion]="searchService.selected['ukRegion'] ? searchService.selected['ukRegion'] : null"
         [selectedSortByOption]="searchService.selectedSortLabel || null"
