@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -36,7 +36,7 @@ export class EditHomeAddress implements OnInit {
   private identityService = inject(IdentityService);
   private router = inject(Router);
 
-  public person!: Person;
+  public person = signal<Person | undefined>(undefined);
 
   protected countryOptionsObject = countryOptions;
 
@@ -56,7 +56,7 @@ export class EditHomeAddress implements OnInit {
         return;
       }
 
-      this.person = person;
+      this.person.set(person);
 
       this.form.patchValue({
         home_address_line_1: person.home_address_line_1,
@@ -76,11 +76,20 @@ export class EditHomeAddress implements OnInit {
   };
 
   protected async saveChanges() {
-    this.person.home_address_line_1 = this.form.controls.home_address_line_1.value || undefined;
-    this.person.home_postcode = this.form.controls.postcode.value || undefined;
-    this.person.home_country_code = this.countryCode ?? undefined;
+    this.person.update((person) => {
+      if (!person) {
+        throw new Error('Person data not loaded');
+      }
 
-    await firstValueFrom(this.identityService.updateAddress(this.person));
+      return {
+        ...person,
+        home_address_line_1: this.form.controls.home_address_line_1.value || undefined,
+        home_postcode: this.form.controls.postcode.value || undefined,
+        home_country_code: this.countryCode ?? undefined,
+      };
+    });
+
+    await firstValueFrom(this.identityService.updateAddress(this.person()!));
 
     await this.router.navigate(['/my-account/']);
   }
