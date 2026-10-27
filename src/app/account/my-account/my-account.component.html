@@ -36,9 +36,7 @@
             <tr>
               <td>
                 Address
-                @if (flags.enableEditHomeAddress) {
-                  (<a routerLink="/my-account/home-address">edit</a>)
-                }
+                <a routerLink="/my-account/home-address">edit</a>
               </td>
               <td>
                 {{ person.home_address_line_1 }}
@@ -50,10 +48,10 @@
                 }
               </td>
             </tr>
-          } @else if (flags.enableEditHomeAddress && !person.is_organisation) {
+          } @else if (!person.is_organisation) {
             <tr>
               <td colspan="2">
-                <a routerLink="/my-account/home-address">Set home Address</a>
+                <a routerLink="/my-account/home-address">Set home address</a>
               </td>
             </tr>
           }

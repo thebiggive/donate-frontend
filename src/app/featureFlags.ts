@@ -2,46 +2,41 @@ import { environment } from '../environments/environment';
 import { EnvironmentID } from '../environments/environment.interface';
 
 type flags = {
-  enableEditHomeAddress: boolean;
-  enableWithdrawFunds: boolean;
-  enableOrgAccount: boolean;
+  enableOrgAccount: true;
   enableSearchByLocation: boolean;
   enableMapViewInExplore: boolean;
+  enableUpdatedCampaignCardFilter: boolean;
 };
 
 const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmentId: EnvironmentID) => {
   switch (environmentId) {
     case 'development':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
+        enableUpdatedCampaignCardFilter: true,
       };
     case 'regression':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
+        enableUpdatedCampaignCardFilter: false,
       };
     case 'staging':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
+        enableUpdatedCampaignCardFilter: false,
       };
     case 'production':
       return {
-        enableEditHomeAddress: true,
-        enableWithdrawFunds: true,
         enableOrgAccount: true,
         enableSearchByLocation: false,
         enableMapViewInExplore: false,
+        enableUpdatedCampaignCardFilter: false,
       };
   }
 };

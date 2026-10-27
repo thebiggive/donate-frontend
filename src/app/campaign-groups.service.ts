@@ -190,6 +190,15 @@ export class CampaignGroupsService {
   }
 
   /**
+   * For new search/filter design we don't distinguish between "categories" and "beneficiaries" but use the
+   * term "themes" instead, so returning a combined array of both. For now we may have to work out which is is which
+   * when submitting to the backend by matching the name string against one of the two lists.
+   */
+  static getThemeNames(): string[] {
+    return [...this.getCategoryNames(), ...this.getBeneficiaryNames()];
+  }
+
+  /**
    * Adapted from https://help.salesforce.com/articleView?id=admin_state_country_picklists_standard_countries.htm&type=5
    */
   static getCountries(): string[] {

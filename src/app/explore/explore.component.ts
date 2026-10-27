@@ -52,6 +52,7 @@ import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CloudflareService } from '../cloudflare.service';
 import { DonationService } from '../donation.service';
+import { CampaignCardFilterGridUpdatedComponent } from './campaign-card-filter-grid-updated/campaign-card-filter-grid-updated.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -79,6 +80,7 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     OptimisedImagePipe,
     BiggiveHeadingBanner,
     CampaignCardFilterGridComponent,
+    CampaignCardFilterGridUpdatedComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -339,8 +341,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   onDoSearchAndFilterUpdate(event: {
     searchText: string | null;
     sortBy: string | null;
-    filterCategory: string | null;
-    filterBeneficiary: string | null;
+    filterTheme?: string | null | undefined;
+    filterCategory?: string | null | undefined;
+    filterBeneficiary?: string | null | undefined;
     filterLocation: string | null;
     filterUKRegion?: string | null;
   }) {

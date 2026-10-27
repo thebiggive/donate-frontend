@@ -60,30 +60,58 @@
   <biggive-page-section>
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
 
-    <app-campaign-card-filter-grid
-      [searchText]="searchService.selected.term || null"
-      [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
-      [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
-      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
-      [selectedFilterUKRegion]="searchService.selected['ukRegion'] ? searchService.selected['ukRegion'] : null"
-      [selectedSortByOption]="searchService.selectedSortLabel || null"
-      [categoryOptions]="categoryOptions"
-      [beneficiaryOptions]="beneficiaryOptions"
-      [locationOptions]="locationOptions"
-      [location]="location"
-      [individualCampaigns]="individualCampaigns"
-      [highlightAreas]="highlightAreas"
-      [locationCounts]="locationCounts"
-      [searchResult]="searchResult()"
-      [fetchingLocation]="fetchingLocation"
-      [geoLocation]="location"
-      [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
-      (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
-      (doGetGeoLocationFromBrowser)="searchByGeoLocation()"
-      (doClearGeoLocation)="clearGeoLocation()"
-      (scrolled)="onScroll()"
-    >
-    </app-campaign-card-filter-grid>
+    @if (flags.enableUpdatedCampaignCardFilter) {
+      <app-campaign-card-filter-grid-updated
+        [searchText]="searchService.selected.term || null"
+        [selectedFilterTheme]="searchService.selected['theme'] ? searchService.selected['theme'] : null"
+        [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+        [selectedFilterUKRegion]="searchService.selected['ukRegion'] ? searchService.selected['ukRegion'] : null"
+        [selectedSortByOption]="searchService.selectedSortLabel || null"
+        [categoryOptions]="categoryOptions"
+        [beneficiaryOptions]="beneficiaryOptions"
+        [locationOptions]="locationOptions"
+        [location]="location"
+        [individualCampaigns]="individualCampaigns"
+        [highlightAreas]="highlightAreas"
+        [locationCounts]="locationCounts"
+        [searchResult]="searchResult()"
+        [fetchingLocation]="fetchingLocation"
+        [geoLocation]="location"
+        [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+        (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
+        (doGetGeoLocationFromBrowser)="searchByGeoLocation()"
+        (doClearGeoLocation)="clearGeoLocation()"
+        (scrolled)="onScroll()"
+      >
+      </app-campaign-card-filter-grid-updated>
+    } @else {
+      <app-campaign-card-filter-grid
+        [searchText]="searchService.selected.term || null"
+        [selectedFilterBeneficiary]="
+          searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null
+        "
+        [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
+        [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
+        [selectedFilterUKRegion]="searchService.selected['ukRegion'] ? searchService.selected['ukRegion'] : null"
+        [selectedSortByOption]="searchService.selectedSortLabel || null"
+        [categoryOptions]="categoryOptions"
+        [beneficiaryOptions]="beneficiaryOptions"
+        [locationOptions]="locationOptions"
+        [location]="location"
+        [individualCampaigns]="individualCampaigns"
+        [highlightAreas]="highlightAreas"
+        [locationCounts]="locationCounts"
+        [searchResult]="searchResult()"
+        [fetchingLocation]="fetchingLocation"
+        [geoLocation]="location"
+        [offerNearMeOption]="this.clientCountryCode === 'GB' || !this.clientCountryCode"
+        (doSearchAndFilterUpdate)="onDoSearchAndFilterUpdate($event)"
+        (doGetGeoLocationFromBrowser)="searchByGeoLocation()"
+        (doClearGeoLocation)="clearGeoLocation()"
+        (scrolled)="onScroll()"
+      >
+      </app-campaign-card-filter-grid>
+    }
 
     @if (loading) {
       <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>

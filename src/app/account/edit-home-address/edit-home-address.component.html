@@ -18,7 +18,7 @@
         Big Give and charities use your home address for Gift Aid claims if your donation is Gift Aid eligible. You can
         edit your home address below.
       </p>
-      @if (person) {
+      @if (person(); as person) {
         <biggive-text-input spaceBelow="0">
           <label slot="label" for="homeAddressLine1">Home address line 1 *</label>
           <input
