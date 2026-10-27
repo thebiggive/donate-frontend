@@ -209,7 +209,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   private _selectedSortByOption: sortOptionLabel | null = null;
 
   /**
-   * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
+   * For injecting the chosen category or beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
   @Input({ required: true }) selectedFilterTheme: string | null = null;
 
@@ -330,6 +330,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       filterPopup.closeFromOutside();
     }
 
+    // hereish
     this.filtersApplied =
       typeof searchAndFilterObj.filterTheme === 'string' || typeof searchAndFilterObj.filterLocation === 'string';
 
@@ -827,5 +828,17 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
+  }
+
+  protected replaceCountryFilter(location: string) {
+    this.removeFilter('locations');
+    this.selectedFilterLocation = location;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  protected replaceThemeFilter(theme: string) {
+    this.removeFilter('themes');
+    this.selectedFilterTheme = theme;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 }
