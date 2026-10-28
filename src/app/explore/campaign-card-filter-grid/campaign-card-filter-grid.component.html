@@ -131,6 +131,11 @@
     <div class="grid-map-container">
       <div class="campaign-grid">
         @if (individualCampaigns()) {
+          @if (searchResult()?.UKFilterRegions) {
+            <p class="campaigns-for-list">
+              Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
+            </p>
+          }
           <app-campaign-summary-grid
             (scrolled)="emitOnScroll()"
             [individualCampaigns]="individualCampaigns()"
