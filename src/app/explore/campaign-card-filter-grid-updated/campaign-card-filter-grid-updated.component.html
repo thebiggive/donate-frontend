@@ -126,7 +126,7 @@
       </div>
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
-          @if (!!getSearchAndFilterObject().filterUKRegion) {
+          @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
             <div class="full-screen-map-button-container">
               <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
             </div>

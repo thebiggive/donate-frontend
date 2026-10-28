@@ -841,6 +841,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   protected onZoomOutClicked(): void {
     this.selectedFilterUKRegion = this.searchResult()?.parentRegion ?? null;
+    this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
