@@ -31,7 +31,6 @@ export type CampaignSummary = {
 export type UKRegion = {
   code: string;
   name: string;
-  parentCode: string | null;
 };
 
 export type CampaignSummaryList = {
