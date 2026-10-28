@@ -653,7 +653,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     }).addTo(this.map);
 
     if (hasChildRegions) {
-      new GeoJSON(await getHighlightedFeatures(childRegions, this.httpClient), {
+      const childRegionCodes = childRegions.map((region) => region.code);
+      new GeoJSON(await getHighlightedFeatures(childRegionCodes, this.httpClient), {
         attribution:
           'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
         style: () => ({
@@ -703,7 +704,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     }
 
     if (hasSiblingRegions) {
-      new GeoJSON(await getHighlightedFeatures(siblingRegions, this.httpClient), {
+      const siblingRegionCodes = siblingRegions.map((region) => region.code);
+      new GeoJSON(await getHighlightedFeatures(siblingRegionCodes, this.httpClient), {
         attribution:
           'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
         style: () => ({
@@ -778,7 +780,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const UKFilterRegions = this.searchResult()?.UKFilterRegions;
 
     if (UKFilterRegions && UKFilterRegions.length > 0) {
-      const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
+      const UKFilterRegionsCodes = UKFilterRegions.map((region) => region.code);
+      const regionsGeo = await getHighlightedFeatures(UKFilterRegionsCodes, this.httpClient);
 
       // If another request or reset has happened while fetching, abort applying stale bounds
       if (currentRequestId !== this.latestBoundsRequestId) {
@@ -815,13 +818,13 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected onZoomOutClicked(): void {
-    this.selectedFilterUKRegion = this.searchResult()?.parentRegion ?? null;
+    this.selectedFilterUKRegion = this.searchResult()?.parentRegion?.code ?? null;
     this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   protected get zoomOutLabel(): string {
-    const parentRegionName = this.searchResult()?.parentRegionName;
+    const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
   }

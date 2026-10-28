@@ -28,12 +28,16 @@ export type CampaignSummary = {
   title: string;
 };
 
+export type UKRegion = {
+  code: string;
+  name: string;
+};
+
 export type CampaignSummaryList = {
   campaignSummaries: CampaignSummary[];
   locationCounts?: { regionCode: string; numCampaigns: number }[];
-  UKFilterRegions?: string[] | undefined;
-  childRegions?: string[];
-  siblingRegions?: string[];
-  parentRegion?: string | null;
-  parentRegionName?: string | null;
+  UKFilterRegions?: UKRegion[] | undefined;
+  childRegions?: UKRegion[];
+  siblingRegions?: UKRegion[];
+  parentRegion?: UKRegion | null;
 };
