@@ -146,84 +146,84 @@
           </div>
         }
       </div>
-      <div class="sort-wrap" style="">
-        <biggive-form-field-select
-          [options]="sortOptions()"
-          [prompt]="null"
-          select-style="underlined"
-          [placeholder]="sortByPlaceholderText"
-          [selectedLabel]="selectedSortByOption"
-          [selectedValue]="getSelectedValue() || null"
-          [selectionChanged]="sortBySelectionChanged"
-          backgroundColour="grey"
-          id="sort-by"
-        />
+    </div>
+    <div class="sort-wrap" style="">
+      <biggive-form-field-select
+        [options]="sortOptions()"
+        [prompt]="null"
+        select-style="underlined"
+        [placeholder]="sortByPlaceholderText"
+        [selectedLabel]="selectedSortByOption"
+        [selectedValue]="getSelectedValue() || null"
+        [selectionChanged]="sortBySelectionChanged"
+        backgroundColour="grey"
+        id="sort-by"
+      />
+    </div>
+    <div style="clear: both; margin-bottom: 20px"></div>
+    <div class="grid-map-container-rule"></div>
+    <div class="grid-map-container">
+      <div class="campaign-grid">
+        @if (individualCampaigns()) {
+          @if (searchResult()?.UKFilterRegions) {
+            <p class="campaigns-for-list">
+              Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
+            </p>
+          }
+          <app-campaign-summary-grid
+            (scrolled)="emitOnScroll()"
+            [individualCampaigns]="individualCampaigns()"
+            [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
+          >
+          </app-campaign-summary-grid>
+        }
       </div>
-      <div style="clear: both; margin-bottom: 20px"></div>
-      <div class="grid-map-container-rule"></div>
-      <div class="grid-map-container">
-        <div class="campaign-grid">
-          @if (individualCampaigns()) {
-            @if (searchResult()?.UKFilterRegions) {
-              <p class="campaigns-for-list">
-                Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
-              </p>
+      @if (showUkMap() && flags.enableMapViewInExplore) {
+        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+          @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
+            <div class="full-screen-map-button-container">
+              <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
+            </div>
+          }
+
+          <div class="full-screen-map-button-container">
+            <fa-icon
+              tabindex="0"
+              [icon]="faExpandArrows"
+              (click)="makeMapFullScreen()"
+              class="full-screen-map-button"
+            ></fa-icon>
+          </div>
+        </div>
+
+        @if (fullScreenMapMode()) {
+          <div
+            tabindex="0"
+            class="drawer-control"
+            [class.open]="campaignDrawerOpen()"
+            (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+          >
+            <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
+            <span class="label">Campaign results</span>
+            @if (campaignDrawerOpen()) {
+              <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
+            } @else {
+              <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
             }
+          </div>
+
+          <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
             <app-campaign-summary-grid
               (scrolled)="emitOnScroll()"
               [individualCampaigns]="individualCampaigns()"
-              [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
+              [columnCount]="2"
             >
             </app-campaign-summary-grid>
-          }
-        </div>
-        @if (showUkMap() && flags.enableMapViewInExplore) {
-          <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
-            @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
-              <div class="full-screen-map-button-container">
-                <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
-              </div>
-            }
-
-            <div class="full-screen-map-button-container">
-              <fa-icon
-                tabindex="0"
-                [icon]="faExpandArrows"
-                (click)="makeMapFullScreen()"
-                class="full-screen-map-button"
-              ></fa-icon>
-            </div>
           </div>
-
-          @if (fullScreenMapMode()) {
-            <div
-              tabindex="0"
-              class="drawer-control"
-              [class.open]="campaignDrawerOpen()"
-              (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-              (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-              (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-            >
-              <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
-              <span class="label">Campaign results</span>
-              @if (campaignDrawerOpen()) {
-                <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
-              } @else {
-                <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
-              }
-            </div>
-
-            <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
-              <app-campaign-summary-grid
-                (scrolled)="emitOnScroll()"
-                [individualCampaigns]="individualCampaigns()"
-                [columnCount]="2"
-              >
-              </app-campaign-summary-grid>
-            </div>
-          }
         }
-      </div>
+      }
     </div>
   </div>
 </div>
