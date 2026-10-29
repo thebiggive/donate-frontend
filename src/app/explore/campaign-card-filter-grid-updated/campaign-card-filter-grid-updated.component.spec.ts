@@ -132,4 +132,17 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(options.some((opt: { value: string; label: string }) => opt.value === 'location')).toBeTrue();
     expect(component.getSelectedValue()).toBe('location');
   });
+
+  it('should emit doSearchAndFilterUpdate with null filterTheme when removeFilter is called for themes', () => {
+    component.selectedFilterTheme = 'Religious';
+    let emittedValue: { filterTheme?: string | null } | undefined;
+    component.doSearchAndFilterUpdate.subscribe((val) => {
+      emittedValue = val;
+    });
+
+    (component as unknown as { removeFilter: (key: string) => void }).removeFilter('themes');
+
+    expect(component.selectedFilterTheme).toBeNull();
+    expect(emittedValue?.filterTheme).toBeNull();
+  });
 });

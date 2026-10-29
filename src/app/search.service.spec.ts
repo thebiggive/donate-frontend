@@ -43,4 +43,34 @@ describe('SearchService', () => {
     expect(service.selectedSortLabel).toBe('Closest');
     expect(service.hasGeoLocationSet()).toBeTrue();
   });
+
+  it('should clear theme and category query params when filterTheme is cleared', () => {
+    service.doSearchAndFilterAndSort(
+      {
+        searchText: null,
+        sortBy: null,
+        filterTheme: 'Religious',
+        filterLocation: null,
+      },
+      'matchFundsRemaining',
+    );
+
+    let queryParams = service.getQueryParams('matchFundsRemaining', undefined);
+    expect(queryParams['category']).toBe('Religious');
+    expect(queryParams['theme']).toBe('Religious');
+
+    service.doSearchAndFilterAndSort(
+      {
+        searchText: null,
+        sortBy: null,
+        filterTheme: null,
+        filterLocation: null,
+      },
+      'matchFundsRemaining',
+    );
+
+    queryParams = service.getQueryParams('matchFundsRemaining', undefined);
+    expect(queryParams['category']).toBeUndefined();
+    expect(queryParams['theme']).toBeUndefined();
+  });
 });

@@ -53,7 +53,7 @@
                 [selectedValue]="selectedFilterTheme"
                 [options]="optionsToArray(this.themeOptions)"
                 [selectionChanged]="themeFilterSelectionChanged"
-                id="categories"
+                id="themes"
                 space-below="2"
               ></biggive-form-field-select>
             </div>
@@ -82,8 +82,7 @@
         @if (searchResult()?.countries; as countries) {
           <div class="selected-filters">
             @if (selectedFilterLocation) {
-              @let country = countries.filter(
-              (country) => country.country === selectedFilterLocation)[0];
+              @let country = getSelectedCountry(countries);
 
               @if (country) {
                 <!-- eslint-disable-next-line -->
@@ -100,7 +99,7 @@
               }
               <div class="flex-break"></div>
             }
-            @for (country of countries.filter((c) => c.country !== selectedFilterLocation).slice(0, 3); track country.country) {
+            @for (country of getVisibleCountries(countries); track country.country) {
               <!-- eslint-disable-next-line -->
               <span class="button" (click)="replaceCountryFilter(country.country)">
                 {{ country.country }} ({{ country.numCampaigns }})
@@ -114,8 +113,7 @@
         @if (searchResult()?.themes; as themes) {
           <div class="selected-filters">
             @if (selectedFilterTheme) {
-              @let theme = themes.filter(
-                (theme) => theme.theme === selectedFilterTheme)[0];
+              @let theme = getSelectedTheme(themes);
 
               @if (theme) {
                 <!-- eslint-disable-next-line -->
@@ -130,7 +128,7 @@
               }
               <div class="flex-break"></div>
             }
-            @for (theme of themes.filter((t) => t.theme !== selectedFilterTheme).slice(0, 3); track theme.theme) {
+            @for (theme of getVisibleThemes(themes); track theme.theme) {
               <!-- eslint-disable-next-line -->
               <span class="button" (click)="replaceThemeFilter(theme.theme)">
                 {{ theme.theme }} ({{ theme.numCampaigns }})

@@ -356,12 +356,11 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const selectEl = this.el.nativeElement.querySelector('#' + filterKey) as
       | HTMLBiggiveFormFieldSelectElement
       | undefined;
-    if (!selectEl) {
-      return;
+    if (selectEl) {
+      selectEl.selectedLabel = null;
+      selectEl.selectedValue = null;
     }
 
-    selectEl.selectedLabel = null;
-    selectEl.selectedValue = null;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
@@ -421,7 +420,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.doClearGeoLocation.emit();
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
-    ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
+    ['sort-by', 'themes', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
       const theEl = this.el.nativeElement.querySelector('#' + id) as HTMLBiggiveFormFieldSelectElement | undefined;
       if (!theEl) {
         return;
@@ -831,14 +830,36 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected replaceCountryFilter(location: string) {
-    this.removeFilter('locations');
     this.selectedFilterLocation = location;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   protected replaceThemeFilter(theme: string) {
-    this.removeFilter('themes');
     this.selectedFilterTheme = theme;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  protected getVisibleCountries(
+    countries: { country: string; numCampaigns: number }[],
+  ): { country: string; numCampaigns: number }[] {
+    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, 3);
+  }
+
+  protected getVisibleThemes(
+    themes: { theme: string; numCampaigns: number }[],
+  ): { theme: string; numCampaigns: number }[] {
+    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, 3);
+  }
+
+  protected getSelectedCountry(
+    countries: { country: string; numCampaigns: number }[],
+  ): { country: string; numCampaigns: number } | undefined {
+    return countries.find((c) => c.country === this.selectedFilterLocation);
+  }
+
+  protected getSelectedTheme(
+    themes: { theme: string; numCampaigns: number }[],
+  ): { theme: string; numCampaigns: number } | undefined {
+    return themes.find((t) => t.theme === this.selectedFilterTheme);
   }
 }
