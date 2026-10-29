@@ -453,6 +453,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
             siblingRegions: this.searchResult()?.siblingRegions,
             parentRegion: this.searchResult()?.parentRegion,
             parentRegionName: this.searchResult()?.parentRegion?.name,
+            countries: this.searchResult()?.countries,
+            themes: this.searchResult()?.themes,
             time: Date.now(), // ms
           };
 

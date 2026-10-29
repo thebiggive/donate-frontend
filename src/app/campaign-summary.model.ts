@@ -40,4 +40,6 @@ export type CampaignSummaryList = {
   childRegions?: UKRegion[];
   siblingRegions?: UKRegion[];
   parentRegion?: UKRegion | null;
+  countries?: { country: string; numCampaigns: number }[];
+  themes?: { theme: string; numCampaigns: number }[];
 };

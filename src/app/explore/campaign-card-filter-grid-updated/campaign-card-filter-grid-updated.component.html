@@ -34,9 +34,10 @@
           <biggive-button
             class="filter"
             colourScheme="primary"
-            (doButtonClick)="handleFilterButtonClick()"
-            Filter
-            label="Filter"
+            (doButtonClick)="handleClearAll()"
+            Clear
+            all
+            label="Clear all"
             [fullWidth]="true"
             space-below="1"
           ></biggive-button>
@@ -77,104 +78,152 @@
           </biggive-popup>
         </div>
       </div>
-      <div class="selected-filter-wrap">
-        <div class="selected-filters">
-          @if (selectedFilterTheme) {
+      <div class="filter-wrap countries-themes">
+        @if (searchResult()?.countries; as countries) {
+          <div class="selected-filters">
+            @if (selectedFilterLocation) {
+              @let country = countries.filter(
+              (country) => country.country === selectedFilterLocation)[0];
+
+              @if (country) {
+                <!-- eslint-disable-next-line -->
+                <span class="button selected" (click)="removeFilter('locations')">
+                  {{ country.country }} ({{ country.numCampaigns }})
+                </span>
+              } @else {
+                <!-- country here may be missing because it wasn't in the result set, perhaps because data o
+             n server changed or another filter was applied that removed all campaigns for that country -->
+                <!-- eslint-disable-next-line -->
+                <span class="button selected" (click)="removeFilter('locations')">
+                  {{ selectedFilterLocation }} (0)
+                </span>
+              }
+              <div style="clear: both"></div>
+            }
+            @for (country of countries.slice(0, 3); track country.country) {
+              @if (country.country !== selectedFilterLocation) {
+                <!-- eslint-disable-next-line -->
+                <span class="button" (click)="replaceCountryFilter(country.country)">
+                  {{ country.country }} ({{ country.numCampaigns }})
+                </span>
+              }
+            }
             <!-- eslint-disable-next-line -->
-            <span class="button" (click)="removeFilter('themes')">
-              {{ selectedFilterTheme }}
-            </span>
-          }
-          @if (selectedFilterLocation) {
+            <span class="button more" (click)="handleFilterButtonClick()"> More Locations </span>
+          </div>
+        }
+
+        @if (searchResult()?.themes; as themes) {
+          <div class="selected-filters">
+            @if (selectedFilterTheme) {
+              @let theme = themes.filter(
+                (theme) => theme.theme === selectedFilterTheme)[0];
+
+              @if (theme) {
+                <!-- eslint-disable-next-line -->
+                <span class="button selected" (click)="removeFilter('themes')">
+                  {{ theme.theme }} ({{ theme.numCampaigns }})
+                </span>
+              } @else {
+                <!-- theme here may be missing because it wasn't in the result set, perhaps because data o
+                n server changed or another filter was applied that removed all campaigns for that country -->
+                <!-- eslint-disable-next-line -->
+                <span class="button selected" (click)="removeFilter('themes')"> {{ selectedFilterTheme }} (0) </span>
+              }
+              <div style="clear: both"></div>
+            }
+            @for (theme of themes.slice(0, 3); track theme.theme) {
+              @if (theme.theme !== selectedFilterTheme) {
+                <!-- eslint-disable-next-line -->
+                <span class="button" (click)="replaceThemeFilter(theme.theme)">
+                  {{ theme.theme }} ({{ theme.numCampaigns }})
+                </span>
+              }
+            }
+
             <!-- eslint-disable-next-line -->
-            <span class="button" (click)="removeFilter('locations')">
-              {{ selectedFilterLocation }}
-            </span>
-          }
-        </div>
-        <div class="clear-all">
-          <!-- eslint-disable-next-line -->
-          <a (click)="handleClearAll()">Clear all</a>
-        </div>
-      </div>
-    </div>
-    <div class="sort-wrap" style="">
-      <biggive-form-field-select
-        [options]="sortOptions()"
-        [prompt]="null"
-        select-style="underlined"
-        [placeholder]="sortByPlaceholderText"
-        [selectedLabel]="selectedSortByOption"
-        [selectedValue]="getSelectedValue() || null"
-        [selectionChanged]="sortBySelectionChanged"
-        backgroundColour="grey"
-        id="sort-by"
-      />
-    </div>
-    <div style="clear: both; margin-bottom: 20px"></div>
-    <div class="grid-map-container-rule"></div>
-    <div class="grid-map-container">
-      <div class="campaign-grid">
-        @if (individualCampaigns()) {
-          @if (searchResult()?.UKFilterRegions) {
-            <p class="campaigns-for-list">
-              Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
-            </p>
-          }
-          <app-campaign-summary-grid
-            (scrolled)="emitOnScroll()"
-            [individualCampaigns]="individualCampaigns()"
-            [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
-          >
-          </app-campaign-summary-grid>
+            <span class="button more" (click)="handleFilterButtonClick()"> More Themes </span>
+          </div>
         }
       </div>
-      @if (showUkMap() && flags.enableMapViewInExplore) {
-        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
-          @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
-            <div class="full-screen-map-button-container">
-              <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
-            </div>
-          }
-
-          <div class="full-screen-map-button-container">
-            <fa-icon
-              tabindex="0"
-              [icon]="faExpandArrows"
-              (click)="makeMapFullScreen()"
-              class="full-screen-map-button"
-            ></fa-icon>
-          </div>
-        </div>
-
-        @if (fullScreenMapMode()) {
-          <div
-            tabindex="0"
-            class="drawer-control"
-            [class.open]="campaignDrawerOpen()"
-            (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-            (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-            (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-          >
-            <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
-            <span class="label">Campaign results</span>
-            @if (campaignDrawerOpen()) {
-              <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
-            } @else {
-              <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
+      <div class="sort-wrap" style="">
+        <biggive-form-field-select
+          [options]="sortOptions()"
+          [prompt]="null"
+          select-style="underlined"
+          [placeholder]="sortByPlaceholderText"
+          [selectedLabel]="selectedSortByOption"
+          [selectedValue]="getSelectedValue() || null"
+          [selectionChanged]="sortBySelectionChanged"
+          backgroundColour="grey"
+          id="sort-by"
+        />
+      </div>
+      <div style="clear: both; margin-bottom: 20px"></div>
+      <div class="grid-map-container-rule"></div>
+      <div class="grid-map-container">
+        <div class="campaign-grid">
+          @if (individualCampaigns()) {
+            @if (searchResult()?.UKFilterRegions) {
+              <p class="campaigns-for-list">
+                Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
+              </p>
             }
-          </div>
-
-          <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
             <app-campaign-summary-grid
               (scrolled)="emitOnScroll()"
               [individualCampaigns]="individualCampaigns()"
-              [columnCount]="2"
+              [columnCount]="showUkMap() && flags.enableMapViewInExplore ? 2 : 3"
             >
             </app-campaign-summary-grid>
+          }
+        </div>
+        @if (showUkMap() && flags.enableMapViewInExplore) {
+          <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+            @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
+              <div class="full-screen-map-button-container">
+                <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
+              </div>
+            }
+
+            <div class="full-screen-map-button-container">
+              <fa-icon
+                tabindex="0"
+                [icon]="faExpandArrows"
+                (click)="makeMapFullScreen()"
+                class="full-screen-map-button"
+              ></fa-icon>
+            </div>
           </div>
+
+          @if (fullScreenMapMode()) {
+            <div
+              tabindex="0"
+              class="drawer-control"
+              [class.open]="campaignDrawerOpen()"
+              (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+              (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+              (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
+            >
+              <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
+              <span class="label">Campaign results</span>
+              @if (campaignDrawerOpen()) {
+                <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
+              } @else {
+                <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
+              }
+            </div>
+
+            <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
+              <app-campaign-summary-grid
+                (scrolled)="emitOnScroll()"
+                [individualCampaigns]="individualCampaigns()"
+                [columnCount]="2"
+              >
+              </app-campaign-summary-grid>
+            </div>
+          }
         }
-      }
+      </div>
     </div>
   </div>
 </div>
