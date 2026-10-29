@@ -98,15 +98,13 @@
                   {{ selectedFilterLocation }} (0)
                 </span>
               }
-              <div style="clear: both"></div>
+              <div class="flex-break"></div>
             }
-            @for (country of countries.slice(0, 3); track country.country) {
-              @if (country.country !== selectedFilterLocation) {
-                <!-- eslint-disable-next-line -->
-                <span class="button" (click)="replaceCountryFilter(country.country)">
-                  {{ country.country }} ({{ country.numCampaigns }})
-                </span>
-              }
+            @for (country of countries.filter((c) => c.country !== selectedFilterLocation).slice(0, 3); track country.country) {
+              <!-- eslint-disable-next-line -->
+              <span class="button" (click)="replaceCountryFilter(country.country)">
+                {{ country.country }} ({{ country.numCampaigns }})
+              </span>
             }
             <!-- eslint-disable-next-line -->
             <span class="button more" (click)="handleFilterButtonClick()"> More Locations </span>
@@ -130,15 +128,13 @@
                 <!-- eslint-disable-next-line -->
                 <span class="button selected" (click)="removeFilter('themes')"> {{ selectedFilterTheme }} (0) </span>
               }
-              <div style="clear: both"></div>
+              <div class="flex-break"></div>
             }
-            @for (theme of themes.slice(0, 3); track theme.theme) {
-              @if (theme.theme !== selectedFilterTheme) {
-                <!-- eslint-disable-next-line -->
-                <span class="button" (click)="replaceThemeFilter(theme.theme)">
-                  {{ theme.theme }} ({{ theme.numCampaigns }})
-                </span>
-              }
+            @for (theme of themes.filter((t) => t.theme !== selectedFilterTheme).slice(0, 3); track theme.theme) {
+              <!-- eslint-disable-next-line -->
+              <span class="button" (click)="replaceThemeFilter(theme.theme)">
+                {{ theme.theme }} ({{ theme.numCampaigns }})
+              </span>
             }
 
             <!-- eslint-disable-next-line -->

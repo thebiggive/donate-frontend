@@ -429,6 +429,14 @@ fa-icon {
     display: flex;
     flex-wrap: wrap;
 
+    .flex-break {
+      flex-basis: 100%;
+      height: 0;
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+
     &:last-child {
       justify-content: flex-end;
 
