@@ -10,12 +10,12 @@
               type="text"
               [value]="searchText ?? ''"
               class="input-text"
-              [placeholder]="placeholderText"
+              placeholder="Search"
               (input)="handleSearchTextChanged($event)"
               (keydown)="handleEnterPressed($event)"
             />
           </div>
-          <biggive-button (doButtonClick)="handleSearchButtonPressed()" [label]="buttonText" />
+          <biggive-button (doButtonClick)="handleSearchButtonPressed()" label="Search" />
         </div>
       </div>
       <div class="sort-filter-wrap">
