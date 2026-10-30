@@ -19,17 +19,6 @@
         </div>
       </div>
       <div class="sort-filter-wrap">
-        @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-          <biggive-button
-            class="filter"
-            colourScheme="primary"
-            (doButtonClick)="handleNearMeButtonPressed()"
-            [label]="this.fetchingLocation ? 'Fetching location...' : 'Near me'"
-            [disabled]="this.fetchingLocation"
-            [fullWidth]="true"
-            space-below="0"
-          ></biggive-button>
-        }
         <div class="filter-wrap">
           <biggive-button
             class="filter"
@@ -107,6 +96,11 @@
             }
             <!-- eslint-disable-next-line -->
             <span class="button more" (click)="handleFilterButtonClick()"> More Locations </span>
+
+            @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
+              <!-- eslint-disable-next-line -->
+              <span class="button" (click)="handleNearMeButtonPressed()">Near me</span>
+            }
           </div>
         }
 
