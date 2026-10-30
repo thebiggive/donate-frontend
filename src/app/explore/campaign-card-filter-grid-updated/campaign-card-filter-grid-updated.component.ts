@@ -182,17 +182,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   @Input({ required: true }) searchText: string | null = null;
 
   /**
-   * Defines the text displayed as the placeholder in the input field
-   * before the user types anything
-   */
-  placeholderText: string = 'Search';
-
-  /**
-   * Defines the text on the search button
-   */
-  buttonText: string = 'Search';
-
-  /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
    * This is especially helpful for the Meta campaign and Explore pages, where searching
    * by text wipes out previous sort options and re-uses Relevance, or where one of those
