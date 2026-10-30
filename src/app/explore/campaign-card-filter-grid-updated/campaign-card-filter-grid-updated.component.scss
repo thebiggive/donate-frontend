@@ -436,6 +436,8 @@ fa-icon {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-direction: column;
+  gap: abstract.$spacer-4;
 
   > div {
     display: flex;
@@ -448,6 +450,11 @@ fa-icon {
       border: 0;
       padding: 0;
     }
+  }
+
+  @media #{abstract.$breakpoint-lg} {
+    flex-direction: row;
+    gap: 0;
 
     &:last-child {
       justify-content: flex-end;
