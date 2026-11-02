@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { PageMetaService } from '../../page-meta.service';
 import { DatePipe } from '@angular/common';
 import { IdentityService } from '../../identity.service';
@@ -10,13 +10,21 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { minPasswordLength } from '../../../environments/common';
 import { Toast } from '../../toast.service';
 import { environment } from '../../../environments/environment';
+import { PasswordInputComponent } from '../../password-input/password-input.component';
 
 @Component({
   templateUrl: './delete-account.component.html',
   styleUrl: './delete-account.component.scss',
   providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [BiggivePageSection, BiggiveHeading, BiggiveButton, ReactiveFormsModule, BiggiveTextInput],
+  imports: [
+    BiggivePageSection,
+    BiggiveHeading,
+    BiggiveButton,
+    ReactiveFormsModule,
+    BiggiveTextInput,
+    PasswordInputComponent,
+  ],
 })
 export class DeleteAccount implements OnInit {
   private pageMeta = inject(PageMetaService);
@@ -29,7 +37,6 @@ export class DeleteAccount implements OnInit {
   public person!: Person;
 
   protected countryCode: string | null = null;
-  protected readonly showPassword = signal(false);
 
   protected form = new FormGroup({
     password: new FormControl('', [
@@ -63,12 +70,6 @@ export class DeleteAccount implements OnInit {
     if (!password) {
       this.toast.showError('Please provide your password to delete your account');
       return;
-    }
-
-    if (this.showPassword()) {
-      this.showPassword.set(false);
-      this.cdr.markForCheck();
-      await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
     if (this.normaliseName(this.form.value.accountName) !== this.fullName) {
@@ -105,8 +106,4 @@ export class DeleteAccount implements OnInit {
   }
 
   protected readonly flags = flags;
-
-  protected toggleShowPassword() {
-    this.showPassword.update((current) => !current);
-  }
 }

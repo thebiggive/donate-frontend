@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-  signal,
   viewChild,
   ViewChild,
   ChangeDetectionStrategy,
@@ -68,6 +67,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { noLongNumberValidator } from '../validators/noLongNumberValidator';
 import { DonorAccountService } from '../donor-account.service';
 import { HttpStatusCode } from '@angular/common/http';
+import { PasswordInputComponent } from '../password-input/password-input.component';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -106,6 +106,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MatCheckbox,
     MoneyPipe,
     AsyncPipe,
+    PasswordInputComponent,
   ],
   providers: [],
   templateUrl: './regular-giving.component.html',
@@ -237,7 +238,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private platformId = inject(PLATFORM_ID);
 
   protected processingTempPasswordRequest = false;
-  protected readonly showPassword = signal(false);
   protected emailTokenValid = false;
 
   /** Determines if we should show form parts related to setting up a new account. If the account is created
@@ -1026,10 +1026,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.emailErrorMessage = errorDescription(error);
     }
   };
-
-  protected toggleShowPassword() {
-    this.showPassword.update((current) => !current);
-  }
 
   protected async continueFromAuthentication() {
     if (this.donor || this.emailTokenValid) {
