@@ -726,6 +726,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       (position: GeolocationPosition) => {
         this.fetchingLocation = false;
         this.location = position;
+        this.searchService.selected['country'] = 'United Kingdom'; // we only support GeoLocations in UK
         this.searchService.sort('location');
         this.changeDetectorRef.markForCheck();
       },

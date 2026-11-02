@@ -45,26 +45,38 @@
     background-color: abstract.$colour-white;
     padding: abstract.$spacer-3 abstract.$spacer-4;
     margin-bottom: abstract.$spacer-3;
+
     h4 {
       margin-bottom: abstract.$spacer-3;
     }
+
     .field-wrap {
       display: flex;
       justify-content: space-between;
+      flex-direction: column;
+      gap: abstract.$spacer-4;
 
       .input-wrap {
         display: flex;
         justify-content: space-between;
         padding-bottom: abstract.$spacer-1;
         border-bottom: 1px solid abstract.$colour-black;
-        margin-right: abstract.$spacer-4;
+        margin-right: abstract.$spacer-2;
         flex-grow: 1;
+
         input {
           border: 0;
         }
       }
+
       button {
         padding: 5px 30px;
+        width: 100%;
+      }
+
+      @media #{abstract.$breakpoint-lg} {
+        flex-direction: row;
+        gap: 0;
       }
     }
   }
@@ -424,6 +436,8 @@ fa-icon {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-direction: column;
+  gap: abstract.$spacer-4;
 
   > div {
     display: flex;
@@ -436,6 +450,11 @@ fa-icon {
       border: 0;
       padding: 0;
     }
+  }
+
+  @media #{abstract.$breakpoint-lg} {
+    flex-direction: row;
+    gap: 0;
 
     &:last-child {
       justify-content: flex-end;
