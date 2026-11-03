@@ -20,7 +20,7 @@ describe('LoginModalComponent', () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [],
-      imports: [FormsModule, MatButtonModule, MatDialogModule, ReactiveFormsModule, LoginModalComponent],
+      imports: [FormsModule, MatButtonModule, MatDialogModule, ReactiveFormsModule],
       providers: [
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,

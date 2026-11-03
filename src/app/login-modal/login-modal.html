@@ -6,17 +6,10 @@
     <div>
       <mat-dialog-content class="mat-typography">
         <form [formGroup]="resetPasswordForm">
-          <biggive-text-input spaceBelow="4" backgroundColour="white">
-            <label slot="label" for="loginEmailAddress">Email address *</label>
-            <input
-              slot="input"
-              matInput
-              type="email"
-              id="ResetPasswordEmailAddress"
-              formControlName="emailAddress"
-              autocapitalize="off"
-            />
-          </biggive-text-input>
+          <mat-form-field class="b-w-100" color="primary">
+            <mat-label for="loginEmailAddress">Email address</mat-label>
+            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off" />
+          </mat-form-field>
           <p class="b-rt-0">Please enter your email address.</p>
         </form>
       </mat-dialog-content>
@@ -56,19 +49,27 @@
   <h2 mat-dialog-title>Log in</h2>
   <mat-dialog-content class="mat-typography">
     <form [formGroup]="loginForm">
-      <biggive-text-input spaceBelow="4" backgroundColour="white">
-        <label slot="label" for="loginEmailAddress">Email address *</label>
-        <input
-          slot="input"
-          matInput
-          type="email"
-          id="loginEmailAddress"
-          formControlName="emailAddress"
-          autocapitalize="off"
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="loginEmailAddress">Email address</mat-label>
+        <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off" />
+      </mat-form-field>
+      <div style="display: flex">
+        <mat-form-field class="b-w-100" color="primary">
+          <mat-label for="loginPassword">Password</mat-label>
+          <div class="visually-hidden" aria-live="polite">
+            {{showPassword() ? 'Your password is shown' : 'Your password is hidden'}}
+          </div>
+          <input matInput [type]="showPassword() ? 'text' : 'password'" id="loginPassword" formControlName="password" />
+        </mat-form-field>
+        &nbsp;
+        <biggive-button
+          aria-controls="loginPassword"
+          colourScheme="clear-primary"
+          (doButtonClick)="toggleShowPassword()"
+          [label]="showPassword() ? 'Hide' : 'Show'"
+          [spaceBelow]="0"
         />
-      </biggive-text-input>
-
-      <app-password-input id="loginPassword" formControlName="password" backgroundColour="white" />
+      </div>
       @if (loginError) {
       <p class="error" aria-live="assertive">Login error: {{ loginError }}</p>
       }

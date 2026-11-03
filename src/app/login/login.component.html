@@ -107,7 +107,29 @@
               />
             </biggive-text-input>
 
-            <app-password-input id="loginPassword" formControlName="password" />
+            <biggive-text-input spaceBelow="4">
+              <label slot="label" for="loginPassword">Password *</label>
+              <div slot="input" style="display: flex">
+                <div class="visually-hidden" aria-live="polite">
+                  {{ showLoginPassword() ? "Your password is shown" : "Your password is hidden" }}
+                </div>
+                <input
+                  matInput
+                  [type]="showLoginPassword() ? 'text' : 'password'"
+                  id="loginPassword"
+                  formControlName="password"
+                />
+                <biggive-button
+                  role="button"
+                  tabindex="0"
+                  aria-controls="loginPassword"
+                  colourScheme="clear-primary"
+                  (doButtonClick)="toggleShowLoginPassword()"
+                  [label]="showLoginPassword() ? 'Hide' : 'Show'"
+                  [spaceBelow]="0"
+                />
+              </div>
+            </biggive-text-input>
             <div aria-live="polite">
               @if (loginError) {
                 <p class="error" aria-live="assertive">
