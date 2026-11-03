@@ -182,17 +182,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   @Input({ required: true }) searchText: string | null = null;
 
   /**
-   * Defines the text displayed as the placeholder in the input field
-   * before the user types anything
-   */
-  placeholderText: string = 'Search';
-
-  /**
-   * Defines the text on the search button
-   */
-  buttonText: string = 'Search';
-
-  /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
    * This is especially helpful for the Meta campaign and Explore pages, where searching
    * by text wipes out previous sort options and re-uses Relevance, or where one of those
@@ -209,7 +198,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   private _selectedSortByOption: sortOptionLabel | null = null;
 
   /**
-   * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
+   * For injecting the chosen category or beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
   @Input({ required: true }) selectedFilterTheme: string | null = null;
 
@@ -330,6 +319,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       filterPopup.closeFromOutside();
     }
 
+    // hereish
     this.filtersApplied =
       typeof searchAndFilterObj.filterTheme === 'string' || typeof searchAndFilterObj.filterLocation === 'string';
 
@@ -355,12 +345,11 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const selectEl = this.el.nativeElement.querySelector('#' + filterKey) as
       | HTMLBiggiveFormFieldSelectElement
       | undefined;
-    if (!selectEl) {
-      return;
+    if (selectEl) {
+      selectEl.selectedLabel = null;
+      selectEl.selectedValue = null;
     }
 
-    selectEl.selectedLabel = null;
-    selectEl.selectedValue = null;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
@@ -420,7 +409,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.doClearGeoLocation.emit();
 
     // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
-    ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
+    ['sort-by', 'themes', 'categories', 'beneficiaries', 'locations', 'funding'].forEach((id) => {
       const theEl = this.el.nativeElement.querySelector('#' + id) as HTMLBiggiveFormFieldSelectElement | undefined;
       if (!theEl) {
         return;
@@ -653,7 +642,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     }).addTo(this.map);
 
     if (hasChildRegions) {
-      new GeoJSON(await getHighlightedFeatures(childRegions, this.httpClient), {
+      const childRegionCodes = childRegions.map((region) => region.code);
+      new GeoJSON(await getHighlightedFeatures(childRegionCodes, this.httpClient), {
         attribution:
           'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
         style: () => ({
@@ -703,7 +693,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     }
 
     if (hasSiblingRegions) {
-      new GeoJSON(await getHighlightedFeatures(siblingRegions, this.httpClient), {
+      const siblingRegionCodes = siblingRegions.map((region) => region.code);
+      new GeoJSON(await getHighlightedFeatures(siblingRegionCodes, this.httpClient), {
         attribution:
           'boundaries &copy; <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Crown copyright</a>',
         style: () => ({
@@ -778,7 +769,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const UKFilterRegions = this.searchResult()?.UKFilterRegions;
 
     if (UKFilterRegions && UKFilterRegions.length > 0) {
-      const regionsGeo = await getHighlightedFeatures(UKFilterRegions, this.httpClient);
+      const UKFilterRegionsCodes = UKFilterRegions.map((region) => region.code);
+      const regionsGeo = await getHighlightedFeatures(UKFilterRegionsCodes, this.httpClient);
 
       // If another request or reset has happened while fetching, abort applying stale bounds
       if (currentRequestId !== this.latestBoundsRequestId) {
@@ -815,13 +807,48 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected onZoomOutClicked(): void {
-    this.selectedFilterUKRegion = this.searchResult()?.parentRegion ?? null;
+    this.selectedFilterUKRegion = this.searchResult()?.parentRegion?.code ?? null;
+    this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   protected get zoomOutLabel(): string {
-    const parentRegionName = this.searchResult()?.parentRegionName;
+    const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
+  }
+
+  protected replaceCountryFilter(location: string) {
+    this.selectedFilterLocation = location;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  protected replaceThemeFilter(theme: string) {
+    this.selectedFilterTheme = theme;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  protected getVisibleCountries(
+    countries: { country: string; numCampaigns: number }[],
+  ): { country: string; numCampaigns: number }[] {
+    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, 3);
+  }
+
+  protected getVisibleThemes(
+    themes: { theme: string; numCampaigns: number }[],
+  ): { theme: string; numCampaigns: number }[] {
+    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, 3);
+  }
+
+  protected getSelectedCountry(
+    countries: { country: string; numCampaigns: number }[],
+  ): { country: string; numCampaigns: number } | undefined {
+    return countries.find((c) => c.country === this.selectedFilterLocation);
+  }
+
+  protected getSelectedTheme(
+    themes: { theme: string; numCampaigns: number }[],
+  ): { theme: string; numCampaigns: number } | undefined {
+    return themes.find((t) => t.theme === this.selectedFilterTheme);
   }
 }

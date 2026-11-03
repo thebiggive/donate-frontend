@@ -9,6 +9,7 @@ export type SelectedType = {
   sortField?: string;
   term?: string;
   ukRegion?: string;
+  theme?: string;
 };
 
 const sortOptions = {
@@ -48,6 +49,7 @@ export class SearchService {
       sortField: defaultSort,
       term: '',
       ukRegion: '',
+      theme: '',
     };
   }
 
