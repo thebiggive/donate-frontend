@@ -5,7 +5,6 @@ import {
   OnInit,
   ViewChild,
   inject,
-  signal,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -22,7 +21,8 @@ import { EMAIL_REGEXP } from '../validators/patterns';
 import { PopupStandaloneComponent } from '../popup-standalone/popup-standalone.component';
 import { WidgetInstance } from 'friendly-challenge';
 import { BackendError, errorDescription } from '../backendError';
-import { BiggiveButton } from '@biggive/components-angular';
+import { BiggiveTextInput } from '@biggive/components-angular';
+import { PasswordInputComponent } from '../password-input/password-input.component';
 
 @Component({
   selector: 'app-login-modal',
@@ -37,7 +37,8 @@ import { BiggiveButton } from '@biggive/components-angular';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     PopupStandaloneComponent,
-    BiggiveButton,
+    BiggiveTextInput,
+    PasswordInputComponent,
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
@@ -58,7 +59,6 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
-  protected readonly showPassword = signal(false);
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -87,18 +87,6 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     await this.friendlyCaptchaWidget.start();
   }
   async login(): Promise<void> {
-    if (this.showPassword()) {
-      this.showPassword.set(false);
-
-      // wait for angular to update the view so that the browser
-      // doesn't think the password is something to save
-      // when the request is submitted.
-
-      // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
-      this.cdr.markForCheck();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
     this.loggingIn = true;
     const credentials: Credentials = {
       captcha_code: this.captchaCode || '',
@@ -145,9 +133,5 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   forgotPasswordClicked(event: Event): void {
     event.preventDefault();
     this.forgotPassword = true;
-  }
-
-  protected toggleShowPassword() {
-    this.showPassword.update((current) => !current);
   }
 }

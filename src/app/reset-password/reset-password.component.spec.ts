@@ -7,7 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { of } from 'rxjs';
 import { MatomoModule } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
@@ -38,6 +39,7 @@ describe('ResetPasswordComponent', () => {
         ]),
       ],
       providers: [
+        { provide: ActivatedRoute, useValue: { queryParams: of({ token: 'abc' }) } },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         { provide: MatomoModule, useClass: MatomoTestingModule },
