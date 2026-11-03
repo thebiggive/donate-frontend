@@ -7,6 +7,6 @@ describe('LoginComponent', () => {
 
   it('should not repeat password input ID', () => {
     cy.mount(LoginComponent);
-    cy.find('#loginPassword').its('length').should('eq', 1)
+    cy.find('#loginPassword').its('length').should('eq', 1);
   });
 });
