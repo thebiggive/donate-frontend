@@ -201,7 +201,7 @@
                   <p>Temporary password accepted</p>
                 } @else {
                   <div class="donation-input">
-                    <app-password-input id="temp-password-input" formControlName="password" />
+                    <app-password-input inputId="temp-password-input" formControlName="password" />
                   </div>
                   @if (intendsToLogInToExistingAccount) {
                     <p>
@@ -276,7 +276,7 @@
                                -->
                     <div class="donation-input">
                       <app-password-input
-                        id="password-post-donation"
+                        inputId="password-post-donation"
                         label="New password *"
                         formControlName="newPassword"
                       />
