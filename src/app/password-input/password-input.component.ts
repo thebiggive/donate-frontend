@@ -40,7 +40,7 @@ export class PasswordInputComponent implements ControlValueAccessor, OnInit {
   private ngForm = inject(NgForm, { optional: true });
 
   @Input({ required: true }) id!: string;
-  @Input() label: string = 'Password *';
+  @Input() label: `${string} *` = 'Password *';
   @Input() spaceBelow: number | string = 4;
   @Input() autocomplete?: string;
   @Input() backgroundColour: 'white' | 'grey' = 'grey';

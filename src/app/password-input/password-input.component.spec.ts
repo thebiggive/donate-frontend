@@ -8,7 +8,7 @@ import { PasswordInputComponent } from './password-input.component';
   imports: [PasswordInputComponent, ReactiveFormsModule],
   template: `
     <form [formGroup]="testForm">
-      <app-password-input formControlName="password" [id]="'test-password'" [label]="'My Password'" />
+      <app-password-input formControlName="password" [id]="'test-password'" [label]="'My Password *'" />
     </form>
   `,
 })
