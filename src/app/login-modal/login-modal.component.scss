@@ -1,6 +1,20 @@
 @use "@angular/material" as mat;
 @use "../../abstract";
 
+input {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  padding: 0;
+  margin: 0 auto;
+  display: block;
+  font-weight: 700;
+  font-family: inherit;
+
+  @include abstract.b-rt-0;
+}
+
 .error {
   color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;

@@ -29,27 +29,13 @@
           returned to the original bank account they were transferred from.
         </p>
         @if (person) {
-          <biggive-text-input spaceBelow="0">
-            <label slot="label" for="password">Confirm password *</label>
-            <div class="visually-hidden" aria-live="polite">
-              {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-            </div>
-            <div slot="input" style="display: flex">
-              <input
-                id="password"
-                [type]="showPassword() ? 'text' : 'password'"
-                autocomplete="password"
-                [formControl]="form.controls.password"
-              />
-              <biggive-button
-                aria-controls="password"
-                colourScheme="clear-primary"
-                (doButtonClick)="toggleShowPassword()"
-                [label]="showPassword() ? 'Hide' : 'Show'"
-                [spaceBelow]="0"
-              />
-            </div>
-          </biggive-text-input>
+          <app-password-input
+            id="password"
+            label="Confirm password *"
+            [spaceBelow]="0"
+            autocomplete="password"
+            [formControl]="form.controls.password"
+          />
 
           <div class="u-height-2em"></div>
 

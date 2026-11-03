@@ -7,7 +7,6 @@ import {
   PLATFORM_ID,
   ViewChild,
   inject,
-  signal,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -29,6 +28,7 @@ import { WidgetInstance } from 'friendly-challenge';
 import { NavigationService } from '../navigation.service';
 import { errorDescription, BackendError } from '../backendError';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
+import { PasswordInputComponent } from '../password-input/password-input.component';
 
 export type LoginNavigationState = {
   /**
@@ -49,6 +49,7 @@ export type LoginNavigationState = {
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    PasswordInputComponent,
     ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
@@ -86,7 +87,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private captchaCode: string | undefined;
   protected registerLink!: string;
   protected isNewRegistration: boolean = false;
-  protected showLoginPassword = signal(false);
 
   constructor() {
     const state: LoginNavigationState = <LoginNavigationState>this.router.currentNavigation()?.extras.state;
@@ -155,18 +155,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async login(): Promise<void> {
-    if (this.showLoginPassword()) {
-      this.showLoginPassword.set(false);
-
-      // wait for angular to update the view so that the browser
-      // doesn't think the password is something to save
-      // when the request is submitted.
-
-      // see https://technology.blog.gov.uk/2021/04/19/simple-things-are-complicated-making-a-show-password-option/
-      this.cdr.markForCheck();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
     if (!this.loginForm.valid) {
       const emailErrors = this.loginForm.controls?.emailAddress?.errors;
       const passwordErrors = this.loginForm.controls?.password?.errors;
@@ -257,9 +245,5 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.markForCheck();
       },
     });
-  }
-
-  protected toggleShowLoginPassword() {
-    this.showLoginPassword.update((current) => !current);
   }
 }

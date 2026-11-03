@@ -195,34 +195,13 @@
             </mat-step>
             @if (!donorAccountExistsOnLoad) {
               <mat-step label="Your password">
-                <!-- below biggive-text-input usage copied from register.component.html - consider extracting a new component -->
                 @if (this.loggedInToExistingAccount) {
                   <p>Password accepted</p>
                 } @else if (this.emailTokenValid) {
                   <p>Temporary password accepted</p>
                 } @else {
                   <div class="donation-input">
-                    <biggive-text-input spaceBelow="4">
-                      <label slot="label" for="password">Password *</label>
-                      <div slot="input" style="display: flex">
-                        <div class="visually-hidden" aria-live="polite">
-                          {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-                        </div>
-                        <input
-                          matInput
-                          [type]="showPassword() ? 'text' : 'password'"
-                          id="temp-password-input"
-                          formControlName="password"
-                        />
-                        <biggive-button
-                          aria-controls="temp-password-input"
-                          colourScheme="clear-primary"
-                          (doButtonClick)="toggleShowPassword()"
-                          [label]="showPassword() ? 'Hide' : 'Show'"
-                          [spaceBelow]="0"
-                        />
-                      </div>
-                    </biggive-text-input>
+                    <app-password-input id="temp-password-input" formControlName="password" />
                   </div>
                   @if (intendsToLogInToExistingAccount) {
                     <p>
@@ -296,27 +275,11 @@
                                   for consistency.
                                -->
                     <div class="donation-input">
-                      <biggive-text-input spaceBelow="4">
-                        <label slot="label" for="password">New password *</label>
-                        <div slot="input" style="display: flex">
-                          <div class="visually-hidden" aria-live="polite">
-                            {{ showPassword() ? "Your password is shown" : "Your password is hidden" }}
-                          </div>
-                          <input
-                            matInput
-                            [type]="showPassword() ? 'text' : 'password'"
-                            id="password-post-donation"
-                            formControlName="newPassword"
-                          />
-                          <biggive-button
-                            aria-controls="password-post-donation"
-                            colourScheme="clear-primary"
-                            (doButtonClick)="toggleShowPassword()"
-                            [label]="showPassword() ? 'Hide' : 'Show'"
-                            [spaceBelow]="0"
-                          />
-                        </div>
-                      </biggive-text-input>
+                      <app-password-input
+                        id="password-post-donation"
+                        label="New password *"
+                        formControlName="newPassword"
+                      />
                     </div>
                   }
                 }
