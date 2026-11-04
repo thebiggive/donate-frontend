@@ -671,6 +671,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }).addTo(this.map);
 
         marker.on('click', () => {
+          this.location = undefined;
+          this.doClearGeoLocation.emit();
           this.selectedFilterUKRegion = countObj!.regionCode;
           this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
         });
@@ -721,6 +723,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = childCountObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
           });
@@ -773,6 +777,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = countObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
           });
