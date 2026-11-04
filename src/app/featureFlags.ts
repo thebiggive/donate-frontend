@@ -22,14 +22,14 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
-        enableUpdatedCampaignCardFilter: false,
+        enableUpdatedCampaignCardFilter: true,
       };
     case 'staging':
       return {
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
-        enableUpdatedCampaignCardFilter: false,
+        enableUpdatedCampaignCardFilter: true,
       };
     case 'production':
       return {
