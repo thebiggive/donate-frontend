@@ -643,24 +643,19 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
           return isMatch;
         });
+        const isSelected = regionCode === this.selectedFilterUKRegion;
 
-        if (regionCode === this.selectedFilterUKRegion) {
-          // no marker for the region that's already selected because:
-          // it's useless to click again
-          // the marker on the map can obscure the shape of the region underneath for small regions displayed alongside
-          // large ones (e.g. Aberdeen City in the map Scotland)
-          // making the region disappear by returning here will make it more obvious that the region is selected
-          // especially in cases like Aberdeen City where the colour of the region beneeth changing would otherwise be
-          // invisible.
+        if (isSelected && hasChildRegions) {
           return;
         }
 
         const count = countObj !== undefined ? countObj.numCampaigns : 0;
         const areaName = feature.properties?.['name'] || '';
 
+        const markerClass = isSelected ? 'campaign-count-marker selected' : 'campaign-count-marker';
         const markerIcon = new DivIcon({
           className: 'campaign-count-marker-container',
-          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
+          html: `<button type="button" class="${markerClass}" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
           iconSize: [32, 32],
           iconAnchor: [16, 16],
         });
@@ -670,12 +665,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
           title: `${count} campaigns in ${areaName}`,
         }).addTo(this.map);
 
-        marker.on('click', () => {
-          this.location = undefined;
-          this.doClearGeoLocation.emit();
-          this.selectedFilterUKRegion = countObj!.regionCode;
-          this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-        });
+        if (!isSelected) {
+          marker.on('click', () => {
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
+            this.selectedFilterUKRegion = countObj!.regionCode;
+            this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+          });
+        }
       },
     }).addTo(this.map);
 
