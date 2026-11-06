@@ -180,16 +180,15 @@
         }
       </div>
     </section>
-    <div class="sort-wrap" style="">
+    <div class="sort-wrap">
       <biggive-form-field-select
-        [options]="sortOptions()"
-        [prompt]="null"
-        select-style="underlined"
+        backgroundColour="grey"
+        prompt="Sort by"
         [placeholder]="sortByPlaceholderText"
         [selectedLabel]="selectedSortByOption"
         [selectedValue]="getSelectedValue() || null"
+        [options]="sortOptions()"
         [selectionChanged]="sortBySelectionChanged"
-        backgroundColour="grey"
         id="sort-by"
       />
     </div>
