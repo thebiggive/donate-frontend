@@ -358,7 +358,8 @@ fa-icon {
       background-color 0.15s ease-in-out;
 
     &:hover,
-    &:focus-visible {
+    &:focus-visible,
+    &.selected {
       background-color: abstract.$colour-secondary;
       color: abstract.$colour-black;
       transform: scale(1.15);
