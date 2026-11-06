@@ -1144,6 +1144,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
             return;
           }
 
+          this.matomoTracker.trackEvent(
+            'donate',
+            'ryft_payment_success',
+            `Ryft donation ${this.donation.donationId} to campaign ${this.donation.projectId}`,
+          );
           await this.exitPostDonationSuccess(this.donation, this.getPaymentMethodType());
 
           return;
