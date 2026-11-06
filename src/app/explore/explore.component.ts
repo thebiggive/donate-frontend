@@ -412,7 +412,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Also saves results for imminent future navigation to the same meta-campaign + filters.
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
-    console.log('will call campaignService.search with query', query);
+    if (!this.environment.productionLike) {
+      console.log('will call campaignService.search with query', query);
+    }
+
     this.campaignService.search(query as SearchQuery).subscribe({
       next: async (result: CampaignSummaryList) => {
         this.lastFailedCampaignSearch = undefined;
