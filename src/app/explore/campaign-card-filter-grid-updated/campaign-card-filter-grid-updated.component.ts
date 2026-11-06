@@ -37,6 +37,7 @@ import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.mod
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 import { CampaignGroupsService } from '../../campaign-groups.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -58,6 +59,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
   styleUrl: './campaign-card-filter-grid-updated.component.scss',
 })
 export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);

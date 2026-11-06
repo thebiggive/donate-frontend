@@ -59,6 +59,7 @@
   }
   <biggive-page-section>
     <div class="u-position-absolute u-margin-top-neg-6em" id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"></div>
+    <h1 class="visually-hidden">{{ metaCampaign ? title : 'Explore campaigns' }}</h1>
 
     @if (flags.enableUpdatedCampaignCardFilter) {
       <app-campaign-card-filter-grid-updated
