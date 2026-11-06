@@ -17,19 +17,18 @@
           </div>
           <biggive-button (doButtonClick)="handleSearchButtonPressed()" label="Search" full-width="true" />
         </div>
+        <biggive-button
+          class="filter-clear"
+          colourScheme="primary-outline"
+          (doButtonClick)="handleClearAll()"
+          Clear
+          all
+          label="Clear all"
+          space-below="1"
+        ></biggive-button>
       </div>
       <div class="sort-filter-wrap">
         <div class="filter-wrap">
-          <biggive-button
-            class="filter"
-            colourScheme="primary"
-            (doButtonClick)="handleClearAll()"
-            Clear
-            all
-            label="Clear all"
-            [fullWidth]="true"
-            space-below="1"
-          ></biggive-button>
           <biggive-popup id="filter-popup">
             <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
             <div class="select-wrapper-1">
@@ -99,7 +98,15 @@
 
             @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
               <!-- eslint-disable-next-line -->
-              <span class="button" (click)="handleNearMeButtonPressed()">Near me</span>
+              <span class="button locate" (click)="handleNearMeButtonPressed()">
+                <fa-icon
+                  [icon]="faLocationCrosshairs"
+                  role="presentation"
+                  class="icon"
+                  [style]="{ 'vertical-align': '0.5em' }"
+                ></fa-icon>
+                Near me
+              </span>
             }
           </div>
         }

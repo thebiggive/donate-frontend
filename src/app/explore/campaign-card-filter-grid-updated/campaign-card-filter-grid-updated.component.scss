@@ -109,8 +109,20 @@
       background-size: 12px auto;
     }
     &.more {
+      border: 2px solid abstract.$colour-primary;
+      background-color: abstract.$colour-white;
+      color: abstract.$colour-primary;
+    }
+    &.locate {
+      // Tweaks to allow for the size of the locate crosshair icon. These adjustments make the button marginally
+      // taller than its neighbours but with their top positions aligning, which seems like the least bad option for now.
+      padding-top: 0;
+      margin-bottom: 2px;
       background-color: abstract.$colour-primary;
       color: abstract.$colour-black-contrast;
+      fa-icon {
+        color: abstract.$colour-white;
+      }
     }
   }
   .clear-all {
@@ -130,6 +142,12 @@
       }
     }
   }
+}
+
+.filter-clear {
+  margin-top: abstract.$spacer-2;
+  display: block;
+  float: right;
 }
 
 .sort-filter-wrap {
@@ -153,31 +171,6 @@
     background-color: abstract.$colour-background; // temp for testing dropdown
 
     margin-left: abstract.$spacer-3;
-
-    .button.filter {
-      padding-left: 60px;
-      padding-right: 30px;
-
-      .filter-icon {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 25px;
-        top: 17px;
-        width: 13px;
-        height: 13px;
-
-        svg {
-          width: 100%;
-          height: auto;
-          vertical-align: top;
-
-          &:hover {
-            fill: abstract.$colour-primary;
-          }
-        }
-      }
-    }
   }
 }
 
@@ -186,16 +179,11 @@
   width: 2rem;
   vertical-align: -0.125rem;
   margin: auto;
-
-  > path {
-    fill: abstract.$colour-primary;
-  }
+  color: abstract.$colour-primary;
 }
 
 .icon-clear-all {
-  > path {
-    fill: abstract.$colour-black;
-  }
+  color: abstract.$colour-black;
 }
 
 @media screen and (max-width: abstract.$smallish) {

@@ -24,6 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
+  faLocationCrosshairs,
   faMagnifyingGlass,
   faTableList,
 } from '@fortawesome/free-solid-svg-icons';
@@ -163,6 +164,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
+  protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
 
