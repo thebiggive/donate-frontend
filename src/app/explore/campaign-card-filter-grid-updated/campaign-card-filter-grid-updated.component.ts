@@ -372,7 +372,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleNearMeButtonPressed = () => {
-    this.matomoTracker.trackEvent('search', 'near_me_button_clicked');
+    this.matomoTracker.trackEvent('search', 'geo_chosen', 'Near me button clicked');
     this.unfocusTextInput();
     this.doGetGeoLocationFromBrowser.emit();
   };
@@ -700,8 +700,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           marker.on('click', () => {
             this.matomoTracker.trackEvent(
               'search',
-              'map_region_marker_clicked',
-              areaName || childCountObj?.regionCode || '',
+              'geo_chosen',
+              `Region clicked: ${areaName || childCountObj?.regionCode || ''}`,
             );
             this.location = undefined;
             this.doClearGeoLocation.emit();
@@ -759,8 +759,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           marker.on('click', () => {
             this.matomoTracker.trackEvent(
               'search',
-              'map_region_marker_clicked',
-              areaName || countObj?.regionCode || '',
+              'geo_chosen',
+              `Region clicked: ${areaName || countObj?.regionCode || ''}`,
             );
             this.location = undefined;
             this.doClearGeoLocation.emit();
