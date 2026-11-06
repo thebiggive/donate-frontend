@@ -18,13 +18,6 @@
           </div>
           <biggive-button (doButtonClick)="handleSearchButtonPressed()" label="Search" full-width="true" />
         </div>
-        <biggive-button
-          class="filter-clear"
-          colourScheme="primary-outline"
-          (doButtonClick)="handleClearAll()"
-          label="Clear all"
-          space-below="1"
-        ></biggive-button>
       </div>
       <div class="sort-filter-wrap">
         <div class="filter-wrap">
@@ -67,6 +60,33 @@
       <div class="filter-wrap countries-themes">
         @if (searchResult()?.countries; as countries) {
           <div class="selected-filters" role="group" aria-label="Filter by location">
+            <biggive-button
+              label="More Locations"
+              (doButtonClick)="handleFilterButtonClick()"
+              size="small"
+              colourScheme="primary-outline"
+              aria-label="Open filter dialogue for more locations"
+            ></biggive-button>
+
+            @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
+              <!-- Essentially matching biggive-button style here. We've not used biggive-icon-button in this app yet,
+              so safer to do this. -->
+              <button
+                type="button"
+                class="button locate"
+                (click)="handleNearMeButtonPressed()"
+                aria-label="Filter by campaigns near me"
+              >
+                <fa-icon
+                  [icon]="faLocationCrosshairs"
+                  role="presentation"
+                  class="icon"
+                  [style]="{ 'vertical-align': '0.5em' }"
+                ></fa-icon>
+                Near me
+              </button>
+            }
+
             @if (selectedFilterLocation) {
               @let country = getSelectedCountry(countries);
 
@@ -100,31 +120,6 @@
                 [attr.aria-label]="'Filter by ' + country.country + ' (' + country.numCampaigns + ' campaigns)'"
               >
                 {{ country.country }} ({{ country.numCampaigns }})
-              </button>
-            }
-            <button
-              type="button"
-              class="button more"
-              (click)="handleFilterButtonClick()"
-              aria-label="Open filter dialogue for more locations"
-            >
-              More Locations
-            </button>
-
-            @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-              <button
-                type="button"
-                class="button locate"
-                (click)="handleNearMeButtonPressed()"
-                aria-label="Filter by campaigns near me"
-              >
-                <fa-icon
-                  [icon]="faLocationCrosshairs"
-                  role="presentation"
-                  class="icon"
-                  [style]="{ 'vertical-align': '0.5em' }"
-                ></fa-icon>
-                Near me
               </button>
             }
           </div>
@@ -178,6 +173,17 @@
             </button>
           </div>
         }
+
+        <div>
+          <biggive-button
+            class="filter-clear"
+            size="small"
+            colourScheme="primary-outline"
+            (doButtonClick)="handleClearAll()"
+            label="Clear all filters"
+            space-below="1"
+          ></biggive-button>
+        </div>
       </div>
     </section>
     <div class="sort-wrap">

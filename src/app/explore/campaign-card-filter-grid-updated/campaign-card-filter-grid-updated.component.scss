@@ -43,8 +43,7 @@
   .search-wrap {
     // @include lower-shadow(); <-- commented out because content of lower-shadow mixin in stencil is commented out
     background-color: abstract.$colour-white;
-    padding: abstract.$spacer-3 abstract.$spacer-4;
-    margin-bottom: abstract.$spacer-3;
+    padding: abstract.$spacer-1 abstract.$spacer-2;
 
     h4 {
       margin-bottom: abstract.$spacer-3;
@@ -108,17 +107,14 @@
       background-position: right 20px center;
       background-size: 12px auto;
     }
-    &.more {
-      border: 1px solid abstract.$colour-primary;
-      background-color: abstract.$colour-white;
-      color: abstract.$colour-primary;
-    }
     &.locate {
-      // Tweaks to allow for the size of the locate crosshair icon. These adjustments make the button marginally
+      // Tweaks to match biggive-button and allow for the size of the locate crosshair icon. These adjustments make the button marginally
       // taller than its neighbours but with their top positions aligning, which seems like the least bad option for now.
+      font-size: 16px;
       padding-top: 0;
       margin-bottom: 2px;
       border-width: 0;
+      border-radius: 5px;
       background-color: abstract.$colour-primary;
       color: abstract.$colour-black-contrast;
       fa-icon {
@@ -154,7 +150,6 @@
 .sort-filter-wrap {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: abstract.$spacer-4;
   padding: 0;
   text-align: right;
   .clear-all {
@@ -169,8 +164,6 @@
   }
 
   .filter-wrap {
-    background-color: abstract.$colour-background; // temp for testing dropdown
-
     margin-left: abstract.$spacer-3;
   }
 }
