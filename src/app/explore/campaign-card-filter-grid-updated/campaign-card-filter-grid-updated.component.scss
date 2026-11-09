@@ -110,17 +110,23 @@
       background-size: 10px auto;
     }
     &.locate {
-      // Tweaks to match biggive-button and allow for the size of the locate crosshair icon. These adjustments make the button marginally
-      // taller than its neighbours but with their top positions aligning, which seems like the least bad option for now.
+      display: inline-flex;
+      align-items: center;
       font-size: 16px;
-      margin: -6px abstract.$spacer-1 2px abstract.$spacer-1;
-      padding-bottom: 6px;
-      border-width: 0;
+      line-height: 22px;
+      padding: 5px 15px;
+      margin: 0 0 4px 0;
+      border: 1px solid abstract.$colour-primary;
       border-radius: 5px;
       background-color: abstract.$colour-primary;
       color: abstract.$colour-black-contrast;
+      box-sizing: border-box;
+
       fa-icon {
         color: abstract.$colour-white;
+        position: static;
+        top: 0;
+        margin: 0 6px 0 0;
       }
     }
   }
@@ -183,6 +189,24 @@
   color: abstract.$colour-black;
 }
 
+.sort-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: abstract.$spacer-2;
+  margin-right: abstract.$spacer-2;
+  gap: abstract.$spacer-2;
+
+  #sort-by {
+    display: block;
+    width: 22em;
+    max-width: 55%;
+    min-width: min(22em, 55%);
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}
+
 @media screen and (max-width: abstract.$smallish) {
   .sort-wrap {
     margin-top: 20px;
@@ -193,17 +217,11 @@
 @media screen and (max-width: 350px) {
   .sort-wrap {
     margin-left: 0;
+    margin-right: 0;
   }
   .filter-wrap {
     margin-left: 3px;
   }
-}
-
-.sort-wrap {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin-right: abstract.$spacer-2;
 }
 
 .align-right {
@@ -417,7 +435,9 @@ fa-icon {
 
 .campaigns-for-list {
   color: abstract.$colour-primary;
-  margin-left: 10px;
+  margin: 0;
+  align-self: center;
+  min-width: 0;
 }
 
 .filter-wrap.countries-themes {
@@ -437,6 +457,7 @@ fa-icon {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      gap: abstract.$spacer-2;
       margin-bottom: 7px;
     }
 
