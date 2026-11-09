@@ -650,6 +650,12 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         }
 
         const count = countObj !== undefined ? countObj.numCampaigns : 0;
+        if (count === 0) {
+          // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+          // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+          // south of North West England etc.
+          return;
+        }
         const areaName = feature.properties?.['name'] || '';
 
         const markerClass = isSelected ? 'campaign-count-marker selected' : 'campaign-count-marker';
@@ -704,6 +710,12 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
           );
 
           const count = childCountObj!.numCampaigns;
+          if (count === 0) {
+            // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+            // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+            // south of North West England etc.
+            return;
+          }
           const areaName = feature.properties?.['name'] || '';
 
           // todo - show counts for child regions as well. Currently not sent from matchbot.
@@ -759,8 +771,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
           const areaName = feature.properties?.['name'] || '';
           const count = countObj?.numCampaigns || 0;
+          if (count === 0) {
+            // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+            // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+            // south of North West England etc.
+            return;
+          }
 
-          // todo - show counts for child regions as well. Currently not sent from matchbot.
           const markerIcon = new DivIcon({
             className: 'campaign-count-marker-container',
             html: `<button type="button" class="campaign-count-marker" aria-label="${areaName}">${count}</button>`,
