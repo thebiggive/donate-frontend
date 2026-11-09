@@ -200,10 +200,14 @@
   #sort-by {
     display: block;
     width: 22em;
-    max-width: 55%;
-    min-width: min(22em, 55%);
-    flex-shrink: 0;
+    max-width: 100%;
     margin-left: auto;
+
+    &:not(:only-child) {
+      max-width: 55%;
+      min-width: min(22em, 55%);
+      flex-shrink: 0;
+    }
   }
 }
 

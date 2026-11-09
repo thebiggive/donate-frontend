@@ -187,7 +187,7 @@
       </div>
     </section>
     <div class="sort-wrap">
-      @if (individualCampaigns() && searchResult()?.UKFilterRegions) {
+      @if (individualCampaigns() && searchResult()?.UKFilterRegions && searchResult()?.UKFilterRegions?.length) {
         <p class="campaigns-for-list">
           Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
         </p>
