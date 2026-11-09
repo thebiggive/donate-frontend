@@ -222,7 +222,14 @@
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
             <div class="full-screen-map-button-container">
-              <biggive-button (doButtonClick)="onZoomOutClicked()" [label]="zoomOutLabel" />
+              <button
+                type="button"
+                class="zoom-out-button"
+                (click)="onZoomOutClicked()"
+                [attr.aria-label]="zoomOutLabel"
+              >
+                {{ zoomOutLabel }}
+              </button>
             </div>
           }
 

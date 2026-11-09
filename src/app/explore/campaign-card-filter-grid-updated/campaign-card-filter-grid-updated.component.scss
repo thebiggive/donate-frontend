@@ -391,6 +391,29 @@ fa-icon {
     display: none;
   }
 
+  .zoom-out-button {
+    font-size: 17px;
+    line-height: 24px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    border: 1px solid abstract.$colour-primary;
+    background-color: abstract.$colour-primary;
+    color: abstract.$colour-white;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all ease-in-out 0.5s;
+
+    &:hover,
+    &:focus-visible {
+      background-color: abstract.$colour-white;
+      color: abstract.$colour-primary;
+      outline: none;
+    }
+  }
+
   .fullScreenMap {
     position: fixed !important; // important to override leaflet's library setting to position: relative
     top: 0;
