@@ -62,7 +62,7 @@
           <div class="selected-filters" role="group" aria-label="Filter by location">
             <div class="filter-actions">
               <biggive-button
-                label="Filter locations"
+                label="More filter locations"
                 (doButtonClick)="handleFilterButtonClick()"
                 size="small"
                 colourScheme="primary-outline"
@@ -82,7 +82,7 @@
                     [icon]="faLocationCrosshairs"
                     role="presentation"
                     class="icon"
-                    [style]="{ 'vertical-align': '0.5em' }"
+                    [style]="{ 'vertical-align': '0.6em' }"
                   ></fa-icon>
                   Near me
                 </button>
@@ -132,7 +132,7 @@
           <div class="selected-filters" role="group" aria-label="Filter by theme">
             <div class="filter-actions">
               <biggive-button
-                label="Filter themes"
+                label="More filter themes"
                 (doButtonClick)="handleFilterButtonClick()"
                 size="small"
                 colourScheme="primary-outline"
@@ -192,6 +192,12 @@
       </div>
     </section>
     <div class="sort-wrap">
+      @if (individualCampaigns() && searchResult()?.UKFilterRegions) {
+        <p class="campaigns-for-list">
+          Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
+        </p>
+      }
+
       <biggive-form-field-select
         backgroundColour="grey"
         prompt="Sort by"
@@ -209,11 +215,6 @@
       <h3 class="visually-hidden">Campaign Results</h3>
       <div class="campaign-grid">
         @if (individualCampaigns()) {
-          @if (searchResult()?.UKFilterRegions) {
-            <p class="campaigns-for-list">
-              Campaigns for {{searchResult()?.UKFilterRegions?.map(region => region.name)?.join(' and ') }}
-            </p>
-          }
           <app-campaign-summary-grid
             (scrolled)="emitOnScroll()"
             [individualCampaigns]="individualCampaigns()"

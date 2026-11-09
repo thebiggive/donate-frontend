@@ -28,10 +28,10 @@
 }
 
 .container {
-  //@include standard-font();
   position: relative;
   .search-filter-wrap {
     background-color: abstract.$colour-white;
+    border: solid 1px abstract.$colour-grey-three-quarter-light;
     margin-left: abstract.$spacer-2;
     margin-right: abstract.$spacer-2;
     padding-right: abstract.$spacer-2;
@@ -85,7 +85,7 @@
   margin-bottom: 23px;
   padding: 0;
   .button {
-    font-size: 0.85rem;
+    font-size: 1rem;
     margin-bottom: 6px;
     display: inline-block;
     cursor: pointer;
@@ -113,9 +113,8 @@
       // Tweaks to match biggive-button and allow for the size of the locate crosshair icon. These adjustments make the button marginally
       // taller than its neighbours but with their top positions aligning, which seems like the least bad option for now.
       font-size: 16px;
-      padding-top: 0;
-      margin: 0 0 2px abstract.$spacer-1;
-      padding-bottom: abstract.$spacer-2;
+      margin: -6px abstract.$spacer-1 2px abstract.$spacer-1;
+      padding-bottom: 6px;
       border-width: 0;
       border-radius: 5px;
       background-color: abstract.$colour-primary;
@@ -201,9 +200,10 @@
 }
 
 .sort-wrap {
-  float: right;
-  width: 19em;
-  padding-right: abstract.$spacer-2;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-right: abstract.$spacer-2;
 }
 
 .align-right {
@@ -416,6 +416,7 @@ fa-icon {
 }
 
 .campaigns-for-list {
+  color: abstract.$colour-primary;
   margin-left: 10px;
 }
 

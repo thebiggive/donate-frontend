@@ -180,6 +180,6 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(themeGroup).toBeTruthy();
     const moreThemesBtn = themeGroup.querySelector('.filter-actions biggive-button');
     expect(moreThemesBtn).toBeTruthy();
-    expect(moreThemesBtn.getAttribute('label')).toBe('Filter themes');
+    expect(moreThemesBtn.getAttribute('label')).toBe('More filter themes');
   });
 });

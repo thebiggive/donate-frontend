@@ -862,13 +862,15 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected getVisibleCountries(
     countries: { country: string; numCampaigns: number }[],
   ): { country: string; numCampaigns: number }[] {
-    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, 3);
+    const nonSelectedMaxCount = this.selectedFilterLocation === null ? 3 : 2;
+    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, nonSelectedMaxCount);
   }
 
   protected getVisibleThemes(
     themes: { theme: string; numCampaigns: number }[],
   ): { theme: string; numCampaigns: number }[] {
-    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, 3);
+    const nonSelectedMaxCount = this.selectedFilterTheme === null ? 3 : 2;
+    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, nonSelectedMaxCount);
   }
 
   protected getSelectedCountry(
