@@ -412,7 +412,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Also saves results for imminent future navigation to the same meta-campaign + filters.
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
-    console.log('will call campaignService.search with query', query);
+    if (!this.environment.productionLike) {
+      console.log('will call campaignService.search with query', query);
+    }
+
     this.campaignService.search(query as SearchQuery).subscribe({
       next: async (result: CampaignSummaryList) => {
         this.lastFailedCampaignSearch = undefined;
@@ -497,6 +500,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
+    this.matomoTracker.trackEvent('search', 'retry_search_clicked');
     this.filterError = false;
     this.loading = true;
     this.doCampaignSearch(lastFailedSearch.query, lastFailedSearch.clearExisting);
@@ -728,10 +732,14 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.location = position;
         this.searchService.selected['country'] = 'United Kingdom'; // we only support GeoLocations in UK
         this.searchService.sort('location');
+        const roundedLat = position.coords.latitude.toFixed(2);
+        const roundedLong = position.coords.longitude.toFixed(2);
+        this.matomoTracker.trackEvent('search', 'geolocation_search_success', `${roundedLat},${roundedLong}`);
         this.changeDetectorRef.markForCheck();
       },
       (error: GeolocationPositionError) => {
         this.fetchingLocation = false;
+        this.matomoTracker.trackEvent('search', 'geolocation_search_error', error.message);
         this.toaster.showError('Error getting your location: ' + error.message);
         this.changeDetectorRef.markForCheck();
         // todo - if the use denies the prompt show them a message explaining how they can manaully give the permission from their browser,
@@ -761,6 +769,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   protected clearGeoLocation() {
+    this.matomoTracker.trackEvent('search', 'clear_geolocation');
     this.location = undefined;
     this.searchService.sort(this.defaultSort);
   }

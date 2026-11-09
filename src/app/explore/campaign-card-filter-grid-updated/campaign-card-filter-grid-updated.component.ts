@@ -24,6 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
+  faLocationCrosshairs,
   faMagnifyingGlass,
   faTableList,
 } from '@fortawesome/free-solid-svg-icons';
@@ -36,6 +37,7 @@ import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.mod
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 import { CampaignGroupsService } from '../../campaign-groups.service';
+import { MatomoTracker } from 'ngx-matomo-client';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -57,6 +59,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
   styleUrl: './campaign-card-filter-grid-updated.component.scss',
 })
 export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);
@@ -163,6 +166,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
+  protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
 
@@ -292,6 +296,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
+    this.matomoTracker.trackEvent('search', 'sort_option_changed', String(value));
     // @ts-expect-error getting Type string is not assignable to type sortOptionLabel | null . Maybe somethign we can 'grandfather' from before port from stencil.
     this.selectedSortByOption = value;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -308,6 +313,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected handleApplyFilterButtonClick = () => {
+    this.matomoTracker.trackEvent('search', 'filter_popup_applied');
     this.selectedFilterTheme = this.newSelectedFilterTheme ?? this.selectedFilterTheme;
     this.selectedFilterLocation = this.newSelectedFilterLocation ?? this.selectedFilterLocation;
 
@@ -327,6 +333,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected removeFilter(filterKey: 'locations' | 'themes') {
+    this.matomoTracker.trackEvent('search', 'remove_filter_clicked', filterKey);
     switch (filterKey) {
       case 'themes':
         this.selectedFilterTheme = null;
@@ -354,6 +361,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected handleSearchButtonPressed = () => {
+    this.matomoTracker.trackEvent('search', 'search_button_clicked', this.searchText || '');
     this.unfocusTextInput();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     this.hasSearchTerm.set(!!this.searchText && this.searchText.length > 0);
@@ -364,6 +372,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleNearMeButtonPressed = () => {
+    this.matomoTracker.trackEvent('search', 'geo_chosen', 'Near me button clicked');
     this.unfocusTextInput();
     this.doGetGeoLocationFromBrowser.emit();
   };
@@ -377,12 +386,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected handleEnterPressed = (ev: Event) => {
     const keyboardEvent = ev as KeyboardEvent;
     if (keyboardEvent.key === 'Enter') {
+      this.matomoTracker.trackEvent('search', 'search_enter_pressed', this.searchText || '');
       this.unfocusTextInput();
       this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
   };
 
   protected handleFilterButtonClick = () => {
+    this.matomoTracker.trackEvent('search', 'filter_popup_opened');
     this.newSelectedFilterTheme = this.selectedFilterTheme;
     this.newSelectedFilterLocation = this.selectedFilterLocation;
 
@@ -393,6 +404,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleClearAll = () => {
+    this.matomoTracker.trackEvent('search', 'clear_filters_clicked');
     this.unfocusTextInput();
 
     // Set the 'Filters' button back to the primary background colour
@@ -526,6 +538,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected makeMapFullScreen() {
+    this.matomoTracker.trackEvent('search', 'map_fullscreen_entered');
     this.fullScreenMapMode.set(true);
     this.map.attributionControl.setPosition('topright');
     setTimeout(() => this.map.invalidateSize(), 0);
@@ -631,6 +644,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
         if (!isSelected) {
           marker.on('click', () => {
+            this.matomoTracker.trackEvent('search', 'map_region_marker_clicked', areaName || regionCode || '');
             this.location = undefined;
             this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = countObj!.regionCode;
@@ -684,6 +698,11 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.matomoTracker.trackEvent(
+              'search',
+              'geo_chosen',
+              `Region clicked: ${areaName || childCountObj?.regionCode || ''}`,
+            );
             this.location = undefined;
             this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = childCountObj!.regionCode;
@@ -738,6 +757,11 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.matomoTracker.trackEvent(
+              'search',
+              'geo_chosen',
+              `Region clicked: ${areaName || countObj?.regionCode || ''}`,
+            );
             this.location = undefined;
             this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = countObj!.regionCode;
@@ -759,6 +783,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       title: 'Exit full screen map',
     }).addTo(this.map);
     exitFullScreenMarker.on('click', () => {
+      this.matomoTracker.trackEvent('search', 'map_fullscreen_exited');
       this.fullScreenMapMode.set(false);
       this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
@@ -810,6 +835,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected onZoomOutClicked(): void {
+    this.matomoTracker.trackEvent('search', 'map_zoom_out_clicked', this.zoomOutLabel);
     this.selectedFilterUKRegion = this.searchResult()?.parentRegion?.code ?? null;
     this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -822,11 +848,13 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected replaceCountryFilter(location: string) {
+    this.matomoTracker.trackEvent('search', 'quick_filter_country_selected', location);
     this.selectedFilterLocation = location;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   protected replaceThemeFilter(theme: string) {
+    this.matomoTracker.trackEvent('search', 'quick_filter_theme_selected', theme);
     this.selectedFilterTheme = theme;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
@@ -834,13 +862,15 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected getVisibleCountries(
     countries: { country: string; numCampaigns: number }[],
   ): { country: string; numCampaigns: number }[] {
-    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, 3);
+    const nonSelectedMaxCount = this.selectedFilterLocation === null ? 3 : 2;
+    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, nonSelectedMaxCount);
   }
 
   protected getVisibleThemes(
     themes: { theme: string; numCampaigns: number }[],
   ): { theme: string; numCampaigns: number }[] {
-    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, 3);
+    const nonSelectedMaxCount = this.selectedFilterTheme === null ? 3 : 2;
+    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, nonSelectedMaxCount);
   }
 
   protected getSelectedCountry(

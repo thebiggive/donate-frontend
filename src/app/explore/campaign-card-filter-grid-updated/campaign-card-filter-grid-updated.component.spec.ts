@@ -1,20 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignCardFilterGridUpdatedComponent } from './campaign-card-filter-grid-updated.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MatomoModule, MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { of } from 'rxjs';
 
 describe('CampaignCardFilterGridComponent', () => {
   let component: CampaignCardFilterGridUpdatedComponent;
   let fixture: ComponentFixture<CampaignCardFilterGridUpdatedComponent>;
   let httpClient: HttpClient;
+  let matomoTracker: MatomoTracker;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CampaignCardFilterGridUpdatedComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
+      ],
     }).compileComponents();
 
     httpClient = TestBed.inject(HttpClient);
+    matomoTracker = TestBed.inject(MatomoTracker);
     spyOn(httpClient, 'get').and.returnValue(of({ type: 'FeatureCollection', features: [] }));
 
     fixture = TestBed.createComponent(CampaignCardFilterGridUpdatedComponent);
@@ -134,6 +144,7 @@ describe('CampaignCardFilterGridComponent', () => {
   });
 
   it('should emit doSearchAndFilterUpdate with null filterTheme when removeFilter is called for themes', () => {
+    const trackEventSpy = spyOn(matomoTracker, 'trackEvent');
     component.selectedFilterTheme = 'Religious';
     let emittedValue: { filterTheme?: string | null } | undefined;
     component.doSearchAndFilterUpdate.subscribe((val) => {
@@ -144,5 +155,31 @@ describe('CampaignCardFilterGridComponent', () => {
 
     expect(component.selectedFilterTheme).toBeNull();
     expect(emittedValue?.filterTheme).toBeNull();
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'remove_filter_clicked', 'themes');
+  });
+
+  it('should track search button clicks and sort selection changes', () => {
+    const trackEventSpy = spyOn(matomoTracker, 'trackEvent');
+    component.searchText = 'cats';
+
+    (component as unknown as { handleSearchButtonPressed: () => void }).handleSearchButtonPressed();
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'search_button_clicked', 'cats');
+
+    (component as unknown as { sortBySelectionChanged: (val: string) => void }).sortBySelectionChanged('Closest');
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'sort_option_changed', 'Closest');
+  });
+
+  it('should render More Themes button in filter-actions when themes are provided', () => {
+    fixture.componentRef.setInput('searchResult', {
+      countries: [{ country: 'United Kingdom', numCampaigns: 5 }],
+      themes: [{ theme: 'Health', numCampaigns: 10 }],
+    } as unknown);
+    fixture.detectChanges();
+
+    const themeGroup = fixture.nativeElement.querySelector('[aria-label="Filter by theme"]');
+    expect(themeGroup).toBeTruthy();
+    const moreThemesBtn = themeGroup.querySelector('.filter-actions biggive-button');
+    expect(moreThemesBtn).toBeTruthy();
+    expect(moreThemesBtn.getAttribute('label')).toBe('More filter themes');
   });
 });
