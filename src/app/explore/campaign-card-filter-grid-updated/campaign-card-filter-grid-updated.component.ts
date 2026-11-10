@@ -64,6 +64,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);
   protected currentSortByOption = signal<sortOptionLabel | null>(null);
+  protected readonly campaignDrawerOpen = signal(false);
 
   protected locationSortAvailable = computed(() => {
     return (
@@ -104,6 +105,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
+  protected readonly enableMapFullScreenMobileMode = flags.enableMapFullScreenMobileMode;
 
   /**
    * Selected location around which donor is looking for campaigns
@@ -526,8 +528,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
     return Object.entries(options).map((entry) => ({ value: entry[0], label: entry[1] }));
   }
-
-  protected readonly campaignDrawerOpen = signal(false);
 
   private locationFilterIsUK(location: string | null) {
     return location === 'United Kingdom';

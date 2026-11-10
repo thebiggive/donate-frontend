@@ -233,14 +233,16 @@
             </div>
           }
 
-          <div class="full-screen-map-button-container">
-            <fa-icon
-              tabindex="0"
-              [icon]="faExpandArrows"
-              (click)="makeMapFullScreen()"
-              class="full-screen-map-button"
-            ></fa-icon>
-          </div>
+          @if (enableMapFullScreenMobileMode) {
+            <div class="full-screen-map-button-container">
+              <fa-icon
+                tabindex="0"
+                [icon]="faExpandArrows"
+                (click)="makeMapFullScreen()"
+                class="full-screen-map-button"
+              ></fa-icon>
+            </div>
+          }
         </div>
 
         @if (fullScreenMapMode()) {
