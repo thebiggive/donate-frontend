@@ -402,8 +402,9 @@ fa-icon {
     // standardise on margins for both.
     margin-top: 16px;
     border-radius: 5px;
-    background-color: abstract.$colour-primary;
-    color: abstract.$colour-white;
+    border-color: abstract.$colour-primary;
+    color: abstract.$colour-primary;
+    background-color: abstract.$colour-white;
     display: inline-block;
     text-decoration: none;
     text-align: center;
@@ -412,8 +413,8 @@ fa-icon {
 
     &:hover,
     &:focus-visible {
-      background-color: abstract.$colour-white;
-      color: abstract.$colour-primary;
+      background-color: abstract.$colour-primary;
+      color: abstract.$colour-white;
       outline: none;
     }
   }
