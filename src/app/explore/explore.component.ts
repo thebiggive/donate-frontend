@@ -111,6 +111,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   individualCampaigns: CampaignSummary[] = [];
   loading = false; // Server render gets initial result set; set true when filters change.
+  loadingMore = false;
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
@@ -344,6 +345,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
+    if (this.loading || this.loadingMore) {
+      return;
+    }
+
     const cardsPerRow = window.innerWidth < 600 ? 1 : window.innerWidth < 968 ? 2 : 3;
     const safeNumberOfRows = 2 + (500 + window.scrollY) / 450; // Allow 500px for top stuff; 450px per card row; 2 spare rows
     const safeNumberToLoad = cardsPerRow * safeNumberOfRows;
@@ -380,7 +385,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
-    this.loading = true;
+    this.loadingMore = true;
     const query = this.campaignService.buildQuery({
       selected: this.searchService.selected,
       offset: this.offset,
@@ -411,18 +416,21 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         this.searchResult.set(result);
 
         this.loading = false;
+        this.loadingMore = false;
 
-        this.highlightAreas = await getHighlightedFeatures(
-          // the change here shouldn't be necassary now that we separately add a GeoJSON based on the childRegions
-          // to the map inside campaign-card-filter-grid component, but in manual testing it seems to be required
-          // otherwise I don't see the child regions at all. Not sure why yet.
-          [
-            ...(this.searchService.selected['ukRegion']
-              ? [this.searchService.selected['ukRegion']]
-              : this.locationCounts?.map((count) => count.regionCode) || []),
-          ],
-          this.http,
-        );
+        if (clearExisting) {
+          this.highlightAreas = await getHighlightedFeatures(
+            // the change here shouldn't be necassary now that we separately add a GeoJSON based on the childRegions
+            // to the map inside campaign-card-filter-grid component, but in manual testing it seems to be required
+            // otherwise I don't see the child regions at all. Not sure why yet.
+            [
+              ...(this.searchService.selected['ukRegion']
+                ? [this.searchService.selected['ukRegion']]
+                : this.locationCounts?.map((count) => count.regionCode) || []),
+            ],
+            this.http,
+          );
+        }
 
         this.changeDetectorRef.detectChanges();
 
@@ -473,6 +481,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         );
         this.filterError = true;
         this.loading = false;
+        this.loadingMore = false;
       },
     });
   }
@@ -487,6 +496,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.matomoTracker.trackEvent('search', 'retry_search_clicked');
     this.filterError = false;
     this.loading = true;
+    this.loadingMore = false;
     this.doCampaignSearch(lastFailedSearch.query, lastFailedSearch.clearExisting);
   }
 
@@ -508,43 +518,47 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       geoLocationPosition: this.location,
     });
     this.loading = true;
+    this.loadingMore = false;
 
-    if (!isPlatformBrowser(this.platformId)) {
-      // Server renders don't need the scroll restoration help
-      this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
-      return;
-    }
+    // TODO make the removal of saved results for scroll restoration permanent, if this doesn't seem to cause any issues
+    // now we have other related changes Nov '26.
 
-    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
-    // Only an exact query match should reinstate the same child campaigns on load.
-    if (
-      recentChildrenData &&
-      recentChildrenData.time > Date.now() - 60000 * this.recentChildrenMaxMinutes &&
-      recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
-    ) {
-      this.individualCampaigns = recentChildrenData.children;
-      // We need to separately reinstate the offset, while excluding it from the normalised query params
-      // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
-      // campaigns still works after we reinstate the existing children.
-      this.offset = recentChildrenData.offset;
-      this.highlightAreas = recentChildrenData.highlightAreas;
-      this.locationCounts = recentChildrenData.locationCounts;
-      this.searchResult.set(recentChildrenData);
+    // if (!isPlatformBrowser(this.platformId)) {
+    // Server renders don't need the scroll restoration help
+    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
+    // return;
+    // }
 
-      // Auto scrolling without a significant extra wait only works when
-      // the child campaigns were quickly loaded from local state from
-      // a recent page view.
-      if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
-        this.shouldAutoScroll = true;
-      }
-
-      this.loading = false;
-
-      return;
-    }
+    // const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
+    // // Only an exact query match should reinstate the same child campaigns on load.
+    // if (
+    //   recentChildrenData &&
+    //   recentChildrenData.time > Date.now() - 60000 * this.recentChildrenMaxMinutes &&
+    //   recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
+    // ) {
+    //   this.individualCampaigns = recentChildrenData.children;
+    //   // We need to separately reinstate the offset, while excluding it from the normalised query params
+    //   // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
+    //   // campaigns still works after we reinstate the existing children.
+    //   this.offset = recentChildrenData.offset;
+    //   this.highlightAreas = recentChildrenData.highlightAreas;
+    //   this.locationCounts = recentChildrenData.locationCounts;
+    //   this.searchResult.set(recentChildrenData);
+    //
+    //   // Auto scrolling without a significant extra wait only works when
+    //   // the child campaigns were quickly loaded from local state from
+    //   // a recent page view.
+    //   if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
+    //     this.shouldAutoScroll = true;
+    //   }
+    //
+    //   this.loading = false;
+    //
+    //   return;
+    // }
 
     // Else need to load children newly in browser.
-    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
+    // this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
   }
 
   /**
