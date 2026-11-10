@@ -520,45 +520,41 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.loading = true;
     this.loadingMore = false;
 
-    // TODO make the removal of saved results for scroll restoration permanent, if this doesn't seem to cause any issues
-    // now we have other related changes Nov '26.
+    if (!isPlatformBrowser(this.platformId)) {
+      // Server renders don't need the scroll restoration help
+      this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
+      return;
+    }
 
-    // if (!isPlatformBrowser(this.platformId)) {
-    // Server renders don't need the scroll restoration help
-    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
-    // return;
-    // }
+    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
+    // Only an exact query match should reinstate the same child campaigns on load.
+    if (
+      recentChildrenData &&
+      recentChildrenData.time > Date.now() - 60000 * this.recentChildrenMaxMinutes &&
+      recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
+    ) {
+      this.individualCampaigns = recentChildrenData.children;
+      // We need to separately reinstate the offset, while excluding it from the normalised query params
+      // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
+      // campaigns still works after we reinstate the existing children.
+      this.offset = recentChildrenData.offset;
+      this.highlightAreas = recentChildrenData.highlightAreas;
+      this.locationCounts = recentChildrenData.locationCounts;
+      this.searchResult.set(recentChildrenData);
 
-    // const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
-    // // Only an exact query match should reinstate the same child campaigns on load.
-    // if (
-    //   recentChildrenData &&
-    //   recentChildrenData.time > Date.now() - 60000 * this.recentChildrenMaxMinutes &&
-    //   recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
-    // ) {
-    //   this.individualCampaigns = recentChildrenData.children;
-    //   // We need to separately reinstate the offset, while excluding it from the normalised query params
-    //   // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
-    //   // campaigns still works after we reinstate the existing children.
-    //   this.offset = recentChildrenData.offset;
-    //   this.highlightAreas = recentChildrenData.highlightAreas;
-    //   this.locationCounts = recentChildrenData.locationCounts;
-    //   this.searchResult.set(recentChildrenData);
-    //
-    //   // Auto scrolling without a significant extra wait only works when
-    //   // the child campaigns were quickly loaded from local state from
-    //   // a recent page view.
-    //   if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
-    //     this.shouldAutoScroll = true;
-    //   }
-    //
-    //   this.loading = false;
-    //
-    //   return;
-    // }
+      // Auto scrolling without a significant extra wait only works when
+      // the child campaigns were quickly loaded from local state from
+      // a recent page view.
+      if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
+        this.shouldAutoScroll = true;
+      }
 
+      this.loading = false;
+
+      return;
+    }
     // Else need to load children newly in browser.
-    // this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
+    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
   }
 
   /**
