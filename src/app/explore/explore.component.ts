@@ -501,9 +501,10 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private normaliseQueryForRecentChildrenComparison(query: SearchQuery): string {
-    delete query.offset;
+    const queryCopy = { ...query };
+    delete queryCopy.offset;
 
-    return JSON.stringify(query); // We don't want to get into object key / true equality comparisons, so just JSON it.
+    return JSON.stringify(queryCopy); // We don't want to get into object key / true equality comparisons, so just JSON it.
   }
 
   private run() {
