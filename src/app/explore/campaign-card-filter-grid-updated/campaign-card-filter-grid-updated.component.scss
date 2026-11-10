@@ -36,24 +36,24 @@
     margin-right: abstract.$spacer-2;
     padding-right: abstract.$spacer-2;
     padding-left: abstract.$spacer-2;
-    padding-bottom: abstract.$spacer-3;
+    padding-bottom: abstract.$spacer-1;
     margin-bottom: abstract.$spacer-3;
   }
 
   .search-wrap {
     // @include lower-shadow(); <-- commented out because content of lower-shadow mixin in stencil is commented out
     background-color: abstract.$colour-white;
-    padding: abstract.$spacer-1 abstract.$spacer-2;
+    padding: abstract.$spacer-1;
 
     h4 {
-      margin-bottom: abstract.$spacer-3;
+      margin-bottom: abstract.$spacer-2;
     }
 
     .field-wrap {
       display: flex;
       justify-content: space-between;
       flex-direction: column;
-      gap: abstract.$spacer-4;
+      gap: abstract.$spacer-3;
 
       .input-wrap {
         display: flex;
@@ -87,12 +87,11 @@
   .button {
     font-family: inherit;
     font-size: 1rem;
-    margin-bottom: 6px;
     display: inline-block;
     cursor: pointer;
     border-radius: 17px;
     padding: 4px 17px 4px 17px;
-    margin-right: 13px;
+    margin: 2px 13px 0 0;
     background: abstract.$colour-white;
     color: abstract.$colour-black;
     border: 1px solid abstract.$colour-secondary;
@@ -130,6 +129,9 @@
         top: 0;
         margin: 0 6px 0 0;
       }
+    }
+    &.open-filters {
+      flex-grow: 1;
     }
   }
   .clear-all {
@@ -214,19 +216,12 @@
 }
 
 @media screen and (max-width: abstract.$smallish) {
+  .filter-actions {
+    width: 100%;
+  }
   .sort-wrap {
     margin-top: 20px;
     margin-bottom: 20px;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .sort-wrap {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .filter-wrap {
-    margin-left: 3px;
   }
 }
 
@@ -480,19 +475,20 @@ fa-icon {
   flex-direction: column;
   gap: abstract.$spacer-4;
 
+  .filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: abstract.$spacer-1;
+    padding-right: abstract.$spacer-1;
+    align-items: center;
+    gap: abstract.$spacer-2;
+  }
+
   .selected-filters {
     display: flex;
     flex-direction: column;
     gap: 0;
     width: 100%;
-
-    .filter-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: abstract.$spacer-2;
-      margin-bottom: 7px;
-    }
 
     .filter-items {
       display: flex;
