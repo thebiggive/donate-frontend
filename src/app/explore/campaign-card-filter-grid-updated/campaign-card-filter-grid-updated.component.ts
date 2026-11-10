@@ -24,6 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
+  faFilter,
   faLocationCrosshairs,
   faMagnifyingGlass,
   faTableList,
@@ -168,6 +169,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
+  protected faFilter = faFilter;
   protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
@@ -862,32 +864,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
-  }
-
-  protected replaceCountryFilter(location: string) {
-    this.matomoTracker.trackEvent('search', 'quick_filter_country_selected', location);
-    this.selectedFilterLocation = location;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected replaceThemeFilter(theme: string) {
-    this.matomoTracker.trackEvent('search', 'quick_filter_theme_selected', theme);
-    this.selectedFilterTheme = theme;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected getVisibleCountries(
-    countries: { country: string; numCampaigns: number }[],
-  ): { country: string; numCampaigns: number }[] {
-    const nonSelectedMaxCount = this.selectedFilterLocation === null ? 3 : 2;
-    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, nonSelectedMaxCount);
-  }
-
-  protected getVisibleThemes(
-    themes: { theme: string; numCampaigns: number }[],
-  ): { theme: string; numCampaigns: number }[] {
-    const nonSelectedMaxCount = this.selectedFilterTheme === null ? 3 : 2;
-    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, nonSelectedMaxCount);
   }
 
   protected getSelectedCountry(
