@@ -30,7 +30,7 @@
                 [placeholder]="themesPlaceHolderText"
                 [selectedLabel]="selectedFilterTheme"
                 [selectedValue]="selectedFilterTheme"
-                [options]="optionsToArray(this.themeOptions)"
+                [options]="themeOptions()"
                 [selectionChanged]="themeFilterSelectionChanged"
                 id="themes"
                 space-below="2"
@@ -44,7 +44,7 @@
                 [placeholder]="locationsPlaceHolderText"
                 [selectedLabel]="selectedFilterLocation"
                 [selectedValue]="selectedFilterLocation"
-                [options]="optionsToArray(this.locationOptions || [])"
+                [options]="countryOptions()"
                 [selectionChanged]="locationSelectionChanged"
                 id="locations"
                 space-below="2"
@@ -130,7 +130,7 @@
                 (click)="removeFilter('themes')"
                 [attr.aria-label]="'Remove theme filter ' + selectedFilterTheme"
               >
-                {{ selectedFilterTheme }} (0)
+                {{ selectedFilterTheme }}
               </button>
             }
           }

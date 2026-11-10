@@ -37,7 +37,6 @@ import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
-import { CampaignGroupsService } from '../../campaign-groups.service';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -106,7 +105,23 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
    */
   @Input({ required: true }) beneficiaryOptions!: string[];
 
-  protected themeOptions = CampaignGroupsService.getThemeNames();
+  protected themeOptions = computed(() => {
+    return [...(this.searchResult()?.themes || [])]
+      .sort((a, b) => a.theme.localeCompare(b.theme))
+      .map((theme) => ({
+        value: theme.theme,
+        label: `${theme.theme} [${theme.numCampaigns}]`,
+      }));
+  });
+
+  protected countryOptions = computed(() => {
+    return [...(this.searchResult()?.countries || [])]
+      .sort((a, b) => a.country.localeCompare(b.country))
+      .map((country) => ({
+        value: country.country,
+        label: `${country.country} [${country.numCampaigns}]`,
+      }));
+  });
 
   /**
    * JSON array of location key/values
