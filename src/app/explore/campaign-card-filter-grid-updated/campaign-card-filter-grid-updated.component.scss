@@ -82,9 +82,10 @@
 }
 .filter-wrap {
   display: flex;
-  margin-bottom: 23px;
+  margin-bottom: 5px;
   padding: 0;
   .button {
+    font-family: inherit;
     font-size: 1rem;
     margin-bottom: 6px;
     display: inline-block;
@@ -392,6 +393,7 @@ fa-icon {
   }
 
   .zoom-out-button {
+    font-family: inherit;
     font-size: 17px;
     line-height: 24px;
     padding: 10px 30px;
@@ -403,7 +405,6 @@ fa-icon {
     text-decoration: none;
     text-align: center;
     cursor: pointer;
-    font-family: inherit;
     transition: all ease-in-out 0.5s;
 
     &:hover,

@@ -34,6 +34,13 @@ body.primary-colour {
   background-color: abstract.$colour-primary;
 }
 
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
 p,
 li {
   @include abstract.b-rt-0;
