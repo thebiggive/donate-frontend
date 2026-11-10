@@ -30,7 +30,7 @@
                 [placeholder]="themesPlaceHolderText"
                 [selectedLabel]="selectedFilterTheme"
                 [selectedValue]="selectedFilterTheme"
-                [options]="optionsToArray(this.themeOptions)"
+                [options]="themeOptions()"
                 [selectionChanged]="themeFilterSelectionChanged"
                 id="themes"
                 space-below="2"
@@ -44,7 +44,7 @@
                 [placeholder]="locationsPlaceHolderText"
                 [selectedLabel]="selectedFilterLocation"
                 [selectedValue]="selectedFilterLocation"
-                [options]="optionsToArray(this.locationOptions || [])"
+                [options]="countryOptions()"
                 [selectionChanged]="locationSelectionChanged"
                 id="locations"
                 space-below="2"
@@ -58,131 +58,95 @@
         </div>
       </div>
       <div class="filter-wrap countries-themes">
-        @if (searchResult()?.countries; as countries) {
-          <div class="selected-filters" role="group" aria-label="Filter by location">
-            <div class="filter-actions">
-              <biggive-button
-                label="More filter locations"
-                (doButtonClick)="handleFilterButtonClick()"
-                size="small"
-                colourScheme="primary-outline"
-                aria-label="Open filter dialogue for more locations"
-              ></biggive-button>
+        <div class="filter-actions">
+          <!-- Essentially matching biggive-button style for both next buttons. We've not used biggive-icon-button in this app yet,
+    so safer to do this. -->
+          <button
+            type="button"
+            class="button with-icon open-filters"
+            (click)="handleFilterButtonClick()"
+            aria-label="Filter by country or theme"
+          >
+            <fa-icon [icon]="faFilter" role="presentation"></fa-icon>
+            Place or Theme
+          </button>
 
-              @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-                <!-- Essentially matching biggive-button style here. We've not used biggive-icon-button in this app yet,
-                so safer to do this. -->
-                <button
-                  type="button"
-                  class="button locate"
-                  (click)="handleNearMeButtonPressed()"
-                  aria-label="Filter by campaigns near me"
-                >
-                  <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
-                  Near me
-                </button>
-              }
-            </div>
+          @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
+            <button
+              type="button"
+              class="button with-icon"
+              (click)="handleNearMeButtonPressed()"
+              aria-label="Filter by campaigns near me"
+            >
+              <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
+              Near me
+            </button>
+          }
+        </div>
 
-            <div class="filter-items">
-              @if (selectedFilterLocation) {
-                @let country = getSelectedCountry(countries);
+        <div class="filter-items">
+          @if (selectedFilterLocation && searchResult()?.countries; as countries) {
+            @let country = getSelectedCountry(countries);
 
-                @if (country) {
-                  <button
-                    type="button"
-                    class="button selected"
-                    (click)="removeFilter('locations')"
-                    [attr.aria-label]="'Remove location filter ' + country.country"
-                  >
-                    {{ country.country }} ({{ country.numCampaigns }})
-                  </button>
-                } @else {
-                  <!-- country here may be missing because it wasn't in the result set, perhaps because data on server changed or another filter was applied that removed all campaigns for that country -->
-                  <button
-                    type="button"
-                    class="button selected"
-                    (click)="removeFilter('locations')"
-                    [attr.aria-label]="'Remove location filter ' + selectedFilterLocation"
-                  >
-                    {{ selectedFilterLocation }} (0)
-                  </button>
-                }
-              }
-              @for (country of getVisibleCountries(countries); track country.country) {
-                <button
-                  type="button"
-                  class="button"
-                  (click)="replaceCountryFilter(country.country)"
-                  [attr.aria-label]="'Filter by ' + country.country + ' (' + country.numCampaigns + ' campaigns)'"
-                >
-                  {{ country.country }} ({{ country.numCampaigns }})
-                </button>
-              }
-            </div>
-          </div>
-        }
+            @if (country) {
+              <button
+                type="button"
+                class="button selected"
+                (click)="removeFilter('locations')"
+                [attr.aria-label]="'Remove location filter ' + country.country"
+              >
+                {{ country.country }}
+              </button>
+            } @else {
+              <!-- country here may be missing because it wasn't in the result set, perhaps because data on server changed or another filter was applied that removed all campaigns for that country -->
+              <button
+                type="button"
+                class="button selected"
+                (click)="removeFilter('locations')"
+                [attr.aria-label]="'Remove location filter ' + selectedFilterLocation"
+              >
+                {{ selectedFilterLocation }}
+              </button>
+            }
+          }
 
-        @if (searchResult()?.themes; as themes) {
-          <div class="selected-filters" role="group" aria-label="Filter by theme">
-            <div class="filter-actions">
-              <biggive-button
-                label="More filter themes"
-                (doButtonClick)="handleFilterButtonClick()"
-                size="small"
-                colourScheme="primary-outline"
-                aria-label="Open filter dialogue for more themes"
-              ></biggive-button>
-            </div>
+          @if (selectedFilterTheme && searchResult()?.themes; as themes) {
+            @let theme = getSelectedTheme(themes);
 
-            <div class="filter-items">
-              @if (selectedFilterTheme) {
-                @let theme = getSelectedTheme(themes);
-
-                @if (theme) {
-                  <button
-                    type="button"
-                    class="button selected"
-                    (click)="removeFilter('themes')"
-                    [attr.aria-label]="'Remove theme filter ' + theme.theme"
-                  >
-                    {{ theme.theme }} ({{ theme.numCampaigns }})
-                  </button>
-                } @else {
-                  <!-- theme here may be missing because it wasn't in the result set, perhaps because data on server changed or another filter was applied that removed all campaigns for that country -->
-                  <button
-                    type="button"
-                    class="button selected"
-                    (click)="removeFilter('themes')"
-                    [attr.aria-label]="'Remove theme filter ' + selectedFilterTheme"
-                  >
-                    {{ selectedFilterTheme }} (0)
-                  </button>
-                }
-              }
-              @for (theme of getVisibleThemes(themes); track theme.theme) {
-                <button
-                  type="button"
-                  class="button"
-                  (click)="replaceThemeFilter(theme.theme)"
-                  [attr.aria-label]="'Filter by ' + theme.theme + ' (' + theme.numCampaigns + ' campaigns)'"
-                >
-                  {{ theme.theme }} ({{ theme.numCampaigns }})
-                </button>
-              }
-            </div>
-          </div>
-        }
+            @if (theme) {
+              <button
+                type="button"
+                class="button selected"
+                (click)="removeFilter('themes')"
+                [attr.aria-label]="'Remove theme filter ' + theme.theme"
+              >
+                {{ theme.theme }}
+              </button>
+            } @else {
+              <!-- theme here may be missing because it wasn't in the result set, perhaps because data on server changed or another filter was applied that removed all campaigns for that country -->
+              <button
+                type="button"
+                class="button selected"
+                (click)="removeFilter('themes')"
+                [attr.aria-label]="'Remove theme filter ' + selectedFilterTheme"
+              >
+                {{ selectedFilterTheme }}
+              </button>
+            }
+          }
+        </div>
 
         <div class="filter-clear-wrap">
-          <biggive-button
-            class="filter-clear"
-            size="small"
-            colourScheme="primary-outline"
-            (doButtonClick)="handleClearAll()"
-            label="Clear all filters"
-            space-below="1"
-          ></biggive-button>
+          @if (selectedFilterLocation || selectedFilterTheme) {
+            <biggive-button
+              class="filter-clear"
+              size="small"
+              colourScheme="primary-outline"
+              (doButtonClick)="handleClearAll()"
+              label="Clear all filters"
+              space-below="1"
+            ></biggive-button>
+          }
         </div>
       </div>
     </section>
@@ -209,6 +173,11 @@
     <section class="grid-map-container" aria-label="Campaign results">
       <h3 class="visually-hidden">Campaign Results</h3>
       <div class="campaign-grid">
+        @if (loading()) {
+          <div class="loading-spinner-wrap">
+            <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+          </div>
+        }
         @if (individualCampaigns()) {
           <app-campaign-summary-grid
             (scrolled)="emitOnScroll()"
@@ -233,14 +202,16 @@
             </div>
           }
 
-          <div class="full-screen-map-button-container">
-            <fa-icon
-              tabindex="0"
-              [icon]="faExpandArrows"
-              (click)="makeMapFullScreen()"
-              class="full-screen-map-button"
-            ></fa-icon>
-          </div>
+          @if (enableMapFullScreenMobileMode) {
+            <div class="full-screen-map-button-container">
+              <fa-icon
+                tabindex="0"
+                [icon]="faExpandArrows"
+                (click)="makeMapFullScreen()"
+                class="full-screen-map-button"
+              ></fa-icon>
+            </div>
+          }
         </div>
 
         @if (fullScreenMapMode()) {
@@ -262,6 +233,11 @@
           </div>
 
           <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
+            @if (loading()) {
+              <div class="loading-spinner-wrap">
+                <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+              </div>
+            }
             <app-campaign-summary-grid
               (scrolled)="emitOnScroll()"
               [individualCampaigns]="individualCampaigns()"

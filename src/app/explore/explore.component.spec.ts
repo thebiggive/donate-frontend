@@ -17,6 +17,7 @@ import { ExploreComponent } from './explore.component';
 import { provideHttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -161,6 +162,21 @@ describe('ExploreComponent', () => {
     expect(componentAccessor.location).toBeUndefined();
     expect(component.searchService.selected['sortField']).toBe(component.defaultSort);
     expect(trackEventSpy).toHaveBeenCalledWith('search', 'clear_geolocation');
+  });
+
+  it('should not set loading to true when more() is called', () => {
+    fixture = TestBed.createComponent(ExploreComponent);
+    component = fixture.componentInstance;
+    component.loading = false;
+    component.individualCampaigns = [];
+
+    const campaignService = TestBed.inject(CampaignService);
+    spyOn(campaignService, 'search').and.returnValue(NEVER);
+
+    component.more();
+
+    expect(component.loading).toBeFalse();
+    expect(component.loadingMore).toBeTrue();
   });
 
   function makeComponentWithCampaign(campaign: Campaign) {

@@ -169,17 +169,67 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(trackEventSpy).toHaveBeenCalledWith('search', 'sort_option_changed', 'Closest');
   });
 
-  it('should render More Themes button in filter-actions when themes are provided', () => {
+  it('should show spinner when loading is true', () => {
+    fixture.componentRef.setInput('loading', true);
+    fixture.detectChanges();
+
+    const spinner = fixture.nativeElement.querySelector('mat-spinner');
+    expect(spinner).toBeTruthy();
+  });
+
+  it('should compute themeOptions sorted alphabetically with match count in brackets from searchResult themes', () => {
     fixture.componentRef.setInput('searchResult', {
-      countries: [{ country: 'United Kingdom', numCampaigns: 5 }],
-      themes: [{ theme: 'Health', numCampaigns: 10 }],
+      themes: [
+        { theme: 'Health', numCampaigns: 15 },
+        { theme: 'Education', numCampaigns: 3 },
+        { theme: 'Animals', numCampaigns: 7 },
+      ],
     } as unknown);
     fixture.detectChanges();
 
-    const themeGroup = fixture.nativeElement.querySelector('[aria-label="Filter by theme"]');
-    expect(themeGroup).toBeTruthy();
-    const moreThemesBtn = themeGroup.querySelector('.filter-actions biggive-button');
-    expect(moreThemesBtn).toBeTruthy();
-    expect(moreThemesBtn.getAttribute('label')).toBe('More filter themes');
+    const options = (component as unknown as { themeOptions: () => { value: string; label: string }[] }).themeOptions();
+    expect(options).toEqual([
+      { value: 'Animals', label: 'Animals [7]' },
+      { value: 'Education', label: 'Education [3]' },
+      { value: 'Health', label: 'Health [15]' },
+    ]);
+  });
+
+  it('should return empty array for themeOptions when searchResult has no themes', () => {
+    fixture.componentRef.setInput('searchResult', undefined);
+    fixture.detectChanges();
+
+    const options = (component as unknown as { themeOptions: () => { value: string; label: string }[] }).themeOptions();
+    expect(options).toEqual([]);
+  });
+
+  it('should compute countryOptions sorted alphabetically with match count in brackets from searchResult countries', () => {
+    fixture.componentRef.setInput('searchResult', {
+      countries: [
+        { country: 'United Kingdom', numCampaigns: 50 },
+        { country: 'Australia', numCampaigns: 4 },
+        { country: 'Ghana', numCampaigns: 12 },
+      ],
+    } as unknown);
+    fixture.detectChanges();
+
+    const options = (
+      component as unknown as { countryOptions: () => { value: string; label: string }[] }
+    ).countryOptions();
+    expect(options).toEqual([
+      { value: 'Australia', label: 'Australia [4]' },
+      { value: 'Ghana', label: 'Ghana [12]' },
+      { value: 'United Kingdom', label: 'United Kingdom [50]' },
+    ]);
+  });
+
+  it('should return empty array for countryOptions when searchResult has no countries', () => {
+    fixture.componentRef.setInput('searchResult', undefined);
+    fixture.detectChanges();
+
+    const options = (
+      component as unknown as { countryOptions: () => { value: string; label: string }[] }
+    ).countryOptions();
+    expect(options).toEqual([]);
   });
 });

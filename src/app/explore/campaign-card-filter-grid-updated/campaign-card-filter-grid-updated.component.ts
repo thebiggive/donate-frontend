@@ -24,6 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
+  faFilter,
   faLocationCrosshairs,
   faMagnifyingGlass,
   faTableList,
@@ -36,8 +37,8 @@ import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
-import { CampaignGroupsService } from '../../campaign-groups.service';
 import { MatomoTracker } from 'ngx-matomo-client';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -53,7 +54,14 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 
 @Component({
   selector: 'app-campaign-card-filter-grid-updated',
-  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
+  imports: [
+    BiggiveButton,
+    BiggivePopup,
+    BiggiveFormFieldSelect,
+    FaIconComponent,
+    CampaignSummaryGridComponent,
+    MatProgressSpinner,
+  ],
   templateUrl: './campaign-card-filter-grid-updated.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './campaign-card-filter-grid-updated.component.scss',
@@ -64,6 +72,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);
   protected currentSortByOption = signal<sortOptionLabel | null>(null);
+  protected readonly campaignDrawerOpen = signal(false);
 
   protected locationSortAvailable = computed(() => {
     return (
@@ -96,7 +105,23 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
    */
   @Input({ required: true }) beneficiaryOptions!: string[];
 
-  protected themeOptions = CampaignGroupsService.getThemeNames();
+  protected themeOptions = computed(() => {
+    return [...(this.searchResult()?.themes || [])]
+      .sort((a, b) => a.theme.localeCompare(b.theme))
+      .map((theme) => ({
+        value: theme.theme,
+        label: `${theme.theme} [${theme.numCampaigns}]`,
+      }));
+  });
+
+  protected countryOptions = computed(() => {
+    return [...(this.searchResult()?.countries || [])]
+      .sort((a, b) => a.country.localeCompare(b.country))
+      .map((country) => ({
+        value: country.country,
+        label: `${country.country} [${country.numCampaigns}]`,
+      }));
+  });
 
   /**
    * JSON array of location key/values
@@ -104,6 +129,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
+  protected readonly enableMapFullScreenMobileMode = flags.enableMapFullScreenMobileMode;
 
   /**
    * Selected location around which donor is looking for campaigns
@@ -166,6 +192,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
+  protected faFilter = faFilter;
   protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
@@ -227,6 +254,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   individualCampaigns = input.required<CampaignSummary[]>();
+  loading = input<boolean>(false);
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
@@ -526,8 +554,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
     return Object.entries(options).map((entry) => ({ value: entry[0], label: entry[1] }));
   }
-
-  protected readonly campaignDrawerOpen = signal(false);
 
   private locationFilterIsUK(location: string | null) {
     return location === 'United Kingdom';
@@ -862,32 +888,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
-  }
-
-  protected replaceCountryFilter(location: string) {
-    this.matomoTracker.trackEvent('search', 'quick_filter_country_selected', location);
-    this.selectedFilterLocation = location;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected replaceThemeFilter(theme: string) {
-    this.matomoTracker.trackEvent('search', 'quick_filter_theme_selected', theme);
-    this.selectedFilterTheme = theme;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected getVisibleCountries(
-    countries: { country: string; numCampaigns: number }[],
-  ): { country: string; numCampaigns: number }[] {
-    const nonSelectedMaxCount = this.selectedFilterLocation === null ? 3 : 2;
-    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, nonSelectedMaxCount);
-  }
-
-  protected getVisibleThemes(
-    themes: { theme: string; numCampaigns: number }[],
-  ): { theme: string; numCampaigns: number }[] {
-    const nonSelectedMaxCount = this.selectedFilterTheme === null ? 3 : 2;
-    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, nonSelectedMaxCount);
   }
 
   protected getSelectedCountry(

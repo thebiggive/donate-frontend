@@ -36,24 +36,24 @@
     margin-right: abstract.$spacer-2;
     padding-right: abstract.$spacer-2;
     padding-left: abstract.$spacer-2;
-    padding-bottom: abstract.$spacer-3;
+    padding-bottom: abstract.$spacer-1;
     margin-bottom: abstract.$spacer-3;
   }
 
   .search-wrap {
     // @include lower-shadow(); <-- commented out because content of lower-shadow mixin in stencil is commented out
     background-color: abstract.$colour-white;
-    padding: abstract.$spacer-1 abstract.$spacer-2;
+    padding: abstract.$spacer-1;
 
     h4 {
-      margin-bottom: abstract.$spacer-3;
+      margin-bottom: abstract.$spacer-2;
     }
 
     .field-wrap {
       display: flex;
       justify-content: space-between;
       flex-direction: column;
-      gap: abstract.$spacer-4;
+      gap: abstract.$spacer-3;
 
       .input-wrap {
         display: flex;
@@ -82,16 +82,16 @@
 }
 .filter-wrap {
   display: flex;
-  margin-bottom: 23px;
+  margin-bottom: 5px;
   padding: 0;
   .button {
+    font-family: inherit;
     font-size: 1rem;
-    margin-bottom: 6px;
     display: inline-block;
     cursor: pointer;
     border-radius: 17px;
     padding: 4px 17px 4px 17px;
-    margin-right: 13px;
+    margin: 2px 13px 0 0;
     background: abstract.$colour-white;
     color: abstract.$colour-black;
     border: 1px solid abstract.$colour-secondary;
@@ -101,15 +101,16 @@
     &:active {
       border: 1px solid abstract.$colour-highlight;
     }
+    // We can probably later consolidate all filters' classes assuming we agree to permanently display only active/selected ones.
+    // This is the only coral style in use as of now.
     &.selected {
       padding: 4px 42px 4px 17px;
-      background-color: abstract.$colour-secondary;
       background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgMTguNCAxOC40IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxOC40IDE4LjQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7c3Ryb2tlOiMwMDAwMDA7fQo8L3N0eWxlPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNOS4yLDguNUwxNywwLjdsMC43LDAuN0w5LjksOS4ybDcuOCw3LjhMMTcsMTcuN0w5LjIsOS45bC03LjgsNy44TDAuNywxN2w3LjgtNy44TDAuNywxLjRsMC43LTAuN0w5LjIsOC41eiIvPgo8L3N2Zz4K);
       background-repeat: no-repeat;
       background-position: right 17px center;
       background-size: 10px auto;
     }
-    &.locate {
+    &.with-icon {
       display: inline-flex;
       align-items: center;
       font-size: 16px;
@@ -212,19 +213,9 @@
 }
 
 @media screen and (max-width: abstract.$smallish) {
-  .sort-wrap {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .sort-wrap {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .filter-wrap {
-    margin-left: 3px;
+  .filter-actions {
+    justify-content: space-between;
+    width: calc(100% - abstract.$spacer-2);
   }
 }
 
@@ -251,6 +242,7 @@ fa-icon {
 
 .grid-map-container {
   display: flex;
+  min-height: 60vh; // Reduce avoidable scrolls up when grid changes.
   gap: 20px;
   flex-direction: column-reverse;
   @media #{abstract.$breakpoint-lg} {
@@ -392,24 +384,27 @@ fa-icon {
   }
 
   .zoom-out-button {
-    font-size: 17px;
+    font-family: inherit;
+    font-size: 1rem;
     line-height: 24px;
-    padding: 10px 30px;
+    padding: abstract.$spacer-1 abstract.$spacer-2;
+    // Match `right` on .full-screen-map-button-container for now. If we delete flagged full screen mode later, we can then
+    // standardise on margins for both.
+    margin-top: 16px;
     border-radius: 5px;
-    border: 1px solid abstract.$colour-primary;
-    background-color: abstract.$colour-primary;
-    color: abstract.$colour-white;
+    border-color: abstract.$colour-primary;
+    color: abstract.$colour-primary;
+    background-color: abstract.$colour-white;
     display: inline-block;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
-    font-family: inherit;
     transition: all ease-in-out 0.5s;
 
     &:hover,
     &:focus-visible {
-      background-color: abstract.$colour-white;
-      color: abstract.$colour-primary;
+      background-color: abstract.$colour-primary;
+      color: abstract.$colour-white;
       outline: none;
     }
   }
@@ -472,21 +467,22 @@ fa-icon {
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
-  gap: abstract.$spacer-4;
+  gap: abstract.$spacer-2;
+
+  .filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: abstract.$spacer-1;
+    padding-right: abstract.$spacer-1;
+    align-items: center;
+    gap: abstract.$spacer-2;
+  }
 
   .selected-filters {
     display: flex;
     flex-direction: column;
     gap: 0;
     width: 100%;
-
-    .filter-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: abstract.$spacer-2;
-      margin-bottom: 7px;
-    }
 
     .filter-items {
       display: flex;
@@ -526,4 +522,11 @@ fa-icon {
       white-space: nowrap;
     }
   }
+}
+
+.loading-spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: abstract.$spacer-2 0;
+  width: 100%;
 }
