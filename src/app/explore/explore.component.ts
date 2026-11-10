@@ -24,7 +24,7 @@ import {
   BiggiveHeadingBanner,
 } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
-import { skip, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignService, SearchQuery } from '../campaign.service';
@@ -131,7 +131,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   // to determine whether the menu needs a `?noredirect`, via NavigationService.
   protected highlightCards!: HighlightCard[];
 
-  private queryParamsSubscription?: Subscription;
   public fund?: Fund;
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v5`; // Key is per-domain/env
   public filterError = false;
@@ -176,7 +175,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
     this.routeParamSubscription?.unsubscribe();
     this.searchServiceSubscription?.unsubscribe();
-    this.queryParamsSubscription?.unsubscribe();
     this.routeChangeListener?.unsubscribe();
   }
 
@@ -215,7 +213,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.locationOptions = CampaignGroupsService.getCountries();
-    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
 
     this.highlightCards = this.route.snapshot.data['highlights'];
     // Call for the main menu update side effect to possibly add `?noredirect`.
@@ -301,19 +298,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         '/assets/images/social-banner.png',
       );
     }
-  }
-
-  private scrollToSearchWhenParamsChange() {
-    return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
-      if (isPlatformBrowser(this.platformId)) {
-        const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
-
-        // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
-        // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
-        // whenever the search filters change substantively.
-        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
-      }
-    });
   }
 
   ngAfterViewChecked() {
@@ -523,7 +507,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       fundSlug: this.fundSlug,
       geoLocationPosition: this.location,
     });
-    this.individualCampaigns = [];
     this.loading = true;
 
     if (!isPlatformBrowser(this.platformId)) {

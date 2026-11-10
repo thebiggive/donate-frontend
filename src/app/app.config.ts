@@ -101,7 +101,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
-      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      withInMemoryScrolling({
+        // Stop Explore filter/map updates making the page jump. See AppComponent.viewportScroller.
+        scrollPositionRestoration: 'disabled',
+        anchorScrolling: 'enabled',
+      }),
       // Allows Explore & home logo links to clear search filters in ExploreComponent
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),

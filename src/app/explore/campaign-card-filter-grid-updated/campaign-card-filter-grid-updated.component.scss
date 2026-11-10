@@ -253,6 +253,7 @@ fa-icon {
 
 .grid-map-container {
   display: flex;
+  min-height: 60vh; // Reduce avoidable scrolls up when grid changes.
   gap: 20px;
   flex-direction: column-reverse;
   @media #{abstract.$breakpoint-lg} {
@@ -531,4 +532,11 @@ fa-icon {
       white-space: nowrap;
     }
   }
+}
+
+.loading-spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: abstract.$spacer-2 0;
+  width: 100%;
 }

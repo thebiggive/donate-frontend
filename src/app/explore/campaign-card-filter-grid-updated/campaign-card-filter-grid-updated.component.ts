@@ -39,6 +39,7 @@ import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 import { CampaignGroupsService } from '../../campaign-groups.service';
 import { MatomoTracker } from 'ngx-matomo-client';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -54,7 +55,14 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 
 @Component({
   selector: 'app-campaign-card-filter-grid-updated',
-  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
+  imports: [
+    BiggiveButton,
+    BiggivePopup,
+    BiggiveFormFieldSelect,
+    FaIconComponent,
+    CampaignSummaryGridComponent,
+    MatProgressSpinner,
+  ],
   templateUrl: './campaign-card-filter-grid-updated.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './campaign-card-filter-grid-updated.component.scss',
@@ -231,6 +239,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   individualCampaigns = input.required<CampaignSummary[]>();
+  loading = input<boolean>(false);
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.

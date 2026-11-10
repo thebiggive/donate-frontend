@@ -168,4 +168,12 @@ describe('CampaignCardFilterGridComponent', () => {
     (component as unknown as { sortBySelectionChanged: (val: string) => void }).sortBySelectionChanged('Closest');
     expect(trackEventSpy).toHaveBeenCalledWith('search', 'sort_option_changed', 'Closest');
   });
+
+  it('should show spinner when loading is true', () => {
+    fixture.componentRef.setInput('loading', true);
+    fixture.detectChanges();
+
+    const spinner = fixture.nativeElement.querySelector('mat-spinner');
+    expect(spinner).toBeTruthy();
+  });
 });

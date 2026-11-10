@@ -1,4 +1,4 @@
-import { APP_BASE_HREF, isPlatformBrowser, AsyncPipe } from '@angular/common';
+import { APP_BASE_HREF, isPlatformBrowser, AsyncPipe, ViewportScroller } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -15,7 +15,7 @@ import {
   afterNextRender,
   ChangeDetectorRef,
 } from '@angular/core';
-import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet, Scroll } from '@angular/router';
 import { BiggiveMainMenu, BiggiveFooter, BiggiveCookieBanner } from '@biggive/components-angular';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { filter, map } from 'rxjs/operators';
@@ -66,6 +66,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private router = inject(Router);
   protected turnstileSiteKey = environment.turnstileSiteKey;
   protected turnstileWidgetVisible = signal(true);
+  private viewportScroller = inject(ViewportScroller);
+
   isWidgetVisible = computed(() => this.cfService.isBlocked() || this.turnstileWidgetVisible());
 
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
@@ -102,8 +104,26 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   public someCampaignHasHomePageRedirect: WritableSignal<boolean> = signal(false);
   private loginStatusChangeSubscription: Subscription | undefined;
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
+  private previousPath = '';
 
   constructor() {
+    this.router.events.pipe(filter((e): e is Scroll => e instanceof Scroll)).subscribe((e) => {
+      if (e.position) {
+        // Backward/forward browser navigation: restore previous scroll position
+        this.viewportScroller.scrollToPosition(e.position);
+      } else if (e.anchor) {
+        // Anchor navigation
+        this.viewportScroller.scrollToAnchor(e.anchor);
+      } else {
+        const currentPath = e.routerEvent.url.split('?')[0];
+        // Only scroll to top if navigating to a different page/path
+        if (currentPath !== this.previousPath) {
+          this.viewportScroller.scrollToPosition([0, 0]);
+        }
+        this.previousPath = currentPath;
+      }
+    });
+
     // Modern way to make this browser-only.
     afterNextRender(() => {
       window.onTurnstileSuccess = this.onTurnstileSuccess.bind(this);

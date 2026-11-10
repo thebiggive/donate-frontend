@@ -173,6 +173,11 @@
     <section class="grid-map-container" aria-label="Campaign results">
       <h3 class="visually-hidden">Campaign Results</h3>
       <div class="campaign-grid">
+        @if (loading()) {
+          <div class="loading-spinner-wrap">
+            <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+          </div>
+        }
         @if (individualCampaigns()) {
           <app-campaign-summary-grid
             (scrolled)="emitOnScroll()"
@@ -228,6 +233,11 @@
           </div>
 
           <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
+            @if (loading()) {
+              <div class="loading-spinner-wrap">
+                <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+              </div>
+            }
             <app-campaign-summary-grid
               (scrolled)="emitOnScroll()"
               [individualCampaigns]="individualCampaigns()"
