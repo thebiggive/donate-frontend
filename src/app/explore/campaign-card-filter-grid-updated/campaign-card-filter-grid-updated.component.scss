@@ -130,9 +130,6 @@
         margin: 0 6px 0 0;
       }
     }
-    &.open-filters {
-      flex-grow: 1;
-    }
   }
   .clear-all {
     margin-left: auto;
@@ -217,11 +214,8 @@
 
 @media screen and (max-width: abstract.$smallish) {
   .filter-actions {
-    width: 100%;
-  }
-  .sort-wrap {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    width: calc(100% - abstract.$spacer-2);
   }
 }
 
@@ -473,7 +467,7 @@ fa-icon {
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
-  gap: abstract.$spacer-4;
+  gap: abstract.$spacer-2;
 
   .filter-actions {
     display: flex;
