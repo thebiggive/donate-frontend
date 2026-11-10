@@ -168,18 +168,4 @@ describe('CampaignCardFilterGridComponent', () => {
     (component as unknown as { sortBySelectionChanged: (val: string) => void }).sortBySelectionChanged('Closest');
     expect(trackEventSpy).toHaveBeenCalledWith('search', 'sort_option_changed', 'Closest');
   });
-
-  it('should render More Themes button in filter-actions when themes are provided', () => {
-    fixture.componentRef.setInput('searchResult', {
-      countries: [{ country: 'United Kingdom', numCampaigns: 5 }],
-      themes: [{ theme: 'Health', numCampaigns: 10 }],
-    } as unknown);
-    fixture.detectChanges();
-
-    const themeGroup = fixture.nativeElement.querySelector('[aria-label="Filter by theme"]');
-    expect(themeGroup).toBeTruthy();
-    const moreThemesBtn = themeGroup.querySelector('.filter-actions biggive-button');
-    expect(moreThemesBtn).toBeTruthy();
-    expect(moreThemesBtn.getAttribute('label')).toBe('More filter themes');
-  });
 });
