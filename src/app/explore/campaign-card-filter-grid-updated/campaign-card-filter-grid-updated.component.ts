@@ -925,7 +925,12 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
     const firstUKRegion = searchResult.UKFilterRegions?.[0];
     if (!firstUKRegion) {
-      throw new Error('Missing first UK region for region-select');
+      // not quite sure why this is ever being called when there are no UKFilterRegions in the search result,
+      // but we were seeing an error thrown here repeatedly on staging, so now just console logging and returning.
+
+      console.log('Missing first UK region for region-select')
+
+      return [];
     }
 
     const childRegions = searchResult?.childRegions;
