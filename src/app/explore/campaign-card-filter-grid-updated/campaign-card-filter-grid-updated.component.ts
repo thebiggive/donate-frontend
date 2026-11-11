@@ -932,9 +932,9 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       },
       ...this.formatRegionsForSelect(childRegions),
       ...(this.searchResult()?.parentRegion ? this.formatRegionsForSelect(siblingRegions) : []),
-      ...(parentRegion ? [{label: parentRegion.name, value: parentRegion.code}] : []),
-    ];
-    // todo - consider sorting alphabetically and adding campaign counts.
+      ...(parentRegion ? [{ label: parentRegion.name, value: parentRegion.code }] : []),
+    ].sort((a, b) => a.label.localeCompare(b.label));
+    // todo - consider  campaign counts.
   }
 
   private formatRegionsForSelect(regions: UKRegion[] | undefined): { label: string; value: string }[] {
