@@ -190,7 +190,17 @@
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
-            <div class="full-screen-map-button-container">
+            <div class="map-button-container">
+              <biggive-form-field-select
+                backgroundColour="grey"
+                prompt="Pick Region"
+                [selectedLabel]="searchResult()?.UKFilterRegions?.[0].name!"
+                [selectedValue]="searchResult()?.UKFilterRegions?.[0].code!"
+                [options]="regionSelectOptions()"
+                [selectionChanged]="UKRegionSelectionChanged"
+                id="select-region"
+              />
+
               <button
                 type="button"
                 class="zoom-out-button"
@@ -203,7 +213,7 @@
           }
 
           @if (enableMapFullScreenMobileMode) {
-            <div class="full-screen-map-button-container">
+            <div class="map-button-container">
               <fa-icon
                 tabindex="0"
                 [icon]="faExpandArrows"

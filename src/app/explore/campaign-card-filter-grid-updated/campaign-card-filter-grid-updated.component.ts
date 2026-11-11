@@ -34,7 +34,7 @@ import { DivIcon, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
-import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
+import { CampaignSummary, CampaignSummaryList, UKRegion } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 import { MatomoTracker } from 'ngx-matomo-client';
@@ -321,6 +321,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
   protected locationSelectionChanged = (value: string) => {
     this.newSelectedFilterLocation = value;
+  };
+
+  protected UKRegionSelectionChanged = (regionCode: string) => {
+    this.matomoTracker.trackEvent('search', 'map_region_drop_down_selected', regionCode);
+    this.location = undefined;
+    this.doClearGeoLocation.emit();
+    this.selectedFilterUKRegion = regionCode;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
 
   protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
@@ -900,5 +908,56 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     themes: { theme: string; numCampaigns: number }[],
   ): { theme: string; numCampaigns: number } | undefined {
     return themes.find((t) => t.theme === this.selectedFilterTheme);
+  }
+
+  protected regionSelectOptions(): { label: string; value: string }[] {
+    const searchResult = this.searchResult();
+    if (!searchResult) {
+      return [];
+    }
+
+    const firstUKRegion = searchResult.UKFilterRegions?.[0];
+    if (!firstUKRegion) {
+      throw new Error('Missing first UK region for region-select');
+    }
+
+    const childRegions = searchResult?.childRegions;
+    const siblingRegions = this.searchResult()?.siblingRegions;
+    const parentRegion = this.searchResult()?.parentRegion;
+
+    return [
+      {
+        label: firstUKRegion.name,
+        value: firstUKRegion.code,
+      },
+      ...this.formatRegionsForSelect(childRegions),
+      ...(this.searchResult()?.parentRegion ? this.formatRegionsForSelect(siblingRegions) : []),
+      ...(parentRegion ? [{ label: parentRegion.name, value: parentRegion.code }] : []),
+    ].sort((a, b) => a.label.localeCompare(b.label));
+    // todo - consider  campaign counts.
+  }
+
+  private formatRegionsForSelect(regions: UKRegion[] | undefined): { label: string; value: string }[] {
+    const searchResult = this.searchResult();
+
+    if (!regions) {
+      return [];
+    }
+
+    if (!searchResult) {
+      return [];
+    }
+
+    const regionsWithAtLeastOneCampaign = regions.filter((ukRegion) => {
+      const count = searchResult.locationCounts?.filter(
+        (locationCount) => locationCount.regionCode === ukRegion.code,
+      )[0];
+      return count && count.numCampaigns > 0;
+    });
+
+    return regionsWithAtLeastOneCampaign.map((region) => ({
+      label: region.name,
+      value: region.code,
+    }));
   }
 }

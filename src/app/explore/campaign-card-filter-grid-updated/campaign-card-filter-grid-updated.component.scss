@@ -320,14 +320,20 @@ fa-icon {
 }
 
 :host ::ng-deep {
-  .full-screen-map-button-container {
+  .map-button-container {
     position: absolute;
     right: 16px;
     z-index: 999; // Less than full screen map, more than small one / most layers.
+    display: flex;
+    width: calc(100% - 32px);
+    justify-content: space-between;
+    gap: abstract.$spacer-1;
+    left: 16px;
+    top: 16px;
   }
 
   .campaign-count-marker-container,
-  .full-screen-map-button-container,
+  .map-button-container,
   .exit-full-screen-map-button-container {
     background: transparent;
     border: none;
@@ -388,9 +394,6 @@ fa-icon {
     font-size: 1rem;
     line-height: 24px;
     padding: abstract.$spacer-1 abstract.$spacer-2;
-    // Match `right` on .full-screen-map-button-container for now. If we delete flagged full screen mode later, we can then
-    // standardise on margins for both.
-    margin-top: 16px;
     border-radius: 5px;
     border-color: abstract.$colour-primary;
     color: abstract.$colour-primary;
