@@ -403,12 +403,20 @@ fa-icon {
     text-align: center;
     cursor: pointer;
     transition: all ease-in-out 0.5s;
+    white-space: nowrap;
+    max-width: 9em;
+    overflow: clip;
+    overflow-clip-margin: content-box;
 
     &:hover,
     &:focus-visible {
       background-color: abstract.$colour-primary;
       color: abstract.$colour-white;
       outline: none;
+    }
+
+    @media #{abstract.$breakpoint-md} {
+      max-width: none;
     }
   }
 
