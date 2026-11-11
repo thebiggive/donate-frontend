@@ -13,6 +13,16 @@ export function addEnglandToNameWhereNeeded(basename: string) {
   return basename;
 }
 
+const geoJsonCache = new Map<string, Promise<FeatureCollection>>();
+
+/**
+ * Clears the in-memory cache of GeoJSON files.
+ * Primarily used for testing purposes.
+ */
+export function clearGeoJsonCache(): void {
+  geoJsonCache.clear();
+}
+
 /**
  * Transforms a list of regionCodes into an array of geoJson features.
  *
@@ -48,10 +58,22 @@ export async function getHighlightedFeatures(
   ];
 
   const fetchedLayers = await Promise.all(
-    layers.map(async (layer) => ({
-      layer,
-      data: await firstValueFrom(http.get<FeatureCollection>(layer.path.toString())),
-    })),
+    layers.map(async (layer) => {
+      const url = layer.path.toString();
+      let dataPromise = geoJsonCache.get(url);
+      if (!dataPromise) {
+        dataPromise = firstValueFrom(http.get<FeatureCollection>(url)).catch((error) => {
+          geoJsonCache.delete(url);
+          throw error;
+        });
+        geoJsonCache.set(url, dataPromise);
+      }
+
+      return {
+        layer,
+        data: await dataPromise,
+      };
+    }),
   );
 
   // some codes appear more than once, e.g. London boroughs are in both localAuthorities.geojson and
