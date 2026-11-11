@@ -893,7 +893,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected get zoomOutLabel(): string {
-    const parentRegionName = this.searchResult()?.parentRegion?.name;
+    let parentRegionName = this.searchResult()?.parentRegion?.name;
+
+    if (parentRegionName?.toLocaleLowerCase() === 'london, england') {
+      // there will be other cases where the parent Region name is longer than it needs to be for clarity,
+      // but just fixing this as a special case for now since it will be one of the most frequently viewed and
+      // we can generalise to others.
+      parentRegionName = 'London';
+    }
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
   }
