@@ -923,6 +923,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
     const childRegions = searchResult?.childRegions;
     const siblingRegions = this.searchResult()?.siblingRegions;
+    const parentRegion = this.searchResult()?.parentRegion;
 
     return [
       {
@@ -931,6 +932,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       },
       ...this.formatRegionsForSelect(childRegions),
       ...(this.searchResult()?.parentRegion ? this.formatRegionsForSelect(siblingRegions) : []),
+      ...(parentRegion ? [{label: parentRegion.name, value: parentRegion.code}] : []),
     ];
     // todo - consider sorting alphabetically and adding campaign counts.
   }
