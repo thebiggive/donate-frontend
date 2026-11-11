@@ -97,6 +97,9 @@ export const appConfig: ApplicationConfig = {
         await defineCustomElements();
       }
     }),
+    // Modern defaults mean this turns on incremental hydration & event replay too.
+    // https://angular.dev/guide/incremental-hydration#how-do-you-enable-incremental-hydration-in-angular
+    // https://angular.dev/guide/hydration#capturing-and-replaying-events
     provideClientHydration(),
     provideRouter(
       routes,
