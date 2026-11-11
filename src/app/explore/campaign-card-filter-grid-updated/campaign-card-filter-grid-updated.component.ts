@@ -16,11 +16,11 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {isPlatformBrowser} from '@angular/common';
-import {SearchService} from '../../search.service';
-import {flags} from '../../featureFlags';
-import {BiggiveButton, BiggiveFormFieldSelect, BiggivePopup} from '@biggive/components-angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import { isPlatformBrowser } from '@angular/common';
+import { SearchService } from '../../search.service';
+import { flags } from '../../featureFlags';
+import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
@@ -29,16 +29,16 @@ import {
   faMagnifyingGlass,
   faTableList,
 } from '@fortawesome/free-solid-svg-icons';
-import {faExpandArrows} from '@fortawesome/pro-solid-svg-icons';
-import {DivIcon, GeoJSON, Map, Marker, TileLayer} from 'leaflet';
-import {Feature, GeoJsonProperties, Geometry} from 'geojson';
-import {getPoleOfInaccessibility} from '../../polylabel';
-import {CampaignSummaryGridComponent} from '../campaign-summary-grid/campaign-summary-grid.component';
-import {CampaignSummary, CampaignSummaryList, UKRegion} from '../../campaign-summary.model';
-import {getHighlightedFeatures} from '../../regions';
-import {HttpClient} from '@angular/common/http';
-import {MatomoTracker} from 'ngx-matomo-client';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { DivIcon, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { getPoleOfInaccessibility } from '../../polylabel';
+import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
+import { CampaignSummary, CampaignSummaryList, UKRegion } from '../../campaign-summary.model';
+import { getHighlightedFeatures } from '../../regions';
+import { HttpClient } from '@angular/common/http';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -936,11 +936,24 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   private formatRegionsForSelect(regions: UKRegion[] | undefined): { label: string; value: string }[] {
+    const searchResult = this.searchResult();
+
     if (!regions) {
       return [];
     }
 
-    return regions.map((region) => ({
+    if (!searchResult) {
+      return [];
+    }
+
+    const regionsWithAtLeastOneCampaign = regions.filter((ukRegion) => {
+      const count = searchResult.locationCounts?.filter(
+        (locationCount) => locationCount.regionCode === ukRegion.code,
+      )[0];
+      return count && count.numCampaigns > 0;
+    });
+
+    return regionsWithAtLeastOneCampaign.map((region) => ({
       label: region.name,
       value: region.code,
     }));
