@@ -191,9 +191,13 @@
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
             <div class="map-button-container">
+              <!-- we don't use a prompt below because the eyebrow text positioning isn't designed to work over a
+                   map background and is unreliably positioned for this narrow control on mobiles we tested with.
+                   The placeholder should just be used for assistive tech -->
               <biggive-form-field-select
                 backgroundColour="grey"
-                prompt="Pick Region"
+                [prompt]="null"
+                [placeholder]="'Pick Region'"
                 [selectedLabel]="searchResult()?.UKFilterRegions?.[0].name!"
                 [selectedValue]="searchResult()?.UKFilterRegions?.[0].code!"
                 [options]="regionSelectOptions()"
