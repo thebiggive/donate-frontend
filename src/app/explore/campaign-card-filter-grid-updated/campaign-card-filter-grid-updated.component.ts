@@ -275,6 +275,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   // We explicitly use 'any' here since the actual typings for Leaflet Map aren't strictly available in this declaration.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private map?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private tileLayer?: any;
 
   /**
    * Sets bounds options which allow a modest space around the relevant area (either whole of UK, one of the major
@@ -526,6 +528,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.resizeObserver = undefined;
     this.map?.remove();
     this.map = undefined;
+    this.tileLayer = undefined;
   }
 
   ngOnDestroy() {
@@ -596,15 +599,19 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       this.updateMapBounds();
     }
 
+    if (!this.tileLayer) {
+      this.tileLayer = new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 13,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(this.map);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.map.eachLayer((layer: any) => {
-      layer.remove();
+      if (layer !== this.tileLayer) {
+        layer.remove();
+      }
     });
-
-    new TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 13,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(this.map);
 
     const searchResult = this.searchResult();
     const childRegions = searchResult?.childRegions;
