@@ -31,6 +31,9 @@ import {
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
 
+/**
+ * @todo probably delete this whole service once new filtering in permanent use.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -187,15 +190,6 @@ export class CampaignGroupsService {
     }
 
     return names;
-  }
-
-  /**
-   * For new search/filter design we don't distinguish between "categories" and "beneficiaries" but use the
-   * term "themes" instead, so returning a combined array of both. For now we may have to work out which is is which
-   * when submitting to the backend by matching the name string against one of the two lists.
-   */
-  static getThemeNames(): string[] {
-    return [...this.getCategoryNames(), ...this.getBeneficiaryNames()];
   }
 
   /**

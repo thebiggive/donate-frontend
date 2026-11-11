@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-import { MatomoModule } from 'ngx-matomo-client';
+import { MatomoModule, MatomoTracker } from 'ngx-matomo-client';
 import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { NEVER, of } from 'rxjs';
 
@@ -17,6 +17,7 @@ import { ExploreComponent } from './explore.component';
 import { provideHttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -114,8 +115,10 @@ describe('ExploreComponent', () => {
   it('should switch sort to location and store position when searchByGeoLocation succeeds', () => {
     fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
+    const tracker = TestBed.inject(MatomoTracker);
+    const trackEventSpy = spyOn(tracker, 'trackEvent');
     const dummyPosition = {
-      coords: { latitude: 51.5, longitude: -0.1 },
+      coords: { latitude: 51.5432, longitude: -0.1234 },
     } as GeolocationPosition;
 
     spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake((success: PositionCallback) => {
@@ -137,11 +140,14 @@ describe('ExploreComponent', () => {
     expect(sortSpy).toHaveBeenCalledWith('location');
     expect(component.searchService.selected['sortField']).toBe('location');
     expect(component.searchService.selectedSortLabel).toBe('Closest');
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'geolocation_search_success', '51.54,-0.12');
   });
 
   it('should clear position and revert sort to default when clearGeoLocation is called', () => {
     fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
+    const tracker = TestBed.inject(MatomoTracker);
+    const trackEventSpy = spyOn(tracker, 'trackEvent');
     const componentAccessor = component as unknown as {
       clearGeoLocation: () => void;
       location: GeolocationPosition | undefined;
@@ -155,6 +161,22 @@ describe('ExploreComponent', () => {
 
     expect(componentAccessor.location).toBeUndefined();
     expect(component.searchService.selected['sortField']).toBe(component.defaultSort);
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'clear_geolocation');
+  });
+
+  it('should not set loading to true when more() is called', () => {
+    fixture = TestBed.createComponent(ExploreComponent);
+    component = fixture.componentInstance;
+    component.loading = false;
+    component.individualCampaigns = [];
+
+    const campaignService = TestBed.inject(CampaignService);
+    spyOn(campaignService, 'search').and.returnValue(NEVER);
+
+    component.more();
+
+    expect(component.loading).toBeFalse();
+    expect(component.loadingMore).toBeTrue();
   });
 
   function makeComponentWithCampaign(campaign: Campaign) {

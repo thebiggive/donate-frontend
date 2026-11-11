@@ -6,6 +6,7 @@ import {
   PLATFORM_ID,
   ViewChild,
   ChangeDetectionStrategy,
+  InjectionToken,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -26,6 +27,9 @@ import { MatIcon } from '@angular/material/icon';
 import { DonationStartLoginComponent } from '../donation-start-login/donation-start-login.component';
 import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
 import { TimeLeftPipe } from '../../time-left.pipe';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+
+const reservedForToken = new InjectionToken<TimeLeftPipe>('reservedFor');
 
 @Component({
   templateUrl: './donation-start-container.component.html',
@@ -42,18 +46,20 @@ import { TimeLeftPipe } from '../../time-left.pipe';
     AsyncPipe,
     TimeLeftPipe,
   ],
+  providers: [{ provide: reservedForToken, useClass: TimeLeftPipe }],
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit {
   identityService = inject(IdentityService);
   private imageService = inject(ImageService);
+  private liveAnnouncer = inject(LiveAnnouncer);
+  private platformId = inject(PLATFORM_ID);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private platformId = inject(PLATFORM_ID);
+  private reservedForPipe = inject<TimeLeftPipe>(reservedForToken);
 
   campaign!: Campaign;
   campaignOpenOnLoad!: boolean;
   donation: Donation | undefined = undefined;
-  personId?: string;
   loggedInEmailAddress?: string;
 
   @ViewChild('donation_start_form') donationStartForm!: DonationStartFormComponent;
@@ -114,7 +120,14 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit {
       return;
     }
 
+    const newlyReserved: boolean = !this.reservationExpiryDate;
     this.reservationExpiryDate = new Date(this.donation.maxReservationTime);
+
+    if (newlyReserved) {
+      void this.liveAnnouncer.announce(
+        'Match funds are reserved for ' + this.reservedForPipe.transform(this.reservationExpiryDate),
+      );
+    }
   }
 
   loadAuthedPersonInfo = (id: string, jwt: string) => {

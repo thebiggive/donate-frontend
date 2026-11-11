@@ -24,6 +24,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCircleChevronDown,
   faCircleChevronUp,
+  faFilter,
+  faLocationCrosshairs,
   faMagnifyingGlass,
   faTableList,
 } from '@fortawesome/free-solid-svg-icons';
@@ -35,7 +37,8 @@ import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-
 import { CampaignSummary, CampaignSummaryList } from '../../campaign-summary.model';
 import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
-import { CampaignGroupsService } from '../../campaign-groups.service';
+import { MatomoTracker } from 'ngx-matomo-client';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -51,16 +54,25 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
 
 @Component({
   selector: 'app-campaign-card-filter-grid-updated',
-  imports: [BiggiveButton, BiggivePopup, BiggiveFormFieldSelect, FaIconComponent, CampaignSummaryGridComponent],
+  imports: [
+    BiggiveButton,
+    BiggivePopup,
+    BiggiveFormFieldSelect,
+    FaIconComponent,
+    CampaignSummaryGridComponent,
+    MatProgressSpinner,
+  ],
   templateUrl: './campaign-card-filter-grid-updated.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './campaign-card-filter-grid-updated.component.scss',
 })
 export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private matomoTracker = inject(MatomoTracker);
   private platformId = inject(PLATFORM_ID);
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);
   protected currentSortByOption = signal<sortOptionLabel | null>(null);
+  protected readonly campaignDrawerOpen = signal(false);
 
   protected locationSortAvailable = computed(() => {
     return (
@@ -93,7 +105,23 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
    */
   @Input({ required: true }) beneficiaryOptions!: string[];
 
-  protected themeOptions = CampaignGroupsService.getThemeNames();
+  protected themeOptions = computed(() => {
+    return [...(this.searchResult()?.themes || [])]
+      .sort((a, b) => a.theme.localeCompare(b.theme))
+      .map((theme) => ({
+        value: theme.theme,
+        label: `${theme.theme} [${theme.numCampaigns}]`,
+      }));
+  });
+
+  protected countryOptions = computed(() => {
+    return [...(this.searchResult()?.countries || [])]
+      .sort((a, b) => a.country.localeCompare(b.country))
+      .map((country) => ({
+        value: country.country,
+        label: `${country.country} [${country.numCampaigns}]`,
+      }));
+  });
 
   /**
    * JSON array of location key/values
@@ -101,6 +129,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
+  protected readonly enableMapFullScreenMobileMode = flags.enableMapFullScreenMobileMode;
 
   /**
    * Selected location around which donor is looking for campaigns
@@ -163,6 +192,8 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faCircleChevronDown = faCircleChevronDown;
   protected faCircleChevronUp = faCircleChevronUp;
   protected faExpandArrows = faExpandArrows;
+  protected faFilter = faFilter;
+  protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
 
@@ -223,6 +254,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   individualCampaigns = input.required<CampaignSummary[]>();
+  loading = input<boolean>(false);
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
@@ -292,6 +324,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
+    this.matomoTracker.trackEvent('search', 'sort_option_changed', String(value));
     // @ts-expect-error getting Type string is not assignable to type sortOptionLabel | null . Maybe somethign we can 'grandfather' from before port from stencil.
     this.selectedSortByOption = value;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -308,6 +341,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected handleApplyFilterButtonClick = () => {
+    this.matomoTracker.trackEvent('search', 'filter_popup_applied');
     this.selectedFilterTheme = this.newSelectedFilterTheme ?? this.selectedFilterTheme;
     this.selectedFilterLocation = this.newSelectedFilterLocation ?? this.selectedFilterLocation;
 
@@ -327,6 +361,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected removeFilter(filterKey: 'locations' | 'themes') {
+    this.matomoTracker.trackEvent('search', 'remove_filter_clicked', filterKey);
     switch (filterKey) {
       case 'themes':
         this.selectedFilterTheme = null;
@@ -354,6 +389,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected handleSearchButtonPressed = () => {
+    this.matomoTracker.trackEvent('search', 'search_button_clicked', this.searchText || '');
     this.unfocusTextInput();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     this.hasSearchTerm.set(!!this.searchText && this.searchText.length > 0);
@@ -364,6 +400,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleNearMeButtonPressed = () => {
+    this.matomoTracker.trackEvent('search', 'geo_chosen', 'Near me button clicked');
     this.unfocusTextInput();
     this.doGetGeoLocationFromBrowser.emit();
   };
@@ -377,12 +414,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected handleEnterPressed = (ev: Event) => {
     const keyboardEvent = ev as KeyboardEvent;
     if (keyboardEvent.key === 'Enter') {
+      this.matomoTracker.trackEvent('search', 'search_enter_pressed', this.searchText || '');
       this.unfocusTextInput();
       this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
   };
 
   protected handleFilterButtonClick = () => {
+    this.matomoTracker.trackEvent('search', 'filter_popup_opened');
     this.newSelectedFilterTheme = this.selectedFilterTheme;
     this.newSelectedFilterLocation = this.selectedFilterLocation;
 
@@ -393,6 +432,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   };
 
   protected handleClearAll = () => {
+    this.matomoTracker.trackEvent('search', 'clear_filters_clicked');
     this.unfocusTextInput();
 
     // Set the 'Filters' button back to the primary background colour
@@ -515,8 +555,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     return Object.entries(options).map((entry) => ({ value: entry[0], label: entry[1] }));
   }
 
-  protected readonly campaignDrawerOpen = signal(false);
-
   private locationFilterIsUK(location: string | null) {
     return location === 'United Kingdom';
   }
@@ -526,6 +564,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected makeMapFullScreen() {
+    this.matomoTracker.trackEvent('search', 'map_fullscreen_entered');
     this.fullScreenMapMode.set(true);
     this.map.attributionControl.setPosition('topright');
     setTimeout(() => this.map.invalidateSize(), 0);
@@ -607,24 +646,25 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
           return isMatch;
         });
-
-        if (regionCode === this.selectedFilterUKRegion) {
-          // no marker for the region that's already selected because:
-          // it's useless to click again
-          // the marker on the map can obscure the shape of the region underneath for small regions displayed alongside
-          // large ones (e.g. Aberdeen City in the map Scotland)
-          // making the region disappear by returning here will make it more obvious that the region is selected
-          // especially in cases like Aberdeen City where the colour of the region beneeth changing would otherwise be
-          // invisible.
+        const isSelected = regionCode === this.selectedFilterUKRegion;
+        if (isSelected && hasChildRegions) {
           return;
         }
 
         const count = countObj !== undefined ? countObj.numCampaigns : 0;
+        if (count === 0) {
+          // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+          // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+          // south of North West England etc.
+          return;
+        }
+
         const areaName = feature.properties?.['name'] || '';
 
+        const markerClass = isSelected ? 'campaign-count-marker selected' : 'campaign-count-marker';
         const markerIcon = new DivIcon({
           className: 'campaign-count-marker-container',
-          html: `<button type="button" class="campaign-count-marker" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
+          html: `<button type="button" class="${markerClass}" aria-label="${count} campaigns in ${areaName}">${count}</button>`,
           iconSize: [32, 32],
           iconAnchor: [16, 16],
         });
@@ -634,10 +674,15 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           title: `${count} campaigns in ${areaName}`,
         }).addTo(this.map);
 
-        marker.on('click', () => {
-          this.selectedFilterUKRegion = countObj!.regionCode;
-          this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-        });
+        if (!isSelected) {
+          marker.on('click', () => {
+            this.matomoTracker.trackEvent('search', 'map_region_marker_clicked', areaName || regionCode || '');
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
+            this.selectedFilterUKRegion = countObj!.regionCode;
+            this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+          });
+        }
       },
     }).addTo(this.map);
 
@@ -669,9 +714,14 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           );
 
           const count = childCountObj!.numCampaigns;
+          if (count === 0) {
+            // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+            // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+            // south of North West England etc.
+            return;
+          }
           const areaName = feature.properties?.['name'] || '';
 
-          // todo - show counts for child regions as well. Currently not sent from matchbot.
           const markerIcon = new DivIcon({
             className: 'campaign-count-marker-container',
             html: `<button type="button" class="campaign-count-marker" aria-label="${areaName}">${count}</button>`,
@@ -685,6 +735,13 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.matomoTracker.trackEvent(
+              'search',
+              'geo_chosen',
+              `Region clicked: ${areaName || childCountObj?.regionCode || ''}`,
+            );
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = childCountObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
           });
@@ -723,7 +780,13 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           const areaName = feature.properties?.['name'] || '';
           const count = countObj?.numCampaigns || 0;
 
-          // todo - show counts for child regions as well. Currently not sent from matchbot.
+          if (count === 0) {
+            // We don't show markers for regions with zero campaigns to make it easier to see the actually useful markers
+            // for regions with at least one campaign, especially in visually dense areas like the Scottish Central Belt,
+            // south of North West England etc.
+            return;
+          }
+
           const markerIcon = new DivIcon({
             className: 'campaign-count-marker-container',
             html: `<button type="button" class="campaign-count-marker" aria-label="${areaName}">${count}</button>`,
@@ -737,6 +800,13 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
           }).addTo(this.map);
 
           marker.on('click', () => {
+            this.matomoTracker.trackEvent(
+              'search',
+              'geo_chosen',
+              `Region clicked: ${areaName || countObj?.regionCode || ''}`,
+            );
+            this.location = undefined;
+            this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = countObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
           });
@@ -756,6 +826,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
       title: 'Exit full screen map',
     }).addTo(this.map);
     exitFullScreenMarker.on('click', () => {
+      this.matomoTracker.trackEvent('search', 'map_fullscreen_exited');
       this.fullScreenMapMode.set(false);
       this.map.attributionControl.setPosition('bottomright');
       setTimeout(() => this.map.invalidateSize(), 0);
@@ -807,6 +878,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   }
 
   protected onZoomOutClicked(): void {
+    this.matomoTracker.trackEvent('search', 'map_zoom_out_clicked', this.zoomOutLabel);
     this.selectedFilterUKRegion = this.searchResult()?.parentRegion?.code ?? null;
     this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -816,28 +888,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     const parentRegionName = this.searchResult()?.parentRegion?.name;
 
     return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
-  }
-
-  protected replaceCountryFilter(location: string) {
-    this.selectedFilterLocation = location;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected replaceThemeFilter(theme: string) {
-    this.selectedFilterTheme = theme;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected getVisibleCountries(
-    countries: { country: string; numCampaigns: number }[],
-  ): { country: string; numCampaigns: number }[] {
-    return countries.filter((c) => c.country !== this.selectedFilterLocation).slice(0, 3);
-  }
-
-  protected getVisibleThemes(
-    themes: { theme: string; numCampaigns: number }[],
-  ): { theme: string; numCampaigns: number }[] {
-    return themes.filter((t) => t.theme !== this.selectedFilterTheme).slice(0, 3);
   }
 
   protected getSelectedCountry(

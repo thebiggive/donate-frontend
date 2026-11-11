@@ -5,6 +5,7 @@ type flags = {
   enableOrgAccount: true;
   enableSearchByLocation: boolean;
   enableMapViewInExplore: boolean;
+  enableMapFullScreenMobileMode: boolean; // Not ready and perhaps counterproductive with current select/zoom approach.
   enableUpdatedCampaignCardFilter: boolean;
 };
 
@@ -15,6 +16,7 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
+        enableMapFullScreenMobileMode: false,
         enableUpdatedCampaignCardFilter: true,
       };
     case 'regression':
@@ -22,21 +24,24 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
-        enableUpdatedCampaignCardFilter: false,
+        enableMapFullScreenMobileMode: false,
+        enableUpdatedCampaignCardFilter: true,
       };
     case 'staging':
       return {
         enableOrgAccount: true,
         enableSearchByLocation: true,
         enableMapViewInExplore: true,
-        enableUpdatedCampaignCardFilter: false,
+        enableMapFullScreenMobileMode: false,
+        enableUpdatedCampaignCardFilter: true,
       };
     case 'production':
       return {
         enableOrgAccount: true,
         enableSearchByLocation: false,
         enableMapViewInExplore: false,
-        enableUpdatedCampaignCardFilter: false,
+        enableMapFullScreenMobileMode: false,
+        enableUpdatedCampaignCardFilter: true,
       };
   }
 };
