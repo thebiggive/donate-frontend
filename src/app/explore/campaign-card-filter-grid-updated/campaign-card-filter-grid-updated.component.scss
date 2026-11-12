@@ -264,6 +264,26 @@ fa-icon {
   height: abstract.$spacer-2;
 }
 
+.map-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+
+  // When the map goes full screen, the wrapper must also go full screen
+  // so that the dropdown overlay (positioned absolutely within the wrapper)
+  // remains visible over the full-screen map.
+  &:has(.fullScreenMap) {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+  }
+}
+
 .campaign-map {
   height: 500px;
   margin-right: 23px;
@@ -322,13 +342,12 @@ fa-icon {
 :host ::ng-deep {
   .map-button-container {
     position: absolute;
-    right: 16px;
     z-index: 999; // Less than full screen map, more than small one / most layers.
     display: flex;
-    width: calc(100% - 32px);
     justify-content: space-between;
     gap: abstract.$spacer-1;
-    left: 16px;
+    left: 25px;
+    right: 39px;
     top: 16px;
   }
 
