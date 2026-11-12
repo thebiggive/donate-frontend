@@ -137,7 +137,7 @@
         </div>
 
         <div class="filter-clear-wrap">
-          @if (selectedFilterLocation || selectedFilterTheme) {
+          @if (selectedFilterLocation || selectedFilterTheme || this.searchService.selected["term"]) {
             <biggive-button
               class="filter-clear"
               size="small"
