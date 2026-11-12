@@ -13,7 +13,23 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
   private readonly zone = inject(NgZone);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  private readonly events = ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown', 'dblclick'];
+  // Events that must be fully blocked (preventDefault + stopPropagation) to stop
+  // Leaflet's Draggable from capturing the pointer. On Firefox Android, once
+  // Leaflet captures the pointer via setPointerCapture(), all subsequent pointer
+  // events go to the map container, not to the <select> inside Shadow DOM.
+  // Using capture phase listeners ensures we intercept before Leaflet's handlers.
+  private readonly blockEvents = ['pointerdown', 'touchstart', 'mousedown'];
+
+  // Events that only need propagation stopped (no preventDefault needed)
+  private readonly stopEvents = ['pointerup', 'pointermove', 'touchend', 'touchmove', 'mouseup', 'dblclick'];
+
+  // Full block: prevent default action AND stop propagation
+  private readonly block = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  // Stop propagation only
   private readonly stop = (e: Event) => e.stopPropagation();
 
   async ngAfterViewInit(): Promise<void> {
@@ -21,13 +37,11 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
 
     const host = this.el.nativeElement;
 
-    // Critical fix: override Leaflet's touch-action on the map container.
+    // Override Leaflet's touch-action on the map container.
     // Leaflet sets touch-action: pinch-zoom (or none) on .leaflet-container,
     // which cascades to children. On Firefox Android, this causes the browser
-    // to treat taps as potential gestures, requiring multiple taps to register
-    // a click on a native <select> element.
-    // "manipulation" allows scrolling but disables pinch-zoom, which is what
-    // we want for a dropdown control.
+    // to treat taps as potential gestures.
+    // "manipulation" allows scrolling but disables pinch-zoom.
     host.style.touchAction = 'manipulation';
 
     // Also apply to any child web components (the dropdown is a custom element
@@ -38,10 +52,16 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
       child.style.touchAction = 'manipulation';
     });
 
-    // Extra pointer/touch blocking, outside Angular to avoid needless
-    // change detection on every touch
+    // Outside Angular zone to avoid needless change detection on every touch
     this.zone.runOutsideAngular(() => {
-      this.events.forEach((type) => host.addEventListener(type, this.stop, { passive: true }));
+      // Capture phase + preventDefault is critical: it stops Leaflet's Draggable
+      // from ever seeing the pointerdown/touchstart event, so it never calls
+      // setPointerCapture(). Without this, Firefox Android routes all subsequent
+      // taps to the map container instead of the <select> options.
+      this.blockEvents.forEach((type) => host.addEventListener(type, this.block, { passive: false, capture: true }));
+
+      // Also stop propagation on bubble phase for other events that might reach Leaflet
+      this.stopEvents.forEach((type) => host.addEventListener(type, this.stop, { passive: true }));
     });
 
     // Load Leaflet only in the browser (it references window on import)
@@ -54,6 +74,7 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
     if (!this.isBrowser) return;
 
     const host = this.el.nativeElement;
-    this.events.forEach((type) => host.removeEventListener(type, this.stop));
+    this.blockEvents.forEach((type) => host.removeEventListener(type, this.block, { capture: true }));
+    this.stopEvents.forEach((type) => host.removeEventListener(type, this.stop));
   }
 }
