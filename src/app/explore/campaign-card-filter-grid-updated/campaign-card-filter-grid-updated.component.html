@@ -190,7 +190,7 @@
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
-            <div class="map-button-container">
+            <div appStopMapPropagation class="map-button-container">
               <!-- we don't use a prompt below because the eyebrow text positioning isn't designed to work over a
                    map background and is unreliably positioned for this narrow control on mobiles we tested with.
                    The placeholder should just be used for assistive tech -->
