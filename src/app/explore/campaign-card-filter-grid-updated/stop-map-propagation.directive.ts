@@ -21,6 +21,23 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
 
     const host = this.el.nativeElement;
 
+    // Critical fix: override Leaflet's touch-action on the map container.
+    // Leaflet sets touch-action: pinch-zoom (or none) on .leaflet-container,
+    // which cascades to children. On Firefox Android, this causes the browser
+    // to treat taps as potential gestures, requiring multiple taps to register
+    // a click on a native <select> element.
+    // "manipulation" allows scrolling but disables pinch-zoom, which is what
+    // we want for a dropdown control.
+    host.style.touchAction = 'manipulation';
+
+    // Also apply to any child web components (the dropdown is a custom element
+    // with Shadow DOM — the style won't penetrate, but the host element itself
+    // needs it too for Firefox Android)
+    const children = host.querySelectorAll('biggive-form-field-select');
+    children.forEach((child: HTMLElement) => {
+      child.style.touchAction = 'manipulation';
+    });
+
     // Extra pointer/touch blocking, outside Angular to avoid needless
     // change detection on every touch
     this.zone.runOutsideAngular(() => {
