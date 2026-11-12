@@ -2,8 +2,13 @@
 // On Firefox Android, the native <select> picker operates at the browser UI level,
 // above the DOM event chain, so blocking DOM pointer events is insufficient.
 // The fix disables pointer events on the parent Leaflet map container when the
-// select is focused, but only on touch devices — on desktop, a focused select
+// select dropdown is open, but only on touch devices — on desktop, a focused select
 // is not necessarily open, so the map should remain clickable.
+//
+// The approach: on touch devices, when the user taps the biggive-form-field-select
+// web component host to open the native picker, we disable pointer events on the
+// Leaflet container. When the selection changes (detected via the change event,
+// which crosses Shadow DOM), we restore pointer events.
 
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
@@ -20,11 +25,15 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
   // Reference to the parent Leaflet container so we can toggle pointer events
   private leafletContainer: HTMLElement | null = null;
 
-  // Whether this device uses touch input (where focus opens the native picker)
+  // Whether this device uses touch input (where tapping opens the native picker)
   private isTouchDevice = false;
 
+  // Whether the dropdown is currently open (to track state)
+  private isDropdownOpen = false;
+
   // Stored listener references for cleanup in ngOnDestroy
-  private onFocusIn: ((e: FocusEvent) => void) | null = null;
+  private onPointerDown: ((e: PointerEvent) => void) | null = null;
+  private onChange: (() => void) | null = null;
   private onFocusOut: (() => void) | null = null;
 
   async ngAfterViewInit(): Promise<void> {
@@ -56,49 +65,68 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
       child.style.touchAction = 'manipulation';
     });
 
-    // On touch devices (mobile), when the select inside the
-    // biggive-form-field-select web component receives focus, the native
-    // picker opens immediately. Disable pointer events on the entire Leaflet
-    // map container to prevent Leaflet from intercepting pointer events while
-    // the browser's native select picker is open.
+    // On touch devices, when the user taps the biggive-form-field-select to
+    // open the native picker, disable pointer events on the Leaflet container.
+    // When the selection changes, restore pointer events.
     //
-    // On desktop, a focused select is not necessarily open (user may have
-    // tabbed to it), so we do NOT disable pointer events — the map should
-    // remain clickable. The existing L.DomEvent.disableClickPropagation
-    // below handles desktop propagation correctly.
+    // On desktop, the map should remain clickable at all times — the existing
+    // L.DomEvent.disableClickPropagation below handles desktop propagation.
     //
-    // Note: 'focus' and 'blur' do NOT cross Shadow DOM boundaries, but
-    // 'focusin' and 'focusout' DO bubble across shadow boundaries. We use
-    // focusin/focusout on the host container to detect when the internal
-    // <select> inside the web component's Shadow DOM gains/loses focus.
+    // We use pointerdown (not click) because it fires before the native picker
+    // opens, giving us a chance to disable pointer events on the map before
+    // the browser renders the picker UI.
     //
-    // When focusin fires, the target is retargeted to the shadow host
-    // (biggive-form-field-select), so we check if the retargeted element
-    // is a child of our host container.
+    // We use the change event to detect when the selection is complete.
+    // The change event crosses Shadow DOM boundaries (composed: true).
     this.zone.runOutsideAngular(() => {
-      this.onFocusIn = (e: FocusEvent) => {
+      this.onPointerDown = (e: PointerEvent) => {
         if (!this.isTouchDevice) return;
 
         const target = e.target as HTMLElement;
-        // The retargeted target will be the web component host element.
-        // If it's a biggive-form-field-select inside our container, disable
-        // pointer events on the Leaflet map.
+        // Check if the tap is on or inside the biggive-form-field-select
+        // The target may be the host element or a child (due to Shadow DOM retargeting)
         if (target.tagName === 'BIGGIVE-FORM-FIELD-SELECT' && host.contains(target)) {
+          // Mark the dropdown as open and disable pointer events on the map
+          this.isDropdownOpen = true;
           if (this.leafletContainer) {
             this.leafletContainer.style.pointerEvents = 'none';
           }
         }
       };
 
-      this.onFocusOut = () => {
-        if (this.leafletContainer) {
-          this.leafletContainer.style.pointerEvents = 'auto';
+      this.onChange = () => {
+        if (!this.isTouchDevice) return;
+
+        // When the selection changes, the native picker should close.
+        // Restore pointer events on the map.
+        if (this.isDropdownOpen) {
+          this.isDropdownOpen = false;
+          if (this.leafletContainer) {
+            this.leafletContainer.style.pointerEvents = 'auto';
+          }
         }
       };
 
-      // Listen in capture phase so we catch the event before it reaches Leaflet
-      host.addEventListener('focusin', this.onFocusIn, true);
-      host.addEventListener('focusout', this.onFocusOut, true);
+      // Fallback: if the user dismisses the dropdown without selecting,
+      // the change event won't fire. Focusout (which crosses Shadow DOM)
+      // will fire when the select loses focus, so we restore pointer events.
+      this.onFocusOut = () => {
+        if (!this.isTouchDevice) return;
+
+        if (this.isDropdownOpen) {
+          this.isDropdownOpen = false;
+          if (this.leafletContainer) {
+            this.leafletContainer.style.pointerEvents = 'auto';
+          }
+        }
+      };
+
+      // Listen in capture phase to intercept before Leaflet
+      host.addEventListener('pointerdown', this.onPointerDown, true);
+      // Change event bubbles and crosses Shadow DOM
+      host.addEventListener('change', this.onChange, false);
+      // Focusout crosses Shadow DOM boundaries (composed: true)
+      host.addEventListener('focusout', this.onFocusOut, false);
     });
 
     // Load Leaflet only in the browser (it references window on import)
@@ -112,12 +140,15 @@ export class StopMapPropagationDirective implements AfterViewInit, OnDestroy {
 
     const host = this.el.nativeElement;
 
-    // Remove focus listeners
-    if (this.onFocusIn) {
-      host.removeEventListener('focusin', this.onFocusIn, true);
+    // Remove listeners
+    if (this.onPointerDown) {
+      host.removeEventListener('pointerdown', this.onPointerDown, true);
+    }
+    if (this.onChange) {
+      host.removeEventListener('change', this.onChange);
     }
     if (this.onFocusOut) {
-      host.removeEventListener('focusout', this.onFocusOut, true);
+      host.removeEventListener('focusout', this.onFocusOut);
     }
 
     // Restore pointer events on the Leaflet container if we disabled them
