@@ -39,6 +39,7 @@ import { getHighlightedFeatures } from '../../regions';
 import { HttpClient } from '@angular/common/http';
 import { MatomoTracker } from 'ngx-matomo-client';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { StopMapPropagationDirective } from './stop-map-propagation.directive';
 
 const sortOptionLabels = {
   relevance: 'Most relevant',
@@ -61,6 +62,7 @@ export type sortOptionLabel = (typeof sortOptionLabels)[sortOptionKey];
     FaIconComponent,
     CampaignSummaryGridComponent,
     MatProgressSpinner,
+    StopMapPropagationDirective,
   ],
   templateUrl: './campaign-card-filter-grid-updated.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
