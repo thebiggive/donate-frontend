@@ -137,7 +137,7 @@
         </div>
 
         <div class="filter-clear-wrap">
-          @if (selectedFilterLocation || selectedFilterTheme) {
+          @if (selectedFilterLocation || selectedFilterTheme || this.searchService.selected["term"]) {
             <biggive-button
               class="filter-clear"
               size="small"
@@ -188,9 +188,36 @@
         }
       </div>
       @if (showUkMap() && flags.enableMapViewInExplore) {
-        <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+        <div class="map-wrapper">
+          <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
+            @if (enableMapFullScreenMobileMode) {
+              <div class="map-button-container">
+                <fa-icon
+                  tabindex="0"
+                  [icon]="faExpandArrows"
+                  (click)="makeMapFullScreen()"
+                  class="full-screen-map-button"
+                ></fa-icon>
+              </div>
+            }
+          </div>
+
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
-            <div class="full-screen-map-button-container">
+            <div class="map-button-container">
+              <!-- we don't use a prompt below because the eyebrow text positioning isn't designed to work over a
+                   map background and is unreliably positioned for this narrow control on mobiles we tested with.
+                   The placeholder should just be used for assistive tech -->
+              <biggive-form-field-select
+                backgroundColour="grey"
+                [prompt]="null"
+                [placeholder]="'Pick Region'"
+                [selectedLabel]="searchResult()?.UKFilterRegions?.[0].name!"
+                [selectedValue]="searchResult()?.UKFilterRegions?.[0].code!"
+                [options]="regionSelectOptions()"
+                [selectionChanged]="UKRegionSelectionChanged"
+                id="select-region"
+              />
+
               <button
                 type="button"
                 class="zoom-out-button"
@@ -199,17 +226,6 @@
               >
                 {{ zoomOutLabel }}
               </button>
-            </div>
-          }
-
-          @if (enableMapFullScreenMobileMode) {
-            <div class="full-screen-map-button-container">
-              <fa-icon
-                tabindex="0"
-                [icon]="faExpandArrows"
-                (click)="makeMapFullScreen()"
-                class="full-screen-map-button"
-              ></fa-icon>
             </div>
           }
         </div>

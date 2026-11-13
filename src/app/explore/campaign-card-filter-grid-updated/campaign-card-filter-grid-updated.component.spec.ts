@@ -95,6 +95,29 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(markerButton.textContent).toContain('42');
   });
 
+  it('should retain the same TileLayer instance across re-renders to avoid tile flashing', async () => {
+    component.selectedFilterLocation = 'United Kingdom';
+    component.categoryOptions = [];
+    component.beneficiaryOptions = [];
+    component.locationOptions = ['United Kingdom'];
+    component.offerNearMeOption = false;
+    component.selectedSortByOption = null;
+    component.fetchingLocation = false;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const initialTileLayer = (component as unknown as { tileLayer?: unknown }).tileLayer;
+    expect(initialTileLayer).toBeDefined();
+
+    component.ngOnChanges({});
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const updatedTileLayer = (component as unknown as { tileLayer?: unknown }).tileLayer;
+    expect(updatedTileLayer).toBe(initialTileLayer);
+  });
+
   it('should ignore stale async region bounds when zooming out', async () => {
     component.selectedFilterLocation = 'United Kingdom';
     component.categoryOptions = [];

@@ -38,8 +38,8 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'production':
       return {
         enableOrgAccount: true,
-        enableSearchByLocation: false,
-        enableMapViewInExplore: false,
+        enableSearchByLocation: true,
+        enableMapViewInExplore: true,
         enableMapFullScreenMobileMode: false,
         enableUpdatedCampaignCardFilter: true,
       };
