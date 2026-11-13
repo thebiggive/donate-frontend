@@ -543,7 +543,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.teardownMap();
   }
 
-  public getSelectedValue(): undefined | string {
+  public getSelectedSortByValue(): undefined | string {
     const sortByOption = this.selectedSortByOption;
     if (!sortByOption) {
       return undefined;
