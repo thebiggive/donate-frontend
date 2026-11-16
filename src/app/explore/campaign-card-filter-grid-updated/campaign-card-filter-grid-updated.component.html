@@ -160,9 +160,9 @@
       <biggive-form-field-select
         backgroundColour="grey"
         prompt="Sort by"
-        [placeholder]="sortByPlaceholderText"
+        placeholder="Sort by"
         [selectedLabel]="selectedSortByOption"
-        [selectedValue]="getSelectedValue() || null"
+        [selectedValue]="getSelectedSortByValue() || null"
         [options]="sortOptions()"
         [selectionChanged]="sortBySelectionChanged"
         id="sort-by"

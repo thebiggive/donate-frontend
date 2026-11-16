@@ -154,7 +154,7 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(
       options.some((opt: { value: string; label: string }) => opt.value === 'location' && opt.label === 'Closest'),
     ).toBeTrue();
-    expect(component.getSelectedValue()).toBe('location');
+    expect(component.getSelectedSortByValue()).toBe('location');
   });
 
   it('should include location in sortOptions when selectedSortByOption is Closest even before location object is passed', () => {
@@ -163,7 +163,7 @@ describe('CampaignCardFilterGridComponent', () => {
 
     const options = (component as unknown as { sortOptions: () => { value: string; label: string }[] }).sortOptions();
     expect(options.some((opt: { value: string; label: string }) => opt.value === 'location')).toBeTrue();
-    expect(component.getSelectedValue()).toBe('location');
+    expect(component.getSelectedSortByValue()).toBe('location');
   });
 
   it('should emit doSearchAndFilterUpdate with null filterTheme when removeFilter is called for themes', () => {

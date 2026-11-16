@@ -164,7 +164,6 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
 
   public searchResult = input<CampaignSummaryList | undefined>();
 
-  protected sortByPlaceholderText = 'Sort by';
   protected themesPlaceHolderText = 'Select theme';
   protected locationsPlaceHolderText = 'Select location';
   private initialSortByOption: sortOptionLabel;
@@ -196,6 +195,12 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
   protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
   protected faTableList = faTableList;
+
+  /** If we've selected closest for a donor during the life of this component and they chose something else
+   * then we let them continue to make their own sort order choice and not force the 'closest' sort on them
+   * every time they navigate the map.
+   */
+  protected closestSearchRejected = false;
 
   /**
    * Space below component
@@ -330,12 +335,34 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.location = undefined;
     this.doClearGeoLocation.emit();
     this.selectedFilterUKRegion = regionCode;
+    this.autoSelectSortByClosest();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
 
+  /**
+   * Called when the user navigates to a region within the UK so we can select sort by closest if appropriate.
+   *
+   * Not perfect since it only really makes sense if there are two regions in their search so we can sort things in
+   * the more local region first - so if they selected Haringey we sort Haringey then London, but if they just selected
+   * London there's nothing to sort by. But afaik at the time this runs we don't have easy access to that info, and
+   * this may be good enough.
+   */
+  private autoSelectSortByClosest(): void {
+    if (this.closestSearchRejected) {
+      // the user has already signaled that they want to sort by a different criteria.
+      return;
+    }
+
+    this.selectedSortByOption = 'Closest';
+  }
+
   protected sortBySelectionChanged = (value: sortOptionLabel | string) => {
     this.matomoTracker.trackEvent('search', 'sort_option_changed', String(value));
-    // @ts-expect-error getting Type string is not assignable to type sortOptionLabel | null . Maybe somethign we can 'grandfather' from before port from stencil.
+    if (this.selectedSortByOption === 'Closest') {
+      this.closestSearchRejected = true;
+    }
+
+    // @ts-expect-error getting Type string is not assignable to type sortOptionLabel | null . Maybe somethigng we can 'grandfather' from before port from stencil.
     this.selectedSortByOption = value;
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
@@ -543,7 +570,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
     this.teardownMap();
   }
 
-  public getSelectedValue(): undefined | string {
+  public getSelectedSortByValue(): undefined | string {
     const sortByOption = this.selectedSortByOption;
     if (!sortByOption) {
       return undefined;
@@ -694,6 +721,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
             this.matomoTracker.trackEvent('search', 'map_region_marker_clicked', areaName || regionCode || '');
             this.location = undefined;
             this.doClearGeoLocation.emit();
+            this.autoSelectSortByClosest();
             this.selectedFilterUKRegion = countObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
           });
@@ -756,6 +784,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
               `Region clicked: ${areaName || childCountObj?.regionCode || ''}`,
             );
             this.location = undefined;
+            this.autoSelectSortByClosest();
             this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = childCountObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -821,6 +850,7 @@ export class CampaignCardFilterGridUpdatedComponent implements OnDestroy, OnChan
               `Region clicked: ${areaName || countObj?.regionCode || ''}`,
             );
             this.location = undefined;
+            this.autoSelectSortByClosest();
             this.doClearGeoLocation.emit();
             this.selectedFilterUKRegion = countObj!.regionCode;
             this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
