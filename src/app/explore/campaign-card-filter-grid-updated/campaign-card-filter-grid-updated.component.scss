@@ -342,7 +342,7 @@ fa-icon {
 :host ::ng-deep {
   .map-button-container {
     position: absolute;
-    z-index: 999; // Less than full screen map, more than small one / most layers.
+    z-index: 1; // Above the map (z-index: 0) but below the main site menu (z-index: 11).
     display: flex;
     justify-content: space-between;
     gap: abstract.$spacer-1;
