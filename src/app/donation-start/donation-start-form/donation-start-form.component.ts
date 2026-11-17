@@ -259,6 +259,12 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   tipPercentage: number = this.tipPercentageDefaults[0].tipPercentage;
   tipValue: number | undefined;
 
+  /**
+   * Tracks whether the donor has explicitly chosen a tip percentage via the slider.
+   * Once set, changing the donation amount should not override the donor's chosen percentage.
+   */
+  private donorChosenTipPercentage = false;
+
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangeBlockedByCaptcha = false;
@@ -2458,6 +2464,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     const tipOrFeeAmount = this.getTipOrFeeAmount(Number(tipPercentage), this.donationAmount);
 
     this.tipPercentage = Number(tipPercentage);
+    this.donorChosenTipPercentage = true;
     this.tipValue = Number(tipOrFeeAmount);
     this.amountsGroup.patchValue({
       // Keep value consistent with format of manual string inputs.
@@ -2506,7 +2513,17 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
       const donationAmount = sanitiseCurrency(donationAmountInput);
 
-      if (!this.showCustomTipInput) {
+      // When the donor entered a custom tip amount, preserve it and skip recalculation.
+      if (this.showCustomTipInput) {
+        this.amountsGroup.patchValue(updatedValues);
+        return;
+      }
+
+      if (this.donorChosenTipPercentage) {
+        // Donor has explicitly chosen a tip percentage — keep it and only recalculate the amount.
+        updatedValues.tipAmount = this.getTipOrFeeAmount(this.tipPercentage, donationAmount);
+      } else {
+        // Donor hasn't chosen yet — apply the tier default for the current donation amount.
         let newDefault = this.tipPercentage;
 
         for (const preset of this.tipPercentageDefaults) {
@@ -2517,8 +2534,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
         updatedValues.tipPercentage = newDefault;
         updatedValues.tipAmount = this.getTipOrFeeAmount(newDefault, donationAmount);
-      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-        updatedValues.tipAmount = this.getTipOrFeeAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
       }
 
       this.amountsGroup.patchValue(updatedValues);
@@ -2774,6 +2789,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           );
 
           this.clearDonation(donation, { clearAllRecord: true, jumpToStart: true });
+          this.donorChosenTipPercentage = false;
 
           // TODO I think we should standardise our various partial resets better instead of just doing them in this case,
           //  but no time for today's fix.
