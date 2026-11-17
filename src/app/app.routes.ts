@@ -14,8 +14,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { MandateResolver } from './mandate.resolver';
 import { PaymentMethodsResolver } from './payment-methods.resolver';
 import { PastDonationsResolver } from './past-donations.resolver';
-import { isPlatformServer } from '@angular/common';
-import { inject, PLATFORM_ID, Type } from '@angular/core';
+import { inject, Type } from '@angular/core';
 
 import { IdentityService } from './identity.service';
 import { LoggedInPersonResolver } from './logged-in-person.resolver';
@@ -55,11 +54,6 @@ const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapsh
 };
 
 const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapshot) => {
-  if (isPlatformServer(inject(PLATFORM_ID))) {
-    // No tokens -> Defer the decision about in-browser rendering to the client.
-    return false;
-  }
-
   const router = inject(Router);
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
@@ -81,11 +75,6 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
 };
 
 const handleLogout: CanActivateFn = () => {
-  if (isPlatformServer(inject(PLATFORM_ID))) {
-    // No tokens -> Defer the decision about in-browser rendering to the client.
-    return false;
-  }
-
   inject(IdentityService).logout();
   return inject(Router).parseUrl('/');
 };

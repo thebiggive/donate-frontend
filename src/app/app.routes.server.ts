@@ -10,10 +10,14 @@ export const serverRoutes: ServerRoute[] = [
     path: 'regular-giving/**',
     renderMode: RenderMode.Client,
   },
-  // These 4 (inc. all sub pages of my-account) are client only, as their guards etc. require cookies and
+  // These 5 (inc. all sub pages of my-account) are client only, as their guards etc. require cookies and
   // they wouldn't be very useful to server load anyway.
   {
     path: 'login',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'logout',
     renderMode: RenderMode.Client,
   },
   {
