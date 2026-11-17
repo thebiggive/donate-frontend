@@ -286,7 +286,7 @@ fa-icon {
   .full-screen-map-button-container {
     position: absolute;
     right: 16px;
-    z-index: 999; // Less than full screen map, more than small one / most layers.
+    z-index: 1; // Above the map (z-index: 0) but below the main site menu (z-index: 11).
   }
 
   .campaign-count-marker-container,
