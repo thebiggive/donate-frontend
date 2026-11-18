@@ -1,4 +1,5 @@
 import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller, AsyncPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import {
   AfterViewChecked,
   Component,
@@ -16,6 +17,7 @@ import {
   ChangeDetectionStrategy,
   signal,
 } from '@angular/core';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
   BiggiveTotalizer,
@@ -41,18 +43,15 @@ import { environment } from '../../environments/environment';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { logCampaignCalloutError } from '../logCampaignCalloutError';
 import { MetaCampaign } from '../metaCampaign.model';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HighlightCardsComponent } from '../highlight-cards/highlight-cards.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { flags } from '../featureFlags';
 import { Toast } from '../toast.service';
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid/campaign-card-filter-grid.component';
 import { getHighlightedFeatures } from '../regions';
-import { HttpClient } from '@angular/common/http';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { CloudflareService } from '../cloudflare.service';
 import { DonationService } from '../donation.service';
-import { CampaignCardFilterGridUpdatedComponent } from './campaign-card-filter-grid-updated/campaign-card-filter-grid-updated.component';
 
 const openPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToOpenPipe');
 const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
@@ -80,7 +79,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     OptimisedImagePipe,
     BiggiveHeadingBanner,
     CampaignCardFilterGridComponent,
-    CampaignCardFilterGridUpdatedComponent,
   ],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
