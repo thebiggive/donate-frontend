@@ -649,4 +649,37 @@ describe('DonationStartForm', () => {
     expect(component.donationCreateError).toBe(false);
     expect(spy).toHaveBeenCalled();
   });
+
+  it('updates default tip percentage to lower tier for large donations when donor has not explicitly chosen percentage', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    component.amountsGroup.get('donationAmount')?.setValue('50');
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(15);
+    expect(component.tipAmount()).toBe(7.5);
+
+    component.amountsGroup.get('donationAmount')?.setValue('1000');
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(8);
+    expect(component.tipAmount()).toBe(80);
+  });
+
+  it('preserves donor chosen tip percentage when donation amount changes', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    component.amountsGroup.get('donationAmount')?.setValue('50');
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(15);
+
+    component.setTipPercentage(20);
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(20);
+    expect(component.tipAmount()).toBe(10);
+
+    component.amountsGroup.get('donationAmount')?.setValue('1000');
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(20);
+    expect(component.tipAmount()).toBe(200);
+  });
 });

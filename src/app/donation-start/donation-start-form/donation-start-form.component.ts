@@ -212,9 +212,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     { minDonation: 300, tipPercentage: 10 },
     { minDonation: 1_000, tipPercentage: 8 },
   ] as const;
-  readonly tipPercentageDefaultsByPercent = [...this.tipPercentageDefaults].sort(
-    (a, b) => a.tipPercentage - b.tipPercentage,
-  );
   readonly tipPercentageFixedOneDecimalValues = this.tipPercentageDefaults.map((d) => d.tipPercentage.toFixed(1));
 
   donorTermsUrl = donorTermsUrl;
@@ -2464,7 +2461,6 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
     const tipOrFeeAmount = this.getTipOrFeeAmount(Number(tipPercentage), this.donationAmount);
 
     this.tipPercentage = Number(tipPercentage);
-    this.donorChosenTipPercentage = true;
     this.tipValue = Number(tipOrFeeAmount);
     this.amountsGroup.patchValue({
       // Keep value consistent with format of manual string inputs.
@@ -2963,6 +2959,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   setTipPercentage(newPercentage: number) {
+    this.donorChosenTipPercentage = true;
     this.updateTipAmountFromSelectedPercentage(newPercentage.toString());
     this.amountsGroup?.get('tipPercentage')?.setValue(newPercentage);
   }
