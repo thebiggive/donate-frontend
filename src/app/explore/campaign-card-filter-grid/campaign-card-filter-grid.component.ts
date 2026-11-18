@@ -23,7 +23,7 @@ import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/co
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faLocationCrosshairs, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faFilter } from '@fortawesome/pro-regular-svg-icons';
-import { DivIcon, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
+import { DivIcon, DomEvent, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { getPoleOfInaccessibility } from '../../polylabel';
 import { CampaignSummaryGridComponent } from '../campaign-summary-grid/campaign-summary-grid.component';
@@ -302,6 +302,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       this.teardownMap();
     }
   }
+
+  @ViewChild('locationSelectWrapper') set locationSelectWrapper(element: ElementRef<HTMLDivElement> | undefined) {
+    if (element && isPlatformBrowser(this.platformId)) {
+      DomEvent.disableClickPropagation(element.nativeElement);
+      DomEvent.disableScrollPropagation(element.nativeElement);
+    }
+  }
+
   get mapElement(): ElementRef<HTMLDivElement> | undefined {
     return this._mapElement;
   }
@@ -606,6 +614,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         keyboard: false,
         scrollWheelZoom: false,
         pinchZoom: false,
+        tap: false,
         zoomSnap: 0.25, // Increases the likelihood of a tight crop around the project area vs. default steps of 1.
       });
 
@@ -890,16 +899,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected get zoomOutLabel(): string {
-    let parentRegionName = this.searchResult()?.parentRegion?.name;
-
-    if (parentRegionName?.toLocaleLowerCase() === 'london, england') {
-      // there will be other cases where the parent Region name is longer than it needs to be for clarity,
-      // but just fixing this as a special case for now since it will be one of the most frequently viewed and
-      // we can generalise to others.
-      parentRegionName = 'London';
-    }
-
-    return parentRegionName ? `Back to ${parentRegionName}` : 'Back to UK';
+    return this.searchResult()?.parentRegion ? 'Back' : 'Back to UK';
   }
 
   protected getSelectedCountry(
