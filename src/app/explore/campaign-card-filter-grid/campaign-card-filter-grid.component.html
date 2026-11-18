@@ -37,7 +37,18 @@
               ></biggive-form-field-select>
             </div>
 
-            <div class="select-wrapper-3">
+            <!-- This wrapper's only important for layout and event isolation to make Leaflet and Stencil components
+play well together. It's not, directly, a "real" touch target so the most accessible option we have is
+skipping these rules. -->
+            <!-- eslint-disable @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+            <div
+              #locationSelectWrapper
+              class="select-wrapper-3"
+              (click)="$event.stopPropagation()"
+              (touchstart)="$event.stopPropagation()"
+              (touchend)="$event.stopPropagation()"
+              (pointerdown)="$event.stopPropagation()"
+            >
               <biggive-form-field-select
                 backgroundColour="white"
                 prompt="Location"
@@ -50,6 +61,7 @@
                 space-below="2"
               ></biggive-form-field-select>
             </div>
+            <!-- eslint-enable @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
 
             <div class="align-right">
               <biggive-button label="Apply filters" (doButtonClick)="handleApplyFilterButtonClick()" />
