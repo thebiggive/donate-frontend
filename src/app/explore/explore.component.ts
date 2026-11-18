@@ -761,6 +761,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   protected clearGeoLocation() {
     this.matomoTracker.trackEvent('search', 'clear_geolocation');
     this.location = undefined;
+    delete this.searchService.selected['filterByLatLong'];
+    this.searchService.selected['country'] = '';
+    this.searchService.selected['ukRegion'] = '';
     this.searchService.sort(this.defaultSort);
   }
 }
