@@ -892,14 +892,10 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected onZoomOutClicked(): void {
-    this.matomoTracker.trackEvent('search', 'map_zoom_out_clicked', this.zoomOutLabel);
+    this.matomoTracker.trackEvent('search', 'map_zoom_out_clicked', 'Back button');
     this.selectedFilterUKRegion = this.searchResult()?.parentRegion?.code ?? null;
     this.doClearGeoLocation.emit();
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
-  protected get zoomOutLabel(): string {
-    return this.searchResult()?.parentRegion ? 'Back' : 'Back to UK';
   }
 
   protected getSelectedCountry(

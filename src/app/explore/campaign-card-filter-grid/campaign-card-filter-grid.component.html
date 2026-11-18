@@ -2,7 +2,7 @@
   <div class="sleeve">
     <section class="search-filter-wrap" aria-label="Search and filters">
       <div class="search-wrap">
-        <h4>Search by charity, project, or location</h4>
+        <h4>Search by charity or project</h4>
         <div class="field-wrap">
           <div class="input-wrap">
             <fa-icon [icon]="faMagnifyingGlass" />
@@ -11,7 +11,7 @@
               [value]="searchText ?? ''"
               class="input-text"
               placeholder="Search"
-              aria-label="Search by charity, project, or location"
+              aria-label="Search by charity or project"
               (input)="handleSearchTextChanged($event)"
               (keydown)="handleEnterPressed($event)"
             />
@@ -223,9 +223,9 @@ skipping these rules. -->
                 type="button"
                 class="zoom-out-button"
                 (click)="onZoomOutClicked()"
-                [attr.aria-label]="zoomOutLabel"
+                aria-label="Zoom out to larger area"
               >
-                {{ zoomOutLabel }}
+                Back
               </button>
             </div>
           }

@@ -266,14 +266,11 @@ fa-icon {
 
 .map-wrapper {
   position: relative;
-  flex: 1;
   min-width: 0;
 }
 
 .campaign-map {
   height: 500px;
-  margin-right: 23px;
-  margin-left: 9px;
   @media #{abstract.$breakpoint-lg} {
     height: 800px;
   }
@@ -286,10 +283,10 @@ fa-icon {
     z-index: 1; // Above the map (z-index: 0) but below the main site menu (z-index: 11).
     display: flex;
     justify-content: space-between;
-    gap: abstract.$spacer-1;
-    left: 25px;
-    right: 39px;
-    top: 16px;
+    gap: abstract.$spacer-2;
+    left: abstract.$spacer-2;
+    right: abstract.$spacer-2;
+    top: abstract.$spacer-2;
   }
 
   .campaign-count-marker-container,
