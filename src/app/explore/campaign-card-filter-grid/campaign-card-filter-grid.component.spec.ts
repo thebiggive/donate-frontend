@@ -1,20 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignCardFilterGridComponent } from './campaign-card-filter-grid.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MatomoModule, MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTestingModule } from 'ngx-matomo-client/testing';
 import { of } from 'rxjs';
 
 describe('CampaignCardFilterGridComponent', () => {
   let component: CampaignCardFilterGridComponent;
   let fixture: ComponentFixture<CampaignCardFilterGridComponent>;
   let httpClient: HttpClient;
+  let matomoTracker: MatomoTracker;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CampaignCardFilterGridComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: MatomoModule, useClass: MatomoTestingModule },
+      ],
     }).compileComponents();
 
     httpClient = TestBed.inject(HttpClient);
+    matomoTracker = TestBed.inject(MatomoTracker);
     spyOn(httpClient, 'get').and.returnValue(of({ type: 'FeatureCollection', features: [] }));
 
     fixture = TestBed.createComponent(CampaignCardFilterGridComponent);
@@ -144,7 +154,7 @@ describe('CampaignCardFilterGridComponent', () => {
     expect(
       options.some((opt: { value: string; label: string }) => opt.value === 'location' && opt.label === 'Closest'),
     ).toBeTrue();
-    expect(component.getSelectedValue()).toBe('location');
+    expect(component.getSelectedSortByValue()).toBe('location');
   });
 
   it('should include location in sortOptions when selectedSortByOption is Closest even before location object is passed', () => {
@@ -153,6 +163,96 @@ describe('CampaignCardFilterGridComponent', () => {
 
     const options = (component as unknown as { sortOptions: () => { value: string; label: string }[] }).sortOptions();
     expect(options.some((opt: { value: string; label: string }) => opt.value === 'location')).toBeTrue();
-    expect(component.getSelectedValue()).toBe('location');
+    expect(component.getSelectedSortByValue()).toBe('location');
+  });
+
+  it('should emit doSearchAndFilterUpdate with null filterTheme when removeFilter is called for themes', () => {
+    const trackEventSpy = spyOn(matomoTracker, 'trackEvent');
+    component.selectedFilterTheme = 'Religious';
+    let emittedValue: { filterTheme?: string | null } | undefined;
+    component.doSearchAndFilterUpdate.subscribe((val) => {
+      emittedValue = val;
+    });
+
+    (component as unknown as { removeFilter: (key: string) => void }).removeFilter('themes');
+
+    expect(component.selectedFilterTheme).toBeNull();
+    expect(emittedValue?.filterTheme).toBeNull();
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'remove_filter_clicked', 'themes');
+  });
+
+  it('should track search button clicks and sort selection changes', () => {
+    const trackEventSpy = spyOn(matomoTracker, 'trackEvent');
+    component.searchText = 'cats';
+
+    (component as unknown as { handleSearchButtonPressed: () => void }).handleSearchButtonPressed();
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'search_button_clicked', 'cats');
+
+    (component as unknown as { sortBySelectionChanged: (val: string) => void }).sortBySelectionChanged('Closest');
+    expect(trackEventSpy).toHaveBeenCalledWith('search', 'sort_option_changed', 'Closest');
+  });
+
+  it('should show spinner when loading is true', () => {
+    fixture.componentRef.setInput('loading', true);
+    fixture.detectChanges();
+
+    const spinner = fixture.nativeElement.querySelector('mat-spinner');
+    expect(spinner).toBeTruthy();
+  });
+
+  it('should compute themeOptions sorted alphabetically with match count in brackets from searchResult themes', () => {
+    fixture.componentRef.setInput('searchResult', {
+      themes: [
+        { theme: 'Health', numCampaigns: 15 },
+        { theme: 'Education', numCampaigns: 3 },
+        { theme: 'Animals', numCampaigns: 7 },
+      ],
+    } as unknown);
+    fixture.detectChanges();
+
+    const options = (component as unknown as { themeOptions: () => { value: string; label: string }[] }).themeOptions();
+    expect(options).toEqual([
+      { value: 'Animals', label: 'Animals [7]' },
+      { value: 'Education', label: 'Education [3]' },
+      { value: 'Health', label: 'Health [15]' },
+    ]);
+  });
+
+  it('should return empty array for themeOptions when searchResult has no themes', () => {
+    fixture.componentRef.setInput('searchResult', undefined);
+    fixture.detectChanges();
+
+    const options = (component as unknown as { themeOptions: () => { value: string; label: string }[] }).themeOptions();
+    expect(options).toEqual([]);
+  });
+
+  it('should compute countryOptions sorted alphabetically with match count in brackets from searchResult countries', () => {
+    fixture.componentRef.setInput('searchResult', {
+      countries: [
+        { country: 'United Kingdom', numCampaigns: 50 },
+        { country: 'Australia', numCampaigns: 4 },
+        { country: 'Ghana', numCampaigns: 12 },
+      ],
+    } as unknown);
+    fixture.detectChanges();
+
+    const options = (
+      component as unknown as { countryOptions: () => { value: string; label: string }[] }
+    ).countryOptions();
+    expect(options).toEqual([
+      { value: 'Australia', label: 'Australia [4]' },
+      { value: 'Ghana', label: 'Ghana [12]' },
+      { value: 'United Kingdom', label: 'United Kingdom [50]' },
+    ]);
+  });
+
+  it('should return empty array for countryOptions when searchResult has no countries', () => {
+    fixture.componentRef.setInput('searchResult', undefined);
+    fixture.detectChanges();
+
+    const options = (
+      component as unknown as { countryOptions: () => { value: string; label: string }[] }
+    ).countryOptions();
+    expect(options).toEqual([]);
   });
 });
