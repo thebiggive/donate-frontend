@@ -189,18 +189,7 @@
       </div>
       @if (showUkMap() && flags.enableMapViewInExplore) {
         <div class="map-wrapper">
-          <div class="campaign-map" [class.fullScreenMap]="fullScreenMapMode()" #mapElement>
-            @if (enableMapFullScreenMobileMode) {
-              <div class="map-button-container">
-                <fa-icon
-                  tabindex="0"
-                  [icon]="faExpandArrows"
-                  (click)="makeMapFullScreen()"
-                  class="full-screen-map-button"
-                ></fa-icon>
-              </div>
-            }
-          </div>
+          <div class="campaign-map" #mapElement></div>
 
           @if (!!getSearchAndFilterObject().filterUKRegion || hasGeoLocation()) {
             <div class="map-button-container">
@@ -229,39 +218,6 @@
             </div>
           }
         </div>
-
-        @if (fullScreenMapMode()) {
-          <div
-            tabindex="0"
-            class="drawer-control"
-            [class.open]="campaignDrawerOpen()"
-            (click)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-            (keyup.enter)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-            (keyup.space)="campaignDrawerOpen.set(!campaignDrawerOpen())"
-          >
-            <fa-icon [icon]="faTableList" role="presentation" class="icon"></fa-icon>
-            <span class="label">Campaign results</span>
-            @if (campaignDrawerOpen()) {
-              <fa-icon [icon]="faCircleChevronDown" class="icon action" title="Close"></fa-icon>
-            } @else {
-              <fa-icon [icon]="faCircleChevronUp" class="icon action" title="Open"></fa-icon>
-            }
-          </div>
-
-          <div class="drawOverFullScreenMap" [class.open]="campaignDrawerOpen()">
-            @if (loading()) {
-              <div class="loading-spinner-wrap">
-                <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
-              </div>
-            }
-            <app-campaign-summary-grid
-              (scrolled)="emitOnScroll()"
-              [individualCampaigns]="individualCampaigns()"
-              [columnCount]="2"
-            >
-            </app-campaign-summary-grid>
-          </div>
-        }
       }
     </section>
   </div>

@@ -21,15 +21,7 @@ import { SearchService } from '../../search.service';
 import { flags } from '../../featureFlags';
 import { BiggiveButton, BiggiveFormFieldSelect, BiggivePopup } from '@biggive/components-angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-  faCircleChevronDown,
-  faCircleChevronUp,
-  faFilter,
-  faLocationCrosshairs,
-  faMagnifyingGlass,
-  faTableList,
-} from '@fortawesome/free-solid-svg-icons';
-import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faFilter, faLocationCrosshairs, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { DivIcon, GeoJSON, Map, Marker, TileLayer } from 'leaflet';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { getPoleOfInaccessibility } from '../../polylabel';
@@ -72,7 +64,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   protected hasGeoLocation = signal(false);
   protected ukRegionFilterSelected = signal(false);
   protected currentSortByOption = signal<sortOptionLabel | null>(null);
-  protected readonly campaignDrawerOpen = signal(false);
 
   protected locationSortAvailable = computed(() => {
     return (
@@ -129,7 +120,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   @Input({ required: true }) locationOptions!: string[];
   protected searchService = inject(SearchService);
   protected flags = flags;
-  protected readonly enableMapFullScreenMobileMode = flags.enableMapFullScreenMobileMode;
 
   /**
    * Selected location around which donor is looking for campaigns
@@ -173,7 +163,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    */
   private newSelectedFilterTheme: string | null = null;
   private newSelectedFilterLocation: string | null = null;
-  protected fullScreenMapMode = signal(false);
   private httpClient = inject(HttpClient);
 
   @ViewChild('root') el!: ElementRef;
@@ -188,13 +177,9 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   doGetGeoLocationFromBrowser = output<void>();
   doClearGeoLocation = output<void>();
-  protected faCircleChevronDown = faCircleChevronDown;
-  protected faCircleChevronUp = faCircleChevronUp;
-  protected faExpandArrows = faExpandArrows;
   protected faFilter = faFilter;
   protected faLocationCrosshairs = faLocationCrosshairs;
   protected faMagnifyingGlass = faMagnifyingGlass;
-  protected faTableList = faTableList;
 
   /** If we've selected closest for a donor during the life of this component and they chose something else
    * then we let them continue to make their own sort order choice and not force the 'closest' sort on them
@@ -285,14 +270,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
 
   /**
    * Sets bounds options which allow a modest space around the relevant area (either whole of UK, one of the major
-   * subdivisions of England, or Wales, Scotland or Nothern Ireland), plus an extra
-   * space for the controls drawer when in full sceen mode.
+   * subdivisions of England, or Wales, Scotland or Nothern Ireland).
+   * @todo probably inline this at some point now it's constant.
    */
   private readonly boundsOptions = computed(() => {
     return {
       paddingTopLeft: [8, 8],
-      // Campaign Results bar is approx. 34px including padding. Add that much to 8px in full screen.
-      paddingBottomRight: [8, this.fullScreenMapMode() ? 42 : 8],
+      paddingBottomRight: [8, 8],
     };
   });
 
@@ -601,13 +585,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this.initMap();
   }
 
-  protected makeMapFullScreen() {
-    this.matomoTracker.trackEvent('search', 'map_fullscreen_entered');
-    this.fullScreenMapMode.set(true);
-    this.map.attributionControl.setPosition('topright');
-    setTimeout(() => this.map.invalidateSize(), 0);
-  }
-
   /**
    * Copied from campaign-info componnent - consider de-duplicating part or all of implementation if it doesn't diverge
    * quickly.
@@ -858,24 +835,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         },
       }).addTo(this.map);
     }
-
-    const exitFullScreenButtonIcon = new DivIcon({
-      className: 'exit-full-screen-map-button-container',
-      html: `<button type="button" class="exit-full-screen-map-button" aria-label="Close full screen map">X</button>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-    });
-
-    const exitFullScreenMarker = new Marker([60.7, 1.5], {
-      icon: exitFullScreenButtonIcon,
-      title: 'Exit full screen map',
-    }).addTo(this.map);
-    exitFullScreenMarker.on('click', () => {
-      this.matomoTracker.trackEvent('search', 'map_fullscreen_exited');
-      this.fullScreenMapMode.set(false);
-      this.map.attributionControl.setPosition('bottomright');
-      setTimeout(() => this.map.invalidateSize(), 0);
-    });
   }
 
   private async updateMapBounds() {

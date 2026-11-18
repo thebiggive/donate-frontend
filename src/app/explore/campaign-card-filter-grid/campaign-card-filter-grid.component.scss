@@ -268,20 +268,6 @@ fa-icon {
   position: relative;
   flex: 1;
   min-width: 0;
-
-  // When the map goes full screen, the wrapper must also go full screen
-  // so that the dropdown overlay (positioned absolutely within the wrapper)
-  // remains visible over the full-screen map.
-  &:has(.fullScreenMap) {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-  }
 }
 
 .campaign-map {
@@ -292,51 +278,6 @@ fa-icon {
     height: 800px;
   }
   z-index: 0;
-}
-
-.drawer-control {
-  cursor: pointer;
-  display: block;
-  width: 100%;
-
-  position: fixed;
-
-  left: 0;
-  min-height: 24px;
-  padding: 5px;
-
-  // These 2 replaced below, when map is .open
-  bottom: 0;
-  margin-bottom: 0;
-
-  z-index: 2001;
-
-  background: abstract.$colour-card-overlay-background;
-  color: abstract.$colour-primary;
-  text-decoration: underline;
-
-  .label {
-    padding-left: 2rem;
-  }
-
-  .icon {
-    vertical-align: super;
-    margin-top: -4px;
-    position: absolute;
-
-    &.action {
-      right: 5px;
-    }
-  }
-
-  &.open {
-    bottom: 80%;
-    margin-bottom: 20px;
-  }
-
-  &:focus-visible {
-    outline: 2px solid abstract.$colour-highlight;
-  }
 }
 
 :host ::ng-deep {
@@ -352,15 +293,12 @@ fa-icon {
   }
 
   .campaign-count-marker-container,
-  .map-button-container,
-  .exit-full-screen-map-button-container {
+  .map-button-container {
     background: transparent;
     border: none;
   }
 
-  .campaign-count-marker,
-  .full-screen-map-button,
-  .exit-full-screen-map-button {
+  .campaign-count-marker {
     background-color: abstract.$colour-primary;
     color: abstract.$colour-white;
     border: 2px solid abstract.$colour-white;
@@ -392,22 +330,6 @@ fa-icon {
     }
   }
 
-  .full-screen-map-button {
-    border: none;
-    @media #{abstract.$breakpoint-lg} {
-      display: none;
-    }
-  }
-
-  .exit-full-screen-map-button-container {
-    display: none;
-  }
-
-  .exit-full-screen-map-button {
-    border: none;
-    display: none;
-  }
-
   .zoom-out-button {
     font-family: inherit;
     font-size: 1rem;
@@ -437,51 +359,6 @@ fa-icon {
     @media #{abstract.$breakpoint-md} {
       max-width: none;
     }
-  }
-
-  .fullScreenMap {
-    position: fixed !important; // important to override leaflet's library setting to position: relative
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    max-width: none;
-    z-index: 1000;
-
-    .full-screen-map-button {
-      display: none;
-    }
-    .exit-full-screen-map-button-container {
-      display: block;
-    }
-    .exit-full-screen-map-button {
-      display: block;
-    }
-  }
-}
-
-.drawOverFullScreenMap {
-  // The full screen map has a z-index of 1,000, acting as near as possible to a true full screen
-  // element on iphone (which doesn't support actually making an element full screen). This sits on top
-  // of the map so has an even higher z-index.
-  z-index: 2000;
-  position: fixed;
-  overflow-y: scroll;
-  left: abstract.$full-screen-border;
-  right: abstract.$full-screen-border;
-  bottom: 0;
-  height: 0;
-
-  outline: 1px solid abstract.$colour-grey-light;
-  padding-top: 15px;
-  background: abstract.$colour-card-overlay-background;
-
-  &.open {
-    height: 80%;
-    bottom: 0;
   }
 }
 

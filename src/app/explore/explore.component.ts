@@ -17,7 +17,6 @@ import {
   ChangeDetectionStrategy,
   signal,
 } from '@angular/core';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterLink } from '@angular/router';
 import {
   BiggiveTotalizer,
@@ -72,7 +71,6 @@ const endPipeToken = new InjectionToken<TimeLeftPipe>('timeLeftToEndPipe');
     BiggiveTotalizer,
     BiggiveTotalizerTickerItem,
     BiggivePageSection,
-    MatProgressSpinner,
     HighlightCardsComponent,
     RouterLink,
     AsyncPipe,
