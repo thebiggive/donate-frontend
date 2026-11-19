@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
@@ -71,6 +71,7 @@ export class TransferFundsComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private toast = inject(Toast);
   readonly flags = flags;
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   donorTermsUrl = donorTermsUrl;
   giftAidTermsUrl = donorGiftAidTermsUrl;
@@ -197,6 +198,7 @@ export class TransferFundsComponent implements OnInit {
           this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
           this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
           this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
+          this.changeDetectorRef.markForCheck();
         });
 
       this.createAndFinaliseTipDonation();
