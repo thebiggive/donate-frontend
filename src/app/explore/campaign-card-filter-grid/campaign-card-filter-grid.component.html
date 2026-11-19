@@ -84,9 +84,7 @@ skipping these rules. -->
           </button>
 
           @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-            @if (fetchingLocation) {
-              Checking your location...
-            } @else {
+            @if (! fetchingLocation) {
               <button
                 type="button"
                 class="button with-icon"
