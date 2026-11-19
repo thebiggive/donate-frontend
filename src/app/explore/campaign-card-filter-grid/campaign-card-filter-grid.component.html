@@ -83,18 +83,16 @@ skipping these rules. -->
             Place or Theme
           </button>
 
-          @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-            @if (! fetchingLocation) {
-              <button
-                type="button"
-                class="button with-icon"
-                (click)="handleNearMeButtonPressed()"
-                aria-label="Filter by campaigns near me"
-              >
-                <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
-                Near me
-              </button>
-            }
+          @if (enableSearchByLocation && offerNearMeOption && !geoLocation && !fetchingLocation) {
+            <button
+              type="button"
+              class="button with-icon"
+              (click)="handleNearMeButtonPressed()"
+              aria-label="Filter by campaigns near me"
+            >
+              <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
+              Near me
+            </button>
           }
         </div>
 
