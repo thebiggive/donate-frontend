@@ -213,7 +213,10 @@
                       or the login modal can be in.
                       -->
                     <p>
-                      <em>Forgot password? Reset it on the <a routerLink="/login">login page</a>.</em>
+                      <em
+                        >Forgot password? Reset it on the
+                        <a routerLink="/login" [queryParams]="{ view: 'reset-password' }">login page</a>.</em
+                      >
                     </p>
                   } @else {
                     Please enter the temporary password we have emailed to you, or your existing password if you have a

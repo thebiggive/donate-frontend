@@ -23,6 +23,7 @@ import { WidgetInstance } from 'friendly-challenge';
 import { BackendError, errorDescription } from '../backendError';
 import { BiggiveTextInput } from '@biggive/components-angular';
 import { PasswordInputComponent } from '../password-input/password-input.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login-modal',
@@ -39,6 +40,7 @@ import { PasswordInputComponent } from '../password-input/password-input.compone
     PopupStandaloneComponent,
     BiggiveTextInput,
     PasswordInputComponent,
+    RouterLink,
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {

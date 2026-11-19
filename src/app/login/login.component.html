@@ -46,9 +46,13 @@
                 </div>
                 <div class="actions">
                   <div>
-                    <!-- Href attribute below is needed to make this act like a link for keyboard users, i.e focusable and-->
-                    <!-- clickable using keyboard. Using # not a no-op JS because we're blocking line JS -->
-                    <a href="#" class="no-op-link" (click)="this.forgotPassword = false">Return to login page</a>
+                    <a
+                      routerLink="/login"
+                      [queryParams]="{ view: null }"
+                      queryParamsHandling="merge"
+                      (click)="this.forgotPassword = false"
+                      >Return to login page</a
+                    >
                   </div>
                   <div id="reset-password-button">
                     @if (!userAskedForResetLink) {
@@ -118,7 +122,13 @@
           </form>
           <div class="actions">
             <div>
-              <a href="#" class="no-op-link" (click)="this.forgotPassword = true">Forgot password?</a>
+              <a
+                routerLink="/login"
+                [queryParams]="{ view: 'reset-password' }"
+                queryParamsHandling="merge"
+                (click)="this.forgotPassword = true"
+                >Forgot password?</a
+              >
             </div>
             <div id="login-button">
               <div aria-live="polite">
