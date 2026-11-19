@@ -84,15 +84,19 @@ skipping these rules. -->
           </button>
 
           @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
-            <button
-              type="button"
-              class="button with-icon"
-              (click)="handleNearMeButtonPressed()"
-              aria-label="Filter by campaigns near me"
-            >
-              <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
-              Near me
-            </button>
+            @if (fetchingLocation) {
+              Checking your location...
+            } @else {
+              <button
+                type="button"
+                class="button with-icon"
+                (click)="handleNearMeButtonPressed()"
+                aria-label="Filter by campaigns near me"
+              >
+                <fa-icon [icon]="faLocationCrosshairs" role="presentation"></fa-icon>
+                Near me
+              </button>
+            }
           }
         </div>
 
