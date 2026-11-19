@@ -103,7 +103,7 @@
 
   @media #{var.$breakpoint-lg} {
     width: calc(100% - 380px);
-    padding-right: 4rem;
+    padding-right: var.$spacer-4;
     box-sizing: border-box;
   }
 
@@ -202,7 +202,8 @@
   flex-direction: column;
   overflow: hidden;
 
-  @media#{var.$breakpoint-lg} {
+  // Icons are too squashed in the available right column space at viewports between lg and xl.
+  @media#{var.$breakpoint-xl} {
     flex-direction: row;
     :nth-child(1) {
       padding-left: 0;
