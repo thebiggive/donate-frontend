@@ -252,7 +252,13 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
    */
   @Input({ required: true }) set selectedFilterLocation(value: string | null) {
     this._selectedFilterLocation = value;
-    this.ukFilterSelected.set(this.locationFilterIsUK(value));
+    const isUK = this.locationFilterIsUK(value);
+    this.ukFilterSelected.set(isUK);
+    // If a non-UK country is selected, clear any UK region filter
+    if (!isUK && this._selectedFilterUKRegion) {
+      this._selectedFilterUKRegion = null;
+      this.ukRegionFilterSelected.set(false);
+    }
   }
   get selectedFilterLocation(): string | null {
     return this._selectedFilterLocation;
