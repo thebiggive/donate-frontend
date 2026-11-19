@@ -399,6 +399,16 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       case 'locations':
         this.selectedFilterLocation = null;
         this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
+        // If a UK location or geolocation was selected, clear the UK region filter and geolocation
+        if (this._selectedFilterUKRegion || this._location) {
+          this._selectedFilterUKRegion = null;
+          this.ukRegionFilterSelected.set(false);
+          this._location = undefined;
+          this._geoLocation = undefined;
+          this.hasGeoLocation.set(false);
+          this.selectedSortByOption = this.initialSortByOption;
+          this.doClearGeoLocation.emit();
+        }
         break;
       default:
         // This asks the compiler to check that we are in dead code, i.e. we covered all the possible filter keys
