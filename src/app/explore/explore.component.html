@@ -61,7 +61,7 @@
     <h1 class="visually-hidden">{{ metaCampaign ? title : "Explore campaigns" }}</h1>
 
     <app-campaign-card-filter-grid
-      [loading]="loading"
+      [loading]="loading || fetchingLocation"
       [searchText]="searchService.selected.term || null"
       [selectedFilterTheme]="searchService.selected['theme'] ? searchService.selected['theme'] : null"
       [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null"
