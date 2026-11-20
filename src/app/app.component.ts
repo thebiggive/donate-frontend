@@ -105,7 +105,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   private loginStatusChangeSubscription: Subscription | undefined;
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
   private previousPath = '';
-  private firstScrollProcessed = false;
 
   constructor() {
     this.router.events.pipe(filter((e): e is Scroll => e instanceof Scroll)).subscribe((e) => {
@@ -117,19 +116,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.viewportScroller.scrollToAnchor(e.anchor);
       } else {
         const currentPath = e.routerEvent.url.split('?')[0];
-        // On the first Scroll event after page load (e.g. after SSR hydration),
-        // just record the path without scrolling. This avoids scrolling to top
-        // when the first user interaction (e.g. clicking a map marker) triggers
-        // a query-param-only navigation, because previousPath might not have been
-        // set correctly yet (router.url at constructor time may differ from the
-        // final navigated URL, or the initial Scroll event may be skipped during hydration).
-        if (!this.firstScrollProcessed) {
-          this.firstScrollProcessed = true;
-          this.previousPath = currentPath;
-          return;
-        }
-        // Only scroll to top if navigating to a different page/path
-        if (currentPath !== this.previousPath) {
+        if (currentPath !== this.previousPath && this.previousPath !== '') {
           this.viewportScroller.scrollToPosition([0, 0]);
         }
         this.previousPath = currentPath;
