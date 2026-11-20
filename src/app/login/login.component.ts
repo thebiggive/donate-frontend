@@ -22,7 +22,7 @@ import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { environment } from '../../environments/environment';
 import { EMAIL_REGEXP } from '../validators/patterns';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { registerPath } from '../app.routes';
 import { WidgetInstance } from 'friendly-challenge';
 import { NavigationService } from '../navigation.service';
@@ -51,6 +51,7 @@ export type LoginNavigationState = {
     MatProgressSpinnerModule,
     PasswordInputComponent,
     ReactiveFormsModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -68,7 +69,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
 
-  protected forgotPassword = false;
+  public forgotPassword = false;
   protected loggingIn = false;
   protected loginError?: string;
   loginForm!: FormGroup;
@@ -116,6 +117,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
     if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
       this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
+    }
+
+    if (this.activatedRoute.snapshot.queryParams.view === 'reset-password') {
+      this.forgotPassword = true;
     }
 
     this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);

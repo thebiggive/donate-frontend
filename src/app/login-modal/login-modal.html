@@ -75,7 +75,9 @@
     </form>
   </mat-dialog-content>
   <mat-dialog-actions class="u-justify-space-between">
-    <a href (click)="forgotPasswordClicked($event)">Forgot password?</a>
+    <a routerLink="/login" [queryParams]="{ view: 'reset-password' }" (click)="forgotPasswordClicked($event)"
+      >Forgot password?</a
+    >
     &nbsp;
     <div>
       <button
