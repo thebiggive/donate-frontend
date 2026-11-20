@@ -126,28 +126,30 @@
       }
 
       <div id="campaign-highlights-beneficiaries-and-categories-mobile">
-        <div class="button-wrapper">
-          @if (donateEnabled && !campaign.isRegularGiving) {
-            <biggive-button
-              space-below="5"
-              colour-scheme="primary"
-              label="Donate now"
-              full-width="true"
-              size="medium"
-              [url]="'/donate/' + campaign.id"
-            ></biggive-button>
-          }
-          @if (donateEnabled && campaign.isRegularGiving) {
-            <biggive-button
-              space-below="5"
-              colour-scheme="primary"
-              label="Donate monthly"
-              full-width="true"
-              size="medium"
-              [url]="'/regular-giving/' + campaign.id"
-            ></biggive-button>
-          }
-        </div>
+        @if (donateEnabled) {
+          <div class="button-wrapper">
+            @if (donateEnabled && !campaign.isRegularGiving) {
+              <biggive-button
+                space-below="5"
+                colour-scheme="primary"
+                label="Donate now"
+                full-width="true"
+                size="medium"
+                [url]="'/donate/' + campaign.id"
+              ></biggive-button>
+            }
+            @if (donateEnabled && campaign.isRegularGiving) {
+              <biggive-button
+                space-below="5"
+                colour-scheme="primary"
+                label="Donate monthly"
+                full-width="true"
+                size="medium"
+                [url]="'/regular-giving/' + campaign.id"
+              ></biggive-button>
+            }
+          </div>
+        }
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
 
@@ -380,32 +382,34 @@
 
     <div class="b-secondary-column">
       <div id="campaign-highlights-beneficiaries-and-categories-desktop">
-        <div class="button-wrapper">
-          <!-- Note disparity between logic for ad-hoc and regular giving campaigns - only because I'm more actively
-                developing regular-giving now and more cautions of regressions in ad-hoc, and I don't fully understand
-                the rationale of the existing different logic in donateEnabled, campaignInPast and
-                DonationStartContainerComponent.campaignIsOpen. May be easier to clear up after we move campaign
-                backend from SF to matchbot.
-          -->
-          @if (donateEnabled && !campaign.isRegularGiving) {
-            <biggive-button
-              colour-scheme="primary"
-              label="Donate now"
-              full-width="true"
-              size="medium"
-              [url]="'/donate/' + campaign.id"
-            ></biggive-button>
-          }
-          @if (donateEnabled && campaign.isRegularGiving && !campaignInPast) {
-            <biggive-button
-              colour-scheme="primary"
-              label="Donate monthly"
-              full-width="true"
-              size="medium"
-              [url]="'/regular-giving/' + campaign.id"
-            ></biggive-button>
-          }
-        </div>
+        @if (donateEnabled) {
+          <div class="button-wrapper">
+            <!-- Note disparity between logic for ad-hoc and regular giving campaigns - only because I'm more actively
+                  developing regular-giving now and more cautions of regressions in ad-hoc, and I don't fully understand
+                  the rationale of the existing different logic in donateEnabled, campaignInPast and
+                  DonationStartContainerComponent.campaignIsOpen. May be easier to clear up after we move campaign
+                  backend from SF to matchbot.
+            -->
+            @if (donateEnabled && !campaign.isRegularGiving) {
+              <biggive-button
+                colour-scheme="primary"
+                label="Donate now"
+                full-width="true"
+                size="medium"
+                [url]="'/donate/' + campaign.id"
+              ></biggive-button>
+            }
+            @if (donateEnabled && campaign.isRegularGiving && !campaignInPast) {
+              <biggive-button
+                colour-scheme="primary"
+                label="Donate monthly"
+                full-width="true"
+                size="medium"
+                [url]="'/regular-giving/' + campaign.id"
+              ></biggive-button>
+            }
+          </div>
+        }
 
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
