@@ -254,10 +254,8 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     this._selectedFilterLocation = value;
     const isUK = this.locationFilterIsUK(value);
     this.ukFilterSelected.set(isUK);
-    // If a non-UK country is selected, clear any UK region filter
-    if (!isUK && this._selectedFilterUKRegion) {
-      this._selectedFilterUKRegion = null;
-      this.ukRegionFilterSelected.set(false);
+    if (!isUK) {
+      this.clearAnySubUKLocationFilter();
     }
   }
   get selectedFilterLocation(): string | null {
@@ -406,15 +404,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
         this.selectedFilterLocation = null;
         this.ukFilterSelected.set(this.locationFilterIsUK(this.selectedFilterLocation));
         // If a UK location or geolocation was selected, clear the UK region filter and geolocation
-        if (this._selectedFilterUKRegion || this._location) {
-          this._selectedFilterUKRegion = null;
-          this.ukRegionFilterSelected.set(false);
-          this._location = undefined;
-          this._geoLocation = undefined;
-          this.hasGeoLocation.set(false);
-          this.selectedSortByOption = this.initialSortByOption;
-          this.doClearGeoLocation.emit();
-        }
+        this.clearAnySubUKLocationFilter();
         break;
       default:
         // This asks the compiler to check that we are in dead code, i.e. we covered all the possible filter keys
@@ -432,6 +422,18 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
     }
 
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  private clearAnySubUKLocationFilter() {
+    if (this._selectedFilterUKRegion || this._location) {
+      this._selectedFilterUKRegion = null;
+      this.ukRegionFilterSelected.set(false);
+      this._location = undefined;
+      this._geoLocation = undefined;
+      this.hasGeoLocation.set(false);
+      this.selectedSortByOption = this.initialSortByOption;
+      this.doClearGeoLocation.emit();
+    }
   }
 
   protected handleSearchButtonPressed = () => {
