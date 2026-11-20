@@ -77,14 +77,17 @@
               </td>
               @if (method.card !== undefined) {
                 <td class="cardUpdateButton">
-                  <!--            href must be set to make link interactable with keyboard-->
-                  <a href="#" class="no-op-link" (click)="updateCard(method.id, method.card, method.billing_details)"
-                    >Edit</a
+                  <button
+                    type="button"
+                    class="link-button"
+                    (click)="updateCard(method.id, method.card, method.billing_details)"
                   >
+                    Edit
+                  </button>
                 </td>
               }
               <td class="cardDeleteButton">
-                <a href="#" class="no-op-link" (click)="deleteMethod(method)">Delete</a>
+                <button type="button" class="link-button" (click)="deleteMethod(method)">Delete</button>
               </td>
             </tr>
           }

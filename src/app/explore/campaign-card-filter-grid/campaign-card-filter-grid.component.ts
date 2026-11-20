@@ -102,7 +102,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       .sort((a, b) => a.theme.localeCompare(b.theme))
       .map((theme) => ({
         value: theme.theme,
-        label: `${theme.theme} [${theme.numCampaigns}]`,
+        label: theme.numCampaigns === null ? theme.theme : `${theme.theme} [${theme.numCampaigns}]`,
       }));
   });
 
@@ -111,7 +111,7 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       .sort((a, b) => a.country.localeCompare(b.country))
       .map((country) => ({
         value: country.country,
-        label: `${country.country} [${country.numCampaigns}]`,
+        label: country.numCampaigns === null ? country.country : `${country.country} [${country.numCampaigns}]`,
       }));
   });
 
@@ -915,14 +915,14 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
   }
 
   protected getSelectedCountry(
-    countries: { country: string; numCampaigns: number }[],
-  ): { country: string; numCampaigns: number } | undefined {
+    countries: { country: string; numCampaigns: number | null }[],
+  ): { country: string; numCampaigns: number | null } | undefined {
     return countries.find((c) => c.country === this.selectedFilterLocation);
   }
 
   protected getSelectedTheme(
-    themes: { theme: string; numCampaigns: number }[],
-  ): { theme: string; numCampaigns: number } | undefined {
+    themes: { theme: string; numCampaigns: number | null }[],
+  ): { theme: string; numCampaigns: number | null } | undefined {
     return themes.find((t) => t.theme === this.selectedFilterTheme);
   }
 
@@ -955,7 +955,6 @@ export class CampaignCardFilterGridComponent implements OnDestroy, OnChanges, Af
       ...(this.searchResult()?.parentRegion ? this.formatRegionsForSelect(siblingRegions) : []),
       ...(parentRegion ? [{ label: parentRegion.name, value: parentRegion.code }] : []),
     ].sort((a, b) => a.label.localeCompare(b.label));
-    // todo - consider  campaign counts.
   }
 
   private formatRegionsForSelect(regions: UKRegion[] | undefined): { label: string; value: string }[] {

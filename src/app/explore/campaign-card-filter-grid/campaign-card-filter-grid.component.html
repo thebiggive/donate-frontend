@@ -83,7 +83,7 @@ skipping these rules. -->
             Place or Theme
           </button>
 
-          @if (enableSearchByLocation && this.offerNearMeOption && !this.geoLocation) {
+          @if (enableSearchByLocation && offerNearMeOption && !geoLocation && !fetchingLocation) {
             <button
               type="button"
               class="button with-icon"
