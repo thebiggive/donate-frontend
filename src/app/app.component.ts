@@ -116,8 +116,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.viewportScroller.scrollToAnchor(e.anchor);
       } else {
         const currentPath = e.routerEvent.url.split('?')[0];
-        // Only scroll to top if navigating to a different page/path
-        if (currentPath !== this.previousPath) {
+        if (currentPath !== this.previousPath && this.previousPath !== '') {
           this.viewportScroller.scrollToPosition([0, 0]);
         }
         this.previousPath = currentPath;
