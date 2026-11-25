@@ -3,9 +3,10 @@
 
 // See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
 const puppeteer = require("puppeteer");
-process.env.CHROME_BIN = puppeteer.executablePath();
 
-module.exports = function (config) {
+module.exports = async function (config) {
+  process.env.CHROME_BIN = await puppeteer.executablePath();
+
   config.set({
     basePath: "",
     frameworks: ["jasmine"],
