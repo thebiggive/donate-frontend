@@ -24,6 +24,7 @@ import { BackendError, errorDescription } from '../backendError';
 import { BiggiveTextInput } from '@biggive/components-angular';
 import { PasswordInputComponent } from '../password-input/password-input.component';
 import { RouterLink } from '@angular/router';
+import { flags } from '../featureFlags';
 
 @Component({
   selector: 'app-login-modal',
@@ -57,12 +58,17 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   resetPasswordSuccess: boolean | undefined = undefined;
   userAskedForResetLink = false;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  protected readonly flags = flags;
   private captchaCode: string | undefined;
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
 
   ngOnInit() {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.captchaCode = 'dummy-captcha-code';
+    }
+
     this.loginForm = this.formBuilder.group({
       emailAddress: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP)]],
       password: [null, [Validators.required]],
@@ -74,6 +80,15 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.captchaCode = 'dummy-captcha-code';
+      return;
+    }
+
+    if (!this.friendlyCaptcha) {
+      return;
+    }
+
     this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
@@ -91,7 +106,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   async login(): Promise<void> {
     this.loggingIn = true;
     const credentials: Credentials = {
-      captcha_code: this.captchaCode || '',
+      captcha_code: this.captchaCode || (flags.bypassFriendlyCaptcha ? 'dummy-captcha-code' : ''),
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     };
@@ -102,11 +117,15 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
         this.loggingIn = false;
       },
       async (error: BackendError) => {
-        this.friendlyCaptchaWidget?.reset();
+        if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+          this.captchaCode = 'dummy-captcha-code';
+        } else {
+          this.friendlyCaptchaWidget?.reset();
+          await this.friendlyCaptchaWidget?.start();
+        }
         this.loginError = errorDescription(error);
         this.loggingIn = false;
         this.cdr.markForCheck();
-        await this.friendlyCaptchaWidget?.start();
       },
     );
   }

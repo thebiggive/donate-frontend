@@ -219,7 +219,7 @@
             }
           </div>
 
-          @if (shouldShowCaptcha) {
+          @if (shouldShowCaptcha && !flags.bypassFriendlyCaptcha) {
             <div
               tabindex="0"
               class="frc-captcha"

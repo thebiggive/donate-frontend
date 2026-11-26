@@ -29,6 +29,7 @@ import { NavigationService } from '../navigation.service';
 import { errorDescription, BackendError } from '../backendError';
 import { addBodyClass, removeBodyClass } from '../bodyStyle';
 import { PasswordInputComponent } from '../password-input/password-input.component';
+import { flags } from '../featureFlags';
 
 export type LoginNavigationState = {
   /**
@@ -80,6 +81,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   protected redirectPath: string = '/my-account';
   protected passwordResetError: undefined | string = undefined;
   protected readonly registerPath = registerPath;
+  protected readonly flags = flags;
 
   protected userAskedForResetLink: boolean = false;
 
@@ -125,6 +127,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);
 
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.captchaCode = 'dummy-captcha-code';
+    }
+
     this.pageInitialised = true;
   }
 
@@ -135,7 +141,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    if (environment.environmentId === 'regression') {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
       this.captchaCode = 'dummy-captcha-code';
       return;
     }
@@ -205,10 +211,15 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loginError = errorDescription(error);
           this.loggingIn = false;
 
-          this.captchaCode = undefined;
-          this.friendlyCaptchaWidget.reset();
+          if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+            this.captchaCode = 'dummy-captcha-code';
+          } else {
+            this.captchaCode = undefined;
+            this.friendlyCaptchaWidget?.reset();
+            this.cdr.markForCheck();
+            await this.friendlyCaptchaWidget?.start();
+          }
           this.cdr.markForCheck();
-          await this.friendlyCaptchaWidget.start();
         },
       });
     this.loggingIn = true;
