@@ -76,7 +76,13 @@ export class TransferFundsComponent implements OnInit {
   donorTermsUrl = donorTermsUrl;
   giftAidTermsUrl = donorGiftAidTermsUrl;
   isLoading: boolean = false;
-  isPurchaseComplete = false;
+
+  fundingInstructions: {
+    accountNumber: string,
+    sortCode: string,
+    accountHolderName: string,
+  }|undefined = undefined;
+
   isOptedIntoGiftAid = false;
   currency = '£';
   /** The Big Give campaign which receives any on-topup tips. */
@@ -89,9 +95,6 @@ export class TransferFundsComponent implements OnInit {
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = maximumDonationAmountForFundedDonation;
-  sortCode?: string;
-  accountNumber?: string;
-  accountHolderName?: string;
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
   donor: Person | undefined = undefined;
@@ -194,10 +197,11 @@ export class TransferFundsComponent implements OnInit {
         .getFundingInstructions(idAndJWT?.id, idAndJWT.jwt)
         .subscribe((response: FundingInstruction) => {
           this.isLoading = false;
-          this.isPurchaseComplete = true;
-          this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
-          this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
-          this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
+          this.fundingInstructions = {
+            accountNumber: response.bank_transfer.financial_addresses[0]!.sort_code.account_number,
+            sortCode: response.bank_transfer.financial_addresses[0]!.sort_code.sort_code,
+            accountHolderName: response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name,
+          };
           this.createAndFinaliseTipDonation();
           this.changeDetectorRef.markForCheck();
         });
