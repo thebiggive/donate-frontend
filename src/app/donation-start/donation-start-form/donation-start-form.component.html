@@ -425,6 +425,7 @@
               <span slot="label">Payment method</span>
               <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe/Ryft not us -->
               <div slot="input">
+                <!-- TODO work out why this is changed after checked. Replace with signal? -->
                 @if (stripeElementLoading) {
                   <mat-spinner color="primary" diameter="30" aria-label="Loading payment form"> </mat-spinner>
                 }
@@ -435,7 +436,7 @@
                 }
               </div>
             </biggive-text-input>
-            @if (!donor) {
+            @if (!donor && !stripeElementLoading) {
               <div class="error" aria-live="polite">
                 <p>
                   Sorry, there was an error showing the payment field. Please try again or
