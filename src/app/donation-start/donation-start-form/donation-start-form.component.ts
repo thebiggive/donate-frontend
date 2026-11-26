@@ -313,7 +313,7 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
 
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement> | undefined;
-  protected shouldShowCaptcha: boolean = true;
+  protected shouldShowCaptcha: boolean = !flags.bypassFriendlyCaptcha;
   protected isSavedPaymentMethodSelected: boolean = false;
   protected paymentMethodOrderVariant: 'A' | 'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
@@ -368,6 +368,10 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   ngOnInit() {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.idCaptchaCode = 'dummy-captcha-code';
+    }
+
     if (isPlatformBrowser(this.platformId)) {
       /**
        * For some reason awaiting this promise makes tests fail with
@@ -587,15 +591,15 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
       return;
     }
 
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.idCaptchaCode = 'dummy-captcha-code';
+      return;
+    }
+
     const friendlyCaptcha = this.friendlyCaptcha;
 
     if (!friendlyCaptcha) {
       // should always be loaded from the template, but not present in tests.
-      return;
-    }
-
-    if (environment.environmentId === 'regression') {
-      this.idCaptchaCode = 'dummy-captcha-code';
       return;
     }
 
@@ -1996,7 +2000,11 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${logCode}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
-          this.friendlyCaptchaWidget?.reset();
+          if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+            this.idCaptchaCode = 'dummy-captcha-code';
+          } else {
+            this.friendlyCaptchaWidget?.reset();
+          }
           this.showDonationCreateError('identity-create: ' + error.message);
           this.stepper?.previous(); // Go back to step 1 to make the general error for donor visible.
         },
@@ -2955,7 +2963,9 @@ export class DonationStartFormComponent implements OnDestroy, OnInit, AfterViewI
   }
 
   showCaptcha() {
-    this.shouldShowCaptcha = true;
+    if (!flags.bypassFriendlyCaptcha) {
+      this.shouldShowCaptcha = true;
+    }
   }
 
   setTipPercentage(newPercentage: number) {

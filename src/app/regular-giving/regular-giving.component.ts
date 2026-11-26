@@ -68,6 +68,7 @@ import { noLongNumberValidator } from '../validators/noLongNumberValidator';
 import { DonorAccountService } from '../donor-account.service';
 import { HttpStatusCode } from '@angular/common/http';
 import { PasswordInputComponent } from '../password-input/password-input.component';
+import { flags } from '../featureFlags';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -125,6 +126,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   private matomoTracker = inject(MatomoTracker);
   private conversionTrackingService = inject(ConversionTrackingService);
   protected friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  protected readonly flags = flags;
   private donorAccountService = inject(DonorAccountService);
 
   protected mandateForm = new FormGroup({
@@ -261,6 +263,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         return;
       }
 
+      if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+        this.friendlyCaptchaSolution = 'dummy-captcha-code';
+        return;
+      }
+
       const friendlyCaptcha = this.friendlyCaptcha();
       if (!friendlyCaptcha) {
         return;
@@ -302,6 +309,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
   async ngOnInit() {
     this.donor = this.route.snapshot.data['donor'];
     this.donorAccount = this.route.snapshot.data['donorAccount'];
+
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+    }
 
     this.campaign = this.route.snapshot.data['campaign'];
     this.formattedCampaignSummary = formattedCampaignSummary(this.campaign);
@@ -414,7 +425,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    if (environment.environmentId === 'regression') {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
       this.friendlyCaptchaSolution = 'dummy-captcha-code';
       return;
     }
@@ -721,8 +732,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
 
   protected async sendEmailToContinue() {
     if (!this.friendlyCaptchaSolution && !this.donor) {
-      this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
-      return;
+      if (flags.bypassFriendlyCaptcha || environment.environmentId === 'regression') {
+        this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      } else {
+        this.toast.showError('Please wait for or complete the CAPTCHA before continuing.');
+        return;
+      }
     }
 
     if (this.donor) {
@@ -744,8 +759,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       this.extractErrorMessage(error);
       return;
     } finally {
-      this.friendlyCaptchaWidget?.reset();
-      await this.friendlyCaptchaWidget?.start();
+      if (!flags.bypassFriendlyCaptcha && environment.environmentId !== 'regression') {
+        this.friendlyCaptchaWidget?.reset();
+        await this.friendlyCaptchaWidget?.start();
+      } else {
+        this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      }
       this.processingTempPasswordRequest = false;
     }
 
@@ -1033,7 +1052,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
       return;
     }
 
-    const captchaCode = this.friendlyCaptchaSolution;
+    const captchaCode =
+      this.friendlyCaptchaSolution ||
+      (flags.bypassFriendlyCaptcha || environment.environmentId === 'regression' ? 'dummy-captcha-code' : undefined);
     if (!captchaCode) {
       this.toast.showError('Captcha code missing - please wait a moment and try again');
       return;
@@ -1068,8 +1089,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toast.showError(
           'Your email or password is incorrect. Please try typing your password again, or go back and check the email address.',
         );
-        this.friendlyCaptchaSolution = undefined;
-        this.friendlyCaptchaWidget.reset();
+        if (!flags.bypassFriendlyCaptcha && environment.environmentId !== 'regression') {
+          this.friendlyCaptchaSolution = undefined;
+          this.friendlyCaptchaWidget?.reset();
+        } else {
+          this.friendlyCaptchaSolution = 'dummy-captcha-code';
+        }
         return;
       }
 
@@ -1117,7 +1142,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     // @todo-DON-1195 - replace exclamation marks below with proper guards
     this.identityService
       .create({
-        captcha_code: this.friendlyCaptchaSolution,
+        captcha_code:
+          this.friendlyCaptchaSolution ||
+          (flags.bypassFriendlyCaptcha || environment.environmentId === 'regression'
+            ? 'dummy-captcha-code'
+            : undefined),
         email_address: this.mandateForm.controls.emailAddress.value!,
         first_name: this.mandateForm.controls.firstName.value!,
         last_name: this.mandateForm.controls.lastName.value!,
@@ -1147,8 +1176,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           this.newPasswordErrorMessage = message;
           this.toast.showError(message);
           this.extractErrorMessage(error);
-          this.friendlyCaptchaWidget?.reset();
-          await this.friendlyCaptchaWidget?.start();
+          if (!flags.bypassFriendlyCaptcha && environment.environmentId !== 'regression') {
+            this.friendlyCaptchaWidget?.reset();
+            await this.friendlyCaptchaWidget?.start();
+          } else {
+            this.friendlyCaptchaSolution = 'dummy-captcha-code';
+          }
         },
       });
   }

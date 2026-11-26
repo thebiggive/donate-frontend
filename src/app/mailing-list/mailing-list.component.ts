@@ -20,6 +20,7 @@ import { environment } from '../../environments/environment';
 import { WidgetInstance } from 'friendly-challenge';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { flags } from '../featureFlags';
 
 /**
  * Mailing list signup component
@@ -39,6 +40,7 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   mailingList = input.required<'donor' | 'charity'>();
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  protected readonly flags = flags;
   private friendlyCaptchaSolution: string | undefined;
   private friendlyCaptchaWidget!: WidgetInstance;
   private http = inject(HttpClient);
@@ -66,6 +68,10 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
     addBodyClass(this.platformId, 'primary-colour');
     this.pageInitialised = true;
 
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+    }
+
     if (this.mailingList() === 'charity') {
       this.mailingListForm.controls.jobTitle.setValidators([Validators.required, Validators.maxLength(35)]);
     }
@@ -76,8 +82,12 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (environment.environmentId === 'regression') {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
       this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      return;
+    }
+
+    if (!this.friendlyCaptcha) {
       return;
     }
 
@@ -104,6 +114,10 @@ export class MailingListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.toast.showError('Please fill in all required fields and try again');
       this.cdr.markForCheck();
       return;
+    }
+
+    if (!this.friendlyCaptchaSolution && flags.bypassFriendlyCaptcha) {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
     }
 
     if (!this.friendlyCaptchaSolution) {
