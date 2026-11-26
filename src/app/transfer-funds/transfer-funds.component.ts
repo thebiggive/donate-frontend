@@ -77,11 +77,13 @@ export class TransferFundsComponent implements OnInit {
   giftAidTermsUrl = donorGiftAidTermsUrl;
   isLoading: boolean = false;
 
-  fundingInstructions: {
-    accountNumber: string,
-    sortCode: string,
-    accountHolderName: string,
-  }|undefined = undefined;
+  fundingInstructions:
+    | {
+        accountNumber: string;
+        sortCode: string;
+        accountHolderName: string;
+      }
+    | undefined = undefined;
 
   isOptedIntoGiftAid = false;
   currency = '£';
