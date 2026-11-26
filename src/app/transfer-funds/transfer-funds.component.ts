@@ -198,10 +198,9 @@ export class TransferFundsComponent implements OnInit {
           this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
           this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
           this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
+          this.createAndFinaliseTipDonation();
           this.changeDetectorRef.markForCheck();
         });
-
-      this.createAndFinaliseTipDonation();
     }
   }
 
