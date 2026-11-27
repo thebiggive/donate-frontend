@@ -118,12 +118,14 @@
               </biggive-text-input>
             }
 
-            <div
-              class="frc-captcha"
-              [attr.data-sitekey]="friendlyCaptchaSiteKey"
-              data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
-              #frccaptcha
-            ></div>
+            @if (!flags.bypassFriendlyCaptcha) {
+              <div
+                class="frc-captcha"
+                [attr.data-sitekey]="friendlyCaptchaSiteKey"
+                data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+                #frccaptcha
+              ></div>
+            }
 
             <div class="button-container">
               <biggive-button

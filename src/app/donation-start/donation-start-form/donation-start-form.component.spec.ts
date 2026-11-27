@@ -682,4 +682,21 @@ describe('DonationStartForm', () => {
     expect(component.amountsGroup.get('tipPercentage')?.value).toBe(20);
     expect(component.tipAmount()).toBe(200);
   });
+
+  it('sets dummy captcha code when bypassFriendlyCaptcha flag is enabled', () => {
+    fixture = TestBed.createComponent(DonationStartFormComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (component as any).flags.bypassFriendlyCaptcha = true;
+    component.ngOnInit();
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    expect((component as any).idCaptchaCode).toBe('dummy-captcha-code');
+
+    // Reset flag after test
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (component as any).flags.bypassFriendlyCaptcha = false;
+  });
 });

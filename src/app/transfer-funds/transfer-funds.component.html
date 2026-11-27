@@ -18,7 +18,7 @@
       </div>
     }
 
-    @if (donor && !isLoading && !isPurchaseComplete) {
+    @if (donor && !isLoading && !fundingInstructions) {
       <form [formGroup]="creditForm">
         <mat-stepper orientation="vertical" [linear]="true" #stepper>
           <mat-step
@@ -259,16 +259,16 @@
       </div>
     }
 
-    @if (donor && isPurchaseComplete) {
+    @if (donor && fundingInstructions) {
       <div>
         <h2>Transfer instructions</h2>
         <p>
           Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account
           using the following details
         </p>
-        <p><strong>Recipient</strong> {{ accountHolderName }}</p>
-        <p><strong>Sort code:</strong> {{ sortCode }}</p>
-        <p><strong>Account number:</strong> {{ accountNumber }}</p>
+        <p><strong>Recipient</strong> {{ fundingInstructions.accountHolderName }}</p>
+        <p><strong>Sort code:</strong> {{ fundingInstructions.sortCode }}</p>
+        <p><strong>Account number:</strong> {{ fundingInstructions.accountNumber }}</p>
       </div>
     }
   </div>

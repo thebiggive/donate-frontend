@@ -92,11 +92,12 @@
       <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
     </div>
   </mat-dialog-actions>
-  }
+  } @if (!flags.bypassFriendlyCaptcha) {
   <div
     class="frc-captcha"
     [attr.data-sitekey]="friendlyCaptchaSiteKey"
     data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
     #frccaptcha
   ></div>
+  }
 </app-popup-standalone>

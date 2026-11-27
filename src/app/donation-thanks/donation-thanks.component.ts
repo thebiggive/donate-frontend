@@ -184,7 +184,10 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
   }
 
   login() {
-    if (!this.friendlyCaptchaSolution) {
+    const captchaCode =
+      this.friendlyCaptchaSolution || (flags.bypassFriendlyCaptcha ? 'dummy-captcha-code' : undefined);
+
+    if (!captchaCode) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then
       // we auto-logged-in with the password the donor just chose.
@@ -194,7 +197,7 @@ export class DonationThanksComponent implements OnDestroy, OnInit {
     const credentials: Credentials = {
       email_address: this.donation?.emailAddress as string,
       raw_password: this.person?.raw_password as string,
-      captcha_code: this.friendlyCaptchaSolution,
+      captcha_code: captchaCode,
     };
 
     this.identityService.login(credentials).subscribe({

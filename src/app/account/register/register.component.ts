@@ -129,6 +129,10 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.loginLink = `/login/?r=` + encodeURIComponent(this.redirectPath);
+
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+      this.friendlyCaptchaSolution = 'dummy-captcha-code';
+    }
   }
 
   async ngAfterViewInit() {
@@ -136,7 +140,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (environment.environmentId === 'regression') {
+    if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
       this.friendlyCaptchaSolution = 'dummy-captcha-code';
       return;
     }
@@ -240,15 +244,23 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: async (error) => {
           this.extractErrorMessage(error);
-          this.friendlyCaptchaWidget?.reset();
           this.processing = false;
+          if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+            this.friendlyCaptchaSolution = 'dummy-captcha-code';
+          } else {
+            this.friendlyCaptchaWidget?.reset();
+            await this.friendlyCaptchaWidget?.start();
+          }
           this.changeDetectorRef.markForCheck();
-          await this.friendlyCaptchaWidget?.start();
         },
       });
   }
 
   private async requestVerificationCode(captchaResponse: string | undefined, emailAddress: string) {
+    if (!captchaResponse && (flags.bypassFriendlyCaptcha || environment.environmentId === 'regression')) {
+      captchaResponse = 'dummy-captcha-code';
+    }
+
     if (!captchaResponse) {
       this.error = 'Captcha error – please try again';
       return;
@@ -282,14 +294,22 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       this.extractErrorMessage(error);
       this.changeDetectorRef.markForCheck();
     } finally {
-      this.friendlyCaptchaWidget?.reset();
       this.processing = false;
+      if (environment.environmentId === 'regression' || flags.bypassFriendlyCaptcha) {
+        this.friendlyCaptchaSolution = 'dummy-captcha-code';
+      } else {
+        this.friendlyCaptchaWidget?.reset();
+        await this.friendlyCaptchaWidget?.start();
+      }
       this.changeDetectorRef.markForCheck();
-      await this.friendlyCaptchaWidget?.start();
     }
   }
 
   private login(captchaResponse: string | undefined) {
+    if (!captchaResponse && (flags.bypassFriendlyCaptcha || environment.environmentId === 'regression')) {
+      captchaResponse = 'dummy-captcha-code';
+    }
+
     if (!captchaResponse) {
       this.error = 'Captcha error – please try again';
       return;
